@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-    APPLICATION_NAME = 'dp-regel-api'
+    APPLICATION_NAME = 'dp-regel-api-arena-adapter'
     ZONE = 'fss'
     NAMESPACE = 'default'
     VERSION = sh(script: 'git rev-parse --short HEAD', returnStdout: true).trim()
