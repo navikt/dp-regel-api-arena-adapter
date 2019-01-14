@@ -23,7 +23,8 @@ enum class Regel {
 }
 
 fun main(args: Array<String>) {
-    val app = embeddedServer(Netty, port = 8093, module = Application::regelApiAdapter)
+    val env = Environment()
+    val app = embeddedServer(Netty, port = env.httpPort, module = Application::regelApiAdapter)
     app.start(wait = false)
     Runtime.getRuntime().addShutdownHook(Thread {
         app.stop(5, 60, TimeUnit.SECONDS)
@@ -31,8 +32,9 @@ fun main(args: Array<String>) {
 }
 
 fun Application.regelApiAdapter() {
+    val env = Environment()
 
-    val regelApiClient = RegelApiClient("http://localhost:8092")
+    val regelApiClient = RegelApiClient(env.dpRegelApiUrl)
 
     install(DefaultHeaders)
     install(CallLogging)

@@ -20,6 +20,10 @@ fasitResources:
       resourceType: credential
     - alias: dagpenger-regel-api-rest
       resourceType: restservice
+    - alias: security-token-service-issuer
+      resourceType: baseUrl
+      propertyMap:
+        url: OIDC_STS_ISSUERURL
   exposed:
     - alias: dagpenger-regel-api-arena-adapter-rest
       resourceType: restservice
