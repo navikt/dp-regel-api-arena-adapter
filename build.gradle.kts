@@ -25,7 +25,7 @@ repositories {
 
 application {
     applicationName = "dp-regel-api-arena-adapter"
-    mainClassName = "no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapter"
+    mainClassName = "no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterKt"
 }
 
 java {
