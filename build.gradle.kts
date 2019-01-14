@@ -1,10 +1,17 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
-    id("application")
-    kotlin("jvm") version "1.3.10"
+    application
+    kotlin("jvm") version "1.3.11"
     id("com.diffplug.gradle.spotless") version "3.13.0"
     id("com.github.johnrengelman.shadow") version "4.0.3"
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
 }
 
 apply {
@@ -17,8 +24,8 @@ repositories {
 }
 
 application {
-    applicationName = "dp-regel-api"
-    mainClassName = "no.nav.dagpenger.regel.Api"
+    applicationName = "dp-regel-api-arena-adapter"
+    mainClassName = "no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapter"
 }
 
 java {
@@ -68,11 +75,17 @@ spotless {
         ktlint()
     }
 }
-val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions {
-    jvmTarget = "1.8"
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+    testLogging {
+        showExceptions = true
+        showStackTraces = true
+        exceptionFormat = TestExceptionFormat.FULL
+        events = setOf(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
+    }
 }
-val compileTestKotlin: KotlinCompile by tasks
-compileTestKotlin.kotlinOptions {
-    jvmTarget = "1.8"
+
+tasks.withType<Wrapper> {
+    gradleVersion = "5.0"
 }
