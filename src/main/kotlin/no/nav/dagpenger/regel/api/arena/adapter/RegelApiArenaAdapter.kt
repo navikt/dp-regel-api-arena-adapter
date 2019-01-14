@@ -56,6 +56,7 @@ fun Application.regelApiAdapter() {
     routing {
         minsteinntekt(regelApiClient)
         grunnlag(regelApiClient)
+        naischecks()
     }
 }
 
