@@ -1,7 +1,9 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
 import de.nielsfalk.ktor.swagger.description
+import de.nielsfalk.ktor.swagger.example
 import de.nielsfalk.ktor.swagger.examples
+import de.nielsfalk.ktor.swagger.ok
 import de.nielsfalk.ktor.swagger.post
 import de.nielsfalk.ktor.swagger.responds
 import de.nielsfalk.ktor.swagger.version.shared.Group
@@ -19,7 +21,25 @@ fun Routing.minsteinntekt(regelApiClient: RegelApiClient) {
             "minsteinntektsberegning"
                     .description("Start minsteinntektberegning")
                     .examples()
-                    .responds()
+                    .responds(ok<MinsteinntektBeregningsResponse>(
+                            example("",
+                                    MinsteinntektBeregningsResponse(
+                                            "456",
+                                            Utfall(true, 104),
+                                            "2018-12-26T14:42:09Z",
+                                            "2018-12-26T14:42:09Z",
+                                            Parametere(
+                                                    "01019955667",
+                                                    123,
+                                                    "2019-01-11",
+                                                    "lasdfQ",
+                                                    InntektsPeriode("2019-01", "2018-01")
+                                            ),
+                                            false,
+                                            false,
+                                            false
+                                    ))
+                    ))
     ) { _, request ->
 
         val taskUrl = regelApiClient.startMinsteinntktBeregning(request)
