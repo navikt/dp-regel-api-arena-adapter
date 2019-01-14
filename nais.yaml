@@ -18,6 +18,8 @@ fasitResources:
   used:
     - alias: srvdp-regel-api-arena-adapter
       resourceType: credential
+    - alias: dagpenger-regel-api-rest
+      resourceType: restservice
   exposed:
     - alias: dagpenger-regel-api-arena-adapter-rest
       resourceType: restservice
