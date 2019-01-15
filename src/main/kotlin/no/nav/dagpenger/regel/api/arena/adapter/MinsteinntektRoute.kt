@@ -18,28 +18,32 @@ class PostMinsteinntekt
 
 fun Routing.minsteinntekt(regelApiClient: RegelApiClient) {
     post<PostMinsteinntekt, MinsteinntektBeregningsRequest>(
-            "minsteinntektsberegning"
-                    .description("Start minsteinntektberegning")
-                    .examples()
-                    .responds(ok<MinsteinntektBeregningsResponse>(
-                            example("",
-                                    MinsteinntektBeregningsResponse(
-                                            "456",
-                                            Utfall(true, 104),
-                                            "2018-12-26T14:42:09Z",
-                                            "2018-12-26T14:42:09Z",
-                                            Parametere(
-                                                    "01019955667",
-                                                    123,
-                                                    "2019-01-11",
-                                                    "lasdfQ",
-                                                    InntektsPeriode("2019-01", "2018-01")
-                                            ),
-                                            false,
-                                            false,
-                                            false
-                                    ))
-                    ))
+        "minsteinntektsberegning"
+            .description("Start minsteinntektberegning")
+            .examples()
+            .responds(
+                ok<MinsteinntektBeregningsResponse>(
+                    example(
+                        "",
+                        MinsteinntektBeregningsResponse(
+                            "456",
+                            Utfall(true, 104),
+                            "2018-12-26T14:42:09Z",
+                            "2018-12-26T14:42:09Z",
+                            Parametere(
+                                "01019955667",
+                                123,
+                                "2019-01-11",
+                                "lasdfQ",
+                                InntektsPeriode("2019-01", "2018-01"),
+                                false,
+                                false,
+                                false
+                            )
+                        )
+                    )
+                )
+            )
     ) { _, request ->
 
         val taskUrl = regelApiClient.startMinsteinntktBeregning(request)
@@ -49,7 +53,8 @@ fun Routing.minsteinntekt(regelApiClient: RegelApiClient) {
             taskResponse = regelApiClient.pollTask(taskUrl)
         }
 
-        val ressursLocation = taskResponse.location ?: throw RegelApiArenaAdapterException("Did not get location with task")
+        val ressursLocation =
+            taskResponse.location ?: throw RegelApiArenaAdapterException("Did not get location with task")
 
         val minsteinntektBeregningResultat = regelApiClient.getMinsteinntekt(ressursLocation)
 
@@ -73,15 +78,12 @@ data class MinsteinntektBeregningsResponse(
     val utfall: Utfall,
     val opprettet: String,
     val utfort: String,
-    val parametere: Parametere,
-    val harAvtjentVerneplikt: Boolean,
-    val oppfyllerKravTilFangstOgFisk: Boolean,
-    val harArbeidsperiodeEosSiste12Maaneder: Boolean
+    val parametere: Parametere
 ) {
     companion object {
         val exampleInntektBeregning = mapOf(
-                "oppfyllerMinsteinntekt" to true,
-                "status" to 1
+            "oppfyllerMinsteinntekt" to true,
+            "status" to 1
         )
     }
 }
