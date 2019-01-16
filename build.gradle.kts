@@ -35,7 +35,7 @@ java {
 
 val ktorVersion = "1.1.1"
 val fuelVersion = "1.15.0"
-val kotlinLoggingVersion = "1.4.9"
+val kotlinLoggingVersion = "1.6.22"
 val log4j2Version = "2.11.1"
 val jupiterVersion = "5.3.2"
 
