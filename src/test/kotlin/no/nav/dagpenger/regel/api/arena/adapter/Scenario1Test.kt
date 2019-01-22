@@ -11,6 +11,7 @@ import io.ktor.server.testing.withTestApplication
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import kotlin.test.assertNotNull
 
 class Scenario1Test {
 
@@ -56,7 +57,7 @@ class Scenario1Test {
 
             assertEquals(false, response.utfall.oppfyllerKravTilMinsteArbeidsinntekt)
             assertEquals("A", response.parametere.inntektsId)
-            assertEquals("M1", response.beregningsId)
+            assertNotNull("Beregnings id er satt og unik", response.beregningsId)
         }
     }
 
@@ -74,7 +75,7 @@ class Scenario1Test {
             assertEquals(true, response.utfall.oppfyllerKravTilMinsteArbeidsinntekt)
             assertEquals(52, response.utfall.periodeAntallUker)
             assertEquals("B", response.parametere.inntektsId)
-            assertEquals("M2", response.beregningsId)
+            assertNotNull("Beregnings id er satt og unik", response.beregningsId)
         }
     }
 
@@ -92,7 +93,7 @@ class Scenario1Test {
             assertEquals(true, response.utfall.oppfyllerKravTilMinsteArbeidsinntekt)
             assertEquals(104, response.utfall.periodeAntallUker)
             assertEquals("B", response.parametere.inntektsId)
-            assertEquals("M3", response.beregningsId)
+            assertNotNull("Beregnings id er satt og unik", response.beregningsId)
         }
     }
 
