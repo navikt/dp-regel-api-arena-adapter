@@ -11,10 +11,11 @@ import io.ktor.server.testing.withTestApplication
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import kotlin.test.assertNotNull
 
 class Scenario2Test {
 
-    val json2_1 = """
+    val scenarioRequest2_1_AND_3 = """
 {
   "aktorId": "1000003221752",
   "beregningsdato": "2019-01-11",
@@ -24,7 +25,7 @@ class Scenario2Test {
 }
 """.trimIndent()
 
-    val json2_2 = """
+    val scenarioRequest2_2 = """
 {
   "aktorId": "1000003221752",
   "beregningsdato": "2019-02-07",
@@ -34,7 +35,7 @@ class Scenario2Test {
 }
 """.trimIndent()
 
-    val json2_3 = """
+    val scenarioRequest2_3 = """
 {
   "aktorId": "1000003221752",
   "beregningsdato": "2019-01-11",
@@ -48,7 +49,7 @@ class Scenario2Test {
     fun `scenario 2-1`() = testApp {
         handleRequest(HttpMethod.Post, "/minsteinntekt") {
             addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(json2_1)
+            setBody(scenarioRequest2_1_AND_3)
         }.apply {
             assertTrue(requestHandled)
             assertEquals(HttpStatusCode.OK, response.status())
@@ -58,7 +59,7 @@ class Scenario2Test {
             assertEquals(true, response.utfall.oppfyllerKravTilMinsteArbeidsinntekt)
             assertEquals(52, response.utfall.periodeAntallUker)
             assertEquals("C", response.parametere.inntektsId)
-            assertEquals("M4", response.beregningsId)
+            assertNotNull("Beregnings id er satt og unik", response.beregningsId)
         }
     }
 
@@ -66,7 +67,7 @@ class Scenario2Test {
     fun `scenario 2-2`() = testApp {
         handleRequest(HttpMethod.Post, "/minsteinntekt") {
             addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(json2_2)
+            setBody(scenarioRequest2_2)
         }.apply {
             assertTrue(requestHandled)
             assertEquals(HttpStatusCode.OK, response.status())
@@ -76,7 +77,25 @@ class Scenario2Test {
             assertEquals(false, response.utfall.oppfyllerKravTilMinsteArbeidsinntekt)
             assertEquals(0, response.utfall.periodeAntallUker)
             assertEquals("D", response.parametere.inntektsId)
-            assertEquals("M5", response.beregningsId)
+            assertNotNull("Beregnings id er satt og unik", response.beregningsId)
+        }
+    }
+
+    @Test
+    fun `scenario 2-3`() = testApp {
+        handleRequest(HttpMethod.Post, "/minsteinntekt") {
+            addHeader(HttpHeaders.ContentType, "application/json")
+            setBody(scenarioRequest2_1_AND_3)
+        }.apply {
+            assertTrue(requestHandled)
+            assertEquals(HttpStatusCode.OK, response.status())
+
+            val response = Gson().fromJson(response.content, MinsteinntektBeregningsResponse::class.java)
+
+            assertEquals(true, response.utfall.oppfyllerKravTilMinsteArbeidsinntekt)
+            assertEquals(52, response.utfall.periodeAntallUker)
+            assertEquals("C", response.parametere.inntektsId)
+            assertNotNull("Beregnings id er satt og unik", response.beregningsId)
         }
     }
 

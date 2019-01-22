@@ -3,6 +3,7 @@ package no.nav.dagpenger.regel.api.arena.adapter
 import java.math.BigDecimal
 import java.net.URI
 import java.time.LocalDateTime
+import java.util.UUID
 
 class RegelApiDummy : RegelApiClient {
 
@@ -23,9 +24,9 @@ class RegelApiDummy : RegelApiClient {
                 scenario1Request = request
                 URI.create("URN:scenario1_3")
             }
-            matchesScenario2_1(request) -> {
+            matchesScenario2_1(request) || matchesScenario2_3(request) -> {
                 scenario2Request = request
-                URI.create("URN:scenario2_1")
+                URI.create("URN:scenario2_1-3")
             }
             matchesScenario2_2(request) -> {
                 scenario2Request = request
@@ -38,7 +39,7 @@ class RegelApiDummy : RegelApiClient {
     override fun getMinsteinntekt(ressursUrl: URI): MinsteinntektBeregningsResponse {
         return when (ressursUrl) {
             URI.create("URN:scenario1_1") -> MinsteinntektBeregningsResponse(
-                "M1",
+                UUID.randomUUID().toString(),
                 Utfall(
                     false,
                     0
@@ -66,7 +67,7 @@ class RegelApiDummy : RegelApiClient {
                 Inntekt(BigDecimal(200000), BigDecimal(0), BigDecimal(0), inneholderNaeringsinntekter = false)
             )
             URI.create("URN:scenario1_3") -> MinsteinntektBeregningsResponse(
-                "M3",
+                UUID.randomUUID().toString(),
                 Utfall(
                     true,
                     104
@@ -79,8 +80,8 @@ class RegelApiDummy : RegelApiClient {
                 InntektsPeriode("2016-02", "2017-01"),
                 Inntekt(BigDecimal(500000), BigDecimal(0), BigDecimal(0), inneholderNaeringsinntekter = true)
             )
-            URI.create("URN:scenario2_1") -> MinsteinntektBeregningsResponse(
-                "M4",
+            URI.create("URN:scenario2_1-3") -> MinsteinntektBeregningsResponse(
+                UUID.randomUUID().toString(),
                 Utfall(
                     true,
                     52
@@ -94,7 +95,7 @@ class RegelApiDummy : RegelApiClient {
                 Inntekt(BigDecimal(164701), BigDecimal(0), BigDecimal(0), inneholderNaeringsinntekter = false)
             )
             URI.create("URN:scenario2_2") -> MinsteinntektBeregningsResponse(
-                "M5",
+                UUID.randomUUID().toString(),
                 Utfall(
                     false,
                     0
@@ -107,7 +108,19 @@ class RegelApiDummy : RegelApiClient {
                 InntektsPeriode("2016-02", "2017-01"),
                 Inntekt(BigDecimal(100000), BigDecimal(40000), BigDecimal(0), inneholderNaeringsinntekter = false)
             )
-            else -> throw RuntimeException("scenario not matched")
+            else -> MinsteinntektBeregningsResponse(
+                UUID.randomUUID().toString(),
+                Utfall(
+                    false,
+                    0
+                ),
+                LocalDateTime.now().toString(),
+                LocalDateTime.now().toString(),
+                mapRequestToParametere(scenario1Request, "D"),
+                InntektsPeriode("2018-02", "2019-01"),
+                InntektsPeriode("2017-02", "2018-01"),
+                InntektsPeriode("2016-02", "2017-01"),
+                Inntekt(BigDecimal(100000), BigDecimal(40000), BigDecimal(0), inneholderNaeringsinntekter = false))
         }
     }
 
@@ -132,6 +145,7 @@ fun matchesScenario1_3(request: MinsteinntektBeregningsRequest) = request.aktorI
 
 fun matchesScenario2_1(request: MinsteinntektBeregningsRequest) = request.aktorId == "1000003221752" && request.vedtakId == 31018347 && request.beregningsdato == "2019-01-11"
 fun matchesScenario2_2(request: MinsteinntektBeregningsRequest) = request.aktorId == "1000003221752" && request.vedtakId == 31018347 && request.beregningsdato == "2019-02-07"
+fun matchesScenario2_3(request: MinsteinntektBeregningsRequest) = request.aktorId == "1000003221752" && request.vedtakId == 31018347 && request.beregningsdato == "2019-01-11"
 
 fun mapRequestToParametere(request: MinsteinntektBeregningsRequest, inntektsId: String): Parametere =
     Parametere(
