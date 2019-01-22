@@ -38,7 +38,6 @@ fun main(args: Array<String>) {
 
 fun Application.regelApiAdapter(regelApiClient: RegelApiClient) {
 
-
     install(DefaultHeaders)
     install(CallLogging)
     install(ContentNegotiation) {

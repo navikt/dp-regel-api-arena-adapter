@@ -4,7 +4,7 @@ import java.math.BigDecimal
 import java.net.URI
 import java.time.LocalDateTime
 
-class RegelApiDummy: RegelApiClient {
+class RegelApiDummy : RegelApiClient {
 
     lateinit var scenario1Request: MinsteinntektBeregningsRequest
     lateinit var scenario2Request: MinsteinntektBeregningsRequest
@@ -112,11 +112,11 @@ class RegelApiDummy: RegelApiClient {
     }
 
     override fun startGrunnlagBeregning(request: DagpengegrunnlagBeregningsRequest): URI {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun getGrunnlag(ressursUrl: URI): DagpengegrunnlagBeregningsResponse {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
     override fun pollTask(taskUrl: URI): TaskPollResponse {
@@ -139,7 +139,7 @@ fun mapRequestToParametere(request: MinsteinntektBeregningsRequest, inntektsId: 
         request.vedtakId,
         request.beregningsdato,
         inntektsId,
-        request.bruktinntektsPeriode?.let {  InntektsPeriode(request.bruktinntektsPeriode.foersteMaaned, request.bruktinntektsPeriode.sisteMaaned)},
+        request.bruktinntektsPeriode?.let { InntektsPeriode(request.bruktinntektsPeriode.foersteMaaned, request.bruktinntektsPeriode.sisteMaaned) },
         request.harAvtjentVerneplikt,
         request.oppfyllerKravTilFangstOgFisk
     )

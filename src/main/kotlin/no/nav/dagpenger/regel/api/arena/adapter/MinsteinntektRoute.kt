@@ -1,11 +1,8 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
 import de.nielsfalk.ktor.swagger.description
-import de.nielsfalk.ktor.swagger.example
 import de.nielsfalk.ktor.swagger.examples
-import de.nielsfalk.ktor.swagger.ok
 import de.nielsfalk.ktor.swagger.post
-import de.nielsfalk.ktor.swagger.responds
 import de.nielsfalk.ktor.swagger.version.shared.Group
 import io.ktor.application.call
 import io.ktor.locations.Location
