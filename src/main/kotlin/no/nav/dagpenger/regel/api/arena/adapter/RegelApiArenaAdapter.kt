@@ -34,7 +34,7 @@ fun main(args: Array<String>) {
 fun Application.regelApiAdapter() {
     val env = Environment()
 
-    val regelApiClient = RegelApiClient(env.dpRegelApiUrl)
+    val regelApiClient = DefaultRegelApiClient(env.dpRegelApiUrl)
 
     install(DefaultHeaders)
     install(CallLogging)
