@@ -24,17 +24,20 @@ enum class Regel {
 
 fun main(args: Array<String>) {
     val env = Environment()
-    val app = embeddedServer(Netty, port = env.httpPort, module = Application::regelApiAdapter)
+    val regelApiClientDummy = RegelApiDummy()
+
+    val app = embeddedServer(Netty, port = env.httpPort) {
+        regelApiAdapter(regelApiClientDummy)
+    }
+
     app.start(wait = false)
     Runtime.getRuntime().addShutdownHook(Thread {
         app.stop(5, 60, TimeUnit.SECONDS)
     })
 }
 
-fun Application.regelApiAdapter() {
-    val env = Environment()
+fun Application.regelApiAdapter(regelApiClient: RegelApiClient) {
 
-    val regelApiClient = DefaultRegelApiClient(env.dpRegelApiUrl)
 
     install(DefaultHeaders)
     install(CallLogging)

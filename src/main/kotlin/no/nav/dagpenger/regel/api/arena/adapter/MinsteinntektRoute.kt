@@ -11,6 +11,7 @@ import io.ktor.application.call
 import io.ktor.locations.Location
 import io.ktor.response.respond
 import io.ktor.routing.Routing
+import java.math.BigDecimal
 
 @Group("Minsteinntekt")
 @Location("/minsteinntekt")
@@ -21,29 +22,37 @@ fun Routing.minsteinntekt(regelApiClient: RegelApiClient) {
         "minsteinntektsberegning"
             .description("Start minsteinntektberegning")
             .examples()
-            .responds(
-                ok<MinsteinntektBeregningsResponse>(
-                    example(
-                        "",
-                        MinsteinntektBeregningsResponse(
-                            "456",
-                            Utfall(true, 104),
-                            "2018-12-26T14:42:09Z",
-                            "2018-12-26T14:42:09Z",
-                            Parametere(
-                                "01019955667",
-                                123,
-                                "2019-01-11",
-                                "lasdfQ",
-                                InntektsPeriode("2019-01", "2018-01"),
-                                false,
-                                false,
-                                false
-                            )
-                        )
-                    )
-                )
-            )
+//            .responds(
+//                ok<MinsteinntektBeregningsResponse>(
+//                    example(
+//                        "",
+//                        MinsteinntektBeregningsResponse(
+//                            "456",
+//                            Utfall(true, 104),
+//                            "2018-12-26T14:42:09Z",
+//                            "2018-12-26T14:42:09Z",
+//                            Parametere(
+//                                "01019955667",
+//                                123,
+//                                "2019-01-11",
+//                                "lasdfQ",
+//                                InntektsPeriode("2019-01", "2018-01"),
+//                                false,
+//                                false
+//                            ),
+//                            InntektsPeriode("2018-01", "2018-12"),
+//                            InntektsPeriode("2017-01", "2017-12"),
+//                            InntektsPeriode("2016-01", "2016-12"),
+//                            Inntekt(
+//                                BigDecimal(50000),
+//                                BigDecimal(0),
+//                                BigDecimal(0),
+//                                inneholderNaeringsinntekter = false
+//                            )
+//                        )
+//                    )
+//                )
+//            )
     ) { _, request ->
 
         val taskUrl = regelApiClient.startMinsteinntktBeregning(request)
@@ -66,11 +75,9 @@ data class MinsteinntektBeregningsRequest(
     val aktorId: String,
     val vedtakId: Int,
     val beregningsdato: String,
-    val inntektsId: String,
-    val bruktinntektsPeriode: InntektsPeriode,
+    val bruktinntektsPeriode: InntektsPeriode?,
     val harAvtjentVerneplikt: Boolean,
-    val oppfyllerKravTilFangstOgFisk: Boolean,
-    val harArbeidsperiodeEosSiste12Maaneder: Boolean
+    val oppfyllerKravTilFangstOgFisk: Boolean
 )
 
 data class MinsteinntektBeregningsResponse(
@@ -78,7 +85,11 @@ data class MinsteinntektBeregningsResponse(
     val utfall: Utfall,
     val opprettet: String,
     val utfort: String,
-    val parametere: Parametere
+    val parametere: Parametere,
+    val sisteInntektsPeriode: InntektsPeriode,
+    val nestSisteInntektsPeriode: InntektsPeriode,
+    val tredjeSisteInntektsPeriode: InntektsPeriode,
+    val inntekt: Inntekt
 ) {
     companion object {
         val exampleInntektBeregning = mapOf(
@@ -87,3 +98,13 @@ data class MinsteinntektBeregningsResponse(
         )
     }
 }
+
+data class Inntekt(
+    val inntektSistePeriode: BigDecimal,
+    val inntektNestSistePeriode: BigDecimal,
+    val inntektTredjeSistePeriode: BigDecimal,
+    val andelInntektSistePeriode: BigDecimal? = null,
+    val andelInntektNestSistePeriode: BigDecimal? = null,
+    val andelInntektTredjeSistePeriode: BigDecimal? = null,
+    val inneholderNaeringsinntekter: Boolean
+)

@@ -37,7 +37,6 @@ fun Routing.grunnlag(regelApiClient: RegelApiClient) {
                                 "lasdFQ=q",
                                 InntektsPeriode("2019-01", "2018-01"),
                                 false,
-                                false,
                                 false
                             )
                         )
@@ -66,8 +65,8 @@ data class DagpengegrunnlagBeregningsRequest(
     val aktorId: String,
     val vedtakId: Int,
     val beregningsdato: String,
-    val inntektsId: String,
-    val bruktinntektsPeriode: InntektsPeriode,
+    val inntektsId: String?,
+    val bruktinntektsPeriode: InntektsPeriode?,
     val harAvtjentVerneplikt: Boolean,
     val oppfyllerKravTilFangstOgFisk: Boolean,
     val harArbeidsperiodeEosSiste12Maaneder: Boolean
@@ -94,7 +93,7 @@ data class DagpengegrunnlagBeregningsResponse(
 }
 
 data class Utfall(
-    val oppfyllerKravtilMinsteArbeidsinntekt: Boolean,
+    val oppfyllerKravTilMinsteArbeidsinntekt: Boolean,
     val periodeAntallUker: Int
 )
 
@@ -102,9 +101,8 @@ data class Parametere(
     val aktorId: String,
     val vedtakId: Int,
     val beregningsdato: String,
-    val inntektsId: String,
-    val bruktinntektsPeriode: InntektsPeriode,
+    val inntektsId: String?,
+    val bruktInntektsPeriode: InntektsPeriode?,
     val harAvtjentVerneplikt: Boolean,
-    val oppfyllerKravTilFangstOgFisk: Boolean,
-    val harArbeidsperiodeEosSiste12Maaneder: Boolean
+    val oppfyllerKravTilFangstOgFisk: Boolean
 )
