@@ -72,7 +72,7 @@ data class MinsteinntektBeregningsRequest(
     val aktorId: String,
     val vedtakId: Int,
     val beregningsdato: String,
-    val bruktinntektsPeriode: InntektsPeriode?,
+    val bruktinntektsPeriode: InntektsPeriode? = null,
     val harAvtjentVerneplikt: Boolean,
     val oppfyllerKravTilFangstOgFisk: Boolean
 )

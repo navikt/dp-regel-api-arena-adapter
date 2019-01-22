@@ -98,8 +98,8 @@ class Scenario2Test {
             assertNotNull("Beregnings id er satt og unik", response.beregningsId)
         }
     }
+}
 
-    private fun testApp(callback: TestApplicationEngine.() -> Unit) {
-        withTestApplication({ regelApiAdapter(RegelApiDummy()) }) { callback() }
-    }
+fun testApp(callback: TestApplicationEngine.() -> Unit) {
+    withTestApplication({ regelApiAdapter(RegelApiDummy()) }) { callback() }
 }
