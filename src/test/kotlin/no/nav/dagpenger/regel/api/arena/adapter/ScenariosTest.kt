@@ -25,7 +25,7 @@ class ScenariosTest {
         }.apply {
             assert200OkResponse()
             val response = Gson().fromJson(response.content, MinsteinntektBeregningsResponse::class.java)
-            assertMinsteinntektResponse(oppfyllerKrav = false, periode = 0, inntektsId = "A", beregning = response)
+            assertMinsteinntektResponse(oppfyllerKrav = false, periode = 0, inntektsId = "01D1XGEK0FNB179YPXB12TPDPT", beregning = response)
         }
     }
 
@@ -37,7 +37,7 @@ class ScenariosTest {
         }.apply {
             assert200OkResponse()
             val response = Gson().fromJson(response.content, MinsteinntektBeregningsResponse::class.java)
-            assertMinsteinntektResponse(oppfyllerKrav = true, periode = 52, inntektsId = "B", beregning = response)
+            assertMinsteinntektResponse(oppfyllerKrav = true, periode = 52, inntektsId = "01D1XGEK15D0B6GDPC74C0ZASV", beregning = response)
         }
     }
 
@@ -49,7 +49,7 @@ class ScenariosTest {
         }.apply {
             assert200OkResponse()
             val response = Gson().fromJson(response.content, MinsteinntektBeregningsResponse::class.java)
-            assertMinsteinntektResponse(oppfyllerKrav = true, periode = 104, inntektsId = "B", beregning = response)
+            assertMinsteinntektResponse(oppfyllerKrav = true, periode = 104, inntektsId = "01D1XGEK1T355GP4FWQ51XP153", beregning = response)
         }
     }
 
@@ -61,7 +61,7 @@ class ScenariosTest {
         }.apply {
             assert200OkResponse()
             val response = Gson().fromJson(response.content, MinsteinntektBeregningsResponse::class.java)
-            assertMinsteinntektResponse(oppfyllerKrav = true, periode = 52, inntektsId = "C", beregning = response)
+            assertMinsteinntektResponse(oppfyllerKrav = true, periode = 52, inntektsId = "01D1XGEK2CA0X5BM7PZFYKS5WX", beregning = response)
         }
     }
 
@@ -73,7 +73,7 @@ class ScenariosTest {
         }.apply {
             assert200OkResponse()
             val response = Gson().fromJson(response.content, MinsteinntektBeregningsResponse::class.java)
-            assertMinsteinntektResponse(oppfyllerKrav = false, periode = 0, inntektsId = "D", beregning = response)
+            assertMinsteinntektResponse(oppfyllerKrav = false, periode = 0, inntektsId = "01D1XGEK2S8WWRZ0QE0Y7W414K", beregning = response)
         }
     }
 
@@ -85,7 +85,7 @@ class ScenariosTest {
         }.apply {
             assert200OkResponse()
             val response = Gson().fromJson(response.content, MinsteinntektBeregningsResponse::class.java)
-            assertMinsteinntektResponse(oppfyllerKrav = true, periode = 52, inntektsId = "C", beregning = response)
+            assertMinsteinntektResponse(oppfyllerKrav = true, periode = 52, inntektsId = "01D1XGEK2CA0X5BM7PZFYKS5WX", beregning = response)
         }
     }
 
@@ -97,7 +97,7 @@ class ScenariosTest {
         }.apply {
             assert200OkResponse()
             val response = Gson().fromJson(response.content, MinsteinntektBeregningsResponse::class.java)
-            assertMinsteinntektResponse(oppfyllerKrav = false, periode = 0, inntektsId = "J", beregning = response)
+            assertMinsteinntektResponse(oppfyllerKrav = false, periode = 0, inntektsId = "01D1XGEK398JX50S7P3V9ENH76", beregning = response)
         }
     }
 
@@ -109,7 +109,7 @@ class ScenariosTest {
         }.apply {
             assert200OkResponse()
             val response = Gson().fromJson(response.content, DagpengegrunnlagBeregningsResponse::class.java)
-            assertDagpengeGrunnlagResponse("J", response)
+            assertDagpengeGrunnlagResponse("01D1XGQB1BSQ4NGXCBMGQ5M2KF", response)
         }
     }
 
@@ -121,7 +121,7 @@ class ScenariosTest {
         }.apply {
             assert200OkResponse()
             val response = Gson().fromJson(response.content, DagpengegrunnlagBeregningsResponse::class.java)
-            assertDagpengeGrunnlagResponse("G", response)
+            assertDagpengeGrunnlagResponse("01D1XGQB3NNMHC54ADBGNF7HQG", response)
         }
     }
 
@@ -133,7 +133,7 @@ class ScenariosTest {
         }.apply {
             assert200OkResponse()
             val response = Gson().fromJson(response.content, DagpengegrunnlagBeregningsResponse::class.java)
-            assertDagpengeGrunnlagResponse("H", response)
+            assertDagpengeGrunnlagResponse("01D1XGQB49ZP6KCMX3FAP2XTNG", response)
         }
     }
 
