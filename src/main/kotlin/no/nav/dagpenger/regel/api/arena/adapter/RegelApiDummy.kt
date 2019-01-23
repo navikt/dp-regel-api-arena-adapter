@@ -3,9 +3,11 @@ package no.nav.dagpenger.regel.api.arena.adapter
 import java.net.URI
 import java.time.LocalDateTime
 import java.util.UUID
+import de.huxhorn.sulky.ulid.ULID
 
 class RegelApiDummy : RegelApiClient {
 
+    var ulid = ULID()
     lateinit var currentMinsteinntektBeregningsRequest: MinsteinntektBeregningsRequest
     lateinit var currentGrunnlagRequest: DagpengegrunnlagBeregningsRequest
 
@@ -45,7 +47,7 @@ class RegelApiDummy : RegelApiClient {
     override fun getMinsteinntekt(ressursUrl: URI): MinsteinntektBeregningsResponse {
         return when (ressursUrl) {
             URI.create("URN:minsteinntekt:scenario1_1") -> MinsteinntektBeregningsResponse(
-                UUID.randomUUID().toString(),
+                ulid.nextULID(),
                 Utfall(
                     false,
                     0
@@ -59,7 +61,7 @@ class RegelApiDummy : RegelApiClient {
                 Inntekt(50000, 0, 0, inneholderNaeringsinntekter = false)
             )
             URI.create("URN:minsteinntekt:scenario1_2") -> MinsteinntektBeregningsResponse(
-                "M2",
+                ulid.nextULID(),
                 Utfall(
                     true,
                     52
@@ -73,7 +75,7 @@ class RegelApiDummy : RegelApiClient {
                 Inntekt(200000, 0, 0, inneholderNaeringsinntekter = false)
             )
             URI.create("URN:minsteinntekt:scenario1_3") -> MinsteinntektBeregningsResponse(
-                UUID.randomUUID().toString(),
+                ulid.nextULID(),
                 Utfall(
                     true,
                     104
@@ -87,7 +89,7 @@ class RegelApiDummy : RegelApiClient {
                 Inntekt(500000, 0, 0, inneholderNaeringsinntekter = true)
             )
             URI.create("URN:minsteinntekt:scenario2_1-3") -> MinsteinntektBeregningsResponse(
-                UUID.randomUUID().toString(),
+                ulid.nextULID(),
                 Utfall(
                     true,
                     52
@@ -101,7 +103,7 @@ class RegelApiDummy : RegelApiClient {
                 Inntekt(164701, 0, 0, inneholderNaeringsinntekter = false)
             )
             URI.create("URN:minsteinntekt:scenario2_2") -> MinsteinntektBeregningsResponse(
-                UUID.randomUUID().toString(),
+                ulid.nextULID(),
                 Utfall(
                     false,
                     0
@@ -115,7 +117,7 @@ class RegelApiDummy : RegelApiClient {
                 Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
             )
             URI.create("URN:minsteinntekt:scenario3_1") -> MinsteinntektBeregningsResponse(
-                UUID.randomUUID().toString(),
+                ulid.nextULID(),
                 Utfall(
                     false,
                     0
@@ -129,7 +131,7 @@ class RegelApiDummy : RegelApiClient {
                 Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
             )
             else -> MinsteinntektBeregningsResponse(
-                UUID.randomUUID().toString(),
+                ulid.nextULID(),
                 Utfall(
                     false,
                     0
