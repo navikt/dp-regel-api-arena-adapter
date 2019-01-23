@@ -1,28 +1,15 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
-import de.nielsfalk.ktor.swagger.description
-import de.nielsfalk.ktor.swagger.example
-import de.nielsfalk.ktor.swagger.examples
-import de.nielsfalk.ktor.swagger.ok
-import de.nielsfalk.ktor.swagger.post
-import de.nielsfalk.ktor.swagger.responds
-import de.nielsfalk.ktor.swagger.version.shared.Group
 import io.ktor.application.call
-import io.ktor.locations.Location
+import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Routing
+import io.ktor.routing.post
 import java.math.BigDecimal
 
-@Group("Grunnlag")
-@Location("/dagpengegrunnlag")
-class PostGrunnlag
-
 fun Routing.grunnlag(regelApiClient: RegelApiClient) {
-    post<PostGrunnlag, DagpengegrunnlagBeregningsRequest>(
-        "grunnlagberegning"
-            .description("Start grunnlagberegning")
-            .examples()
-    ) { _, request ->
+    post("/dagpengegrunnlag") {
+        val request = call.receive<DagpengegrunnlagBeregningsRequest>()
 
         val taskUrl = regelApiClient.startGrunnlagBeregning(request)
 

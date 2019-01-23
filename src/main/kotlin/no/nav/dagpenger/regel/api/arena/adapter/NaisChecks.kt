@@ -2,22 +2,15 @@ package no.nav.dagpenger.regel.api.arena.adapter
 
 import io.ktor.application.call
 import io.ktor.http.ContentType
-import io.ktor.locations.Location
-import io.ktor.locations.get
 import io.ktor.response.respondText
 import io.ktor.routing.Routing
-
-@Location("/isAlive")
-class IsAlive
-
-@Location("/isReady")
-class IsReady
+import io.ktor.routing.get
 
 fun Routing.naischecks() {
-    get<IsAlive> {
+    get("/isAlive") {
         call.respondText("ALIVE", ContentType.Text.Plain)
     }
-    get<IsReady> {
+    get("/isReady") {
         call.respondText("READY", ContentType.Text.Plain)
     }
 }

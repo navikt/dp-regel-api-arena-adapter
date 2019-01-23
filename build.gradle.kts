@@ -46,7 +46,6 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-gson:$ktorVersion")
     implementation("io.ktor:ktor-auth:$ktorVersion")
-    implementation("io.ktor:ktor-locations:$ktorVersion")
 
     implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
 
@@ -57,8 +56,6 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:$log4j2Version")
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4j2Version")
     implementation("com.vlkan.log4j2:log4j2-logstash-layout-fatjar:0.15")
-
-    implementation("de.nielsfalk.ktor:ktor-swagger:0.4.0")
 
     testImplementation(kotlin("test"))
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")

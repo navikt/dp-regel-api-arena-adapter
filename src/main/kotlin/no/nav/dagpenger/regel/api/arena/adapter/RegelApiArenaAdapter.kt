@@ -1,15 +1,11 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
-import de.nielsfalk.ktor.swagger.SwaggerSupport
-import de.nielsfalk.ktor.swagger.version.shared.Information
-import de.nielsfalk.ktor.swagger.version.v2.Swagger
 import io.ktor.application.Application
 import io.ktor.application.install
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.gson.gson
-import io.ktor.locations.Locations
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
@@ -43,17 +39,6 @@ fun Application.regelApiAdapter(regelApiClient: RegelApiClient) {
     install(ContentNegotiation) {
         gson {
             setPrettyPrinting()
-        }
-    }
-    install(Locations)
-
-    install(SwaggerSupport) {
-        forwardRoot = true
-        val information = Information(
-                title = "Dagpenger regel-api arena-adapter"
-        )
-        swagger = Swagger().apply {
-            info = information
         }
     }
 

@@ -1,56 +1,16 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
-import de.nielsfalk.ktor.swagger.description
-import de.nielsfalk.ktor.swagger.examples
-import de.nielsfalk.ktor.swagger.post
-import de.nielsfalk.ktor.swagger.version.shared.Group
 import io.ktor.application.call
-import io.ktor.locations.Location
+import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Routing
+import io.ktor.routing.post
 import java.math.BigDecimal
 
-@Group("Minsteinntekt")
-@Location("/minsteinntekt")
-class PostMinsteinntekt
-
 fun Routing.minsteinntekt(regelApiClient: RegelApiClient) {
-    post<PostMinsteinntekt, MinsteinntektBeregningsRequest>(
-        "minsteinntektsberegning"
-            .description("Start minsteinntektberegning")
-            .examples()
-//            .responds(
-//                ok<MinsteinntektBeregningsResponse>(
-//                    example(
-//                        "",
-//                        MinsteinntektBeregningsResponse(
-//                            "456",
-//                            Utfall(true, 104),
-//                            "2018-12-26T14:42:09Z",
-//                            "2018-12-26T14:42:09Z",
-//                            Parametere(
-//                                "01019955667",
-//                                123,
-//                                "2019-01-11",
-//                                "lasdfQ",
-//                                InntektsPeriode("2019-01", "2018-01"),
-//                                false,
-//                                false
-//                            ),
-//                            InntektsPeriode("2018-01", "2018-12"),
-//                            InntektsPeriode("2017-01", "2017-12"),
-//                            InntektsPeriode("2016-01", "2016-12"),
-//                            Inntekt(
-//                                BigDecimal(50000),
-//                                BigDecimal(0),
-//                                BigDecimal(0),
-//                                inneholderNaeringsinntekter = false
-//                            )
-//                        )
-//                    )
-//                )
-//            )
-    ) { _, request ->
+
+    post("/minsteinntekt") {
+        val request = call.receive<MinsteinntektBeregningsRequest>()
 
         val taskUrl = regelApiClient.startMinsteinntktBeregning(request)
 
