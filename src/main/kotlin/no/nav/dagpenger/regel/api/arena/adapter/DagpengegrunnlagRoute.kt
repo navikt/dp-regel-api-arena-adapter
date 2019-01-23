@@ -66,7 +66,7 @@ data class Parametere(
     val aktorId: String,
     val vedtakId: Int,
     val beregningsdato: String,
-    val inntektsId: String,
+    val inntektsId: String?,
     val bruktInntektsPeriode: InntektsPeriode?,
     val harAvtjentVerneplikt: Boolean,
     val oppfyllerKravTilFangstOgFisk: Boolean
