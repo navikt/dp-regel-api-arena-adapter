@@ -1,0 +1,130 @@
+openapi: 3.0.0
+info:
+  title: Regelkjørings API
+  version: "1.0"
+servers:
+  - url: https://dagpenger-regel-api.nais.adeo.no:{port}/v1
+    variables:
+      port:
+        default: "443"
+        enum:
+          - "443"
+          - "8443"
+  - url: https://virtserver.swaggerhub.com/geiralund/dagpenger-regelkjorings-api/
+    description: SwaggerHub API Auto Mocking
+tags:
+  - name: minsteinntekt
+    description: Beregner minsteinntekt og dagpengeperiode etter §4-4 og §4-15
+    externalDocs:
+      description: Folketrygdloven $4-4
+      url: https://lovdata.no/lov/1997-02-28-19/§4-4
+  - name: dagpengegrunnlag
+    description: Beregnger dagpengegrunnlag etter §4-11
+    externalDocs:
+      description: Folketrygdloven $4-11
+      url: https://lovdata.no/lov/1997-02-28-19/§4-11
+paths:
+  /minsteinntekt:
+    post:
+      tags:
+        - minsteinntekt
+      summary: Kjør en beregning av minsteinntekt
+      requestBody:
+        description: Hvilke parametere som skal brukes for beregningen
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Minsteinntekt'
+        required: true
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinsteinntektResultat'
+        400:
+          description: Invalid input
+        500:
+          description: System error
+components:
+  schemas:
+    Minsteinntekt:
+      required:
+        - aktorId
+        - beregningsdato
+        - vedtakId
+      type: object
+      properties:
+        aktorId:
+          type: string
+          description: Identifikasjon av bruker
+          example: "01019955667"
+        vedtakId:
+          type: integer
+          description: Identifikasjon av dagpengevedtak
+          format: int32
+          example: 1234
+        beregningsdato:
+          type: string
+          description: Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
+          example: 2019-01-11
+        bruktinntektsPeriode:
+          $ref: '#/components/schemas/InntektsPeriode'
+        harAvtjentVerneplikt:
+          type: boolean
+          description: Om bruker har avtjent verneplikt minst 3 av de siste 12 måneder.
+        oppfyllerKravTilFangstOgFisk:
+          type: boolean
+          description: Om bruker oppfyller særvilkårene for fangst og fisk.
+        harArbeidsperiodeEosSiste12Maaneder:
+          type: boolean
+          description: Om bruker har hatt inntekt i EØS.
+    InntektsPeriode:
+      required:
+        - foersteMaaned
+        - sisteMaaned
+      description:
+      type: object
+      properties:
+        foersteMaaned:
+          type: string
+          example: 2019-01
+        sisteMaaned:
+          type: string
+          example: 2018-01
+    MinsteinntektResultat:
+      allOf:
+        - type: object
+          properties:
+            beregningsId:
+              type: string
+              description: Unik ID for denne beregningen
+            utfall:
+              $ref: '#/components/schemas/MinsteinntektUtfall'
+            opprettet:
+              type: string
+              description: Dato for når kjøringen ble opprettet
+              example: 2018-12-26T14:42:09Z
+            utført:
+              type: string
+              description: Dato for når kjøringen ble oppdatert
+              example: 2018-12-26T14:42:09Z
+            parametere:
+              $ref: '#/components/schemas/Minsteinntekt'
+    MinsteinntektUtfall:
+      required:
+        - oppfyllerKravetTilMinsteArbeidsinntekt
+        - sisteMaaned
+      type: object
+      properties:
+        oppfyllerKravetTilMinsteArbeidsinntekt:
+          type: boolean
+        periodeAntallUker:
+          type: integer
+          description: Lengde på stønadsperiode
+          format: int32
+          example: 104
+          enum:
+            - 54
+            - 104
