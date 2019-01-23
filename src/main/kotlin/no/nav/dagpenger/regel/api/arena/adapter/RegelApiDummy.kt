@@ -1,6 +1,5 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
-import java.math.BigDecimal
 import java.net.URI
 import java.time.LocalDateTime
 import java.util.UUID
@@ -57,7 +56,7 @@ class RegelApiDummy : RegelApiClient {
                 InntektsPeriode("2018-01", "2018-12"),
                 InntektsPeriode("2017-01", "2017-12"),
                 InntektsPeriode("2016-01", "2016-12"),
-                Inntekt(BigDecimal(50000), BigDecimal(0), BigDecimal(0), inneholderNaeringsinntekter = false)
+                Inntekt(50000, 0, 0, inneholderNaeringsinntekter = false)
             )
             URI.create("URN:minsteinntekt:scenario1_2") -> MinsteinntektBeregningsResponse(
                 "M2",
@@ -71,7 +70,7 @@ class RegelApiDummy : RegelApiClient {
                 InntektsPeriode("2018-02", "2019-01"),
                 InntektsPeriode("2017-02", "2018-01"),
                 InntektsPeriode("2016-02", "2017-01"),
-                Inntekt(BigDecimal(200000), BigDecimal(0), BigDecimal(0), inneholderNaeringsinntekter = false)
+                Inntekt(200000, 0, 0, inneholderNaeringsinntekter = false)
             )
             URI.create("URN:minsteinntekt:scenario1_3") -> MinsteinntektBeregningsResponse(
                 UUID.randomUUID().toString(),
@@ -85,7 +84,7 @@ class RegelApiDummy : RegelApiClient {
                 InntektsPeriode("2018-02", "2019-01"),
                 InntektsPeriode("2017-02", "2018-01"),
                 InntektsPeriode("2016-02", "2017-01"),
-                Inntekt(BigDecimal(500000), BigDecimal(0), BigDecimal(0), inneholderNaeringsinntekter = true)
+                Inntekt(500000, 0, 0, inneholderNaeringsinntekter = true)
             )
             URI.create("URN:minsteinntekt:scenario2_1-3") -> MinsteinntektBeregningsResponse(
                 UUID.randomUUID().toString(),
@@ -99,7 +98,7 @@ class RegelApiDummy : RegelApiClient {
                 InntektsPeriode("2018-01", "2018-12"),
                 InntektsPeriode("2017-01", "2017-12"),
                 InntektsPeriode("2016-01", "2016-12"),
-                Inntekt(BigDecimal(164701), BigDecimal(0), BigDecimal(0), inneholderNaeringsinntekter = false)
+                Inntekt(164701, 0, 0, inneholderNaeringsinntekter = false)
             )
             URI.create("URN:minsteinntekt:scenario2_2") -> MinsteinntektBeregningsResponse(
                 UUID.randomUUID().toString(),
@@ -113,7 +112,7 @@ class RegelApiDummy : RegelApiClient {
                 InntektsPeriode("2018-02", "2019-01"),
                 InntektsPeriode("2017-02", "2018-01"),
                 InntektsPeriode("2016-02", "2017-01"),
-                Inntekt(BigDecimal(100000), BigDecimal(40000), BigDecimal(0), inneholderNaeringsinntekter = false)
+                Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
             )
             URI.create("URN:minsteinntekt:scenario3_1") -> MinsteinntektBeregningsResponse(
                 UUID.randomUUID().toString(),
@@ -127,7 +126,7 @@ class RegelApiDummy : RegelApiClient {
                 InntektsPeriode("2018-02", "2019-01"),
                 InntektsPeriode("2017-02", "2018-01"),
                 InntektsPeriode("2016-02", "2017-01"),
-                Inntekt(BigDecimal(100000), BigDecimal(40000), BigDecimal(0), inneholderNaeringsinntekter = false)
+                Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
             )
             else -> MinsteinntektBeregningsResponse(
                 UUID.randomUUID().toString(),
@@ -141,7 +140,7 @@ class RegelApiDummy : RegelApiClient {
                 InntektsPeriode("2018-02", "2019-01"),
                 InntektsPeriode("2017-02", "2018-01"),
                 InntektsPeriode("2016-02", "2017-01"),
-                Inntekt(BigDecimal(100000), BigDecimal(40000), BigDecimal(0), inneholderNaeringsinntekter = false)
+                Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
             )
         }
     }
@@ -172,7 +171,7 @@ class RegelApiDummy : RegelApiClient {
             URI.create("URN:grunnlag:scenario1") -> DagpengegrunnlagBeregningsResponse(
                 UUID.randomUUID().toString(),
                 UtfallGrunnlag(
-                    BigDecimal(500000), BigDecimal(500000), BigDecimal(500000), BigDecimal(5000), "N/A", false
+                    500000, 500000, 500000, 5000, "N/A", false
                 ),
                 LocalDateTime.now().toString(),
                 LocalDateTime.now().toString(),
@@ -180,12 +179,12 @@ class RegelApiDummy : RegelApiClient {
                 InntektsPeriode("2018-02", "2019-01"),
                 InntektsPeriode("2017-02", "2018-01"),
                 InntektsPeriode("2016-02", "2017-01"),
-                Inntekt(BigDecimal(100000), BigDecimal(40000), BigDecimal(0), inneholderNaeringsinntekter = false)
+                Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
             )
             URI.create("URN:grunnlag:scenario2") -> DagpengegrunnlagBeregningsResponse(
                 UUID.randomUUID().toString(),
                 UtfallGrunnlag(
-                    BigDecimal(500000), BigDecimal(500000), BigDecimal(500000), BigDecimal(5000), "N/A", false
+                    500000, 500000, 500000, 5000, "N/A", false
                 ),
                 LocalDateTime.now().toString(),
                 LocalDateTime.now().toString(),
@@ -193,12 +192,12 @@ class RegelApiDummy : RegelApiClient {
                 InntektsPeriode("2018-02", "2019-01"),
                 InntektsPeriode("2017-02", "2018-01"),
                 InntektsPeriode("2016-02", "2017-01"),
-                Inntekt(BigDecimal(100000), BigDecimal(40000), BigDecimal(0), inneholderNaeringsinntekter = false)
+                Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
             )
             URI.create("URN:grunnlag:scenario3") -> DagpengegrunnlagBeregningsResponse(
                 UUID.randomUUID().toString(),
                 UtfallGrunnlag(
-                    BigDecimal(500000), BigDecimal(500000), BigDecimal(500000), BigDecimal(5000), "N/A", false
+                    500000, 500000, 500000, 5000, "N/A", false
                 ),
                 LocalDateTime.now().toString(),
                 LocalDateTime.now().toString(),
@@ -206,12 +205,12 @@ class RegelApiDummy : RegelApiClient {
                 InntektsPeriode("2018-02", "2019-01"),
                 InntektsPeriode("2017-02", "2018-01"),
                 InntektsPeriode("2016-02", "2017-01"),
-                Inntekt(BigDecimal(200000), BigDecimal(40000), BigDecimal(0), inneholderNaeringsinntekter = false)
+                Inntekt(200000, 40000, 0, inneholderNaeringsinntekter = false)
             )
             else -> DagpengegrunnlagBeregningsResponse(
                 UUID.randomUUID().toString(),
                 UtfallGrunnlag(
-                    BigDecimal(500000), BigDecimal(500000), BigDecimal(500000), BigDecimal(5000), "N/A", false
+                    500000, 500000, 500000, 5000, "N/A", false
                 ),
                 LocalDateTime.now().toString(),
                 LocalDateTime.now().toString(),
@@ -219,7 +218,7 @@ class RegelApiDummy : RegelApiClient {
                 InntektsPeriode("2018-02", "2019-01"),
                 InntektsPeriode("2017-02", "2018-01"),
                 InntektsPeriode("2016-02", "2017-01"),
-                Inntekt(BigDecimal(100000), BigDecimal(40000), BigDecimal(0), inneholderNaeringsinntekter = false)
+                Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
             )
         }
     }

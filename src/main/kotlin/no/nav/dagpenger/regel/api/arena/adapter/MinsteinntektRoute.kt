@@ -5,7 +5,6 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Routing
 import io.ktor.routing.post
-import java.math.BigDecimal
 
 fun Routing.minsteinntekt(regelApiClient: RegelApiClient) {
 
@@ -55,11 +54,11 @@ data class Utfall(
 )
 
 data class Inntekt(
-    val inntektSistePeriode: BigDecimal,
-    val inntektNestSistePeriode: BigDecimal,
-    val inntektTredjeSistePeriode: BigDecimal,
-    val andelInntektSistePeriode: BigDecimal? = null,
-    val andelInntektNestSistePeriode: BigDecimal? = null,
-    val andelInntektTredjeSistePeriode: BigDecimal? = null,
+    val inntektSistePeriode: Int,
+    val inntektNestSistePeriode: Int,
+    val inntektTredjeSistePeriode: Int,
+    val andelInntektSistePeriode: Int? = null,
+    val andelInntektNestSistePeriode: Int? = null,
+    val andelInntektTredjeSistePeriode: Int? = null,
     val inneholderNaeringsinntekter: Boolean
 )

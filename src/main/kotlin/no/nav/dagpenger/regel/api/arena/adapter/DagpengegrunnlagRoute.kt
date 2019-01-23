@@ -5,7 +5,6 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Routing
 import io.ktor.routing.post
-import java.math.BigDecimal
 
 fun Routing.grunnlag(regelApiClient: RegelApiClient) {
     post("/dagpengegrunnlag") {
@@ -54,10 +53,10 @@ data class DagpengegrunnlagBeregningsResponse(
 )
 
 data class UtfallGrunnlag(
-    val dagpengegrunnlag: BigDecimal,
-    val dagpengegrunnlagUavkortet: BigDecimal,
-    val dagsatsUtenBarnetillegg: BigDecimal,
-    val ukesatsMedBarnetillegg: BigDecimal,
+    val dagpengegrunnlag: Int,
+    val dagpengegrunnlagUavkortet: Int,
+    val dagsatsUtenBarnetillegg: Int,
+    val ukesatsMedBarnetillegg: Int,
     val beregningsregel: String,
     val benyttet90ProsentRegel: Boolean
 )
