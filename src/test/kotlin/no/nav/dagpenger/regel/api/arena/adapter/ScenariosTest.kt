@@ -1,6 +1,7 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
-import com.google.gson.Gson
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -17,14 +18,26 @@ class ScenariosTest {
 
     // Test and dummy responses as defined in https://confluence.adeo.no/display/TEAMARENA/ARENA-1892+-+04+Scenarier
 
+    val moshi = Moshi.Builder()
+        .add(YearMonthJsonAdapter())
+        .add(LocalDateTimeJsonAdapter())
+        .add(LocalDateJsonAdapter())
+        .add(KotlinJsonAdapterFactory())
+        .build()
+
+    val minsteinntektBeregningsRequestAdapter = moshi.adapter(MinsteinntektBeregningsRequest::class.java)
+    val minsteinntektBeregningsResponseAdapter = moshi.adapter(MinsteinntektBeregningsResponse::class.java)
+    val grunnlagRequestAdapter = moshi.adapter(DagpengegrunnlagBeregningsRequest::class.java)
+    val grunnlagResponseAdapter = moshi.adapter(DagpengegrunnlagBeregningsResponse::class.java)
+
     @Test
     fun `scenario 1-1`() = testApp {
         handleRequest(HttpMethod.Post, "/minsteinntekt") {
             addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(Gson().toJson(Scenario1_1Request))
+            setBody(minsteinntektBeregningsRequestAdapter.toJson(Scenario1_1Request))
         }.apply {
             assert200OkResponse()
-            val response = Gson().fromJson(response.content, MinsteinntektBeregningsResponse::class.java)
+            val response = minsteinntektBeregningsResponseAdapter.fromJson(response.content) ?: throw RuntimeException()
             assertMinsteinntektResponse(oppfyllerKrav = false, periode = 0, inntektsId = "01D1XGEK0FNB179YPXB12TPDPT", beregning = response)
         }
     }
@@ -33,10 +46,10 @@ class ScenariosTest {
     fun `scenario 1-2`() = testApp {
         handleRequest(HttpMethod.Post, "/minsteinntekt") {
             addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(Gson().toJson(Scenario1_2Request))
+            setBody(minsteinntektBeregningsRequestAdapter.toJson(Scenario1_2Request))
         }.apply {
             assert200OkResponse()
-            val response = Gson().fromJson(response.content, MinsteinntektBeregningsResponse::class.java)
+            val response = minsteinntektBeregningsResponseAdapter.fromJson(response.content) ?: throw RuntimeException()
             assertMinsteinntektResponse(oppfyllerKrav = true, periode = 52, inntektsId = "01D1XGEK15D0B6GDPC74C0ZASV", beregning = response)
         }
     }
@@ -45,10 +58,10 @@ class ScenariosTest {
     fun `scenario 1-3`() = testApp {
         handleRequest(HttpMethod.Post, "/minsteinntekt") {
             addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(Gson().toJson(Scenario1_3Request))
+            setBody(minsteinntektBeregningsRequestAdapter.toJson(Scenario1_3Request))
         }.apply {
             assert200OkResponse()
-            val response = Gson().fromJson(response.content, MinsteinntektBeregningsResponse::class.java)
+            val response = minsteinntektBeregningsResponseAdapter.fromJson(response.content) ?: throw RuntimeException()
             assertMinsteinntektResponse(oppfyllerKrav = true, periode = 104, inntektsId = "01D1XGEK1T355GP4FWQ51XP153", beregning = response)
         }
     }
@@ -57,10 +70,10 @@ class ScenariosTest {
     fun `scenario 2-1`() = testApp {
         handleRequest(HttpMethod.Post, "/minsteinntekt") {
             addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(Gson().toJson(Scenario2_1_AND_3_Request))
+            setBody(minsteinntektBeregningsRequestAdapter.toJson(Scenario2_1_AND_3_Request))
         }.apply {
             assert200OkResponse()
-            val response = Gson().fromJson(response.content, MinsteinntektBeregningsResponse::class.java)
+            val response = minsteinntektBeregningsResponseAdapter.fromJson(response.content) ?: throw RuntimeException()
             assertMinsteinntektResponse(oppfyllerKrav = true, periode = 52, inntektsId = "01D1XGEK2CA0X5BM7PZFYKS5WX", beregning = response)
         }
     }
@@ -69,10 +82,10 @@ class ScenariosTest {
     fun `scenario 2-2`() = testApp {
         handleRequest(HttpMethod.Post, "/minsteinntekt") {
             addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(Gson().toJson(Scenario2_2Request))
+            setBody(minsteinntektBeregningsRequestAdapter.toJson(Scenario2_2Request))
         }.apply {
             assert200OkResponse()
-            val response = Gson().fromJson(response.content, MinsteinntektBeregningsResponse::class.java)
+            val response = minsteinntektBeregningsResponseAdapter.fromJson(response.content) ?: throw RuntimeException()
             assertMinsteinntektResponse(oppfyllerKrav = false, periode = 0, inntektsId = "01D1XGEK2S8WWRZ0QE0Y7W414K", beregning = response)
         }
     }
@@ -81,10 +94,10 @@ class ScenariosTest {
     fun `scenario 2-3`() = testApp {
         handleRequest(HttpMethod.Post, "/minsteinntekt") {
             addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(Gson().toJson(Scenario2_1_AND_3_Request))
+            setBody(minsteinntektBeregningsRequestAdapter.toJson(Scenario2_1_AND_3_Request))
         }.apply {
             assert200OkResponse()
-            val response = Gson().fromJson(response.content, MinsteinntektBeregningsResponse::class.java)
+            val response = minsteinntektBeregningsResponseAdapter.fromJson(response.content) ?: throw RuntimeException()
             assertMinsteinntektResponse(oppfyllerKrav = true, periode = 52, inntektsId = "01D1XGEK2CA0X5BM7PZFYKS5WX", beregning = response)
         }
     }
@@ -93,10 +106,10 @@ class ScenariosTest {
     fun `scenario 3_1`() = testApp {
         handleRequest(HttpMethod.Post, "/minsteinntekt") {
             addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(Gson().toJson(Scenario3_1Request))
+            setBody(minsteinntektBeregningsRequestAdapter.toJson(Scenario3_1Request))
         }.apply {
             assert200OkResponse()
-            val response = Gson().fromJson(response.content, MinsteinntektBeregningsResponse::class.java)
+            val response = minsteinntektBeregningsResponseAdapter.fromJson(response.content) ?: throw RuntimeException()
             assertMinsteinntektResponse(oppfyllerKrav = false, periode = 0, inntektsId = "01D1XGEK398JX50S7P3V9ENH76", beregning = response)
         }
     }
@@ -105,10 +118,10 @@ class ScenariosTest {
     fun `grunnlagscenario 1`() = testApp {
         handleRequest(HttpMethod.Post, "/dagpengegrunnlag") {
             addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(Gson().toJson(GrunnlagScenario1))
+            setBody(grunnlagRequestAdapter.toJson(GrunnlagScenario1))
         }.apply {
             assert200OkResponse()
-            val response = Gson().fromJson(response.content, DagpengegrunnlagBeregningsResponse::class.java)
+            val response = grunnlagResponseAdapter.fromJson(response.content) ?: throw RuntimeException()
             assertDagpengeGrunnlagResponse("01D1XGQB1BSQ4NGXCBMGQ5M2KF", response)
         }
     }
@@ -117,10 +130,10 @@ class ScenariosTest {
     fun `grunnlagscenario 2`() = testApp {
         handleRequest(HttpMethod.Post, "/dagpengegrunnlag") {
             addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(Gson().toJson(GrunnlagScenario2))
+            setBody(grunnlagRequestAdapter.toJson(GrunnlagScenario2))
         }.apply {
             assert200OkResponse()
-            val response = Gson().fromJson(response.content, DagpengegrunnlagBeregningsResponse::class.java)
+            val response = grunnlagResponseAdapter.fromJson(response.content) ?: throw RuntimeException()
             assertDagpengeGrunnlagResponse("01D1XGQB3NNMHC54ADBGNF7HQG", response)
         }
     }
@@ -129,10 +142,10 @@ class ScenariosTest {
     fun `grunnlagscenario 3`() = testApp {
         handleRequest(HttpMethod.Post, "/dagpengegrunnlag") {
             addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(Gson().toJson(GrunnlagScenario3))
+            setBody(grunnlagRequestAdapter.toJson(GrunnlagScenario3))
         }.apply {
             assert200OkResponse()
-            val response = Gson().fromJson(response.content, DagpengegrunnlagBeregningsResponse::class.java)
+            val response = grunnlagResponseAdapter.fromJson(response.content) ?: throw RuntimeException()
             assertDagpengeGrunnlagResponse("01D1XGQB49ZP6KCMX3FAP2XTNG", response)
         }
     }

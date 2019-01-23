@@ -5,6 +5,9 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Routing
 import io.ktor.routing.post
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.YearMonth
 
 fun Routing.grunnlag(regelApiClient: RegelApiClient) {
     post("/dagpengegrunnlag") {
@@ -29,22 +32,22 @@ fun Routing.grunnlag(regelApiClient: RegelApiClient) {
 data class DagpengegrunnlagBeregningsRequest(
     val aktorId: String,
     val vedtakId: Int,
-    val beregningsdato: String,
+    val beregningsdato: LocalDate,
     val bruktinntektsPeriode: InntektsPeriode? = null,
     val harAvtjentVerneplikt: Boolean,
     val oppfyllerKravTilFangstOgFisk: Boolean
 )
 
 data class InntektsPeriode(
-    val foersteMaaned: String,
-    val sisteMaaned: String
+    val foersteMaaned: YearMonth,
+    val sisteMaaned: YearMonth
 )
 
 data class DagpengegrunnlagBeregningsResponse(
     val beregningsId: String,
     val utfall: UtfallGrunnlag,
-    val opprettet: String,
-    val utfort: String,
+    val opprettet: LocalDateTime,
+    val utfort: LocalDateTime,
     val parametere: Parametere,
     val sisteInntektsPeriode: InntektsPeriode,
     val nestSisteInntektsPeriode: InntektsPeriode,
@@ -64,7 +67,7 @@ data class UtfallGrunnlag(
 data class Parametere(
     val aktorId: String,
     val vedtakId: Int,
-    val beregningsdato: String,
+    val beregningsdato: LocalDate,
     val inntektsId: String?,
     val bruktInntektsPeriode: InntektsPeriode?,
     val harAvtjentVerneplikt: Boolean,
