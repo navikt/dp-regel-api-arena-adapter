@@ -1,9 +1,8 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
+import de.huxhorn.sulky.ulid.ULID
 import java.net.URI
 import java.time.LocalDateTime
-import java.util.UUID
-import de.huxhorn.sulky.ulid.ULID
 
 class RegelApiDummy : RegelApiClient {
 
@@ -171,7 +170,7 @@ class RegelApiDummy : RegelApiClient {
     override fun getGrunnlag(ressursUrl: URI): DagpengegrunnlagBeregningsResponse {
         return when (ressursUrl) {
             URI.create("URN:grunnlag:scenario1") -> DagpengegrunnlagBeregningsResponse(
-                UUID.randomUUID().toString(),
+                ulid.nextULID(),
                 UtfallGrunnlag(
                     500000, 500000, 500000, 5000, "N/A", false
                 ),
@@ -184,7 +183,7 @@ class RegelApiDummy : RegelApiClient {
                 Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
             )
             URI.create("URN:grunnlag:scenario2") -> DagpengegrunnlagBeregningsResponse(
-                UUID.randomUUID().toString(),
+                ulid.nextULID(),
                 UtfallGrunnlag(
                     500000, 500000, 500000, 5000, "N/A", false
                 ),
@@ -197,7 +196,7 @@ class RegelApiDummy : RegelApiClient {
                 Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
             )
             URI.create("URN:grunnlag:scenario3") -> DagpengegrunnlagBeregningsResponse(
-                UUID.randomUUID().toString(),
+                ulid.nextULID(),
                 UtfallGrunnlag(
                     500000, 500000, 500000, 5000, "N/A", false
                 ),
@@ -210,7 +209,7 @@ class RegelApiDummy : RegelApiClient {
                 Inntekt(200000, 40000, 0, inneholderNaeringsinntekter = false)
             )
             else -> DagpengegrunnlagBeregningsResponse(
-                UUID.randomUUID().toString(),
+                ulid.nextULID(),
                 UtfallGrunnlag(
                     500000, 500000, 500000, 5000, "N/A", false
                 ),
