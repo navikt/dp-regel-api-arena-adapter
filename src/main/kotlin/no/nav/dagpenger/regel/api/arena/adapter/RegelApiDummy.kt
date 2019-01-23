@@ -7,44 +7,45 @@ import java.util.UUID
 
 class RegelApiDummy : RegelApiClient {
 
-    lateinit var currentRequest: MinsteinntektBeregningsRequest
+    lateinit var currentMinsteinntektBeregningsRequest: MinsteinntektBeregningsRequest
+    lateinit var currentGrunnlagRequest: DagpengegrunnlagBeregningsRequest
 
     override fun startMinsteinntktBeregning(request: MinsteinntektBeregningsRequest): URI {
         return when {
             Scenario1_1Request == request -> {
-                currentRequest = request
-                URI.create("URN:scenario1_1")
+                currentMinsteinntektBeregningsRequest = request
+                URI.create("URN:minsteinntekt:scenario1_1")
             }
             Scenario1_2Request == request -> {
-                currentRequest = request
-                URI.create("URN:scenario1_2")
+                currentMinsteinntektBeregningsRequest = request
+                URI.create("URN:minsteinntekt:scenario1_2")
             }
             Scenario1_3Request == request -> {
-                currentRequest = request
-                URI.create("URN:scenario1_3")
+                currentMinsteinntektBeregningsRequest = request
+                URI.create("URN:minsteinntekt:scenario1_3")
             }
             Scenario2_1_AND_3_Request == request -> {
-                currentRequest = request
-                URI.create("URN:scenario2_1-3")
+                currentMinsteinntektBeregningsRequest = request
+                URI.create("URN:minsteinntekt:scenario2_1-3")
             }
             Scenario2_2Request == request -> {
-                currentRequest = request
-                URI.create("URN:scenario2_2")
+                currentMinsteinntektBeregningsRequest = request
+                URI.create("URN:minsteinntekt:scenario2_2")
             }
             Scenario3_1Request == request -> {
-                currentRequest = request
-                URI.create("URN:scenario3_1")
+                currentMinsteinntektBeregningsRequest = request
+                URI.create("URN:minsteinntekt:scenario3_1")
             }
             else -> {
-                currentRequest = request
-                URI.create("URN:nomatch")
+                currentMinsteinntektBeregningsRequest = request
+                URI.create("URN:minsteinntekt:nomatch")
             }
         }
     }
 
     override fun getMinsteinntekt(ressursUrl: URI): MinsteinntektBeregningsResponse {
         return when (ressursUrl) {
-            URI.create("URN:scenario1_1") -> MinsteinntektBeregningsResponse(
+            URI.create("URN:minsteinntekt:scenario1_1") -> MinsteinntektBeregningsResponse(
                 UUID.randomUUID().toString(),
                 Utfall(
                     false,
@@ -52,13 +53,13 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now().toString(),
                 LocalDateTime.now().toString(),
-                mapRequestToParametere(currentRequest, "A"),
+                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "A"),
                 InntektsPeriode("2018-01", "2018-12"),
                 InntektsPeriode("2017-01", "2017-12"),
                 InntektsPeriode("2016-01", "2016-12"),
                 Inntekt(BigDecimal(50000), BigDecimal(0), BigDecimal(0), inneholderNaeringsinntekter = false)
             )
-            URI.create("URN:scenario1_2") -> MinsteinntektBeregningsResponse(
+            URI.create("URN:minsteinntekt:scenario1_2") -> MinsteinntektBeregningsResponse(
                 "M2",
                 Utfall(
                     true,
@@ -66,13 +67,13 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now().toString(),
                 LocalDateTime.now().toString(),
-                mapRequestToParametere(currentRequest, "B"),
+                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "B"),
                 InntektsPeriode("2018-02", "2019-01"),
                 InntektsPeriode("2017-02", "2018-01"),
                 InntektsPeriode("2016-02", "2017-01"),
                 Inntekt(BigDecimal(200000), BigDecimal(0), BigDecimal(0), inneholderNaeringsinntekter = false)
             )
-            URI.create("URN:scenario1_3") -> MinsteinntektBeregningsResponse(
+            URI.create("URN:minsteinntekt:scenario1_3") -> MinsteinntektBeregningsResponse(
                 UUID.randomUUID().toString(),
                 Utfall(
                     true,
@@ -80,13 +81,13 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now().toString(),
                 LocalDateTime.now().toString(),
-                mapRequestToParametere(currentRequest, "B"),
+                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "B"),
                 InntektsPeriode("2018-02", "2019-01"),
                 InntektsPeriode("2017-02", "2018-01"),
                 InntektsPeriode("2016-02", "2017-01"),
                 Inntekt(BigDecimal(500000), BigDecimal(0), BigDecimal(0), inneholderNaeringsinntekter = true)
             )
-            URI.create("URN:scenario2_1-3") -> MinsteinntektBeregningsResponse(
+            URI.create("URN:minsteinntekt:scenario2_1-3") -> MinsteinntektBeregningsResponse(
                 UUID.randomUUID().toString(),
                 Utfall(
                     true,
@@ -94,13 +95,13 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now().toString(),
                 LocalDateTime.now().toString(),
-                mapRequestToParametere(currentRequest, "C"),
+                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "C"),
                 InntektsPeriode("2018-01", "2018-12"),
                 InntektsPeriode("2017-01", "2017-12"),
                 InntektsPeriode("2016-01", "2016-12"),
                 Inntekt(BigDecimal(164701), BigDecimal(0), BigDecimal(0), inneholderNaeringsinntekter = false)
             )
-            URI.create("URN:scenario2_2") -> MinsteinntektBeregningsResponse(
+            URI.create("URN:minsteinntekt:scenario2_2") -> MinsteinntektBeregningsResponse(
                 UUID.randomUUID().toString(),
                 Utfall(
                     false,
@@ -108,13 +109,13 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now().toString(),
                 LocalDateTime.now().toString(),
-                mapRequestToParametere(currentRequest, "D"),
+                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "D"),
                 InntektsPeriode("2018-02", "2019-01"),
                 InntektsPeriode("2017-02", "2018-01"),
                 InntektsPeriode("2016-02", "2017-01"),
                 Inntekt(BigDecimal(100000), BigDecimal(40000), BigDecimal(0), inneholderNaeringsinntekter = false)
             )
-            URI.create("URN:scenario3_1") -> MinsteinntektBeregningsResponse(
+            URI.create("URN:minsteinntekt:scenario3_1") -> MinsteinntektBeregningsResponse(
                 UUID.randomUUID().toString(),
                 Utfall(
                     false,
@@ -122,7 +123,7 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now().toString(),
                 LocalDateTime.now().toString(),
-                mapRequestToParametere(currentRequest, "J"),
+                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "J"),
                 InntektsPeriode("2018-02", "2019-01"),
                 InntektsPeriode("2017-02", "2018-01"),
                 InntektsPeriode("2016-02", "2017-01"),
@@ -136,7 +137,7 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now().toString(),
                 LocalDateTime.now().toString(),
-                mapRequestToParametere(currentRequest, "D"),
+                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "D"),
                 InntektsPeriode("2018-02", "2019-01"),
                 InntektsPeriode("2017-02", "2018-01"),
                 InntektsPeriode("2016-02", "2017-01"),
@@ -146,11 +147,81 @@ class RegelApiDummy : RegelApiClient {
     }
 
     override fun startGrunnlagBeregning(request: DagpengegrunnlagBeregningsRequest): URI {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        return when {
+            GrunnlagScenario1 == request -> {
+                currentGrunnlagRequest = request
+                URI.create("URN:grunnlag:scenario1")
+            }
+            GrunnlagScenario2 == request -> {
+                currentGrunnlagRequest = request
+                URI.create("URN:grunnlag:scenario2")
+            }
+            GrunnlagScenario3 == request -> {
+                currentGrunnlagRequest = request
+                URI.create("URN:grunnlag:scenario3")
+            }
+            else -> {
+                currentGrunnlagRequest = request
+                URI.create("URN:grunnlag:nomatch")
+            }
+        }
     }
 
     override fun getGrunnlag(ressursUrl: URI): DagpengegrunnlagBeregningsResponse {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+        return when (ressursUrl) {
+            URI.create("URN:grunnlag:scenario1") -> DagpengegrunnlagBeregningsResponse(
+                UUID.randomUUID().toString(),
+                UtfallGrunnlag(
+                    BigDecimal(500000), BigDecimal(500000), BigDecimal(500000), BigDecimal(5000), "N/A", false
+                ),
+                LocalDateTime.now().toString(),
+                LocalDateTime.now().toString(),
+                mapRequestToParametere(currentGrunnlagRequest, "J"),
+                InntektsPeriode("2018-02", "2019-01"),
+                InntektsPeriode("2017-02", "2018-01"),
+                InntektsPeriode("2016-02", "2017-01"),
+                Inntekt(BigDecimal(100000), BigDecimal(40000), BigDecimal(0), inneholderNaeringsinntekter = false)
+            )
+            URI.create("URN:grunnlag:scenario2") -> DagpengegrunnlagBeregningsResponse(
+                UUID.randomUUID().toString(),
+                UtfallGrunnlag(
+                    BigDecimal(500000), BigDecimal(500000), BigDecimal(500000), BigDecimal(5000), "N/A", false
+                ),
+                LocalDateTime.now().toString(),
+                LocalDateTime.now().toString(),
+                mapRequestToParametere(currentGrunnlagRequest, "G"),
+                InntektsPeriode("2018-02", "2019-01"),
+                InntektsPeriode("2017-02", "2018-01"),
+                InntektsPeriode("2016-02", "2017-01"),
+                Inntekt(BigDecimal(100000), BigDecimal(40000), BigDecimal(0), inneholderNaeringsinntekter = false)
+            )
+            URI.create("URN:grunnlag:scenario3") -> DagpengegrunnlagBeregningsResponse(
+                UUID.randomUUID().toString(),
+                UtfallGrunnlag(
+                    BigDecimal(500000), BigDecimal(500000), BigDecimal(500000), BigDecimal(5000), "N/A", false
+                ),
+                LocalDateTime.now().toString(),
+                LocalDateTime.now().toString(),
+                mapRequestToParametere(currentGrunnlagRequest, "H"),
+                InntektsPeriode("2018-02", "2019-01"),
+                InntektsPeriode("2017-02", "2018-01"),
+                InntektsPeriode("2016-02", "2017-01"),
+                Inntekt(BigDecimal(200000), BigDecimal(40000), BigDecimal(0), inneholderNaeringsinntekter = false)
+            )
+            else -> DagpengegrunnlagBeregningsResponse(
+                UUID.randomUUID().toString(),
+                UtfallGrunnlag(
+                    BigDecimal(500000), BigDecimal(500000), BigDecimal(500000), BigDecimal(5000), "N/A", false
+                ),
+                LocalDateTime.now().toString(),
+                LocalDateTime.now().toString(),
+                mapRequestToParametere(currentGrunnlagRequest, "J"),
+                InntektsPeriode("2018-02", "2019-01"),
+                InntektsPeriode("2017-02", "2018-01"),
+                InntektsPeriode("2016-02", "2017-01"),
+                Inntekt(BigDecimal(100000), BigDecimal(40000), BigDecimal(0), inneholderNaeringsinntekter = false)
+            )
+        }
     }
 
     override fun pollTask(taskUrl: URI): TaskPollResponse {
@@ -159,6 +230,22 @@ class RegelApiDummy : RegelApiClient {
 }
 
 fun mapRequestToParametere(request: MinsteinntektBeregningsRequest, inntektsId: String): Parametere =
+    Parametere(
+        request.aktorId,
+        request.vedtakId,
+        request.beregningsdato,
+        inntektsId,
+        request.bruktinntektsPeriode?.let {
+            InntektsPeriode(
+                request.bruktinntektsPeriode.foersteMaaned,
+                request.bruktinntektsPeriode.sisteMaaned
+            )
+        },
+        request.harAvtjentVerneplikt,
+        request.oppfyllerKravTilFangstOgFisk
+    )
+
+fun mapRequestToParametere(request: DagpengegrunnlagBeregningsRequest, inntektsId: String): Parametere =
     Parametere(
         request.aktorId,
         request.vedtakId,
@@ -206,6 +293,29 @@ val Scenario2_2Request = MinsteinntektBeregningsRequest(
 val Scenario3_1Request = MinsteinntektBeregningsRequest(
     aktorId = "1000074474453",
     vedtakId = 31018398,
+    beregningsdato = "2019-02-08",
+    harAvtjentVerneplikt = false,
+    oppfyllerKravTilFangstOgFisk = false
+)
+val GrunnlagScenario1 = DagpengegrunnlagBeregningsRequest(
+    aktorId = "1000074474453",
+    vedtakId = 31018398,
+    beregningsdato = "2019-02-08",
+    harAvtjentVerneplikt = false,
+    oppfyllerKravTilFangstOgFisk = false
+)
+
+val GrunnlagScenario2 = DagpengegrunnlagBeregningsRequest(
+    aktorId = "1000066295933",
+    vedtakId = 31018397,
+    beregningsdato = "2019-01-31",
+    harAvtjentVerneplikt = false,
+    oppfyllerKravTilFangstOgFisk = false
+)
+
+val GrunnlagScenario3 = DagpengegrunnlagBeregningsRequest(
+    aktorId = "1000066295933",
+    vedtakId = 31018397,
     beregningsdato = "2019-02-08",
     harAvtjentVerneplikt = false,
     oppfyllerKravTilFangstOgFisk = false

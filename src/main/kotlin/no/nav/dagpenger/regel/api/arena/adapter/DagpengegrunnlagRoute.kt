@@ -11,6 +11,7 @@ import io.ktor.application.call
 import io.ktor.locations.Location
 import io.ktor.response.respond
 import io.ktor.routing.Routing
+import java.math.BigDecimal
 
 @Group("Grunnlag")
 @Location("/dagpengegrunnlag")
@@ -21,28 +22,6 @@ fun Routing.grunnlag(regelApiClient: RegelApiClient) {
         "grunnlagberegning"
             .description("Start grunnlagberegning")
             .examples()
-            .responds(
-                ok<DagpengegrunnlagBeregningsResponse>(
-                    example(
-                        "",
-                        DagpengegrunnlagBeregningsResponse(
-                            "456",
-                            Utfall(true, 104),
-                            "2018-12-26T14:42:09Z",
-                            "2018-12-26T14:42:09Z",
-                            Parametere(
-                                "01019955667",
-                                123,
-                                "2019-01-11",
-                                "lasdFQ=q",
-                                InntektsPeriode("2019-01", "2018-01"),
-                                false,
-                                false
-                            )
-                        )
-                    )
-                )
-            )
     ) { _, request ->
 
         val taskUrl = regelApiClient.startGrunnlagBeregning(request)
@@ -65,11 +44,9 @@ data class DagpengegrunnlagBeregningsRequest(
     val aktorId: String,
     val vedtakId: Int,
     val beregningsdato: String,
-    val inntektsId: String?,
-    val bruktinntektsPeriode: InntektsPeriode?,
+    val bruktinntektsPeriode: InntektsPeriode? = null,
     val harAvtjentVerneplikt: Boolean,
-    val oppfyllerKravTilFangstOgFisk: Boolean,
-    val harArbeidsperiodeEosSiste12Maaneder: Boolean
+    val oppfyllerKravTilFangstOgFisk: Boolean
 )
 
 data class InntektsPeriode(
@@ -79,29 +56,30 @@ data class InntektsPeriode(
 
 data class DagpengegrunnlagBeregningsResponse(
     val beregningsId: String,
-    val utfall: Utfall,
+    val utfall: UtfallGrunnlag,
     val opprettet: String,
     val utfort: String,
-    val parametere: Parametere
-) {
-    companion object {
-        val exampleInntektBeregning = mapOf(
-            "oppfyllerMinsteinntekt" to true,
-            "status" to 1
-        )
-    }
-}
+    val parametere: Parametere,
+    val sisteInntektsPeriode: InntektsPeriode,
+    val nestSisteInntektsPeriode: InntektsPeriode,
+    val tredjeSisteInntektsPeriode: InntektsPeriode,
+    val inntekt: Inntekt
+)
 
-data class Utfall(
-    val oppfyllerKravTilMinsteArbeidsinntekt: Boolean,
-    val periodeAntallUker: Int
+data class UtfallGrunnlag(
+    val dagpengegrunnlag: BigDecimal,
+    val dagpengegrunnlagUavkortet: BigDecimal,
+    val dagsatsUtenBarnetillegg: BigDecimal,
+    val ukesatsMedBarnetillegg: BigDecimal,
+    val beregningsregel: String,
+    val benyttet90ProsentRegel: Boolean
 )
 
 data class Parametere(
     val aktorId: String,
     val vedtakId: Int,
     val beregningsdato: String,
-    val inntektsId: String?,
+    val inntektsId: String,
     val bruktInntektsPeriode: InntektsPeriode?,
     val harAvtjentVerneplikt: Boolean,
     val oppfyllerKravTilFangstOgFisk: Boolean

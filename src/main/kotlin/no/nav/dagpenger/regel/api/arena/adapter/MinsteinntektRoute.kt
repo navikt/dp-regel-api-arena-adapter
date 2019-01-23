@@ -87,14 +87,12 @@ data class MinsteinntektBeregningsResponse(
     val nestSisteInntektsPeriode: InntektsPeriode,
     val tredjeSisteInntektsPeriode: InntektsPeriode,
     val inntekt: Inntekt
-) {
-    companion object {
-        val exampleInntektBeregning = mapOf(
-            "oppfyllerMinsteinntekt" to true,
-            "status" to 1
-        )
-    }
-}
+)
+
+data class Utfall(
+    val oppfyllerKravTilMinsteArbeidsinntekt: Boolean,
+    val periodeAntallUker: Int
+)
 
 data class Inntekt(
     val inntektSistePeriode: BigDecimal,

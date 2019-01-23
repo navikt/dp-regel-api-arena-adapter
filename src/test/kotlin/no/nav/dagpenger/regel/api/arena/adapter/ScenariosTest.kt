@@ -101,6 +101,42 @@ class ScenariosTest {
         }
     }
 
+    @Test
+    fun `grunnlagscenario 1`() = testApp {
+        handleRequest(HttpMethod.Post, "/dagpengegrunnlag") {
+            addHeader(HttpHeaders.ContentType, "application/json")
+            setBody(Gson().toJson(GrunnlagScenario1))
+        }.apply {
+            assert200OkResponse()
+            val response = Gson().fromJson(response.content, DagpengegrunnlagBeregningsResponse::class.java)
+            assertDagpengeGrunnlagResponse("J", response)
+        }
+    }
+
+    @Test
+    fun `grunnlagscenario 2`() = testApp {
+        handleRequest(HttpMethod.Post, "/dagpengegrunnlag") {
+            addHeader(HttpHeaders.ContentType, "application/json")
+            setBody(Gson().toJson(GrunnlagScenario2))
+        }.apply {
+            assert200OkResponse()
+            val response = Gson().fromJson(response.content, DagpengegrunnlagBeregningsResponse::class.java)
+            assertDagpengeGrunnlagResponse("G", response)
+        }
+    }
+
+    @Test
+    fun `grunnlagscenario 3`() = testApp {
+        handleRequest(HttpMethod.Post, "/dagpengegrunnlag") {
+            addHeader(HttpHeaders.ContentType, "application/json")
+            setBody(Gson().toJson(GrunnlagScenario3))
+        }.apply {
+            assert200OkResponse()
+            val response = Gson().fromJson(response.content, DagpengegrunnlagBeregningsResponse::class.java)
+            assertDagpengeGrunnlagResponse("H", response)
+        }
+    }
+
     fun testApp(callback: TestApplicationEngine.() -> Unit) {
         withTestApplication({ regelApiAdapter(RegelApiDummy()) }) { callback() }
     }
@@ -115,6 +151,14 @@ class ScenariosTest {
         Assertions.assertEquals(periode, beregning.utfall.periodeAntallUker)
         Assertions.assertEquals(inntektsId, beregning.parametere.inntektsId)
         assertNotNull("Beregnings id er satt og unik", beregning.beregningsId)
+    }
+
+    fun assertDagpengeGrunnlagResponse(
+        inntektsId: String,
+        grunnlag: DagpengegrunnlagBeregningsResponse
+    ) {
+        Assertions.assertEquals(inntektsId, grunnlag.parametere.inntektsId)
+        assertNotNull("Beregnings id er satt og unik", grunnlag.beregningsId)
     }
 
     fun TestApplicationCall.assert200OkResponse() {
