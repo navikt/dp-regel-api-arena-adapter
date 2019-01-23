@@ -38,6 +38,8 @@ val fuelVersion = "1.15.0"
 val kotlinLoggingVersion = "1.6.22"
 val log4j2Version = "2.11.1"
 val jupiterVersion = "5.3.2"
+val moshiVersion = "1.8.0"
+val ktorMoshiVersion = "1.0.1"
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -46,6 +48,13 @@ dependencies {
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-gson:$ktorVersion")
     implementation("io.ktor:ktor-auth:$ktorVersion")
+
+    implementation("com.squareup.okio:okio:2.1.0")
+    implementation("com.squareup.moshi:moshi-adapters:$moshiVersion")
+    implementation("com.squareup.moshi:moshi-kotlin:$moshiVersion")
+    implementation("com.squareup.moshi:moshi:$moshiVersion")
+    implementation("com.ryanharter.ktor:ktor-moshi:$ktorMoshiVersion")
+    implementation("com.ryanharter.ktor:ktor-moshi:$ktorMoshiVersion")
 
     implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
 
