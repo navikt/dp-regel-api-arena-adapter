@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 class RegelApiDummy : RegelApiClient {
 
-    var ulid = ULID()
+    private var ulid = ULID()
     lateinit var currentMinsteinntektBeregningsRequest: MinsteinntektBeregningsRequest
     lateinit var currentGrunnlagRequest: DagpengegrunnlagBeregningsRequest
 

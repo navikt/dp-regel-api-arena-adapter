@@ -2,7 +2,7 @@
 
 * Status: Pending
 * Deciders: Team digitale dagpenger
-* Date: 2019-01-23
+* Date: 2019-01-24
 
 
 ## Context and Problem Statement
@@ -12,6 +12,7 @@ LEL1 2019 API (regelapi) mot Arena
 
 ## Decision Outcome
 
+Logg 2019-01-23:
 Endringer:
 - Vi fjerner (i første runde gjør den optional) `inntektsId` i `dp-regel-api-arena-adapter`.
 - Vi legger til `beregningsId` på grunnlag.
@@ -19,6 +20,8 @@ Endringer:
 
 ### Consequences
 
+
+Logg 2019-01-23:
 Konsekvenser:
 - Minsteinntekt henter alltid "siste gjeldende inntekt" fra `dp-inntekts-api` hver gang den kjøres.
 - Grunnlag henter alltid "siste gjeldende inntekt", med mindre `beregningsId` settes.
