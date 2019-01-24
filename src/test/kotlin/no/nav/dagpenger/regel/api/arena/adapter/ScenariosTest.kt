@@ -62,7 +62,7 @@ class ScenariosTest {
         }.apply {
             assert200OkResponse()
             val response = minsteinntektBeregningsResponseAdapter.fromJson(response.content) ?: throw RuntimeException()
-            assertMinsteinntektResponse(oppfyllerKrav = true, periode = 104, inntektsId = "01D1XGEK1T355GP4FWQ51XP153", beregning = response)
+            assertMinsteinntektResponse(oppfyllerKrav = true, periode = 104, inntektsId = "01D1XGEK15D0B6GDPC74C0ZASV", beregning = response)
         }
     }
 
@@ -103,7 +103,7 @@ class ScenariosTest {
     }
 
     @Test
-    fun `scenario 3_1`() = testApp {
+    fun `scenario 3-1`() = testApp {
         handleRequest(HttpMethod.Post, "/minsteinntekt") {
             addHeader(HttpHeaders.ContentType, "application/json")
             setBody(minsteinntektBeregningsRequestAdapter.toJson(Scenario3_1Request))
@@ -115,10 +115,10 @@ class ScenariosTest {
     }
 
     @Test
-    fun `grunnlagscenario 1`() = testApp {
+    fun `scenario 3-4`() = testApp {
         handleRequest(HttpMethod.Post, "/dagpengegrunnlag") {
             addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(grunnlagRequestAdapter.toJson(GrunnlagScenario1))
+            setBody(grunnlagRequestAdapter.toJson(Scenario3_4Request))
         }.apply {
             assert200OkResponse()
             val response = grunnlagResponseAdapter.fromJson(response.content) ?: throw RuntimeException()
@@ -127,10 +127,10 @@ class ScenariosTest {
     }
 
     @Test
-    fun `grunnlagscenario 2`() = testApp {
+    fun `scenario 4-1`() = testApp {
         handleRequest(HttpMethod.Post, "/dagpengegrunnlag") {
             addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(grunnlagRequestAdapter.toJson(GrunnlagScenario2))
+            setBody(grunnlagRequestAdapter.toJson(Scenario4_1Request))
         }.apply {
             assert200OkResponse()
             val response = grunnlagResponseAdapter.fromJson(response.content) ?: throw RuntimeException()
@@ -139,14 +139,36 @@ class ScenariosTest {
     }
 
     @Test
-    fun `grunnlagscenario 3`() = testApp {
+    fun `scenario 4-2`() = testApp {
         handleRequest(HttpMethod.Post, "/dagpengegrunnlag") {
             addHeader(HttpHeaders.ContentType, "application/json")
-            setBody(grunnlagRequestAdapter.toJson(GrunnlagScenario3))
+            setBody(grunnlagRequestAdapter.toJson(Scenario4_2Request))
         }.apply {
             assert200OkResponse()
             val response = grunnlagResponseAdapter.fromJson(response.content) ?: throw RuntimeException()
             assertDagpengeGrunnlagResponse("01D1XGQB49ZP6KCMX3FAP2XTNG", response)
+        }
+    }
+
+    @Test
+    fun `scenario 5-1`() = testApp {
+        handleRequest(HttpMethod.Post, "/minsteinntekt") {
+            addHeader(HttpHeaders.ContentType, "application/json")
+            setBody(minsteinntektBeregningsRequestAdapter.toJson(Scenario5_1Request))
+        }.apply {
+            assert200OkResponse()
+            val response = minsteinntektBeregningsResponseAdapter.fromJson(response.content) ?: throw RuntimeException()
+            assertMinsteinntektResponse(oppfyllerKrav = true, periode = 104, inntektsId = "01D1XGEK151116GDPC74C0Z111", beregning = response)
+        }
+    }
+
+    @Test
+    fun `scenario 5-2`() = testApp {
+        handleRequest(HttpMethod.Post, "/dagpengegrunnlag") {
+            addHeader(HttpHeaders.ContentType, "application/json")
+            setBody(grunnlagRequestAdapter.toJson(Scenario5_2Request))
+        }.apply {
+            assert400BadRequestResponse()
         }
     }
 
@@ -177,5 +199,9 @@ class ScenariosTest {
     fun TestApplicationCall.assert200OkResponse() {
         Assertions.assertTrue(requestHandled)
         Assertions.assertEquals(HttpStatusCode.OK, response.status())
+    }
+    fun TestApplicationCall.assert400BadRequestResponse() {
+        Assertions.assertTrue(requestHandled)
+        Assertions.assertEquals(HttpStatusCode.BadRequest, response.status())
     }
 }

@@ -35,7 +35,8 @@ data class DagpengegrunnlagBeregningsRequest(
     val beregningsdato: LocalDate,
     val bruktinntektsPeriode: InntektsPeriode? = null,
     val harAvtjentVerneplikt: Boolean,
-    val oppfyllerKravTilFangstOgFisk: Boolean
+    val oppfyllerKravTilFangstOgFisk: Boolean,
+    val beregningsId: String? = null
 )
 
 data class InntektsPeriode(

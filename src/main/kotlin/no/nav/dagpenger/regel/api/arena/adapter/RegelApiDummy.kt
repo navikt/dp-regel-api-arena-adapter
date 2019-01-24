@@ -38,6 +38,10 @@ class RegelApiDummy : RegelApiClient {
                 currentMinsteinntektBeregningsRequest = request
                 URI.create("URN:minsteinntekt:scenario3_1")
             }
+            Scenario5_1Request == request -> {
+                currentMinsteinntektBeregningsRequest = request
+                URI.create("URN:minsteinntekt:scenario5_1")
+            }
             else -> {
                 currentMinsteinntektBeregningsRequest = request
                 URI.create("URN:minsteinntekt:nomatch")
@@ -83,7 +87,7 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "01D1XGEK1T355GP4FWQ51XP153"),
+                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "01D1XGEK15D0B6GDPC74C0ZASV"),
                 InntektsPeriode(YearMonth.parse("2018-02"), YearMonth.parse("2019-01")),
                 InntektsPeriode(YearMonth.parse("2017-02"), YearMonth.parse("2018-01")),
                 InntektsPeriode(YearMonth.parse("2016-02"), YearMonth.parse("2017-01")),
@@ -131,6 +135,34 @@ class RegelApiDummy : RegelApiClient {
                 InntektsPeriode(YearMonth.parse("2016-02"), YearMonth.parse("2017-01")),
                 Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
             )
+            URI.create("URN:minsteinntekt:scenario5_1") -> MinsteinntektBeregningsResponse(
+                ulid.nextULID(),
+                MinsteinntektUtfall(
+                    true,
+                    104
+                ),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "01D1XGEK151116GDPC74C0Z111"),
+                InntektsPeriode(YearMonth.parse("2018-01"), YearMonth.parse("2018-12")),
+                InntektsPeriode(YearMonth.parse("2017-01"), YearMonth.parse("2017-12")),
+                InntektsPeriode(YearMonth.parse("2016-01"), YearMonth.parse("2016-12")),
+                Inntekt(500000, 0, 0, inneholderNaeringsinntekter = false)
+            )
+            URI.create("URN:minsteinntekt:scenario5_2") -> MinsteinntektBeregningsResponse(
+                ulid.nextULID(),
+                MinsteinntektUtfall(
+                    true,
+                    104
+                ),
+                LocalDateTime.now(),
+                LocalDateTime.now(),
+                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "01D1XGEK151116GDPC74C0Z111"),
+                InntektsPeriode(YearMonth.parse("2018-01"), YearMonth.parse("2018-12")),
+                InntektsPeriode(YearMonth.parse("2017-01"), YearMonth.parse("2017-12")),
+                InntektsPeriode(YearMonth.parse("2016-01"), YearMonth.parse("2016-12")),
+                Inntekt(500000, 0, 0, inneholderNaeringsinntekter = true)
+            )
             else -> MinsteinntektBeregningsResponse(
                 ulid.nextULID(),
                 MinsteinntektUtfall(
@@ -150,17 +182,20 @@ class RegelApiDummy : RegelApiClient {
 
     override fun startGrunnlagBeregning(request: DagpengegrunnlagBeregningsRequest): URI {
         return when {
-            GrunnlagScenario1 == request -> {
+            Scenario3_4Request == request -> {
                 currentGrunnlagRequest = request
                 URI.create("URN:grunnlag:scenario1")
             }
-            GrunnlagScenario2 == request -> {
+            Scenario4_1Request == request -> {
                 currentGrunnlagRequest = request
                 URI.create("URN:grunnlag:scenario2")
             }
-            GrunnlagScenario3 == request -> {
+            Scenario4_2Request == request -> {
                 currentGrunnlagRequest = request
                 URI.create("URN:grunnlag:scenario3")
+            }
+            Scenario5_2Request == request -> {
+                throw BadRequestException()
             }
             else -> {
                 currentGrunnlagRequest = request
@@ -299,7 +334,8 @@ val Scenario3_1Request = MinsteinntektBeregningsRequest(
     harAvtjentVerneplikt = false,
     oppfyllerKravTilFangstOgFisk = false
 )
-val GrunnlagScenario1 = DagpengegrunnlagBeregningsRequest(
+
+val Scenario3_4Request = DagpengegrunnlagBeregningsRequest(
     aktorId = "1000074474453",
     vedtakId = 31018398,
     beregningsdato = LocalDate.of(2019, 2, 8),
@@ -307,7 +343,7 @@ val GrunnlagScenario1 = DagpengegrunnlagBeregningsRequest(
     oppfyllerKravTilFangstOgFisk = false
 )
 
-val GrunnlagScenario2 = DagpengegrunnlagBeregningsRequest(
+val Scenario4_1Request = DagpengegrunnlagBeregningsRequest(
     aktorId = "1000066295933",
     vedtakId = 31018397,
     beregningsdato = LocalDate.of(2019, 1, 31),
@@ -315,10 +351,27 @@ val GrunnlagScenario2 = DagpengegrunnlagBeregningsRequest(
     oppfyllerKravTilFangstOgFisk = false
 )
 
-val GrunnlagScenario3 = DagpengegrunnlagBeregningsRequest(
+val Scenario4_2Request = DagpengegrunnlagBeregningsRequest(
     aktorId = "1000066295933",
     vedtakId = 31018397,
     beregningsdato = LocalDate.of(2019, 2, 8),
     harAvtjentVerneplikt = false,
     oppfyllerKravTilFangstOgFisk = false
+)
+
+val Scenario5_1Request = MinsteinntektBeregningsRequest(
+    aktorId = "123",
+    vedtakId = 456,
+    beregningsdato = LocalDate.of(2019, 2, 2),
+    harAvtjentVerneplikt = false,
+    oppfyllerKravTilFangstOgFisk = false
+)
+
+val Scenario5_2Request = DagpengegrunnlagBeregningsRequest(
+    aktorId = "123",
+    vedtakId = 456,
+    beregningsdato = LocalDate.of(2019, 2, 10),
+    harAvtjentVerneplikt = false,
+    oppfyllerKravTilFangstOgFisk = false,
+    beregningsId = "01DFXL4H9127LKMTR99"
 )

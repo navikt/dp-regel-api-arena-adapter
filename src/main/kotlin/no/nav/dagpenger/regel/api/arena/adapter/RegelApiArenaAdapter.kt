@@ -3,10 +3,14 @@ package no.nav.dagpenger.regel.api.arena.adapter
 import com.ryanharter.ktor.moshi.moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import io.ktor.application.Application
+import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
+import io.ktor.features.StatusPages
+import io.ktor.http.HttpStatusCode
+import io.ktor.response.respond
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
@@ -43,6 +47,11 @@ fun Application.regelApiAdapter(regelApiClient: RegelApiClient) {
             add(LocalDateTimeJsonAdapter())
             add(LocalDateJsonAdapter())
             add(KotlinJsonAdapterFactory())
+        }
+    }
+    install(StatusPages) {
+        exception<BadRequestException> { cause ->
+            call.respond(HttpStatusCode.BadRequest)
         }
     }
 

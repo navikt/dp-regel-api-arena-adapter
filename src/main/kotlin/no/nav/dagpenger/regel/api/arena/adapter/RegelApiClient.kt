@@ -12,6 +12,8 @@ interface RegelApiClient {
 
 class RegelApiException(val statusCode: Int, override val message: String, override val cause: Throwable) : RuntimeException(message, cause)
 
+class BadRequestException() : RuntimeException()
+
 enum class TaskStatus {
     PENDING, DONE
 }
