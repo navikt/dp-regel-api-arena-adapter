@@ -3,7 +3,7 @@ package no.nav.dagpenger.regel.api.arena.adapter
 import java.net.URI
 
 interface RegelApiClient {
-    fun startMinsteinntktBeregning(request: MinsteinntektBeregningsRequest): URI
+    fun startMinsteinntektBeregning(request: MinsteinntektBeregningsRequest): URI
     fun getMinsteinntekt(ressursUrl: URI): MinsteinntektBeregningsResponse
     fun startGrunnlagBeregning(request: DagpengegrunnlagBeregningsRequest): URI
     fun getGrunnlag(ressursUrl: URI): DagpengegrunnlagBeregningsResponse

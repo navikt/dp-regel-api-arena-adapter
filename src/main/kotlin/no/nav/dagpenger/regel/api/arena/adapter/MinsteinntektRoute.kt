@@ -13,7 +13,7 @@ fun Routing.minsteinntekt(regelApiClient: RegelApiClient) {
     post("/minsteinntekt") {
         val request = call.receive<MinsteinntektBeregningsRequest>()
 
-        val taskUrl = regelApiClient.startMinsteinntktBeregning(request)
+        val taskUrl = regelApiClient.startMinsteinntektBeregning(request)
 
         var taskResponse = regelApiClient.pollTask(taskUrl)
         while (taskResponse.task?.status == TaskStatus.PENDING) {

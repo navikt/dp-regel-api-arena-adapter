@@ -9,7 +9,7 @@ import java.net.URI
 
 class DefaultRegelApiClient(private val regelApiUrl: String) : RegelApiClient {
 
-    override fun startMinsteinntktBeregning(request: MinsteinntektBeregningsRequest): URI {
+    override fun startMinsteinntektBeregning(request: MinsteinntektBeregningsRequest): URI {
         val url = "$regelApiUrl/minsteinntekt"
         val json = Gson().toJson(request).toString()
         val (_, response, result) =

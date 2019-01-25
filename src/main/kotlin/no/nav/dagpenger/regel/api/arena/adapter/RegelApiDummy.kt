@@ -12,7 +12,7 @@ class RegelApiDummy : RegelApiClient {
     lateinit var currentMinsteinntektBeregningsRequest: MinsteinntektBeregningsRequest
     lateinit var currentGrunnlagRequest: DagpengegrunnlagBeregningsRequest
 
-    override fun startMinsteinntktBeregning(request: MinsteinntektBeregningsRequest): URI {
+    override fun startMinsteinntektBeregning(request: MinsteinntektBeregningsRequest): URI {
         return when {
             Scenario1_1Request == request -> {
                 currentMinsteinntektBeregningsRequest = request
