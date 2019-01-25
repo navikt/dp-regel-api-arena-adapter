@@ -40,6 +40,7 @@ val log4j2Version = "2.11.1"
 val jupiterVersion = "5.3.2"
 val moshiVersion = "1.8.0"
 val ktorMoshiVersion = "1.0.1"
+val cucumberVersion = "4.0.0"
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -73,6 +74,8 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jupiterVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:$jupiterVersion")
+    testImplementation("io.cucumber:cucumber-java8:$cucumberVersion")
+    testImplementation("io.cucumber:cucumber-junit:$cucumberVersion")
 }
 
 spotless {
