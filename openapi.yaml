@@ -1,0 +1,340 @@
+openapi: 3.0.0
+info:
+  title: Dagpenger Regel API - Arena Adapter
+  version: '1.0'
+servers:
+  - url: 'https://dagpenger-regel-api-arena-adapter.nais.adeo.no:{port}/v1'
+    variables:
+      port:
+        default: '443'
+        enum:
+          - '443'
+          - '8443'
+tags:
+  - name: Minsteinntekt
+    description: Beregner minsteinntekt og dagpengeperiode etter §4-4 og §4-15
+    externalDocs:
+      description: Folketrygdloven $4-4
+      url: 'https://lovdata.no/lov/1997-02-28-19/§4-4'
+  - name: Dagpengegrunnlag
+    description: Beregnger dagpengegrunnlag etter §4-11
+    externalDocs:
+      description: Folketrygdloven $4-11
+      url: 'https://lovdata.no/lov/1997-02-28-19/§4-11'
+paths:
+  /dagpengegrunnlag:
+    post:
+      tags:
+        - Dagpengegrunnlag
+      summary: Beregn dagpengegrunnlag
+      requestBody:
+        description: Hvilke parametere som skal brukes for beregningen
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DagpengegrunnlagParametere'
+            examples:
+              grunnlag:
+                summary: Eksempel for å fastsette både grunnlag og sats uten særvilkår
+                value:
+                  aktorId: 01019955667
+                  vedtakId: 1234
+                  beregningsdato: '2019-01-11'
+              verneplikt:
+                summary: Eksempel for å fastsette både grunnlag og sats med særvilkår
+                value:
+                  aktorId: 01019955667
+                  vedtakId: 1234
+                  beregningsdato: '2019-01-11'
+                  harAvtjentVerneplikt: true
+              bruktInntekt:
+                summary: Eksempel for å fastsette både grunnlag og sats med fratrekk fra tidligere brukt inntekt
+                value:
+                  aktorId: 01019955667
+                  vedtakId: 1234
+                  beregningsdato: '2019-01-11'
+                  bruktInntektsPeriode:
+                    foersteMaaned: 2019-01
+                    sisteMaaned: 2018-01
+              bareSats:
+                summary: Eksempel for å fastsette kun sats
+                value:
+                  aktorId: 01019955667
+                  vedtakId: 1234
+                  beregningsdato: '2019-01-11'
+                  antallBarn: 0
+                  grunnlag: 250250
+      responses:
+        '200':
+          description: En beregning av dagpengegrunnlag og/eller sats
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DagpengegrunnlagBeregning'
+              examples:
+                grunnlag:
+                  summary: Fastsatt både grunnlag og sats uten særvilkår
+                  value:
+                    beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+                    opprettet: '2018-12-26T14:42:09Z'
+                    utfort: '2018-12-26T14:43:12Z'
+                    parametere:
+                      aktorId: 01019955667
+                      vedtakId: 1234
+                      beregningsdato: '2019-01-11'
+                    resultat:
+                      grunnlag:
+                        avkortet: 342352
+                        uavkortet: 342352
+                      sats:
+                        dagsats: 213
+                        ukesats: 1065
+                verneplikt:
+                  summary: Eksempel for å fastsette både grunnlag og sats med særvilkår
+                  value:
+                    beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FBV
+                    opprettet: '2018-12-26T14:42:09Z'
+                    utfort: '2018-12-26T14:43:12Z'
+                    parametere:
+                      aktorId: 01019955667
+                      vedtakId: 1234
+                      beregningsdato: '2019-01-11'
+                      harAvtjentVerneplikt: true
+                    resultat:
+                      grunnlag:
+                        avkortet: 342352
+                        uavkortet: 342352
+                      sats:
+                        dagsats: 213
+                        ukesats: 1065
+                bruktInntekt:
+                  summary: Eksempel for å fastsette både grunnlag og sats med fratrekk fra tidligere brukt inntekt
+                  value:
+                    beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FCV
+                    opprettet: '2018-12-26T14:42:09Z'
+                    utfort: '2018-12-26T14:43:12Z'
+                    parametere:
+                      aktorId: 01019955667
+                      vedtakId: 1234
+                      beregningsdato: '2019-01-11'
+                      bruktInntektsPeriode:
+                        foersteMaaned: 2019-01
+                        sisteMaaned: 2018-01
+                    resultat:
+                      grunnlag:
+                        avkortet: 342352
+                        uavkortet: 342352
+                      sats:
+                        dagsats: 213
+                        ukesats: 1065
+                bareSats:
+                  summary: Eksempel for å fastsette kun sats
+                  value:
+                    beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FDV
+                    opprettet: '2018-12-26T14:42:09Z'
+                    utfort: '2018-12-26T14:43:12Z'
+                    parametere:
+                      aktorId: 01019955667
+                      vedtakId: 1234
+                      beregningsdato: '2019-01-11'
+                      antallBarn: 0
+                      grunnlag: 250250
+                    resultat:
+                      grunnlag:
+                        avkortet: 250250
+                        uavkortet: 250250
+                      sats:
+                        dagsats: 213
+                        ukesats: 1065
+  /minsteinntekt:
+    post:
+      tags:
+        - Minsteinntekt
+      summary: Kjør en beregning av minsteinntekt
+      requestBody:
+        description: Hvilke parametere som skal brukes for beregningen
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MinsteinntektParametere'
+        required: true
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MinsteinntektBeregning'
+        '400':
+          description: Invalid input
+        '500':
+          description: System error
+components:
+  schemas:
+    Dagpengegrunnlag:
+      type: object
+      properties:
+        avkortet:
+          type: integer
+          example: 342352
+          description: 'Fiks ferdig utregnet grunnlag, avkortet til 6G'
+        uavkortet:
+          type: integer
+          example: 342352
+          description: Fiks ferdig utregnet grunnlag uten å være avkortet til 6G
+    DagpengegrunnlagBeregning:
+      allOf:
+        - $ref: '#/components/schemas/Subsumsjon'
+        - type: object
+          properties:
+            parametere:
+              $ref: '#/components/schemas/DagpengegrunnlagParametere'
+            resultat:
+              $ref: '#/components/schemas/DagpengegrunnlagResultat'
+    DagpengegrunnlagParametere:
+      type: object
+      required:
+        - aktorId
+        - vedtakId
+        - beregningsdato
+      properties:
+        aktorId:
+          type: string
+          description: Identifikasjon av bruker
+          example: 01019955667
+        vedtakId:
+          type: integer
+          description: Identifikasjon av dagpengevedtak
+          format: int32
+          example: 1234
+        beregningsdato:
+          type: string
+          description: Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
+          example: '2019-01-11'
+        harAvtjentVerneplikt:
+          type: boolean
+          default: false
+          description: Om bruker har avtjent verneplikt minst 3 av de siste 12 måneder.
+        oppfyllerKravTilFangstOgFisk:
+          type: boolean
+          default: false
+          description: Om bruker oppfyller særvilkårene for fangst og fisk.
+        antallBarn:
+          type: integer
+          default: 0
+          description: Antall barn bruker søker barnetillegg for
+        bruktInntektsPeriode:
+          $ref: '#/components/schemas/InntektsPeriode'
+        grunnlag:
+          type: integer
+          nullable: true
+          description: 'Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum her'
+    DagpengegrunnlagResultat:
+      type: object
+      properties:
+        grunnlag:
+          $ref: '#/components/schemas/Dagpengegrunnlag'
+        sats:
+          $ref: '#/components/schemas/Sats'
+    InntektsPeriode:
+      type: object
+      description: Et uttrykk for en periode med inntekt.
+      required:
+        - forsteMaaned
+        - sisteMaaned
+      properties:
+        foersteMaaned:
+          type: string
+          example: 2019-01
+        sisteMaaned:
+          type: string
+          example: 2018-01
+    MinsteinntektBeregning:
+      allOf:
+        - $ref: '#/components/schemas/Subsumsjon'
+        - type: object
+          properties:
+            parametere:
+              $ref: '#/components/schemas/MinsteinntektParametere'
+            resultat:
+              $ref: '#/components/schemas/MinsteinntektResultat'
+    MinsteinntektParametere:
+      required:
+        - aktorId
+        - vedtakId
+        - beregningsdato
+      type: object
+      properties:
+        aktorId:
+          type: string
+          description: Identifikasjon av bruker
+          example: 01019955667
+        vedtakId:
+          type: integer
+          description: Identifikasjon av dagpengevedtak
+          format: int32
+          example: 1234
+        beregningsdato:
+          type: string
+          description: Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
+          example: '2019-01-11'
+        harAvtjentVerneplikt:
+          type: boolean
+          default: false
+          description: Om bruker har avtjent verneplikt minst 3 av de siste 12 måneder.
+        oppfyllerKravTilFangstOgFisk:
+          type: boolean
+          default: false
+          description: Om bruker oppfyller særvilkårene for fangst og fisk.
+        harArbeidsperiodeEosSiste12Maaneder:
+          type: boolean
+          default: false
+          description: Om bruker har hatt inntekt i EØS.
+        bruktInntektsPeriode:
+          $ref: '#/components/schemas/InntektsPeriode'
+    MinsteinntektResultat:
+      required:
+        - oppfyllerKravetTilMinsteArbeidsinntekt
+        - periodeAntallUker
+      type: object
+      properties:
+        oppfyllerKravetTilMinsteArbeidsinntekt:
+          type: boolean
+        periodeAntallUker:
+          type: integer
+          description: Lengde på stønadsperiode
+          format: int32
+          example: 52
+          enum:
+            - 52
+            - 104
+    Sats:
+      type: object
+      properties:
+        dagsats:
+          type: integer
+          example: 213
+          description: Dagsats. Dagsats inneholder ikke barnetillegg
+        ukesats:
+          type: integer
+          example: 1065
+          description: Ukesats. Ukesats inneholder barnetillegg
+    Subsumsjon:
+      type: object
+      required:
+        - beregningsId
+        - opprettet
+        - utfort
+      properties:
+        beregningsId:
+          type: string
+          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          description: Unik ID for denne beregningen
+        opprettet:
+          type: string
+          description: Dato for når kjøringen ble opprettet
+          example: '2018-12-26T14:42:09Z'
+        utfort:
+          type: string
+          description: Dato for når kjøringen ble oppdatert
+          example: '2018-12-26T14:43:12Z'
