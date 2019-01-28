@@ -1,0 +1,7 @@
+specFileName: openapi-definition.yaml
+apiTitle: Dagpenger Regel API - Arena Adapter
+splitSpec: true
+codeSamples: false
+swaggerUI: true
+travis: false
+oasVersion: 3.0.0
