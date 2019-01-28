@@ -39,7 +39,7 @@ pipeline {
       }
     }
 
-    stage('Publish spec') {
+    stage('Publish OpenAPI specification') {
       environment {
         TRAVIS = 'dp-regel-api-arena-adapter'
         TRAVIS_REPO_SLUG = 'navikt/dp-regel-api-arena-adapter'
