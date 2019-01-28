@@ -105,7 +105,7 @@ paths:
                   value:
                     beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FAV
                     opprettet: '2018-12-26T14:42:09Z'
-                    utført: '2018-12-26T14:43:12Z'
+                    utfort: '2018-12-26T14:43:12Z'
                     parametere:
                       aktorId: 01019955667
                       vedtakId: 1234
@@ -123,7 +123,7 @@ paths:
                   value:
                     beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FBV
                     opprettet: '2018-12-26T14:42:09Z'
-                    utført: '2018-12-26T14:43:12Z'
+                    utfort: '2018-12-26T14:43:12Z'
                     parametere:
                       aktorId: 01019955667
                       vedtakId: 1234
@@ -142,7 +142,7 @@ paths:
                   value:
                     beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FCV
                     opprettet: '2018-12-26T14:42:09Z'
-                    utført: '2018-12-26T14:43:12Z'
+                    utfort: '2018-12-26T14:43:12Z'
                     parametere:
                       aktorId: 01019955667
                       vedtakId: 1234
@@ -163,7 +163,7 @@ paths:
                   value:
                     beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FDV
                     opprettet: '2018-12-26T14:42:09Z'
-                    utført: '2018-12-26T14:43:12Z'
+                    utfort: '2018-12-26T14:43:12Z'
                     parametere:
                       aktorId: 01019955667
                       vedtakId: 1234
@@ -186,7 +186,7 @@ components:
       required:
         - beregningsId
         - opprettet
-        - utført
+        - utfort
       properties:
         beregningsId:
           type: string
@@ -196,7 +196,7 @@ components:
           type: string
           description: Dato for når kjøringen ble opprettet
           example: "2018-12-26T14:42:09Z"
-        utført:
+        utfort:
           type: string
           description: Dato for når kjøringen ble oppdatert
           example: "2018-12-26T14:43:12Z"
