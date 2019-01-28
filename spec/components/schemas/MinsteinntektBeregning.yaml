@@ -1,0 +1,8 @@
+allOf:
+  - $ref: '#/components/schemas/Subsumsjon'
+  - type: object
+    properties:
+      parametere:
+        $ref: '#/components/schemas/MinsteinntektParametere'
+      resultat:
+        $ref: '#/components/schemas/MinsteinntektResultat'
