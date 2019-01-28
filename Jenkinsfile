@@ -34,15 +34,6 @@ pipeline {
             reportName: 'Test coverage'
           ]
 
-          publishHTML target: [
-            allowMissing: true,
-            alwaysLinkToLastBuild: false,
-            keepAll: true,
-            reportDir: 'web_deploy',
-            reportFiles: 'index.html',
-            reportName: 'OpenAPI Specification'
-          ]
-
           junit 'build/test-results/test/*.xml'
         }
       }
