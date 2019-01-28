@@ -1,0 +1,9 @@
+summary: Vurdering som hensyntar særvilkår og tidligere brukt inntekt
+value:
+  aktorId: 01019955667
+  vedtakId: 1234
+  beregningsdato: '2019-01-11'
+  oppfyllerKravTilFangstOgFisk: true
+  bruktInntektsPeriode:
+    foersteMaaned: 2019-01
+    sisteMaaned: 2018-01

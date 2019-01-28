@@ -8,7 +8,15 @@ post:
       application/json:
         schema:
           $ref: '#/components/schemas/MinsteinntektParametere'
-    required: true
+        examples:
+          vanlig:
+            $ref: '#/components/examples/minsteinntekt-vanlig'
+          bruktInntekt:
+            $ref: '#/components/examples/minsteinntekt-bruktInntekt'
+          verneplikt:
+            $ref: '#/components/examples/minsteinntekt-verneplikt'
+          fiskBruktInntekt:
+            $ref: '#/components/examples/minsteinntekt-fiskBruktInntekt'
   responses:
     '200':
       description: Ok

@@ -1,0 +1,11 @@
+summary: 'Vanlig vurdering, uten særvilkår eller tidligere brukt inntekt'
+value:
+  aktorId: 01019955667
+  vedtakId: 1234
+  beregningsdato: '2019-01-11'
+  harAvtjentVerneplikt: false
+  oppfyllerKravTilFangstOgFisk: false
+  harArbeidsperiodeEosSiste12Maaneder: false
+  bruktInntektsPeriode:
+    foersteMaaned: 2019-01
+    sisteMaaned: 2018-01

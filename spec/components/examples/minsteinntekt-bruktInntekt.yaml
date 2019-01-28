@@ -1,0 +1,8 @@
+summary: Vurdering som hensyntar tidligere brukt inntekt
+value:
+  aktorId: 01019955667
+  vedtakId: 1234
+  beregningsdato: '2019-01-11'
+  bruktInntektsPeriode:
+    foersteMaaned: 2019-01
+    sisteMaaned: 2018-01
