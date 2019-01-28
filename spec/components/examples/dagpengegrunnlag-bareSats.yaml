@@ -1,0 +1,18 @@
+summary: Eksempel for å fastsette kun sats
+value:
+  beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FDV
+  opprettet: '2018-12-26T14:42:09Z'
+  utfort: '2018-12-26T14:43:12Z'
+  parametere:
+    aktorId: 01019955667
+    vedtakId: 1234
+    beregningsdato: '2019-01-11'
+    antallBarn: 0
+    grunnlag: 250250
+  resultat:
+    grunnlag:
+      avkortet: 250250
+      uavkortet: 250250
+    sats:
+      dagsats: 213
+      ukesats: 1065

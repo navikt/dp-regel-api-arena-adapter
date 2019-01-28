@@ -1,0 +1,16 @@
+summary: Fastsatt både grunnlag og sats uten særvilkår
+value:
+  beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+  opprettet: '2018-12-26T14:42:09Z'
+  utfort: '2018-12-26T14:43:12Z'
+  parametere:
+    aktorId: 01019955667
+    vedtakId: 1234
+    beregningsdato: '2019-01-11'
+  resultat:
+    grunnlag:
+      avkortet: 342352
+      uavkortet: 342352
+    sats:
+      dagsats: 213
+      ukesats: 1065

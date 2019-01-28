@@ -10,37 +10,13 @@ post:
           $ref: '#/components/schemas/DagpengegrunnlagParametere'
         examples:
           grunnlag:
-            summary: Eksempel for å fastsette både grunnlag og sats uten særvilkår
-            value:
-              aktorId: 01019955667
-              vedtakId: 1234
-              beregningsdato: '2019-01-11'
+            $ref: '#/components/examples/dagpengegrunnlag-grunnlag'
           verneplikt:
-            summary: Eksempel for å fastsette både grunnlag og sats med særvilkår
-            value:
-              aktorId: 01019955667
-              vedtakId: 1234
-              beregningsdato: '2019-01-11'
-              harAvtjentVerneplikt: true
+            $ref: '#/components/examples/dagpengegrunnlag-verneplikt'
           bruktInntekt:
-            summary: >-
-              Eksempel for å fastsette både grunnlag og sats med fratrekk fra
-              tidligere brukt inntekt
-            value:
-              aktorId: 01019955667
-              vedtakId: 1234
-              beregningsdato: '2019-01-11'
-              bruktInntektsPeriode:
-                foersteMaaned: 2019-01
-                sisteMaaned: 2018-01
+            $ref: '#/components/examples/dagpengegrunnlag-bruktInntekt'
           bareSats:
-            summary: Eksempel for å fastsette kun sats
-            value:
-              aktorId: 01019955667
-              vedtakId: 1234
-              beregningsdato: '2019-01-11'
-              antallBarn: 0
-              grunnlag: 250250
+            $ref: '#/components/examples/dagpengegrunnlag-bareSats'
   responses:
     '200':
       description: En beregning av dagpengegrunnlag og/eller sats
@@ -48,80 +24,3 @@ post:
         application/json:
           schema:
             $ref: '#/components/schemas/DagpengegrunnlagBeregning'
-          examples:
-            grunnlag:
-              summary: Fastsatt både grunnlag og sats uten særvilkår
-              value:
-                beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FAV
-                opprettet: '2018-12-26T14:42:09Z'
-                utfort: '2018-12-26T14:43:12Z'
-                parametere:
-                  aktorId: 01019955667
-                  vedtakId: 1234
-                  beregningsdato: '2019-01-11'
-                resultat:
-                  grunnlag:
-                    avkortet: 342352
-                    uavkortet: 342352
-                  sats:
-                    dagsats: 213
-                    ukesats: 1065
-            verneplikt:
-              summary: Eksempel for å fastsette både grunnlag og sats med særvilkår
-              value:
-                beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FBV
-                opprettet: '2018-12-26T14:42:09Z'
-                utfort: '2018-12-26T14:43:12Z'
-                parametere:
-                  aktorId: 01019955667
-                  vedtakId: 1234
-                  beregningsdato: '2019-01-11'
-                  harAvtjentVerneplikt: true
-                resultat:
-                  grunnlag:
-                    avkortet: 342352
-                    uavkortet: 342352
-                  sats:
-                    dagsats: 213
-                    ukesats: 1065
-            bruktInntekt:
-              summary: >-
-                Eksempel for å fastsette både grunnlag og sats med fratrekk fra
-                tidligere brukt inntekt
-              value:
-                beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FCV
-                opprettet: '2018-12-26T14:42:09Z'
-                utfort: '2018-12-26T14:43:12Z'
-                parametere:
-                  aktorId: 01019955667
-                  vedtakId: 1234
-                  beregningsdato: '2019-01-11'
-                  bruktInntektsPeriode:
-                    foersteMaaned: 2019-01
-                    sisteMaaned: 2018-01
-                resultat:
-                  grunnlag:
-                    avkortet: 342352
-                    uavkortet: 342352
-                  sats:
-                    dagsats: 213
-                    ukesats: 1065
-            bareSats:
-              summary: Eksempel for å fastsette kun sats
-              value:
-                beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FDV
-                opprettet: '2018-12-26T14:42:09Z'
-                utfort: '2018-12-26T14:43:12Z'
-                parametere:
-                  aktorId: 01019955667
-                  vedtakId: 1234
-                  beregningsdato: '2019-01-11'
-                  antallBarn: 0
-                  grunnlag: 250250
-                resultat:
-                  grunnlag:
-                    avkortet: 250250
-                    uavkortet: 250250
-                  sats:
-                    dagsats: 213
-                    ukesats: 1065

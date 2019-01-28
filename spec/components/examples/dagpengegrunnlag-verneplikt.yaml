@@ -1,0 +1,17 @@
+summary: Eksempel for å fastsette både grunnlag og sats med særvilkår
+value:
+  beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FBV
+  opprettet: '2018-12-26T14:42:09Z'
+  utfort: '2018-12-26T14:43:12Z'
+  parametere:
+    aktorId: 01019955667
+    vedtakId: 1234
+    beregningsdato: '2019-01-11'
+    harAvtjentVerneplikt: true
+  resultat:
+    grunnlag:
+      avkortet: 342352
+      uavkortet: 342352
+    sats:
+      dagsats: 213
+      ukesats: 1065
