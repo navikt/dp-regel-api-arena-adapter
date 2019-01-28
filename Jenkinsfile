@@ -40,6 +40,11 @@ pipeline {
     }
 
     stage('Publish spec') {
+      environment {
+        TRAVIS = 'dp-regel-api-arena-adapter'
+        TRAVIS_REPO_SLUG = 'navikt/dp-regel-api-arena-adapter'
+      }
+
       steps {
         withCredentials([usernamePassword(
           credentialsId: 'github-androa-push-token',
