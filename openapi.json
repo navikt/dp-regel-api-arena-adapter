@@ -93,10 +93,23 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/MinsteinntektParametere"
+              },
+              "examples": {
+                "vanlig": {
+                  "$ref": "#/components/examples/minsteinntekt-vanlig"
+                },
+                "bruktInntekt": {
+                  "$ref": "#/components/examples/minsteinntekt-bruktInntekt"
+                },
+                "verneplikt": {
+                  "$ref": "#/components/examples/minsteinntekt-verneplikt"
+                },
+                "fiskBruktInntekt": {
+                  "$ref": "#/components/examples/minsteinntekt-fiskBruktInntekt"
+                }
               }
             }
-          },
-          "required": true
+          }
         },
         "responses": {
           "200": {
@@ -455,6 +468,55 @@
               "ukesats": 1065
             }
           }
+        }
+      },
+      "minsteinntekt-bruktInntekt": {
+        "summary": "Vurdering som hensyntar tidligere brukt inntekt",
+        "value": {
+          "aktorId": "01019955667",
+          "vedtakId": 1234,
+          "beregningsdato": "2019-01-11",
+          "bruktInntektsPeriode": {
+            "foersteMaaned": "2019-01",
+            "sisteMaaned": "2018-01"
+          }
+        }
+      },
+      "minsteinntekt-fiskBruktInntekt": {
+        "summary": "Vurdering som hensyntar særvilkår og tidligere brukt inntekt",
+        "value": {
+          "aktorId": "01019955667",
+          "vedtakId": 1234,
+          "beregningsdato": "2019-01-11",
+          "oppfyllerKravTilFangstOgFisk": true,
+          "bruktInntektsPeriode": {
+            "foersteMaaned": "2019-01",
+            "sisteMaaned": "2018-01"
+          }
+        }
+      },
+      "minsteinntekt-vanlig": {
+        "summary": "Vanlig vurdering, uten særvilkår eller tidligere brukt inntekt",
+        "value": {
+          "aktorId": "01019955667",
+          "vedtakId": 1234,
+          "beregningsdato": "2019-01-11",
+          "harAvtjentVerneplikt": false,
+          "oppfyllerKravTilFangstOgFisk": false,
+          "harArbeidsperiodeEosSiste12Maaneder": false,
+          "bruktInntektsPeriode": {
+            "foersteMaaned": "2019-01",
+            "sisteMaaned": "2018-01"
+          }
+        }
+      },
+      "minsteinntekt-verneplikt": {
+        "summary": "Vurdering som hensyntar særvilkår",
+        "value": {
+          "aktorId": "01019955667",
+          "vedtakId": 1234,
+          "beregningsdato": "2019-01-11",
+          "harAvtjentVerneplikt": true
         }
       }
     }
