@@ -5,11 +5,8 @@ import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import cucumber.api.java8.No
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
-import io.ktor.routing.routing
 import io.ktor.server.testing.TestApplicationEngine
-import io.ktor.server.testing.createTestEnvironment
 import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.on
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import kotlin.test.assertFalse
