@@ -42,8 +42,7 @@ class CucumberSteps : No {
             }
         }
 
-        Så("blir ikke kravet innfridd")
-        {
+        Så("blir ikke kravet innfridd") {
             assertFalse(minsteInntektResponse.utfall.oppfyllerKravTilMinsteArbeidsinntekt)
         }
 
