@@ -50,7 +50,13 @@ pipeline {
 
     stage('Publish spec') {
       steps {
-        sh "npm run gh-pages"
+        withCredentials([usernamePassword(
+          credentialsId: 'github-androa-push-token',
+          usernameVariable: '_',
+          passwordVariable: 'GH_TOKEN'
+        )]) {
+          sh "npm run gh-pages"
+        }
       }
     }
 
