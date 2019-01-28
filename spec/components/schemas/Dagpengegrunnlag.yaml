@@ -1,0 +1,10 @@
+type: object
+properties:
+  avkortet:
+    type: integer
+    example: 342352
+    description: 'Fiks ferdig utregnet grunnlag, avkortet til 6G'
+  uavkortet:
+    type: integer
+    example: 342352
+    description: Fiks ferdig utregnet grunnlag uten å være avkortet til 6G
