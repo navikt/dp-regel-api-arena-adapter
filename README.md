@@ -1,4 +1,4 @@
-# Dagpenger Regel API - Arena Adapter OpenAPI Specification
+# Dagpenger Regel API - Arena Adapter
 
 
 ## Working on specification
