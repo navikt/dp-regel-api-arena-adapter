@@ -12,12 +12,14 @@ pipeline {
   stages {
     stage('Install dependencies') {
       steps {
+        sh "npm install"
         sh "./gradlew assemble"
       }
     }
 
     stage('Build') {
       steps {
+        sh "npm run build"
         sh "./gradlew build"
       }
 
@@ -34,6 +36,12 @@ pipeline {
 
           junit 'build/test-results/test/*.xml'
         }
+      }
+    }
+
+    stage('Publish spec') {
+      steps {
+        sh "npm run gh-pages"
       }
     }
 
