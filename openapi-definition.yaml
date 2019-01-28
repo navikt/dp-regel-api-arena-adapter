@@ -3,7 +3,7 @@ info:
   title: Dagpenger Regel API - Arena Adapter
   version: "1.0"
 servers:
-  - url: https://dagpenger-regel-api.nais.adeo.no:{port}/v1
+  - url: https://dagpenger-regel-api-arena-adapter.nais.adeo.no:{port}/v1
     variables:
       port:
         default: "443"
@@ -57,7 +57,41 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/DagpengegrunnlagParametere'
-        required: true
+            examples:
+              grunnlag:
+                summary: Eksempel for å fastsette både grunnlag og sats uten særvilkår
+                value:
+                  aktorId: 01019955667
+                  vedtakId: 1234
+                  beregningsdato: '2019-01-11'
+
+              verneplikt:
+                summary: Eksempel for å fastsette både grunnlag og sats med særvilkår
+                value:
+                  aktorId: 01019955667
+                  vedtakId: 1234
+                  beregningsdato: '2019-01-11'
+                  harAvtjentVerneplikt: true
+
+              bruktInntekt:
+                summary: Eksempel for å fastsette både grunnlag og sats med fratrekk fra tidligere brukt inntekt
+                value:
+                  aktorId: 01019955667
+                  vedtakId: 1234
+                  beregningsdato: '2019-01-11'
+                  bruktInntektsPeriode:
+                    foersteMaaned: 2019-01
+                    sisteMaaned: 2018-01
+
+              bareSats:
+                summary: Eksempel for å fastsette kun sats
+                value:
+                  aktorId: 01019955667
+                  vedtakId: 1234
+                  beregningsdato: '2019-01-11'
+                  antallBarn: 0
+                  grunnlag: 250250
+
       responses:
         200:
           description: Ok
