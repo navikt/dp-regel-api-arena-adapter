@@ -1,6 +1,6 @@
 openapi: 3.0.0
 info:
-  title: Regelkjørings API
+  title: Dagpenger Regel API - Arena Adapter
   version: "1.0"
 servers:
   - url: https://dagpenger-regel-api.nais.adeo.no:{port}/v1
@@ -10,15 +10,13 @@ servers:
         enum:
           - "443"
           - "8443"
-  - url: https://virtserver.swaggerhub.com/geiralund/dagpenger-regelkjorings-api/
-    description: SwaggerHub API Auto Mocking
 tags:
-  - name: minsteinntekt
+  - name: Minsteinntekt
     description: Beregner minsteinntekt og dagpengeperiode etter §4-4 og §4-15
     externalDocs:
       description: Folketrygdloven $4-4
       url: https://lovdata.no/lov/1997-02-28-19/§4-4
-  - name: dagpengegrunnlag
+  - name: Dagpengegrunnlag
     description: Beregnger dagpengegrunnlag etter §4-11
     externalDocs:
       description: Folketrygdloven $4-11
@@ -27,14 +25,14 @@ paths:
   /minsteinntekt:
     post:
       tags:
-        - minsteinntekt
+        - Minsteinntekt
       summary: Kjør en beregning av minsteinntekt
       requestBody:
         description: Hvilke parametere som skal brukes for beregningen
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Minsteinntekt'
+              $ref: '#/components/schemas/MinsteinntektParametere'
         required: true
       responses:
         200:
@@ -42,18 +40,71 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MinsteinntektResultat'
+                $ref: '#/components/schemas/MinsteinntektBeregning'
         400:
           description: Invalid input
         500:
           description: System error
+
+  /dagpengegrunnlag:
+    post:
+      tags:
+        - Dagpengegrunnlag
+      summary: Beregn dagpengegrunnlag
+      requestBody:
+        description: Hvilke parametere som skal brukes for beregningen
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DagpengegrunnlagParametere'
+        required: true
+      responses:
+        200:
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DagpengegrunnlagBeregning'
+
 components:
   schemas:
-    Minsteinntekt:
+
+    Subsumsjon:
+      type: object
+      required:
+        - beregningsId
+        - opprettet
+        - utført
+      properties:
+        beregningsId:
+          type: string
+          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          description: Unik ID for denne beregningen
+        opprettet:
+          type: string
+          description: Dato for når kjøringen ble opprettet
+          example: "2018-12-26T14:42:09Z"
+        utført:
+          type: string
+          description: Dato for når kjøringen ble oppdatert
+          example: "2018-12-26T14:43:12Z"
+
+    # Minsteinntekt
+    MinsteinntektBeregning:
+      allOf:
+        - $ref: '#/components/schemas/Subsumsjon'
+        - type: object
+          properties:
+            parametere:
+              $ref: '#/components/schemas/MinsteinntektParametere'
+            resultat:
+              $ref: '#/components/schemas/MinsteinntektResultat'
+
+    MinsteinntektParametere:
       required:
         - aktorId
-        - beregningsdato
         - vedtakId
+        - beregningsdato
       type: object
       properties:
         aktorId:
@@ -68,51 +119,23 @@ components:
         beregningsdato:
           type: string
           description: Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
-          example: 2019-01-11
-        bruktinntektsPeriode:
-          $ref: '#/components/schemas/InntektsPeriode'
+          example: "2019-01-11"
         harAvtjentVerneplikt:
           type: boolean
+          default: false
           description: Om bruker har avtjent verneplikt minst 3 av de siste 12 måneder.
         oppfyllerKravTilFangstOgFisk:
           type: boolean
+          default: false
           description: Om bruker oppfyller særvilkårene for fangst og fisk.
         harArbeidsperiodeEosSiste12Maaneder:
           type: boolean
+          default: false
           description: Om bruker har hatt inntekt i EØS.
-    InntektsPeriode:
-      required:
-        - foersteMaaned
-        - sisteMaaned
-      description:
-      type: object
-      properties:
-        foersteMaaned:
-          type: string
-          example: 2019-01
-        sisteMaaned:
-          type: string
-          example: 2018-01
+        bruktInntektsPeriode:
+          $ref: '#/components/schemas/InntektsPeriode'
+
     MinsteinntektResultat:
-      allOf:
-        - type: object
-          properties:
-            beregningsId:
-              type: string
-              description: Unik ID for denne beregningen
-            utfall:
-              $ref: '#/components/schemas/MinsteinntektUtfall'
-            opprettet:
-              type: string
-              description: Dato for når kjøringen ble opprettet
-              example: 2018-12-26T14:42:09Z
-            utført:
-              type: string
-              description: Dato for når kjøringen ble oppdatert
-              example: 2018-12-26T14:42:09Z
-            parametere:
-              $ref: '#/components/schemas/Minsteinntekt'
-    MinsteinntektUtfall:
       required:
         - oppfyllerKravetTilMinsteArbeidsinntekt
         - sisteMaaned
@@ -124,7 +147,104 @@ components:
           type: integer
           description: Lengde på stønadsperiode
           format: int32
-          example: 104
+          example: 52
           enum:
-            - 54
+            - 52
             - 104
+
+    # Dagpengegrunnlag
+    DagpengegrunnlagBeregning:
+      allOf:
+        - $ref: '#/components/schemas/Subsumsjon'
+        - type: object
+          properties:
+            parametere:
+              $ref: '#/components/schemas/DagpengegrunnlagParametere'
+            resultat:
+              $ref: '#/components/schemas/DagpengegrunnlagResultat'
+
+    DagpengegrunnlagParametere:
+      type: object
+      required:
+        - aktorId
+        - vedtakId
+        - beregningsdato
+      properties:
+        aktorId:
+          type: string
+          description: Identifikasjon av bruker
+          example: "01019955667"
+        vedtakId:
+          type: integer
+          description: Identifikasjon av dagpengevedtak
+          format: int32
+          example: 1234
+        beregningsdato:
+          type: string
+          description: Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
+          example: "2019-01-11"
+        harAvtjentVerneplikt:
+          type: boolean
+          default: false
+          description: Om bruker har avtjent verneplikt minst 3 av de siste 12 måneder.
+        oppfyllerKravTilFangstOgFisk:
+          type: boolean
+          default: false
+          description: Om bruker oppfyller særvilkårene for fangst og fisk.
+        antallBarn:
+          type: integer
+          default: 0
+          description: Antall barn bruker søker barnetillegg for
+        bruktInntektsPeriode:
+          $ref: '#/components/schemas/InntektsPeriode'
+        grunnlag:
+          type: integer
+          nullable: true
+          description: Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum her
+
+    DagpengegrunnlagResultat:
+      type: object
+      properties:
+        grunnlag:
+          $ref: '#/components/schemas/Dagpengegrunnlag'
+        sats:
+          $ref: '#/components/schemas/Sats'
+
+    Dagpengegrunnlag:
+      type: object
+      properties:
+        avkortet:
+          type: integer
+          example: 342352
+          description: Fiks ferdig utregnet grunnlag, avkortet til 6G
+        uavkortet:
+          type: integer
+          example: 342352
+          description: Fiks ferdig utregnet grunnlag uten å være avkortet til 6G
+
+    Sats:
+      type: object
+      properties:
+        dagsats:
+          type: integer
+          example: 213
+          description: Dagsats. Dagsats inneholder ikke barnetillegg
+        ukesats:
+          type: integer
+          example: 1065
+          description: Ukesats. Ukesats inneholder barnetillegg
+
+    # Generelle objekter
+    InntektsPeriode:
+      type: object
+      description: Et uttrykk for en periode med inntekt.
+      required:
+        - forsteMaaned
+        - sisteMaaned
+      properties:
+        foersteMaaned:
+          type: string
+          example: 2019-01
+        sisteMaaned:
+          type: string
+          example: 2018-01
