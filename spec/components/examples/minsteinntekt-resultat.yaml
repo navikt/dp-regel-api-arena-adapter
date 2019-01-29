@@ -1,0 +1,40 @@
+summary: Eksempelresultat
+value:
+  beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+  opprettet: '2018-12-26T14:42:09Z'
+  utfort: '2018-12-26T14:43:12Z'
+  parametre:
+    aktorId: 01019955667
+    vedtakId: 1234
+    beregningsdato: '2019-07-01'
+    harAvtjentVerneplikt: false
+    oppflyllerKravTilFangstOgFisk: false
+    bruktInntektsPeriode:
+      foersteMaaned: 2018-01
+      sisteMaaned: 2019-06
+    resultat:
+      oppfyllerKravetTilMinsteArbeidsinntekt: true
+      periodeAntallUker: 52
+      beregningsregel: ORDINAER_ETTAAR
+    inntekt:
+      - inntekt: 210012
+        periode: 1
+        andel: 32212
+        inneholderNaeringsinntekter: false
+        inntektsPeriode:
+          foersteMaaned: 2018-06
+          sisteMaaned: 2019-06
+      - inntekt: 1892112
+        periode: 2
+        andel: 19921
+        inneholderNaeringsinntekter: false
+        inntektsPeriode:
+          foersteMaaned: 2017-06
+          sisteMaaned: 2016-06
+      - inntekt: 297090
+        periode: 3
+        andel: 1212
+        inneholderNaeringsinntekter: false
+        inntektsPeriode:
+          foersteMaaned: 2017-06
+          sisteMaaned: 2016-06

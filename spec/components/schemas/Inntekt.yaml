@@ -1,17 +1,17 @@
 type: object
 required:
   - inntektsPeriode
-  - sum
-  - periodeNummer
+  - inntekt
+  - periode
   - inneholderNaeringsinntekter
 properties:
   inntektsPeriode:
     $ref: '#/components/schemas/InntektsPeriode'
-  sum:
+  inntekt:
     type: integer
     example: 200000
-    description: Inntekt summert opp for perioden
-  periodeNummer:
+    description: Inntekt for perioden
+  periode:
     type: integer
     example: 1
     description: 'Siste-, nestsiste- eller tredjesiste-periode. TODO - enum?'
