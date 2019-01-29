@@ -1,6 +1,7 @@
 required:
   - oppfyllerKravetTilMinsteArbeidsinntekt
   - periodeAntallUker
+  - beregningsregel
 type: object
 properties:
   oppfyllerKravetTilMinsteArbeidsinntekt:
@@ -13,3 +14,15 @@ properties:
     enum:
       - 52
       - 104
+  beregningsregel:
+    type: string
+    example: ORDINAER_ETTAAR
+    enum:
+      - ORDINAER_ETTAAR
+      - ORDINAER_TREAAR
+      - ORDINAER_OVER_6G
+      - ORDINAER_OVER_6G_SISTE_2019
+      - ORDINAER_OVER_6G_3SISTE_2019
+      - MANUELL_UNDER_6G
+      - MANUELL_OVER_6G
+      - VERNEPLIKT
