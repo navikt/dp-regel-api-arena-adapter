@@ -24,6 +24,9 @@ post:
         application/json:
           schema:
             $ref: '#/components/schemas/MinsteinntektBeregning'
+          examples:
+            minsteinntekt-resultat:
+              $ref: '#/components/examples/minsteinntekt-resultat'
     '400':
       description: Invalid input
     '500':

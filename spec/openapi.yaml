@@ -17,7 +17,7 @@ tags:
       description: Folketrygdloven $4-4
       url: 'https://lovdata.no/lov/1997-02-28-19/§4-4'
   - name: Dagpengegrunnlag
-    description: Beregnger dagpengegrunnlag etter §4-11
+    description: Beregner dagpengegrunnlag etter §4-11
     externalDocs:
       description: Folketrygdloven $4-11
       url: 'https://lovdata.no/lov/1997-02-28-19/§4-11'

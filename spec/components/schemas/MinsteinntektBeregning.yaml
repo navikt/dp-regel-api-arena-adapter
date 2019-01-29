@@ -6,3 +6,7 @@ allOf:
         $ref: '#/components/schemas/MinsteinntektParametere'
       resultat:
         $ref: '#/components/schemas/MinsteinntektResultat'
+      inntekt:
+        type: array
+        items:
+          $ref: '#/components/schemas/Inntekt'

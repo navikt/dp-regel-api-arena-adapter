@@ -1,0 +1,27 @@
+type: object
+required:
+  - inntektsPeriode
+  - inntekt
+  - periode
+  - inneholderNaeringsinntekter
+properties:
+  inntektsPeriode:
+    $ref: '#/components/schemas/InntektsPeriode'
+  inntekt:
+    type: integer
+    example: 200000
+    description: Inntekt for perioden
+  periode:
+    type: integer
+    example: 1
+    description: 'Siste-, nestsiste- eller tredjesiste-periode. TODO - enum?'
+  inneholderNaeringsinntekter:
+    type: boolean
+    example: false
+    description: >-
+      Angir om inntektene som har inngått i vurderingen inneholder
+      næringsinntekter.
+  andel:
+    type: integer
+    example: 2222
+    description: 'Andel av inntekt siste-, nestsiste- eller tredjesiste-periode'
