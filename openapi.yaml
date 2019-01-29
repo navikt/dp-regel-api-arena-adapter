@@ -17,7 +17,7 @@ tags:
       description: Folketrygdloven $4-4
       url: 'https://lovdata.no/lov/1997-02-28-19/§4-4'
   - name: Dagpengegrunnlag
-    description: Beregnger dagpengegrunnlag etter §4-11
+    description: Beregner dagpengegrunnlag etter §4-11
     externalDocs:
       description: Folketrygdloven $4-11
       url: 'https://lovdata.no/lov/1997-02-28-19/§4-11'
@@ -76,6 +76,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MinsteinntektBeregning'
+              examples:
+                minsteinntekt-resultat:
+                  $ref: '#/components/examples/minsteinntekt-resultat'
         '400':
           description: Invalid input
         '500':
@@ -147,6 +150,32 @@ components:
           $ref: '#/components/schemas/Dagpengegrunnlag'
         sats:
           $ref: '#/components/schemas/Sats'
+    Inntekt:
+      type: object
+      required:
+        - inntektsPeriode
+        - inntekt
+        - periode
+        - inneholderNaeringsinntekter
+      properties:
+        inntektsPeriode:
+          $ref: '#/components/schemas/InntektsPeriode'
+        inntekt:
+          type: integer
+          example: 200000
+          description: Inntekt for perioden
+        periode:
+          type: integer
+          example: 1
+          description: 'Siste-, nestsiste- eller tredjesiste-periode. TODO - enum?'
+        inneholderNaeringsinntekter:
+          type: boolean
+          example: false
+          description: Angir om inntektene som har inngått i vurderingen inneholder næringsinntekter.
+        andel:
+          type: integer
+          example: 2222
+          description: 'Andel av inntekt siste-, nestsiste- eller tredjesiste-periode'
     InntektsPeriode:
       type: object
       description: Et uttrykk for en periode med inntekt.
@@ -169,6 +198,10 @@ components:
               $ref: '#/components/schemas/MinsteinntektParametere'
             resultat:
               $ref: '#/components/schemas/MinsteinntektResultat'
+            inntekt:
+              type: array
+              items:
+                $ref: '#/components/schemas/Inntekt'
     MinsteinntektParametere:
       required:
         - aktorId
@@ -197,16 +230,13 @@ components:
           type: boolean
           default: false
           description: Om bruker oppfyller særvilkårene for fangst og fisk.
-        harArbeidsperiodeEosSiste12Maaneder:
-          type: boolean
-          default: false
-          description: Om bruker har hatt inntekt i EØS.
         bruktInntektsPeriode:
           $ref: '#/components/schemas/InntektsPeriode'
     MinsteinntektResultat:
       required:
         - oppfyllerKravetTilMinsteArbeidsinntekt
         - periodeAntallUker
+        - beregningsregel
       type: object
       properties:
         oppfyllerKravetTilMinsteArbeidsinntekt:
@@ -219,6 +249,18 @@ components:
           enum:
             - 52
             - 104
+        beregningsregel:
+          type: string
+          example: ORDINAER_ETTAAR
+          enum:
+            - ORDINAER_ETTAAR
+            - ORDINAER_TREAAR
+            - ORDINAER_OVER_6G
+            - ORDINAER_OVER_6G_SISTE_2019
+            - ORDINAER_OVER_6G_3SISTE_2019
+            - MANUELL_UNDER_6G
+            - MANUELL_OVER_6G
+            - VERNEPLIKT
     Sats:
       type: object
       properties:
@@ -343,6 +385,47 @@ components:
         bruktInntektsPeriode:
           foersteMaaned: 2019-01
           sisteMaaned: 2018-01
+    minsteinntekt-resultat:
+      summary: Eksempelresultat
+      value:
+        beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+        opprettet: '2018-12-26T14:42:09Z'
+        utfort: '2018-12-26T14:43:12Z'
+        parametre:
+          aktorId: 01019955667
+          vedtakId: 1234
+          beregningsdato: '2019-07-01'
+          harAvtjentVerneplikt: false
+          oppflyllerKravTilFangstOgFisk: false
+          bruktInntektsPeriode:
+            foersteMaaned: 2018-01
+            sisteMaaned: 2019-06
+          resultat:
+            oppfyllerKravetTilMinsteArbeidsinntekt: true
+            periodeAntallUker: 52
+            beregningsregel: ORDINAER_ETTAAR
+          inntekt:
+            - inntekt: 210012
+              periode: 1
+              andel: 32212
+              inneholderNaeringsinntekter: false
+              inntektsPeriode:
+                foersteMaaned: 2018-06
+                sisteMaaned: 2019-06
+            - inntekt: 1892112
+              periode: 2
+              andel: 19921
+              inneholderNaeringsinntekter: false
+              inntektsPeriode:
+                foersteMaaned: 2017-06
+                sisteMaaned: 2016-06
+            - inntekt: 297090
+              periode: 3
+              andel: 1212
+              inneholderNaeringsinntekter: false
+              inntektsPeriode:
+                foersteMaaned: 2017-06
+                sisteMaaned: 2016-06
     minsteinntekt-vanlig:
       summary: 'Vanlig vurdering, uten særvilkår eller tidligere brukt inntekt'
       value:
