@@ -1,0 +1,16 @@
+type: object
+required:
+  - inntektsPeriode
+  - sum
+  - periodeNummer
+properties:
+  inntektsPeriode:
+    $ref: '#/components/schemas/InntektsPeriode'
+  sum:
+    type: integer
+    example: 200000
+    description: Inntekt summert opp for perioden
+  periodeNummer:
+    type: integer
+    example: 1
+    description: Periodenummer
