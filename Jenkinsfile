@@ -12,12 +12,14 @@ pipeline {
   stages {
     stage('Install dependencies') {
       steps {
+        sh "npm install"
         sh "./gradlew assemble"
       }
     }
 
     stage('Build') {
       steps {
+        sh "npm run build"
         sh "./gradlew build"
       }
 
@@ -33,6 +35,23 @@ pipeline {
           ]
 
           junit 'build/test-results/test/*.xml'
+        }
+      }
+    }
+
+    stage('Publish OpenAPI specification') {
+      environment {
+        TRAVIS = 'dp-regel-api-arena-adapter'
+        TRAVIS_REPO_SLUG = 'navikt/dp-regel-api-arena-adapter'
+      }
+
+      steps {
+        withCredentials([usernamePassword(
+          credentialsId: 'github-androa-push-token',
+          usernameVariable: '_',
+          passwordVariable: 'GH_TOKEN'
+        )]) {
+          sh "npm run gh-pages"
         }
       }
     }
