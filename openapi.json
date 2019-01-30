@@ -229,6 +229,20 @@
           },
           "sats": {
             "$ref": "#/components/schemas/Sats"
+          },
+          "beregningsregel": {
+            "type": "string",
+            "example": "ORDINAER_ETTAAR",
+            "enum": [
+              "ORDINAER_ETTAAR",
+              "ORDINAER_TREAAR",
+              "ORDINAER_OVER_6G",
+              "ORDINAER_OVER_6G_SISTE_2019",
+              "ORDINAER_OVER_6G_3SISTE_2019",
+              "MANUELL_UNDER_6G",
+              "MANUELL_OVER_6G",
+              "VERNEPLIKT"
+            ]
           }
         }
       },
@@ -350,8 +364,7 @@
       "MinsteinntektResultat": {
         "required": [
           "oppfyllerKravetTilMinsteArbeidsinntekt",
-          "periodeAntallUker",
-          "beregningsregel"
+          "periodeAntallUker"
         ],
         "type": "object",
         "properties": {
@@ -366,20 +379,6 @@
             "enum": [
               52,
               104
-            ]
-          },
-          "beregningsregel": {
-            "type": "string",
-            "example": "ORDINAER_ETTAAR",
-            "enum": [
-              "ORDINAER_ETTAAR",
-              "ORDINAER_TREAAR",
-              "ORDINAER_OVER_6G",
-              "ORDINAER_OVER_6G_SISTE_2019",
-              "ORDINAER_OVER_6G_3SISTE_2019",
-              "MANUELL_UNDER_6G",
-              "MANUELL_OVER_6G",
-              "VERNEPLIKT"
             ]
           }
         }
@@ -568,8 +567,7 @@
             },
             "resultat": {
               "oppfyllerKravetTilMinsteArbeidsinntekt": true,
-              "periodeAntallUker": 52,
-              "beregningsregel": "ORDINAER_ETTAAR"
+              "periodeAntallUker": 52
             },
             "inntekt": [
               {
