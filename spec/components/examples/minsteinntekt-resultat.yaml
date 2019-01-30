@@ -15,7 +15,6 @@ value:
     resultat:
       oppfyllerKravetTilMinsteArbeidsinntekt: true
       periodeAntallUker: 52
-      beregningsregel: ORDINAER_ETTAAR
     inntekt:
       - inntekt: 210012
         periode: 1
