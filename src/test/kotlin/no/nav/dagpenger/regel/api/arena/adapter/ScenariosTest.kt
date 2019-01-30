@@ -1,7 +1,5 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -10,6 +8,21 @@ import io.ktor.server.testing.TestApplicationEngine
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
+import no.nav.dagpenger.regel.api.arena.adapter.alpha.DagpengegrunnlagBeregningsRequest
+import no.nav.dagpenger.regel.api.arena.adapter.alpha.DagpengegrunnlagBeregningsResponse
+import no.nav.dagpenger.regel.api.arena.adapter.alpha.MinsteinntektBeregningsRequest
+import no.nav.dagpenger.regel.api.arena.adapter.alpha.MinsteinntektBeregningsResponse
+import no.nav.dagpenger.regel.api.arena.adapter.alpha.Scenario1_1Request
+import no.nav.dagpenger.regel.api.arena.adapter.alpha.Scenario1_2Request
+import no.nav.dagpenger.regel.api.arena.adapter.alpha.Scenario1_3Request
+import no.nav.dagpenger.regel.api.arena.adapter.alpha.Scenario2_1_AND_3_Request
+import no.nav.dagpenger.regel.api.arena.adapter.alpha.Scenario2_2Request
+import no.nav.dagpenger.regel.api.arena.adapter.alpha.Scenario3_1Request
+import no.nav.dagpenger.regel.api.arena.adapter.alpha.Scenario3_4Request
+import no.nav.dagpenger.regel.api.arena.adapter.alpha.Scenario4_1Request
+import no.nav.dagpenger.regel.api.arena.adapter.alpha.Scenario4_2Request
+import no.nav.dagpenger.regel.api.arena.adapter.alpha.Scenario5_1Request
+import no.nav.dagpenger.regel.api.arena.adapter.alpha.Scenario5_2Request
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import kotlin.test.assertNotNull
@@ -18,17 +31,10 @@ class ScenariosTest {
 
     // Test and dummy responses as defined in https://confluence.adeo.no/display/TEAMARENA/ARENA-1892+-+04+Scenarier
 
-    val moshi = Moshi.Builder()
-        .add(YearMonthJsonAdapter())
-        .add(LocalDateTimeJsonAdapter())
-        .add(LocalDateJsonAdapter())
-        .add(KotlinJsonAdapterFactory())
-        .build()
-
-    val minsteinntektBeregningsRequestAdapter = moshi.adapter(MinsteinntektBeregningsRequest::class.java)
-    val minsteinntektBeregningsResponseAdapter = moshi.adapter(MinsteinntektBeregningsResponse::class.java)
-    val grunnlagRequestAdapter = moshi.adapter(DagpengegrunnlagBeregningsRequest::class.java)
-    val grunnlagResponseAdapter = moshi.adapter(DagpengegrunnlagBeregningsResponse::class.java)
+    val minsteinntektBeregningsRequestAdapter = moshiInstance.adapter(MinsteinntektBeregningsRequest::class.java)
+    val minsteinntektBeregningsResponseAdapter = moshiInstance.adapter(MinsteinntektBeregningsResponse::class.java)
+    val grunnlagRequestAdapter = moshiInstance.adapter(DagpengegrunnlagBeregningsRequest::class.java)
+    val grunnlagResponseAdapter = moshiInstance.adapter(DagpengegrunnlagBeregningsResponse::class.java)
 
     @Test
     fun `scenario 1-1`() = testApp {
@@ -173,7 +179,7 @@ class ScenariosTest {
     }
 
     fun testApp(callback: TestApplicationEngine.() -> Unit) {
-        withTestApplication({ regelApiAdapter(RegelApiDummy()) }) { callback() }
+        withTestApplication({ regelApiAdapter() }) { callback() }
     }
 
     fun assertMinsteinntektResponse(

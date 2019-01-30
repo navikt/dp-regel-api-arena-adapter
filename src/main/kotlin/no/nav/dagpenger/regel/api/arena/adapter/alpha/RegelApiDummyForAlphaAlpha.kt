@@ -1,4 +1,4 @@
-package no.nav.dagpenger.regel.api.arena.adapter
+package no.nav.dagpenger.regel.api.arena.adapter.alpha
 
 import de.huxhorn.sulky.ulid.ULID
 import java.net.URI
@@ -6,7 +6,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
 
-class RegelApiDummy : RegelApiClient {
+class RegelApiDummyForAlphaAlpha : RegelApiClientAlpha {
 
     private val ulid = ULID()
     lateinit var currentMinsteinntektBeregningsRequest: MinsteinntektBeregningsRequest
@@ -59,10 +59,22 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "01D1XGEK0FNB179YPXB12TPDPT"),
-                InntektsPeriode(YearMonth.parse("2018-01"), YearMonth.parse("2018-12")),
-                InntektsPeriode(YearMonth.parse("2017-01"), YearMonth.parse("2017-12")),
-                InntektsPeriode(YearMonth.parse("2016-01"), YearMonth.parse("2016-12")),
+                mapRequestToParametere(
+                    currentMinsteinntektBeregningsRequest,
+                    "01D1XGEK0FNB179YPXB12TPDPT"
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2018-01"),
+                    YearMonth.parse("2018-12")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2017-01"),
+                    YearMonth.parse("2017-12")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2016-01"),
+                    YearMonth.parse("2016-12")
+                ),
                 Inntekt(50000, 0, 0, inneholderNaeringsinntekter = false)
             )
             URI.create("URN:minsteinntekt:scenario1_2") -> MinsteinntektBeregningsResponse(
@@ -73,11 +85,28 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "01D1XGEK15D0B6GDPC74C0ZASV"),
-                InntektsPeriode(YearMonth.parse("2018-02"), YearMonth.parse("2019-01")),
-                InntektsPeriode(YearMonth.parse("2017-02"), YearMonth.parse("2018-01")),
-                InntektsPeriode(YearMonth.parse("2016-02"), YearMonth.parse("2017-01")),
-                Inntekt(200000, 0, 0, inneholderNaeringsinntekter = false)
+                mapRequestToParametere(
+                    currentMinsteinntektBeregningsRequest,
+                    "01D1XGEK15D0B6GDPC74C0ZASV"
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2018-02"),
+                    YearMonth.parse("2019-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2017-02"),
+                    YearMonth.parse("2018-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2016-02"),
+                    YearMonth.parse("2017-01")
+                ),
+                Inntekt(
+                    200000,
+                    0,
+                    0,
+                    inneholderNaeringsinntekter = false
+                )
             )
             URI.create("URN:minsteinntekt:scenario1_3") -> MinsteinntektBeregningsResponse(
                 ulid.nextULID(),
@@ -87,10 +116,22 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "01D1XGEK15D0B6GDPC74C0ZASV"),
-                InntektsPeriode(YearMonth.parse("2018-02"), YearMonth.parse("2019-01")),
-                InntektsPeriode(YearMonth.parse("2017-02"), YearMonth.parse("2018-01")),
-                InntektsPeriode(YearMonth.parse("2016-02"), YearMonth.parse("2017-01")),
+                mapRequestToParametere(
+                    currentMinsteinntektBeregningsRequest,
+                    "01D1XGEK15D0B6GDPC74C0ZASV"
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2018-02"),
+                    YearMonth.parse("2019-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2017-02"),
+                    YearMonth.parse("2018-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2016-02"),
+                    YearMonth.parse("2017-01")
+                ),
                 Inntekt(500000, 0, 0, inneholderNaeringsinntekter = true)
             )
             URI.create("URN:minsteinntekt:scenario2_1-3") -> MinsteinntektBeregningsResponse(
@@ -101,11 +142,28 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "01D1XGEK2CA0X5BM7PZFYKS5WX"),
-                InntektsPeriode(YearMonth.parse("2018-01"), YearMonth.parse("2018-12")),
-                InntektsPeriode(YearMonth.parse("2017-01"), YearMonth.parse("2017-12")),
-                InntektsPeriode(YearMonth.parse("2016-01"), YearMonth.parse("2016-12")),
-                Inntekt(164701, 0, 0, inneholderNaeringsinntekter = false)
+                mapRequestToParametere(
+                    currentMinsteinntektBeregningsRequest,
+                    "01D1XGEK2CA0X5BM7PZFYKS5WX"
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2018-01"),
+                    YearMonth.parse("2018-12")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2017-01"),
+                    YearMonth.parse("2017-12")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2016-01"),
+                    YearMonth.parse("2016-12")
+                ),
+                Inntekt(
+                    164701,
+                    0,
+                    0,
+                    inneholderNaeringsinntekter = false
+                )
             )
             URI.create("URN:minsteinntekt:scenario2_2") -> MinsteinntektBeregningsResponse(
                 ulid.nextULID(),
@@ -115,11 +173,28 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "01D1XGEK2S8WWRZ0QE0Y7W414K"),
-                InntektsPeriode(YearMonth.parse("2018-02"), YearMonth.parse("2019-01")),
-                InntektsPeriode(YearMonth.parse("2017-02"), YearMonth.parse("2018-01")),
-                InntektsPeriode(YearMonth.parse("2016-02"), YearMonth.parse("2017-01")),
-                Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
+                mapRequestToParametere(
+                    currentMinsteinntektBeregningsRequest,
+                    "01D1XGEK2S8WWRZ0QE0Y7W414K"
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2018-02"),
+                    YearMonth.parse("2019-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2017-02"),
+                    YearMonth.parse("2018-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2016-02"),
+                    YearMonth.parse("2017-01")
+                ),
+                Inntekt(
+                    100000,
+                    40000,
+                    0,
+                    inneholderNaeringsinntekter = false
+                )
             )
             URI.create("URN:minsteinntekt:scenario3_1") -> MinsteinntektBeregningsResponse(
                 ulid.nextULID(),
@@ -129,11 +204,28 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "01D1XGEK398JX50S7P3V9ENH76"),
-                InntektsPeriode(YearMonth.parse("2018-02"), YearMonth.parse("2019-01")),
-                InntektsPeriode(YearMonth.parse("2017-02"), YearMonth.parse("2018-01")),
-                InntektsPeriode(YearMonth.parse("2016-02"), YearMonth.parse("2017-01")),
-                Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
+                mapRequestToParametere(
+                    currentMinsteinntektBeregningsRequest,
+                    "01D1XGEK398JX50S7P3V9ENH76"
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2018-02"),
+                    YearMonth.parse("2019-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2017-02"),
+                    YearMonth.parse("2018-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2016-02"),
+                    YearMonth.parse("2017-01")
+                ),
+                Inntekt(
+                    100000,
+                    40000,
+                    0,
+                    inneholderNaeringsinntekter = false
+                )
             )
             URI.create("URN:minsteinntekt:scenario5_1") -> MinsteinntektBeregningsResponse(
                 ulid.nextULID(),
@@ -143,11 +235,28 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "01D1XGEK151116GDPC74C0Z111"),
-                InntektsPeriode(YearMonth.parse("2018-01"), YearMonth.parse("2018-12")),
-                InntektsPeriode(YearMonth.parse("2017-01"), YearMonth.parse("2017-12")),
-                InntektsPeriode(YearMonth.parse("2016-01"), YearMonth.parse("2016-12")),
-                Inntekt(500000, 0, 0, inneholderNaeringsinntekter = false)
+                mapRequestToParametere(
+                    currentMinsteinntektBeregningsRequest,
+                    "01D1XGEK151116GDPC74C0Z111"
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2018-01"),
+                    YearMonth.parse("2018-12")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2017-01"),
+                    YearMonth.parse("2017-12")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2016-01"),
+                    YearMonth.parse("2016-12")
+                ),
+                Inntekt(
+                    500000,
+                    0,
+                    0,
+                    inneholderNaeringsinntekter = false
+                )
             )
             URI.create("URN:minsteinntekt:scenario5_2") -> MinsteinntektBeregningsResponse(
                 ulid.nextULID(),
@@ -157,10 +266,22 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                mapRequestToParametere(currentMinsteinntektBeregningsRequest, "01D1XGEK151116GDPC74C0Z111"),
-                InntektsPeriode(YearMonth.parse("2018-01"), YearMonth.parse("2018-12")),
-                InntektsPeriode(YearMonth.parse("2017-01"), YearMonth.parse("2017-12")),
-                InntektsPeriode(YearMonth.parse("2016-01"), YearMonth.parse("2016-12")),
+                mapRequestToParametere(
+                    currentMinsteinntektBeregningsRequest,
+                    "01D1XGEK151116GDPC74C0Z111"
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2018-01"),
+                    YearMonth.parse("2018-12")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2017-01"),
+                    YearMonth.parse("2017-12")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2016-01"),
+                    YearMonth.parse("2016-12")
+                ),
                 Inntekt(500000, 0, 0, inneholderNaeringsinntekter = true)
             )
             else -> MinsteinntektBeregningsResponse(
@@ -171,11 +292,28 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                mapRequestToParametere(currentMinsteinntektBeregningsRequest, ulid.nextULID()),
-                InntektsPeriode(YearMonth.parse("2018-02"), YearMonth.parse("2019-01")),
-                InntektsPeriode(YearMonth.parse("2017-02"), YearMonth.parse("2018-01")),
-                InntektsPeriode(YearMonth.parse("2016-02"), YearMonth.parse("2017-01")),
-                Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
+                mapRequestToParametere(
+                    currentMinsteinntektBeregningsRequest,
+                    ulid.nextULID()
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2018-02"),
+                    YearMonth.parse("2019-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2017-02"),
+                    YearMonth.parse("2018-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2016-02"),
+                    YearMonth.parse("2017-01")
+                ),
+                Inntekt(
+                    100000,
+                    40000,
+                    0,
+                    inneholderNaeringsinntekter = false
+                )
             )
         }
     }
@@ -213,11 +351,28 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                mapRequestToParametere(currentGrunnlagRequest, "01D1XGQB1BSQ4NGXCBMGQ5M2KF"),
-                InntektsPeriode(YearMonth.parse("2018-02"), YearMonth.parse("2019-01")),
-                InntektsPeriode(YearMonth.parse("2017-02"), YearMonth.parse("2018-01")),
-                InntektsPeriode(YearMonth.parse("2016-02"), YearMonth.parse("2017-01")),
-                Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
+                mapRequestToParametere(
+                    currentGrunnlagRequest,
+                    "01D1XGQB1BSQ4NGXCBMGQ5M2KF"
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2018-02"),
+                    YearMonth.parse("2019-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2017-02"),
+                    YearMonth.parse("2018-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2016-02"),
+                    YearMonth.parse("2017-01")
+                ),
+                Inntekt(
+                    100000,
+                    40000,
+                    0,
+                    inneholderNaeringsinntekter = false
+                )
             )
             URI.create("URN:grunnlag:scenario2") -> DagpengegrunnlagBeregningsResponse(
                 ulid.nextULID(),
@@ -226,11 +381,28 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                mapRequestToParametere(currentGrunnlagRequest, "01D1XGQB3NNMHC54ADBGNF7HQG"),
-                InntektsPeriode(YearMonth.parse("2018-02"), YearMonth.parse("2019-01")),
-                InntektsPeriode(YearMonth.parse("2017-02"), YearMonth.parse("2018-01")),
-                InntektsPeriode(YearMonth.parse("2016-02"), YearMonth.parse("2017-01")),
-                Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
+                mapRequestToParametere(
+                    currentGrunnlagRequest,
+                    "01D1XGQB3NNMHC54ADBGNF7HQG"
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2018-02"),
+                    YearMonth.parse("2019-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2017-02"),
+                    YearMonth.parse("2018-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2016-02"),
+                    YearMonth.parse("2017-01")
+                ),
+                Inntekt(
+                    100000,
+                    40000,
+                    0,
+                    inneholderNaeringsinntekter = false
+                )
             )
             URI.create("URN:grunnlag:scenario3") -> DagpengegrunnlagBeregningsResponse(
                 ulid.nextULID(),
@@ -239,11 +411,28 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                mapRequestToParametere(currentGrunnlagRequest, "01D1XGQB49ZP6KCMX3FAP2XTNG"),
-                InntektsPeriode(YearMonth.parse("2018-02"), YearMonth.parse("2019-01")),
-                InntektsPeriode(YearMonth.parse("2017-02"), YearMonth.parse("2018-01")),
-                InntektsPeriode(YearMonth.parse("2016-02"), YearMonth.parse("2017-01")),
-                Inntekt(200000, 40000, 0, inneholderNaeringsinntekter = false)
+                mapRequestToParametere(
+                    currentGrunnlagRequest,
+                    "01D1XGQB49ZP6KCMX3FAP2XTNG"
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2018-02"),
+                    YearMonth.parse("2019-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2017-02"),
+                    YearMonth.parse("2018-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2016-02"),
+                    YearMonth.parse("2017-01")
+                ),
+                Inntekt(
+                    200000,
+                    40000,
+                    0,
+                    inneholderNaeringsinntekter = false
+                )
             )
             else -> DagpengegrunnlagBeregningsResponse(
                 ulid.nextULID(),
@@ -252,17 +441,40 @@ class RegelApiDummy : RegelApiClient {
                 ),
                 LocalDateTime.now(),
                 LocalDateTime.now(),
-                mapRequestToParametere(currentGrunnlagRequest, ulid.nextULID()),
-                InntektsPeriode(YearMonth.parse("2018-02"), YearMonth.parse("2019-01")),
-                InntektsPeriode(YearMonth.parse("2017-02"), YearMonth.parse("2018-01")),
-                InntektsPeriode(YearMonth.parse("2016-02"), YearMonth.parse("2017-01")),
-                Inntekt(100000, 40000, 0, inneholderNaeringsinntekter = false)
+                mapRequestToParametere(
+                    currentGrunnlagRequest,
+                    ulid.nextULID()
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2018-02"),
+                    YearMonth.parse("2019-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2017-02"),
+                    YearMonth.parse("2018-01")
+                ),
+                InntektsPeriode(
+                    YearMonth.parse("2016-02"),
+                    YearMonth.parse("2017-01")
+                ),
+                Inntekt(
+                    100000,
+                    40000,
+                    0,
+                    inneholderNaeringsinntekter = false
+                )
             )
         }
     }
 
     override fun pollTask(taskUrl: URI): TaskPollResponse {
-        return TaskPollResponse(TaskResponse(Regel.MINSTEINNTEKT, TaskStatus.DONE, ""), taskUrl)
+        return TaskPollResponse(
+            TaskResponse(
+                Regel.MINSTEINNTEKT,
+                TaskStatus.DONE,
+                ""
+            ), taskUrl
+        )
     }
 }
 

@@ -1,29 +1,31 @@
-package no.nav.dagpenger.regel.api.arena.adapter
+package no.nav.dagpenger.regel.api.arena.adapter.alpha
 
 import io.ktor.application.call
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Routing
 import io.ktor.routing.post
+import no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterException
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
 
-fun Routing.grunnlag(regelApiClient: RegelApiClient) {
+@Deprecated("use DagpengegrunnlagApi", replaceWith = ReplaceWith("no.nav.dagpenger.regel.api.arena.adapter.DagpengegrunnlagApi.kt"))
+fun Routing.grunnlag(regelApiClientAlpha: RegelApiClientAlpha = RegelApiDummyForAlphaAlpha()) {
     post("/dagpengegrunnlag") {
         val request = call.receive<DagpengegrunnlagBeregningsRequest>()
 
-        val taskUrl = regelApiClient.startGrunnlagBeregning(request)
+        val taskUrl = regelApiClientAlpha.startGrunnlagBeregning(request)
 
-        var taskResponse = regelApiClient.pollTask(taskUrl)
+        var taskResponse = regelApiClientAlpha.pollTask(taskUrl)
         while (taskResponse.task?.status == TaskStatus.PENDING) {
-            taskResponse = regelApiClient.pollTask(taskUrl)
+            taskResponse = regelApiClientAlpha.pollTask(taskUrl)
         }
 
         val ressursLocation =
             taskResponse.location ?: throw RegelApiArenaAdapterException("Did not get location with task")
 
-        val grunnlagBeregningResultat = regelApiClient.getGrunnlag(ressursLocation)
+        val grunnlagBeregningResultat = regelApiClientAlpha.getGrunnlag(ressursLocation)
 
         call.respond(grunnlagBeregningResultat)
     }

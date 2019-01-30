@@ -1,29 +1,31 @@
-package no.nav.dagpenger.regel.api.arena.adapter
+package no.nav.dagpenger.regel.api.arena.adapter.alpha
 
 import io.ktor.application.call
 import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.Routing
 import io.ktor.routing.post
+import no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterException
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-fun Routing.minsteinntekt(regelApiClient: RegelApiClient) {
+@Deprecated("use MinsteinntektApi", replaceWith = ReplaceWith("no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektApi"))
+fun Routing.minsteinntekt(regelApiClientAlpha: RegelApiClientAlpha = RegelApiDummyForAlphaAlpha()) {
 
     post("/minsteinntekt") {
         val request = call.receive<MinsteinntektBeregningsRequest>()
 
-        val taskUrl = regelApiClient.startMinsteinntektBeregning(request)
+        val taskUrl = regelApiClientAlpha.startMinsteinntektBeregning(request)
 
-        var taskResponse = regelApiClient.pollTask(taskUrl)
+        var taskResponse = regelApiClientAlpha.pollTask(taskUrl)
         while (taskResponse.task?.status == TaskStatus.PENDING) {
-            taskResponse = regelApiClient.pollTask(taskUrl)
+            taskResponse = regelApiClientAlpha.pollTask(taskUrl)
         }
 
         val ressursLocation =
             taskResponse.location ?: throw RegelApiArenaAdapterException("Did not get location with task")
 
-        val minsteinntektBeregningResultat = regelApiClient.getMinsteinntekt(ressursLocation)
+        val minsteinntektBeregningResultat = regelApiClientAlpha.getMinsteinntekt(ressursLocation)
 
         call.respond(minsteinntektBeregningResultat)
     }

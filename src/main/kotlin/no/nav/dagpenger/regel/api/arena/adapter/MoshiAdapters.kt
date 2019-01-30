@@ -1,24 +1,20 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
 import com.squareup.moshi.FromJson
+import com.squareup.moshi.Moshi
 import com.squareup.moshi.ToJson
-import java.math.BigDecimal
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
-class BigDecimalJsonAdapter {
-    @ToJson
-    fun toJson(bigDecimal: BigDecimal): String {
-        return bigDecimal.toString()
-    }
-
-    @FromJson
-    fun fromJson(json: String): BigDecimal {
-        return BigDecimal(json)
-    }
-}
+val moshiInstance: Moshi = Moshi.Builder()
+    .add(YearMonthJsonAdapter())
+    .add(LocalDateTimeJsonAdapter())
+    .add(LocalDateJsonAdapter())
+    .add(KotlinJsonAdapterFactory())
+    .build()!!
 
 class YearMonthJsonAdapter {
     @ToJson
