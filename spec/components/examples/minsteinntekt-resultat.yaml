@@ -6,6 +6,7 @@ value:
   parametre:
     aktorId: 01019955667
     vedtakId: 1234
+    inntektsId: 01D2FB328P06WD808P22N9CFY5
     beregningsdato: '2019-07-01'
     harAvtjentVerneplikt: false
     oppfyllerKravTilFangstOgFisk: false
