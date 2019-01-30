@@ -196,6 +196,12 @@
             "description": "Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.",
             "example": "2019-01-11"
           },
+          "inntektsId": {
+            "type": "string",
+            "format": "ulid",
+            "description": "Identifiserer hvilke inntekter som lå til grunn for beregningen.",
+            "example": "01D2FB328P06WD808P22N9CFY5"
+          },
           "harAvtjentVerneplikt": {
             "type": "boolean",
             "default": false,
@@ -265,8 +271,13 @@
           },
           "periode": {
             "type": "integer",
+            "description": "Siste-, nestsiste- eller tredjesiste-periode.",
             "example": 1,
-            "description": "Siste-, nestsiste- eller tredjesiste-periode. TODO - enum?"
+            "enum": [
+              1,
+              2,
+              3
+            ]
           },
           "inneholderNaeringsinntekter": {
             "type": "boolean",
@@ -346,6 +357,12 @@
             "description": "Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.",
             "example": "2019-01-11"
           },
+          "inntektsId": {
+            "type": "string",
+            "format": "ulid",
+            "description": "Identifiserer hvilke inntekter som lå til grunn for beregningen.",
+            "example": "01D2FB328P06WD808P22N9CFY5"
+          },
           "harAvtjentVerneplikt": {
             "type": "boolean",
             "default": false,
@@ -363,12 +380,12 @@
       },
       "MinsteinntektResultat": {
         "required": [
-          "oppfyllerKravetTilMinsteArbeidsinntekt",
+          "oppfyllerKravTilMinsteArbeidsinntekt",
           "periodeAntallUker"
         ],
         "type": "object",
         "properties": {
-          "oppfyllerKravetTilMinsteArbeidsinntekt": {
+          "oppfyllerKravTilMinsteArbeidsinntekt": {
             "type": "boolean"
           },
           "periodeAntallUker": {
@@ -560,48 +577,48 @@
             "vedtakId": 1234,
             "beregningsdato": "2019-07-01",
             "harAvtjentVerneplikt": false,
-            "oppflyllerKravTilFangstOgFisk": false,
+            "oppfyllerKravTilFangstOgFisk": false,
             "bruktInntektsPeriode": {
               "foersteMaaned": "2018-01",
               "sisteMaaned": "2019-06"
-            },
-            "resultat": {
-              "oppfyllerKravetTilMinsteArbeidsinntekt": true,
-              "periodeAntallUker": 52
-            },
-            "inntekt": [
-              {
-                "inntekt": 210012,
-                "periode": 1,
-                "andel": 32212,
-                "inneholderNaeringsinntekter": false,
-                "inntektsPeriode": {
-                  "foersteMaaned": "2018-06",
-                  "sisteMaaned": "2019-06"
-                }
-              },
-              {
-                "inntekt": 1892112,
-                "periode": 2,
-                "andel": 19921,
-                "inneholderNaeringsinntekter": false,
-                "inntektsPeriode": {
-                  "foersteMaaned": "2017-06",
-                  "sisteMaaned": "2016-06"
-                }
-              },
-              {
-                "inntekt": 297090,
-                "periode": 3,
-                "andel": 1212,
-                "inneholderNaeringsinntekter": false,
-                "inntektsPeriode": {
-                  "foersteMaaned": "2017-06",
-                  "sisteMaaned": "2016-06"
-                }
+            }
+          },
+          "resultat": {
+            "oppfyllerKravTilMinsteArbeidsinntekt": true,
+            "periodeAntallUker": 52
+          },
+          "inntekt": [
+            {
+              "inntekt": 210012,
+              "periode": 1,
+              "andel": 32212,
+              "inneholderNaeringsinntekter": false,
+              "inntektsPeriode": {
+                "foersteMaaned": "2018-06",
+                "sisteMaaned": "2019-06"
               }
-            ]
-          }
+            },
+            {
+              "inntekt": 1892112,
+              "periode": 2,
+              "andel": 19921,
+              "inneholderNaeringsinntekter": false,
+              "inntektsPeriode": {
+                "foersteMaaned": "2017-06",
+                "sisteMaaned": "2016-06"
+              }
+            },
+            {
+              "inntekt": 297090,
+              "periode": 3,
+              "andel": 1212,
+              "inneholderNaeringsinntekter": false,
+              "inntektsPeriode": {
+                "foersteMaaned": "2017-06",
+                "sisteMaaned": "2016-06"
+              }
+            }
+          ]
         }
       },
       "minsteinntekt-vanlig": {
