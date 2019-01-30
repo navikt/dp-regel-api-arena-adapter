@@ -1,0 +1,37 @@
+required:
+  - aktorId
+  - vedtakId
+  - beregningsdato
+  - inntektsId
+type: object
+properties:
+  aktorId:
+    type: string
+    description: Identifikasjon av bruker
+    example: 01019955667
+  vedtakId:
+    type: integer
+    description: Identifikasjon av dagpengevedtak
+    format: int32
+    example: 1234
+  beregningsdato:
+    type: string
+    description: >-
+      Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt
+      skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
+    example: '2019-01-11'
+  inntektsId:
+    type: string
+    format: ulid
+    description: Identifiserer hvilke inntekter som lå til grunn for beregningen.
+    example: 01D2FB328P06WD808P22N9CFY5
+  harAvtjentVerneplikt:
+    type: boolean
+    default: false
+    description: Om bruker har avtjent verneplikt minst 3 av de siste 12 måneder.
+  oppfyllerKravTilFangstOgFisk:
+    type: boolean
+    default: false
+    description: Om bruker oppfyller særvilkårene for fangst og fisk.
+  bruktInntektsPeriode:
+    $ref: '#/components/schemas/InntektsPeriode'

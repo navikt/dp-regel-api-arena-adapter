@@ -7,7 +7,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: '#/components/schemas/DagpengegrunnlagParametere'
+          $ref: '#/components/schemas/DagpengegrunnlagInnParametere'
         examples:
           grunnlag:
             $ref: '#/components/examples/dagpengegrunnlag-grunnlag'

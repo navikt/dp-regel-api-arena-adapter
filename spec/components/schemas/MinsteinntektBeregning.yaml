@@ -3,7 +3,7 @@ allOf:
   - type: object
     properties:
       parametere:
-        $ref: '#/components/schemas/MinsteinntektParametere'
+        $ref: '#/components/schemas/MinsteinntektResultatParametere'
       resultat:
         $ref: '#/components/schemas/MinsteinntektResultat'
       inntekt:

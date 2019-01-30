@@ -1,8 +1,9 @@
+type: object
 required:
   - aktorId
   - vedtakId
   - beregningsdato
-type: object
+  - inntektsId
 properties:
   aktorId:
     type: string
@@ -32,5 +33,15 @@ properties:
     type: boolean
     default: false
     description: Om bruker oppfyller særvilkårene for fangst og fisk.
+  antallBarn:
+    type: integer
+    default: 0
+    description: Antall barn bruker søker barnetillegg for
   bruktInntektsPeriode:
     $ref: '#/components/schemas/InntektsPeriode'
+  grunnlag:
+    type: integer
+    nullable: true
+    description: >-
+      Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum
+      her

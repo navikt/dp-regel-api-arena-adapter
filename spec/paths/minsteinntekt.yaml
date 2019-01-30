@@ -7,7 +7,7 @@ post:
     content:
       application/json:
         schema:
-          $ref: '#/components/schemas/MinsteinntektParametere'
+          $ref: '#/components/schemas/MinsteinntektInnParametere'
         examples:
           vanlig:
             $ref: '#/components/examples/minsteinntekt-vanlig'

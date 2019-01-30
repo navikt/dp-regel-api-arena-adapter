@@ -1,6 +1,5 @@
 required:
   - oppfyllerKravTilMinsteArbeidsinntekt
-  - periodeAntallUker
 type: object
 properties:
   oppfyllerKravTilMinsteArbeidsinntekt:
@@ -11,5 +10,6 @@ properties:
     format: int32
     example: 52
     enum:
+      - 26
       - 52
       - 104

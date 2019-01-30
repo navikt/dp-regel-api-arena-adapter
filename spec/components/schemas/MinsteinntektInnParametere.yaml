@@ -1,8 +1,8 @@
-type: object
 required:
   - aktorId
   - vedtakId
   - beregningsdato
+type: object
 properties:
   aktorId:
     type: string
@@ -19,11 +19,6 @@ properties:
       Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt
       skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
     example: '2019-01-11'
-  inntektsId:
-    type: string
-    format: ulid
-    description: Identifiserer hvilke inntekter som lå til grunn for beregningen.
-    example: 01D2FB328P06WD808P22N9CFY5
   harAvtjentVerneplikt:
     type: boolean
     default: false
@@ -32,15 +27,5 @@ properties:
     type: boolean
     default: false
     description: Om bruker oppfyller særvilkårene for fangst og fisk.
-  antallBarn:
-    type: integer
-    default: 0
-    description: Antall barn bruker søker barnetillegg for
   bruktInntektsPeriode:
     $ref: '#/components/schemas/InntektsPeriode'
-  grunnlag:
-    type: integer
-    nullable: true
-    description: >-
-      Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum
-      her
