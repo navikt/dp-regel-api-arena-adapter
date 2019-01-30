@@ -48,7 +48,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DagpengegrunnlagParametere"
+                "$ref": "#/components/schemas/DagpengegrunnlagInnParametere"
               },
               "examples": {
                 "grunnlag": {
@@ -92,7 +92,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MinsteinntektParametere"
+                "$ref": "#/components/schemas/MinsteinntektInnParametere"
               },
               "examples": {
                 "vanlig": {
@@ -163,7 +163,7 @@
             "type": "object",
             "properties": {
               "parametere": {
-                "$ref": "#/components/schemas/DagpengegrunnlagParametere"
+                "$ref": "#/components/schemas/DagpengegrunnlagResultatParametere"
               },
               "resultat": {
                 "$ref": "#/components/schemas/DagpengegrunnlagResultat"
@@ -172,7 +172,7 @@
           }
         ]
       },
-      "DagpengegrunnlagParametere": {
+      "DagpengegrunnlagInnParametere": {
         "type": "object",
         "required": [
           "aktorId",
@@ -195,12 +195,6 @@
             "type": "string",
             "description": "Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.",
             "example": "2019-01-11"
-          },
-          "inntektsId": {
-            "type": "string",
-            "format": "ulid",
-            "description": "Identifiserer hvilke inntekter som lå til grunn for beregningen.",
-            "example": "01D2FB328P06WD808P22N9CFY5"
           },
           "harAvtjentVerneplikt": {
             "type": "boolean",
@@ -249,6 +243,62 @@
               "MANUELL_OVER_6G",
               "VERNEPLIKT"
             ]
+          }
+        }
+      },
+      "DagpengegrunnlagResultatParametere": {
+        "type": "object",
+        "required": [
+          "aktorId",
+          "vedtakId",
+          "beregningsdato",
+          "inntektsId"
+        ],
+        "properties": {
+          "aktorId": {
+            "type": "string",
+            "description": "Identifikasjon av bruker",
+            "example": "01019955667"
+          },
+          "vedtakId": {
+            "type": "integer",
+            "description": "Identifikasjon av dagpengevedtak",
+            "format": "int32",
+            "example": 1234
+          },
+          "beregningsdato": {
+            "type": "string",
+            "description": "Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.",
+            "example": "2019-01-11"
+          },
+          "inntektsId": {
+            "type": "string",
+            "format": "ulid",
+            "description": "Identifiserer hvilke inntekter som lå til grunn for beregningen.",
+            "example": "01D2FB328P06WD808P22N9CFY5"
+          },
+          "harAvtjentVerneplikt": {
+            "type": "boolean",
+            "default": false,
+            "description": "Om bruker har avtjent verneplikt minst 3 av de siste 12 måneder."
+          },
+          "oppfyllerKravTilFangstOgFisk": {
+            "type": "boolean",
+            "default": false,
+            "description": "Om bruker oppfyller særvilkårene for fangst og fisk."
+          },
+          "antallBarn": {
+            "type": "integer",
+            "default": 0,
+            "description": "Antall barn bruker søker barnetillegg for"
+          },
+          "bruktInntektsPeriode": {
+            "$ref": "#/components/schemas/InntektsPeriode"
+          },
+          "grunnlag": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum her"
           }
         }
       },
@@ -318,7 +368,7 @@
             "type": "object",
             "properties": {
               "parametere": {
-                "$ref": "#/components/schemas/MinsteinntektParametere"
+                "$ref": "#/components/schemas/MinsteinntektResultatParametere"
               },
               "resultat": {
                 "$ref": "#/components/schemas/MinsteinntektResultat"
@@ -333,11 +383,73 @@
           }
         ]
       },
-      "MinsteinntektParametere": {
+      "MinsteinntektInnParametere": {
         "required": [
           "aktorId",
           "vedtakId",
           "beregningsdato"
+        ],
+        "type": "object",
+        "properties": {
+          "aktorId": {
+            "type": "string",
+            "description": "Identifikasjon av bruker",
+            "example": "01019955667"
+          },
+          "vedtakId": {
+            "type": "integer",
+            "description": "Identifikasjon av dagpengevedtak",
+            "format": "int32",
+            "example": 1234
+          },
+          "beregningsdato": {
+            "type": "string",
+            "description": "Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.",
+            "example": "2019-01-11"
+          },
+          "harAvtjentVerneplikt": {
+            "type": "boolean",
+            "default": false,
+            "description": "Om bruker har avtjent verneplikt minst 3 av de siste 12 måneder."
+          },
+          "oppfyllerKravTilFangstOgFisk": {
+            "type": "boolean",
+            "default": false,
+            "description": "Om bruker oppfyller særvilkårene for fangst og fisk."
+          },
+          "bruktInntektsPeriode": {
+            "$ref": "#/components/schemas/InntektsPeriode"
+          }
+        }
+      },
+      "MinsteinntektResultat": {
+        "required": [
+          "oppfyllerKravTilMinsteArbeidsinntekt"
+        ],
+        "type": "object",
+        "properties": {
+          "oppfyllerKravTilMinsteArbeidsinntekt": {
+            "type": "boolean"
+          },
+          "periodeAntallUker": {
+            "type": "integer",
+            "description": "Lengde på stønadsperiode",
+            "format": "int32",
+            "example": 52,
+            "enum": [
+              26,
+              52,
+              104
+            ]
+          }
+        }
+      },
+      "MinsteinntektResultatParametere": {
+        "required": [
+          "aktorId",
+          "vedtakId",
+          "beregningsdato",
+          "inntektsId"
         ],
         "type": "object",
         "properties": {
@@ -375,28 +487,6 @@
           },
           "bruktInntektsPeriode": {
             "$ref": "#/components/schemas/InntektsPeriode"
-          }
-        }
-      },
-      "MinsteinntektResultat": {
-        "required": [
-          "oppfyllerKravTilMinsteArbeidsinntekt",
-          "periodeAntallUker"
-        ],
-        "type": "object",
-        "properties": {
-          "oppfyllerKravTilMinsteArbeidsinntekt": {
-            "type": "boolean"
-          },
-          "periodeAntallUker": {
-            "type": "integer",
-            "description": "Lengde på stønadsperiode",
-            "format": "int32",
-            "example": 52,
-            "enum": [
-              52,
-              104
-            ]
           }
         }
       },
