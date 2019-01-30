@@ -8,7 +8,7 @@ import java.time.YearMonth
 
 class RegelApiDummy : RegelApiClient {
 
-    private var ulid = ULID()
+    private val ulid = ULID()
     lateinit var currentMinsteinntektBeregningsRequest: MinsteinntektBeregningsRequest
     lateinit var currentGrunnlagRequest: DagpengegrunnlagBeregningsRequest
 

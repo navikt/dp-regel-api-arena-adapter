@@ -8,32 +8,32 @@ value:
     vedtakId: 1234
     beregningsdato: '2019-07-01'
     harAvtjentVerneplikt: false
-    oppflyllerKravTilFangstOgFisk: false
+    oppfyllerKravTilFangstOgFisk: false
     bruktInntektsPeriode:
       foersteMaaned: 2018-01
       sisteMaaned: 2019-06
-    resultat:
-      oppfyllerKravetTilMinsteArbeidsinntekt: true
-      periodeAntallUker: 52
-    inntekt:
-      - inntekt: 210012
-        periode: 1
-        andel: 32212
-        inneholderNaeringsinntekter: false
-        inntektsPeriode:
-          foersteMaaned: 2018-06
-          sisteMaaned: 2019-06
-      - inntekt: 1892112
-        periode: 2
-        andel: 19921
-        inneholderNaeringsinntekter: false
-        inntektsPeriode:
-          foersteMaaned: 2017-06
-          sisteMaaned: 2016-06
-      - inntekt: 297090
-        periode: 3
-        andel: 1212
-        inneholderNaeringsinntekter: false
-        inntektsPeriode:
-          foersteMaaned: 2017-06
-          sisteMaaned: 2016-06
+  resultat:
+    oppfyllerKravTilMinsteArbeidsinntekt: true
+    periodeAntallUker: 52
+  inntekt:
+    - inntekt: 210012
+      periode: 1
+      andel: 32212
+      inneholderNaeringsinntekter: false
+      inntektsPeriode:
+        foersteMaaned: 2018-06
+        sisteMaaned: 2019-06
+    - inntekt: 1892112
+      periode: 2
+      andel: 19921
+      inneholderNaeringsinntekter: false
+      inntektsPeriode:
+        foersteMaaned: 2017-06
+        sisteMaaned: 2016-06
+    - inntekt: 297090
+      periode: 3
+      andel: 1212
+      inneholderNaeringsinntekter: false
+      inntektsPeriode:
+        foersteMaaned: 2017-06
+        sisteMaaned: 2016-06

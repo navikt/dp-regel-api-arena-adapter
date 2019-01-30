@@ -1,9 +1,9 @@
 required:
-  - oppfyllerKravetTilMinsteArbeidsinntekt
+  - oppfyllerKravTilMinsteArbeidsinntekt
   - periodeAntallUker
 type: object
 properties:
-  oppfyllerKravetTilMinsteArbeidsinntekt:
+  oppfyllerKravTilMinsteArbeidsinntekt:
     type: boolean
   periodeAntallUker:
     type: integer

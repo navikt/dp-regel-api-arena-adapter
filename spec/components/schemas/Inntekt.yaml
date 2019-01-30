@@ -13,8 +13,12 @@ properties:
     description: Inntekt for perioden
   periode:
     type: integer
+    description: 'Siste-, nestsiste- eller tredjesiste-periode.'
     example: 1
-    description: 'Siste-, nestsiste- eller tredjesiste-periode. TODO - enum?'
+    enum:
+      - 1
+      - 2
+      - 3
   inneholderNaeringsinntekter:
     type: boolean
     example: false

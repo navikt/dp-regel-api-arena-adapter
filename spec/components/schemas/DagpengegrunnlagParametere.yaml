@@ -19,6 +19,11 @@ properties:
       Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt
       skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
     example: '2019-01-11'
+  inntektsId:
+    type: string
+    format: ulid
+    description: Identifiserer hvilke inntekter som lå til grunn for beregningen.
+    example: 01D2FB328P06WD808P22N9CFY5
   harAvtjentVerneplikt:
     type: boolean
     default: false
