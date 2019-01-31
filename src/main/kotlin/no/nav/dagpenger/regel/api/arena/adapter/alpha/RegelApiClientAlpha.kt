@@ -1,8 +1,8 @@
-package no.nav.dagpenger.regel.api.arena.adapter
+package no.nav.dagpenger.regel.api.arena.adapter.alpha
 
 import java.net.URI
 
-interface RegelApiClient {
+interface RegelApiClientAlpha {
     fun startMinsteinntektBeregning(request: MinsteinntektBeregningsRequest): URI
     fun getMinsteinntekt(ressursUrl: URI): MinsteinntektBeregningsResponse
     fun startGrunnlagBeregning(request: DagpengegrunnlagBeregningsRequest): URI
@@ -12,7 +12,7 @@ interface RegelApiClient {
 
 class RegelApiException(val statusCode: Int, override val message: String, override val cause: Throwable) : RuntimeException(message, cause)
 
-class BadRequestException() : RuntimeException()
+class BadRequestException : RuntimeException()
 
 enum class TaskStatus {
     PENDING, DONE
@@ -28,3 +28,7 @@ data class TaskPollResponse(
     val task: TaskResponse?,
     val location: URI?
 )
+
+enum class Regel {
+    MINSTEINNTEKT, GRUNNLAG
+}
