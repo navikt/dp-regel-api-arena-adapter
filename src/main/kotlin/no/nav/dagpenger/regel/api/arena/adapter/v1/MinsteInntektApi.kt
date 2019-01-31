@@ -9,7 +9,7 @@ import io.ktor.routing.Route
 import io.ktor.routing.post
 import io.ktor.routing.route
 import mu.KotlinLogging
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt.Inntekt
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.Inntekt
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt.MinsteinntektBeregning
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt.MinsteinntektInnParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt.MinsteinntektResultat

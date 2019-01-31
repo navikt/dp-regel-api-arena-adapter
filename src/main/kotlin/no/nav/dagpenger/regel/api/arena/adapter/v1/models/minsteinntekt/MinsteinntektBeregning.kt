@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt
 
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.Inntekt
 import java.time.LocalDateTime
 
 data class MinsteinntektBeregning(

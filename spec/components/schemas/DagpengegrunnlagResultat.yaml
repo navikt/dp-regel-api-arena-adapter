@@ -1,4 +1,9 @@
 type: object
+required:
+  - grunnlag
+  - sats
+  - beregningsregel
+  - benyttet90ProsentRegel
 properties:
   grunnlag:
     $ref: '#/components/schemas/Dagpengegrunnlag'
@@ -16,3 +21,10 @@ properties:
       - MANUELL_UNDER_6G
       - MANUELL_OVER_6G
       - VERNEPLIKT
+  benyttet90ProsentRegel:
+    type: boolean
+    example: false
+    description: >-
+      Settes til true dersom det totalt beregnede barnetillegget overstiger 90 %
+      av dagpengegrunnlaget. Barnetillegget er derfor redusert til 90 % av
+      barnetillegget. Dette gjenspeiles i ukessatsene.

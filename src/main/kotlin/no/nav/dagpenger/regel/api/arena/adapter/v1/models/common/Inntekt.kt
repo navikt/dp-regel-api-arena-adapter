@@ -1,4 +1,4 @@
-package no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt
+package no.nav.dagpenger.regel.api.arena.adapter.v1.models.common
 
 data class Inntekt(
     val inntekt: Int,
