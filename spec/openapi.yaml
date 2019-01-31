@@ -15,9 +15,9 @@ tags:
     description: Beregner minsteinntekt og dagpengeperiode etter §4-4 og §4-15
     externalDocs:
       description: Folketrygdloven $4-4
-      url: 'https://lovdata.no/lov/1997-02-28-19/§4-4'
+      url: 'https://lovdata.no/lov/1997-02-28-19/%C2%A74-4'
   - name: Dagpengegrunnlag
     description: Beregner dagpengegrunnlag etter §4-11
     externalDocs:
       description: Folketrygdloven $4-11
-      url: 'https://lovdata.no/lov/1997-02-28-19/§4-11'
+      url: 'https://lovdata.no/lov/1997-02-28-19/%C2%A74-11'
