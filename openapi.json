@@ -57,9 +57,6 @@
                 "verneplikt": {
                   "$ref": "#/components/examples/dagpengegrunnlag-verneplikt"
                 },
-                "bruktInntekt": {
-                  "$ref": "#/components/examples/dagpengegrunnlag-bruktInntekt"
-                },
                 "bareSats": {
                   "$ref": "#/components/examples/dagpengegrunnlag-bareSats"
                 }
@@ -141,6 +138,10 @@
     "schemas": {
       "Dagpengegrunnlag": {
         "type": "object",
+        "required": [
+          "avkortet",
+          "uavkortet"
+        ],
         "properties": {
           "avkortet": {
             "type": "integer",
@@ -161,6 +162,11 @@
           },
           {
             "type": "object",
+            "required": [
+              "parametere",
+              "resultat",
+              "inntekt"
+            ],
             "properties": {
               "parametere": {
                 "$ref": "#/components/schemas/DagpengegrunnlagResultatParametere"
@@ -226,6 +232,12 @@
       },
       "DagpengegrunnlagResultat": {
         "type": "object",
+        "required": [
+          "grunnlag",
+          "sats",
+          "beregningsregel",
+          "benyttet90ProsentRegel"
+        ],
         "properties": {
           "grunnlag": {
             "$ref": "#/components/schemas/Dagpengegrunnlag"
@@ -246,6 +258,11 @@
               "MANUELL_OVER_6G",
               "VERNEPLIKT"
             ]
+          },
+          "benyttet90ProsentRegel": {
+            "type": "boolean",
+            "example": false,
+            "description": "Settes til true dersom det totalt beregnede barnetillegget overstiger 90 % av dagpengegrunnlaget. Barnetillegget er derfor redusert til 90 % av barnetillegget. Dette gjenspeiles i ukessatsene."
           }
         }
       },
@@ -294,9 +311,6 @@
             "type": "integer",
             "default": 0,
             "description": "Antall barn bruker søker barnetillegg for"
-          },
-          "bruktInntektsPeriode": {
-            "$ref": "#/components/schemas/InntektsPeriode"
           },
           "grunnlag": {
             "type": "integer",
@@ -369,6 +383,11 @@
           },
           {
             "type": "object",
+            "required": [
+              "parametere",
+              "resultat",
+              "inntekt"
+            ],
             "properties": {
               "parametere": {
                 "$ref": "#/components/schemas/MinsteinntektResultatParametere"
@@ -448,13 +467,13 @@
         }
       },
       "MinsteinntektResultatParametere": {
+        "type": "object",
         "required": [
           "aktorId",
           "vedtakId",
           "beregningsdato",
           "inntektsId"
         ],
-        "type": "object",
         "properties": {
           "aktorId": {
             "type": "string",
@@ -495,6 +514,10 @@
       },
       "Sats": {
         "type": "object",
+        "required": [
+          "dagsats",
+          "ukesats"
+        ],
         "properties": {
           "dagsats": {
             "type": "integer",
@@ -552,33 +575,6 @@
             "grunnlag": {
               "avkortet": 250250,
               "uavkortet": 250250
-            },
-            "sats": {
-              "dagsats": 213,
-              "ukesats": 1065
-            }
-          }
-        }
-      },
-      "dagpengegrunnlag-bruktInntekt": {
-        "summary": "Eksempel for å fastsette både grunnlag og sats med fratrekk fra tidligere brukt inntekt",
-        "value": {
-          "beregningsId": "01ARZ3NDEKTSV4RRFFQ69G5FCV",
-          "opprettet": "2018-12-26T14:42:09Z",
-          "utfort": "2018-12-26T14:43:12Z",
-          "parametere": {
-            "aktorId": "01019955667",
-            "vedtakId": 1234,
-            "beregningsdato": "2019-01-11",
-            "bruktInntektsPeriode": {
-              "foersteMaaned": "2019-01",
-              "sisteMaaned": "2018-01"
-            }
-          },
-          "resultat": {
-            "grunnlag": {
-              "avkortet": 342352,
-              "uavkortet": 342352
             },
             "sats": {
               "dagsats": 213,
