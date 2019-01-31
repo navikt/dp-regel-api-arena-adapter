@@ -2,7 +2,9 @@ package no.nav.dagpenger.regel.api.arena.adapter
 
 import com.ryanharter.ktor.moshi.moshi
 import com.squareup.moshi.JsonDataException
+import com.squareup.moshi.JsonEncodingException
 import io.ktor.application.Application
+import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CallLogging
@@ -15,10 +17,9 @@ import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import io.ktor.util.pipeline.PipelineContext
 import mu.KotlinLogging
-import no.nav.dagpenger.regel.api.arena.adapter.alpha.BadRequestException
-import no.nav.dagpenger.regel.api.arena.adapter.alpha.grunnlag
-import no.nav.dagpenger.regel.api.arena.adapter.alpha.minsteinntekt
+
 import no.nav.dagpenger.regel.api.arena.adapter.v1.DagpengegrunnlagApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektApi
 import java.util.concurrent.TimeUnit
@@ -46,25 +47,25 @@ fun Application.regelApiAdapter() {
         moshi(moshiInstance)
     }
     install(StatusPages) {
-        exception<BadRequestException> { cause ->
-            LOGGER.warn("Bad request") { cause }
-            call.respond(HttpStatusCode.BadRequest)
-        }
         exception<JsonDataException> { cause ->
-            LOGGER.warn("Bad request") { cause }
-            call.respond(HttpStatusCode.BadRequest)
+            badRequest(cause)
         }
-    }
-
-    routing {
-        route("/v1") {
-            MinsteinntektApi()
-            DagpengegrunnlagApi()
+        exception<JsonEncodingException> { cause ->
+            badRequest(cause)
         }
-        minsteinntekt()
-        grunnlag()
-        naischecks()
+        routing {
+            route("/v1") {
+                MinsteinntektApi()
+                DagpengegrunnlagApi()
+            }
+            naischecks()
+        }
     }
 }
 
-class RegelApiArenaAdapterException(override val message: String) : RuntimeException(message)
+private suspend fun <T : Throwable> PipelineContext<Unit, ApplicationCall>.badRequest(
+    cause: T
+) {
+    call.respond(HttpStatusCode.BadRequest)
+    throw cause
+}

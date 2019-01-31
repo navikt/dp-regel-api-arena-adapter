@@ -56,8 +56,4 @@ class MinsteinntektApiV1Steps : No {
             }
         }
     }
-
-    fun <T> String?.parseJsonFrom(adapter: JsonAdapter<T>): T {
-        return this?.let { adapter.fromJson(it) } ?: throw AssertionError("No content from server")
-    }
 }
