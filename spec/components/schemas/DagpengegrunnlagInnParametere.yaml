@@ -31,8 +31,6 @@ properties:
     type: integer
     default: 0
     description: Antall barn bruker søker barnetillegg for
-  bruktInntektsPeriode:
-    $ref: '#/components/schemas/InntektsPeriode'
   grunnlag:
     type: integer
     nullable: true

@@ -6,3 +6,7 @@ allOf:
         $ref: '#/components/schemas/DagpengegrunnlagResultatParametere'
       resultat:
         $ref: '#/components/schemas/DagpengegrunnlagResultat'
+      inntekt:
+        type: array
+        items:
+          $ref: '#/components/schemas/Inntekt'
