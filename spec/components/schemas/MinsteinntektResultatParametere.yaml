@@ -1,9 +1,9 @@
+type: object
 required:
   - aktorId
   - vedtakId
   - beregningsdato
   - inntektsId
-type: object
 properties:
   aktorId:
     type: string

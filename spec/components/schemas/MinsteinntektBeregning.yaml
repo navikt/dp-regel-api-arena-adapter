@@ -1,6 +1,10 @@
 allOf:
   - $ref: '#/components/schemas/Subsumsjon'
   - type: object
+    required:
+      - parametere
+      - resultat
+      - inntekt
     properties:
       parametere:
         $ref: '#/components/schemas/MinsteinntektResultatParametere'

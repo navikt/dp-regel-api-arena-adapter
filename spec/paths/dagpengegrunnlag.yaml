@@ -13,8 +13,6 @@ post:
             $ref: '#/components/examples/dagpengegrunnlag-grunnlag'
           verneplikt:
             $ref: '#/components/examples/dagpengegrunnlag-verneplikt'
-          bruktInntekt:
-            $ref: '#/components/examples/dagpengegrunnlag-bruktInntekt'
           bareSats:
             $ref: '#/components/examples/dagpengegrunnlag-bareSats'
   responses:
