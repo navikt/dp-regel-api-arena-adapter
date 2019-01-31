@@ -41,9 +41,8 @@ class DagpengergrunnlagApiV1Steps : No {
             }
         }
 
-        Så("er inntektsId benyttet {string}") { beregningsId: String ->
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
+        Så("er vedtak id {int}") { vedtakId: Int ->
+            assertEquals(vedtakId, dagpengegrunnlagBeregning.parametere.vedtakId)
         }
     }
 }
