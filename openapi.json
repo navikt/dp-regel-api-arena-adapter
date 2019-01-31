@@ -29,7 +29,7 @@
     },
     {
       "name": "Dagpengegrunnlag",
-      "description": "Beregnger dagpengegrunnlag etter §4-11",
+      "description": "Beregner dagpengegrunnlag etter §4-11",
       "externalDocs": {
         "description": "Folketrygdloven $4-11",
         "url": "https://lovdata.no/lov/1997-02-28-19/§4-11"
@@ -48,7 +48,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/DagpengegrunnlagParametere"
+                "$ref": "#/components/schemas/DagpengegrunnlagInnParametere"
               },
               "examples": {
                 "grunnlag": {
@@ -56,9 +56,6 @@
                 },
                 "verneplikt": {
                   "$ref": "#/components/examples/dagpengegrunnlag-verneplikt"
-                },
-                "bruktInntekt": {
-                  "$ref": "#/components/examples/dagpengegrunnlag-bruktInntekt"
                 },
                 "bareSats": {
                   "$ref": "#/components/examples/dagpengegrunnlag-bareSats"
@@ -92,7 +89,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/MinsteinntektParametere"
+                "$ref": "#/components/schemas/MinsteinntektInnParametere"
               },
               "examples": {
                 "vanlig": {
@@ -118,6 +115,11 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/MinsteinntektBeregning"
+                },
+                "examples": {
+                  "minsteinntekt-resultat": {
+                    "$ref": "#/components/examples/minsteinntekt-resultat"
+                  }
                 }
               }
             }
@@ -136,6 +138,10 @@
     "schemas": {
       "Dagpengegrunnlag": {
         "type": "object",
+        "required": [
+          "avkortet",
+          "uavkortet"
+        ],
         "properties": {
           "avkortet": {
             "type": "integer",
@@ -156,18 +162,29 @@
           },
           {
             "type": "object",
+            "required": [
+              "parametere",
+              "resultat",
+              "inntekt"
+            ],
             "properties": {
               "parametere": {
-                "$ref": "#/components/schemas/DagpengegrunnlagParametere"
+                "$ref": "#/components/schemas/DagpengegrunnlagResultatParametere"
               },
               "resultat": {
                 "$ref": "#/components/schemas/DagpengegrunnlagResultat"
+              },
+              "inntekt": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Inntekt"
+                }
               }
             }
           }
         ]
       },
-      "DagpengegrunnlagParametere": {
+      "DagpengegrunnlagInnParametere": {
         "type": "object",
         "required": [
           "aktorId",
@@ -206,9 +223,6 @@
             "default": 0,
             "description": "Antall barn bruker søker barnetillegg for"
           },
-          "bruktInntektsPeriode": {
-            "$ref": "#/components/schemas/InntektsPeriode"
-          },
           "grunnlag": {
             "type": "integer",
             "nullable": true,
@@ -218,12 +232,129 @@
       },
       "DagpengegrunnlagResultat": {
         "type": "object",
+        "required": [
+          "grunnlag",
+          "sats",
+          "beregningsregel",
+          "benyttet90ProsentRegel"
+        ],
         "properties": {
           "grunnlag": {
             "$ref": "#/components/schemas/Dagpengegrunnlag"
           },
           "sats": {
             "$ref": "#/components/schemas/Sats"
+          },
+          "beregningsregel": {
+            "type": "string",
+            "example": "ORDINAER_ETTAAR",
+            "enum": [
+              "ORDINAER_ETTAAR",
+              "ORDINAER_TREAAR",
+              "ORDINAER_OVER_6G",
+              "ORDINAER_OVER_6G_SISTE_2019",
+              "ORDINAER_OVER_6G_3SISTE_2019",
+              "MANUELL_UNDER_6G",
+              "MANUELL_OVER_6G",
+              "VERNEPLIKT"
+            ]
+          },
+          "benyttet90ProsentRegel": {
+            "type": "boolean",
+            "example": false,
+            "description": "Settes til true dersom det totalt beregnede barnetillegget overstiger 90 % av dagpengegrunnlaget. Barnetillegget er derfor redusert til 90 % av barnetillegget. Dette gjenspeiles i ukessatsene."
+          }
+        }
+      },
+      "DagpengegrunnlagResultatParametere": {
+        "type": "object",
+        "required": [
+          "aktorId",
+          "vedtakId",
+          "beregningsdato",
+          "inntektsId"
+        ],
+        "properties": {
+          "aktorId": {
+            "type": "string",
+            "description": "Identifikasjon av bruker",
+            "example": "01019955667"
+          },
+          "vedtakId": {
+            "type": "integer",
+            "description": "Identifikasjon av dagpengevedtak",
+            "format": "int32",
+            "example": 1234
+          },
+          "beregningsdato": {
+            "type": "string",
+            "description": "Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.",
+            "example": "2019-01-11"
+          },
+          "inntektsId": {
+            "type": "string",
+            "format": "ulid",
+            "description": "Identifiserer hvilke inntekter som lå til grunn for beregningen.",
+            "example": "01D2FB328P06WD808P22N9CFY5"
+          },
+          "harAvtjentVerneplikt": {
+            "type": "boolean",
+            "default": false,
+            "description": "Om bruker har avtjent verneplikt minst 3 av de siste 12 måneder."
+          },
+          "oppfyllerKravTilFangstOgFisk": {
+            "type": "boolean",
+            "default": false,
+            "description": "Om bruker oppfyller særvilkårene for fangst og fisk."
+          },
+          "antallBarn": {
+            "type": "integer",
+            "default": 0,
+            "description": "Antall barn bruker søker barnetillegg for"
+          },
+          "grunnlag": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum her"
+          }
+        }
+      },
+      "Inntekt": {
+        "type": "object",
+        "required": [
+          "inntektsPeriode",
+          "inntekt",
+          "periode",
+          "inneholderNaeringsinntekter"
+        ],
+        "properties": {
+          "inntektsPeriode": {
+            "$ref": "#/components/schemas/InntektsPeriode"
+          },
+          "inntekt": {
+            "type": "integer",
+            "example": 200000,
+            "description": "Inntekt for perioden"
+          },
+          "periode": {
+            "type": "integer",
+            "description": "Siste-, nestsiste- eller tredjesiste-periode.",
+            "example": 1,
+            "enum": [
+              1,
+              2,
+              3
+            ]
+          },
+          "inneholderNaeringsinntekter": {
+            "type": "boolean",
+            "example": false,
+            "description": "Angir om inntektene som har inngått i vurderingen inneholder næringsinntekter."
+          },
+          "andel": {
+            "type": "integer",
+            "example": 2222,
+            "description": "Andel av inntekt siste-, nestsiste- eller tredjesiste-periode"
           }
         }
       },
@@ -252,18 +383,29 @@
           },
           {
             "type": "object",
+            "required": [
+              "parametere",
+              "resultat",
+              "inntekt"
+            ],
             "properties": {
               "parametere": {
-                "$ref": "#/components/schemas/MinsteinntektParametere"
+                "$ref": "#/components/schemas/MinsteinntektResultatParametere"
               },
               "resultat": {
                 "$ref": "#/components/schemas/MinsteinntektResultat"
+              },
+              "inntekt": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Inntekt"
+                }
               }
             }
           }
         ]
       },
-      "MinsteinntektParametere": {
+      "MinsteinntektInnParametere": {
         "required": [
           "aktorId",
           "vedtakId",
@@ -297,11 +439,6 @@
             "default": false,
             "description": "Om bruker oppfyller særvilkårene for fangst og fisk."
           },
-          "harArbeidsperiodeEosSiste12Maaneder": {
-            "type": "boolean",
-            "default": false,
-            "description": "Om bruker har hatt inntekt i EØS."
-          },
           "bruktInntektsPeriode": {
             "$ref": "#/components/schemas/InntektsPeriode"
           }
@@ -309,12 +446,11 @@
       },
       "MinsteinntektResultat": {
         "required": [
-          "oppfyllerKravetTilMinsteArbeidsinntekt",
-          "periodeAntallUker"
+          "oppfyllerKravTilMinsteArbeidsinntekt"
         ],
         "type": "object",
         "properties": {
-          "oppfyllerKravetTilMinsteArbeidsinntekt": {
+          "oppfyllerKravTilMinsteArbeidsinntekt": {
             "type": "boolean"
           },
           "periodeAntallUker": {
@@ -323,14 +459,65 @@
             "format": "int32",
             "example": 52,
             "enum": [
+              26,
               52,
               104
             ]
           }
         }
       },
+      "MinsteinntektResultatParametere": {
+        "type": "object",
+        "required": [
+          "aktorId",
+          "vedtakId",
+          "beregningsdato",
+          "inntektsId"
+        ],
+        "properties": {
+          "aktorId": {
+            "type": "string",
+            "description": "Identifikasjon av bruker",
+            "example": "01019955667"
+          },
+          "vedtakId": {
+            "type": "integer",
+            "description": "Identifikasjon av dagpengevedtak",
+            "format": "int32",
+            "example": 1234
+          },
+          "beregningsdato": {
+            "type": "string",
+            "description": "Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.",
+            "example": "2019-01-11"
+          },
+          "inntektsId": {
+            "type": "string",
+            "format": "ulid",
+            "description": "Identifiserer hvilke inntekter som lå til grunn for beregningen.",
+            "example": "01D2FB328P06WD808P22N9CFY5"
+          },
+          "harAvtjentVerneplikt": {
+            "type": "boolean",
+            "default": false,
+            "description": "Om bruker har avtjent verneplikt minst 3 av de siste 12 måneder."
+          },
+          "oppfyllerKravTilFangstOgFisk": {
+            "type": "boolean",
+            "default": false,
+            "description": "Om bruker oppfyller særvilkårene for fangst og fisk."
+          },
+          "bruktInntektsPeriode": {
+            "$ref": "#/components/schemas/InntektsPeriode"
+          }
+        }
+      },
       "Sats": {
         "type": "object",
+        "required": [
+          "dagsats",
+          "ukesats"
+        ],
         "properties": {
           "dagsats": {
             "type": "integer",
@@ -388,33 +575,6 @@
             "grunnlag": {
               "avkortet": 250250,
               "uavkortet": 250250
-            },
-            "sats": {
-              "dagsats": 213,
-              "ukesats": 1065
-            }
-          }
-        }
-      },
-      "dagpengegrunnlag-bruktInntekt": {
-        "summary": "Eksempel for å fastsette både grunnlag og sats med fratrekk fra tidligere brukt inntekt",
-        "value": {
-          "beregningsId": "01ARZ3NDEKTSV4RRFFQ69G5FCV",
-          "opprettet": "2018-12-26T14:42:09Z",
-          "utfort": "2018-12-26T14:43:12Z",
-          "parametere": {
-            "aktorId": "01019955667",
-            "vedtakId": 1234,
-            "beregningsdato": "2019-01-11",
-            "bruktInntektsPeriode": {
-              "foersteMaaned": "2019-01",
-              "sisteMaaned": "2018-01"
-            }
-          },
-          "resultat": {
-            "grunnlag": {
-              "avkortet": 342352,
-              "uavkortet": 342352
             },
             "sats": {
               "dagsats": 213,
@@ -493,6 +653,62 @@
             "foersteMaaned": "2019-01",
             "sisteMaaned": "2018-01"
           }
+        }
+      },
+      "minsteinntekt-resultat": {
+        "summary": "Eksempelresultat",
+        "value": {
+          "beregningsId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+          "opprettet": "2018-12-26T14:42:09Z",
+          "utfort": "2018-12-26T14:43:12Z",
+          "parametre": {
+            "aktorId": "01019955667",
+            "vedtakId": 1234,
+            "beregningsdato": "2019-07-01",
+            "inntektsId": "01D2FB328P06WD808P22N9CFY5",
+            "harAvtjentVerneplikt": false,
+            "oppfyllerKravTilFangstOgFisk": false,
+            "bruktInntektsPeriode": {
+              "foersteMaaned": "2018-01",
+              "sisteMaaned": "2019-06"
+            }
+          },
+          "resultat": {
+            "oppfyllerKravTilMinsteArbeidsinntekt": true,
+            "periodeAntallUker": 52
+          },
+          "inntekt": [
+            {
+              "inntekt": 210012,
+              "periode": 1,
+              "andel": 32212,
+              "inneholderNaeringsinntekter": false,
+              "inntektsPeriode": {
+                "foersteMaaned": "2018-06",
+                "sisteMaaned": "2019-06"
+              }
+            },
+            {
+              "inntekt": 1892112,
+              "periode": 2,
+              "andel": 19921,
+              "inneholderNaeringsinntekter": false,
+              "inntektsPeriode": {
+                "foersteMaaned": "2017-06",
+                "sisteMaaned": "2016-06"
+              }
+            },
+            {
+              "inntekt": 297090,
+              "periode": 3,
+              "andel": 1212,
+              "inneholderNaeringsinntekter": false,
+              "inntektsPeriode": {
+                "foersteMaaned": "2017-06",
+                "sisteMaaned": "2016-06"
+              }
+            }
+          ]
         }
       },
       "minsteinntekt-vanlig": {
