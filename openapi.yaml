@@ -105,6 +105,10 @@ components:
               $ref: '#/components/schemas/DagpengegrunnlagResultatParametere'
             resultat:
               $ref: '#/components/schemas/DagpengegrunnlagResultat'
+            inntekt:
+              type: array
+              items:
+                $ref: '#/components/schemas/Inntekt'
     DagpengegrunnlagInnParametere:
       type: object
       required:
@@ -137,8 +141,6 @@ components:
           type: integer
           default: 0
           description: Antall barn bruker søker barnetillegg for
-        bruktInntektsPeriode:
-          $ref: '#/components/schemas/InntektsPeriode'
         grunnlag:
           type: integer
           nullable: true
