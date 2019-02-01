@@ -3,7 +3,7 @@ package no.nav.dagpenger.regel.api.arena.adapter.v1.models.dagpengergrunnlag
 class DagpengegrunnlagResultat(
     val grunnlag: Dagpengegrunnlag,
     val sats: Sats,
-    val beregningsRegel: Beregningsregel,
+    val beregningsregel: Beregningsregel,
     val benyttet90ProsentRegel: Boolean
 ) {
     enum class Beregningsregel {
