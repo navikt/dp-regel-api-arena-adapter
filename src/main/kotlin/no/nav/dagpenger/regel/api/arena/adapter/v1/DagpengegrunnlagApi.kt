@@ -46,7 +46,7 @@ fun Route.DagpengegrunnlagApi() {
                         dagsats = 213,
                         ukesats = 1065
                     ),
-                    beregningsRegel = DagpengegrunnlagResultat.Beregningsregel.ORDINAER_ETTAAR,
+                    beregningsregel = DagpengegrunnlagResultat.Beregningsregel.ORDINAER_ETTAAR,
                     benyttet90ProsentRegel = false
                 ),
                 inntekt = setOf(
