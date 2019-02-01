@@ -10,12 +10,14 @@ import io.ktor.routing.post
 import io.ktor.routing.route
 import mu.KotlinLogging
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.Inntekt
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.InntektsPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt.MinsteinntektBeregning
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt.MinsteinntektInnParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt.MinsteinntektResultat
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt.MinsteinntektResultatParametere
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.YearMonth
 
 private val LOGGER = KotlinLogging.logger {}
 
@@ -43,6 +45,10 @@ fun Route.MinsteinntektApi() {
                 inntekt = setOf(
                     Inntekt(
                         inntekt = 2899182,
+                        inntektsPeriode = InntektsPeriode(
+                            sisteMaaned = YearMonth.of(2019, 2),
+                            foersteMaaned = YearMonth.of(2018, 2)
+                        ),
                         periode = 1,
                         inneholderNaeringsinntekter = false,
                         andel = 39982
@@ -50,16 +56,23 @@ fun Route.MinsteinntektApi() {
                     Inntekt(
                         inntekt = 2899182,
                         periode = 2,
+                        inntektsPeriode = InntektsPeriode(
+                            sisteMaaned = YearMonth.of(2018, 3),
+                            foersteMaaned = YearMonth.of(2017, 2)
+                        ),
                         inneholderNaeringsinntekter = false,
                         andel = 39982
                     ),
                     Inntekt(
                         inntekt = 2899182,
                         periode = 3,
+                        inntektsPeriode = InntektsPeriode(
+                            sisteMaaned = YearMonth.of(2017, 3),
+                            foersteMaaned = YearMonth.of(2016, 2)
+                        ),
                         inneholderNaeringsinntekter = false,
                         andel = 39982
                     )
-
                 )
 
             )
