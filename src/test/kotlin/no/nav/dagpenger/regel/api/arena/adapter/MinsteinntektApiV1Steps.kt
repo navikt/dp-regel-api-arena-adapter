@@ -47,7 +47,7 @@ class MinsteinntektApiV1Steps : No {
         }
 
         Så("kravet til minsteinntekt er {string}") { utfall: String ->
-            assertEquals(utfall.equals("oppfylt"), minsteinntektBeregning.resultat.oppfyllerKravTilMinsteArbeidsinntekt)
+            assertEquals(utfall == "oppfylt", minsteinntektBeregning.resultat.oppfyllerKravTilMinsteArbeidsinntekt)
         }
 
         Og("har krav på {int} uker") { periodeAntallUker: Int ->
@@ -56,7 +56,7 @@ class MinsteinntektApiV1Steps : No {
             }
         }
 
-        Gitt("at søker har ingen inntekt siste {int} måneder") { int1: Int ->
+        Gitt("at søker har ingen inntekt siste {int} måneder") { måneder: Int ->
             // Write code here that turns the phrase above into concrete actions
             throw cucumber.api.PendingException()
         }
@@ -71,7 +71,7 @@ class MinsteinntektApiV1Steps : No {
             throw cucumber.api.PendingException()
         }
 
-        Når("digidag skal vrudere søknaden") {
+        Når("digidag skal vurdere søknaden") {
             // Write code here that turns the phrase above into concrete actions
             throw cucumber.api.PendingException()
         }

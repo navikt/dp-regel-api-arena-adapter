@@ -9,7 +9,7 @@ Egenskap: Sett minteinntekt, periode, grunnlag og sats
   Scenario: Ingen inntekt og verneplikt skal gi 26 uker
     Gitt at søker har ingen inntekt siste 36 måneder
     Og har avtjent verneplikt
-    Når digidag skal vrudere søknaden
+    Når digidag skal vurdere søknaden
     Så er kravet til minsteinntekt "oppfylt"
     Og perioden er 26 uker
     Og grunnlaget er XXX
