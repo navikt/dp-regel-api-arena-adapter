@@ -71,11 +71,6 @@ class MinsteinntektApiV1Steps : No {
             throw cucumber.api.PendingException()
         }
 
-        Når("digidag skal vurdere søknaden") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
         Så("er kravet til minsteinntekt {string}") { string: String ->
             // Write code here that turns the phrase above into concrete actions
             throw cucumber.api.PendingException()
