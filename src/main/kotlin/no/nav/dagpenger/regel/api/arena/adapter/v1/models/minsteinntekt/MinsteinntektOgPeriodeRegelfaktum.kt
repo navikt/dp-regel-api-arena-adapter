@@ -3,7 +3,7 @@ package no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.InntektsPeriode
 import java.time.LocalDate
 
-data class MinsteinntektResultatParametere(
+data class MinsteinntektOgPeriodeRegelfaktum(
     val aktorId: String,
     val vedtakId: Int,
     val beregningsdato: LocalDate,

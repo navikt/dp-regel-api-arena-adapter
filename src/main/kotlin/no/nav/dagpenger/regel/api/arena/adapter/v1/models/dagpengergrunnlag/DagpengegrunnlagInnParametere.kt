@@ -15,7 +15,7 @@ data class DagpengegrunnlagInnParametere(
 )
 
 /** {
-"beregningsId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+"subsumsjonsId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
 "opprettet": "2018-12-26T14:42:09Z",
 "utfort": "2018-12-26T14:43:12Z",
 "parametere": {

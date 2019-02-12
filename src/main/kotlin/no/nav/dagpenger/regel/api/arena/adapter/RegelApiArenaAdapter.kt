@@ -22,6 +22,9 @@ import mu.KotlinLogging
 
 import no.nav.dagpenger.regel.api.arena.adapter.v1.DagpengegrunnlagApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektApi
+import no.nav.dagpenger.regel.api.arena.adapter.v1.RegelApiHttpClient
+import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt.SynchronousMinsteinntekt
+import no.nav.dagpenger.regel.api.arena.adapter.v1.periode.SynchronousPeriode
 import java.util.concurrent.TimeUnit
 
 private val LOGGER = KotlinLogging.logger {}
@@ -40,6 +43,11 @@ fun main() {
 }
 
 fun Application.regelApiAdapter() {
+    val env = Environment()
+
+    val regelApiHttpClient = RegelApiHttpClient(env.dpRegelApiUrl)
+    val synchronousMinsteinntekt = SynchronousMinsteinntekt(regelApiHttpClient)
+    val synchronousPeriode = SynchronousPeriode(regelApiHttpClient)
 
     install(DefaultHeaders)
     install(CallLogging)
@@ -55,7 +63,7 @@ fun Application.regelApiAdapter() {
         }
         routing {
             route("/v1") {
-                MinsteinntektApi()
+                MinsteinntektApi(synchronousMinsteinntekt, synchronousPeriode)
                 DagpengegrunnlagApi()
             }
             naischecks()
@@ -69,3 +77,5 @@ private suspend fun <T : Throwable> PipelineContext<Unit, ApplicationCall>.badRe
     call.respond(HttpStatusCode.BadRequest)
     throw cause
 }
+
+class RegelApiArenaAdapterException(override val message: String) : RuntimeException(message)

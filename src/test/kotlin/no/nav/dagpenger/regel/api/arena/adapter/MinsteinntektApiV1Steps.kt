@@ -8,7 +8,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt.MinsteinntektBeregning
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt.MinsteinntektOgPeriodeSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt.MinsteinntektInnParametere
 import java.time.LocalDate
 import kotlin.test.assertEquals
@@ -19,13 +19,13 @@ class MinsteinntektApiV1Steps : No {
 
     val minsteinntektInnParametereAdapter: JsonAdapter<MinsteinntektInnParametere> =
         moshiInstance.adapter<MinsteinntektInnParametere>(MinsteinntektInnParametere::class.java)
-    val minsteinntektBeregningAdapter: JsonAdapter<MinsteinntektBeregning> =
-        moshiInstance.adapter<MinsteinntektBeregning>(MinsteinntektBeregning::class.java)
+    val minsteinntektBeregningAdapter: JsonAdapter<MinsteinntektOgPeriodeSubsumsjon> =
+        moshiInstance.adapter<MinsteinntektOgPeriodeSubsumsjon>(MinsteinntektOgPeriodeSubsumsjon::class.java)
 
     init {
 
         lateinit var minsteinntektInnParametere: MinsteinntektInnParametere
-        lateinit var minsteinntektBeregning: MinsteinntektBeregning
+        lateinit var minsteinntektBeregning: MinsteinntektOgPeriodeSubsumsjon
         Gitt("at søker med aktør id {string} med vedtak id {int} med beregningsdato {string}") { aktørId: String, vedtakId: Int, beregningsDato: String ->
             minsteinntektInnParametere = MinsteinntektInnParametere(
                 aktorId = aktørId,
