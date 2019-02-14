@@ -7,8 +7,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.dagpengergrunnlag.DagpengegrunnlagBeregning
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.dagpengergrunnlag.DagpengegrunnlagInnParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.DagpengegrunnlagBeregning
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.DagpengegrunnlagInnParametere
 import java.time.LocalDate
 import kotlin.test.assertEquals
 

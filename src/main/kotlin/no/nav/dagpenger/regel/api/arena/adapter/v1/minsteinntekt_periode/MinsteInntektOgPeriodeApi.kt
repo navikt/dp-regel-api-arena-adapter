@@ -1,4 +1,4 @@
-package no.nav.dagpenger.regel.api.arena.adapter.v1
+package no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode
 
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
@@ -8,21 +8,19 @@ import io.ktor.routing.Route
 import io.ktor.routing.post
 import io.ktor.routing.route
 import mu.KotlinLogging
-import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt.SynchronousMinsteinntekt
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt.MinsteinntektInnParametere
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.minsteinntekt.mergeMinsteinntektOgPeriodeSubsumsjon
-import no.nav.dagpenger.regel.api.arena.adapter.v1.periode.SynchronousPeriode
+import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.SynchronousMinsteinntekt
+import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode.SynchronousPeriode
 
 private val LOGGER = KotlinLogging.logger {}
 
-fun Route.MinsteinntektApi(
+fun Route.MinsteinntektOgPeriodeApi(
     synchronousMinsteinntekt: SynchronousMinsteinntekt,
     synchronousPeriode: SynchronousPeriode
 ) {
 
     route("/minsteinntekt") {
         post {
-            val parametere = call.receive<MinsteinntektInnParametere>()
+            val parametere = call.receive<MinsteinntektOgPeriodeParametere>()
 
             val minsteinntektSubsumsjon = synchronousMinsteinntekt.getMinsteinntektSynchronously(parametere)
 

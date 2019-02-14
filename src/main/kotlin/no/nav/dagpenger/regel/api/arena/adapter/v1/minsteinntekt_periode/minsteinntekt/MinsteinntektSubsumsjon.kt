@@ -1,4 +1,4 @@
-package no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt
+package no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt
 
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.Inntekt
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.InntektsPeriode

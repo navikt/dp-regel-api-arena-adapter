@@ -20,11 +20,13 @@ import io.ktor.server.netty.Netty
 import io.ktor.util.pipeline.PipelineContext
 import mu.KotlinLogging
 
-import no.nav.dagpenger.regel.api.arena.adapter.v1.DagpengegrunnlagApi
-import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektApi
-import no.nav.dagpenger.regel.api.arena.adapter.v1.RegelApiHttpClient
-import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt.SynchronousMinsteinntekt
-import no.nav.dagpenger.regel.api.arena.adapter.v1.periode.SynchronousPeriode
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsApi
+import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.MinsteinntektOgPeriodeApi
+import no.nav.dagpenger.regel.api.arena.adapter.v1.RegelApiTasksHttpClient
+import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.RegelApiMinsteinntektHttpClient
+import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.SynchronousMinsteinntekt
+import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode.RegelApiPeriodeHttpClient
+import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode.SynchronousPeriode
 import java.util.concurrent.TimeUnit
 
 private val LOGGER = KotlinLogging.logger {}
@@ -45,9 +47,11 @@ fun main() {
 fun Application.regelApiAdapter() {
     val env = Environment()
 
-    val regelApiHttpClient = RegelApiHttpClient(env.dpRegelApiUrl)
-    val synchronousMinsteinntekt = SynchronousMinsteinntekt(regelApiHttpClient)
-    val synchronousPeriode = SynchronousPeriode(regelApiHttpClient)
+    val regelApiTasksHttpClient = RegelApiTasksHttpClient(env.dpRegelApiUrl)
+    val regelApiMinsteinntektHttpClient = RegelApiMinsteinntektHttpClient(env.dpRegelApiUrl)
+    val regelApiPeriodeHttpClient = RegelApiPeriodeHttpClient(env.dpRegelApiUrl)
+    val synchronousMinsteinntekt = SynchronousMinsteinntekt(regelApiMinsteinntektHttpClient, regelApiTasksHttpClient)
+    val synchronousPeriode = SynchronousPeriode(regelApiPeriodeHttpClient, regelApiTasksHttpClient)
 
     install(DefaultHeaders)
     install(CallLogging)
@@ -63,8 +67,8 @@ fun Application.regelApiAdapter() {
         }
         routing {
             route("/v1") {
-                MinsteinntektApi(synchronousMinsteinntekt, synchronousPeriode)
-                DagpengegrunnlagApi()
+                MinsteinntektOgPeriodeApi(synchronousMinsteinntekt, synchronousPeriode)
+                GrunnlagOgSatsApi()
             }
             naischecks()
         }

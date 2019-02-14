@@ -1,4 +1,4 @@
-package no.nav.dagpenger.regel.api.arena.adapter.v1
+package no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats
 
 import de.huxhorn.sulky.ulid.ULID
 import io.ktor.application.call
@@ -9,16 +9,10 @@ import io.ktor.routing.Route
 import io.ktor.routing.post
 import io.ktor.routing.route
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.Inntekt
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.dagpengergrunnlag.Dagpengegrunnlag
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.dagpengergrunnlag.DagpengegrunnlagBeregning
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.dagpengergrunnlag.DagpengegrunnlagInnParametere
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.dagpengergrunnlag.DagpengegrunnlagResultat
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.dagpengergrunnlag.DagpengegrunnlagResultatParametere
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.dagpengergrunnlag.Sats
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-fun Route.DagpengegrunnlagApi() {
+fun Route.GrunnlagOgSatsApi() {
 
     val ulidGenerator = ULID()
     route("/dagpengegrunnlag") {

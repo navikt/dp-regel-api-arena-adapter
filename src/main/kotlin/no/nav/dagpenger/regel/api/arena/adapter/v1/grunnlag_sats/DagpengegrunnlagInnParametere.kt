@@ -1,4 +1,4 @@
-package no.nav.dagpenger.regel.api.arena.adapter.v1.models.dagpengergrunnlag
+package no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats
 
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.InntektsPeriode
 import java.time.LocalDate
