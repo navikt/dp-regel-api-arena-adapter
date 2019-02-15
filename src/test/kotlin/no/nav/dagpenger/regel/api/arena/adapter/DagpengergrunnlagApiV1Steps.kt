@@ -11,6 +11,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsS
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsParametere
 import java.time.LocalDate
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class DagpengergrunnlagApiV1Steps : No {
 
@@ -43,6 +44,9 @@ class DagpengergrunnlagApiV1Steps : No {
 
         Så("er vedtak id {int}") { vedtakId: Int ->
             assertEquals(vedtakId, dagpengegrunnlagBeregning.parametere.vedtakId)
+            assertTrue { dagpengegrunnlagBeregning.inntekt.size == 3 }
+            val inntekt = dagpengegrunnlagBeregning.inntekt.map { it.periode to it }.toMap()
+            assertEquals("2019-02", inntekt[1]?.inntektsPeriode?.sisteMaaned.toString())
         }
     }
 }
