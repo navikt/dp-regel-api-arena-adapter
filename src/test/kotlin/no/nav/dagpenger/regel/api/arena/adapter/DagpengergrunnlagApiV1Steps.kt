@@ -25,7 +25,7 @@ class DagpengergrunnlagApiV1Steps : No {
             dagpengegrunnlagInnParametere = GrunnlagOgSatsParametere(
                 aktorId = aktørId,
                 vedtakId = vedtaktId,
-                beregningsDato = LocalDate.parse(beregningsDato)
+                beregningsdato = LocalDate.parse(beregningsDato)
             )
         }
 
