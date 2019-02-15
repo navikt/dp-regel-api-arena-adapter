@@ -1,18 +1,18 @@
-package no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode
+package no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats
 
 import no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterException
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.RegelApiTasksHttpClient
 import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.TaskStatus
-import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.MinsteinntektOgPeriodeParametere
 
-class SynchronousPeriode(
-    val regelApiPeriodeHttpClient: RegelApiPeriodeHttpClient,
+class SynchronousSats(
+    val regelApiSatsHttpClient: RegelApiSatsHttpClient,
     val regelApiTasksHttpClient: RegelApiTasksHttpClient
 ) {
 
-    fun getPeriodeSynchronously(parametere: MinsteinntektOgPeriodeParametere): PeriodeSubsumsjon {
+    fun getSatsSynchronously(parametere: GrunnlagOgSatsParametere): SatsSubsumsjon {
 
-        val taskUrl = regelApiPeriodeHttpClient.startPeriodeSubsumsjon(parametere)
+        val taskUrl = regelApiSatsHttpClient.startSatsSubsumsjon(parametere)
 
         var taskResponse = regelApiTasksHttpClient.pollTask(taskUrl)
         while (taskResponse.task?.status == TaskStatus.PENDING) {
@@ -21,8 +21,8 @@ class SynchronousPeriode(
 
         val ressursLocation = taskResponse.location ?: throw RegelApiArenaAdapterException("Did not get location with task")
 
-        val periodeSubsumsjon = regelApiPeriodeHttpClient.getPeriode(ressursLocation)
+        val minsteinntektSubsumsjon = regelApiSatsHttpClient.getSats(ressursLocation)
 
-        return periodeSubsumsjon
+        return minsteinntektSubsumsjon
     }
 }

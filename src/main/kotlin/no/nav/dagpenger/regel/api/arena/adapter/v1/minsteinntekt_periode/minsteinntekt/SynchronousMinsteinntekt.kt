@@ -1,9 +1,9 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt
 
 import no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterException
-import no.nav.dagpenger.regel.api.arena.adapter.v1.RegelApiTasksHttpClient
-import no.nav.dagpenger.regel.api.arena.adapter.v1.TaskStatus
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.MinsteinntektOgPeriodeParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.RegelApiTasksHttpClient
+import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.TaskStatus
 
 class SynchronousMinsteinntekt(
     val regelApiMinsteinntektHttpClient: RegelApiMinsteinntektHttpClient,

@@ -7,22 +7,22 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.DagpengegrunnlagBeregning
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.DagpengegrunnlagInnParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsParametere
 import java.time.LocalDate
 import kotlin.test.assertEquals
 
 class DagpengergrunnlagApiV1Steps : No {
 
-    val dagpengegrunnlagInnParametereAdapter = moshiInstance.adapter<DagpengegrunnlagInnParametere>(DagpengegrunnlagInnParametere::class.java)
-    val dagpengegrunnlagBeregningAdapter = moshiInstance.adapter<DagpengegrunnlagBeregning>(DagpengegrunnlagBeregning::class.java)
+    val dagpengegrunnlagInnParametereAdapter = moshiInstance.adapter<GrunnlagOgSatsParametere>(GrunnlagOgSatsParametere::class.java)
+    val dagpengegrunnlagBeregningAdapter = moshiInstance.adapter<GrunnlagOgSatsSubsumsjon>(GrunnlagOgSatsSubsumsjon::class.java)
 
     init {
 
-        lateinit var dagpengegrunnlagInnParametere: DagpengegrunnlagInnParametere
-        lateinit var dagpengegrunnlagBeregning: DagpengegrunnlagBeregning
+        lateinit var dagpengegrunnlagInnParametere: GrunnlagOgSatsParametere
+        lateinit var dagpengegrunnlagBeregning: GrunnlagOgSatsSubsumsjon
         Gitt("at søker med aktør id {string} med vedtak id {int} med beregningsdato {string} i beregning av grunnlag") { aktørId: String, vedtaktId: Int, beregningsDato: String ->
-            dagpengegrunnlagInnParametere = DagpengegrunnlagInnParametere(
+            dagpengegrunnlagInnParametere = GrunnlagOgSatsParametere(
                 aktorId = aktørId,
                 vedtakId = vedtaktId,
                 beregningsDato = LocalDate.parse(beregningsDato)
