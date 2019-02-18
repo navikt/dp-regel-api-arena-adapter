@@ -12,6 +12,7 @@ import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode
+import io.ktor.request.path
 import io.ktor.response.respond
 import io.ktor.routing.route
 import io.ktor.routing.routing
@@ -67,6 +68,12 @@ fun Application.regelApiAdapter() {
     install(DefaultHeaders)
     install(CallLogging) {
         level = Level.INFO
+
+        filter { call ->
+            !call.request.path().startsWith("/isAlive") &&
+                !call.request.path().startsWith("/isReady") &&
+                !call.request.path().startsWith("/metrics")
+        }
     }
     install(ContentNegotiation) {
         moshi(moshiInstance)
