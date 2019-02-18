@@ -3,7 +3,6 @@ package no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats
 import no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.RegelApiTasksHttpClient
-import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.TaskStatus
 
 class SynchronousSats(
     val regelApiSatsHttpClient: RegelApiSatsHttpClient,

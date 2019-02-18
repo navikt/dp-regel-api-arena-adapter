@@ -30,11 +30,11 @@ class RegelApiTasksHttpClient(private val regelApiUrl: String) {
     }
 
     fun pollTaskUntilDone(taskUrl: String, timeoutSeconds: Int = 10): TaskPollResponse {
-        val runUntilTime = Instant.now().toEpochMilli() + timeoutSeconds*1000
+        val runUntilTime = Instant.now().toEpochMilli() + timeoutSeconds * 1000
 
         var taskResponse = pollTask(taskUrl)
         while (taskResponse.task?.status == TaskStatus.PENDING) {
-            if(Instant.now().toEpochMilli() > runUntilTime) {
+            if (Instant.now().toEpochMilli() > runUntilTime) {
                 throw RegelApiTimeoutException("Polled task status for more than $timeoutSeconds seconds")
             }
 
@@ -47,6 +47,7 @@ class RegelApiTasksHttpClient(private val regelApiUrl: String) {
 
 class RegelApiTasksHttpClientException(
     override val message: String,
-    override val cause: Throwable) : RuntimeException(message, cause)
+    override val cause: Throwable
+) : RuntimeException(message, cause)
 
-class RegelApiTimeoutException(override val message: String): RuntimeException(message)
+class RegelApiTimeoutException(override val message: String) : RuntimeException(message)

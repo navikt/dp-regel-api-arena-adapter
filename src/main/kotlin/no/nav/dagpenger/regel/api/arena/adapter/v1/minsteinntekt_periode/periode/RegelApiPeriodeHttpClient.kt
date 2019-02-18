@@ -49,4 +49,5 @@ class RegelApiPeriodeHttpClient(private val regelApiUrl: String) {
 
 class RegelApiPeriodeHttpClientException(
     override val message: String,
-    override val cause: Throwable) : RuntimeException(message, cause)
+    override val cause: Throwable
+) : RuntimeException(message, cause)

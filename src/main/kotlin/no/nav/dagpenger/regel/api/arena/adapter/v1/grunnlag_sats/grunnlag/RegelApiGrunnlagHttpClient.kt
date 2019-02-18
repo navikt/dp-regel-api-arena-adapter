@@ -51,4 +51,5 @@ class RegelApiGrunnlagHttpClient(private val regelApiUrl: String) {
 
 class RegelApiGrunnlagHttpClientException(
     override val message: String,
-    override val cause: Throwable) : RuntimeException(message, cause)
+    override val cause: Throwable
+) : RuntimeException(message, cause)

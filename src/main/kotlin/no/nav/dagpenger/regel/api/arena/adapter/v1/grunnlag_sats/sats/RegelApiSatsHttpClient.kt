@@ -51,4 +51,5 @@ class RegelApiSatsHttpClient(private val regelApiUrl: String) {
 
 class RegelApiSatsHttpClientException(
     override val message: String,
-    override val cause: Throwable) : RuntimeException(message, cause)
+    override val cause: Throwable
+) : RuntimeException(message, cause)
