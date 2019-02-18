@@ -77,7 +77,7 @@ fun mergeGrunnlagOgSatsSubsumsjon(
             grunnlagFaktum.inntektsId,
             grunnlagFaktum.harAvtjentVerneplikt,
             grunnlagFaktum.oppfyllerKravTilFangstOgFisk,
-            grunnlagFaktum.antallBarn,
+            satsFaktum.antallBarn,
             satsFaktum.grunnlag
         ),
         GrunnlagOgSatsResultat(

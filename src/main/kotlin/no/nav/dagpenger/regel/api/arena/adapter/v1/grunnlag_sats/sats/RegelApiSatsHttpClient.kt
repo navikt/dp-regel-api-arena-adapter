@@ -5,7 +5,6 @@ import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.moshi.moshiDeserializerOf
 import com.github.kittinunf.fuel.moshi.responseObject
 import com.github.kittinunf.result.Result
-import no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterException
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.RegelApiTasksHttpClient
