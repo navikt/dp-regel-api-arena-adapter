@@ -32,7 +32,7 @@ class RegelApiSatsHttpClient(private val regelApiUrl: String) {
                 response.statusCode, response.responseMessage, result.getException()
             )
             is Result.Success ->
-                response.headers["Location"]?.first() ?: throw RegelApiArenaAdapterException("No location")
+                response.headers["Location"].first()
         }
     }
 

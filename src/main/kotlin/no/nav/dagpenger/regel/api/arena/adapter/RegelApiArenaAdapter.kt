@@ -30,6 +30,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.RegelApiSatsHttpClient
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SynchronousSats
 import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.RegelApiTasksHttpClient
+import org.slf4j.event.Level
 import java.util.concurrent.TimeUnit
 
 private val LOGGER = KotlinLogging.logger {}
@@ -63,7 +64,9 @@ fun Application.regelApiAdapter() {
     val synchronousSats = SynchronousSats(regelApiSatsHttpClient, regelApiTasksHttpClient)
 
     install(DefaultHeaders)
-    install(CallLogging)
+    install(CallLogging) {
+        level = Level.INFO
+    }
     install(ContentNegotiation) {
         moshi(moshiInstance)
     }

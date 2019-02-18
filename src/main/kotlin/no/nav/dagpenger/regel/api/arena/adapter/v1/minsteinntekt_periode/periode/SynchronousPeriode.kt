@@ -1,9 +1,8 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode
 
 import no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterException
-import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.RegelApiTasksHttpClient
-import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.TaskStatus
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.MinsteinntektOgPeriodeParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.RegelApiTasksHttpClient
 
 class SynchronousPeriode(
     val regelApiPeriodeHttpClient: RegelApiPeriodeHttpClient,
@@ -14,10 +13,7 @@ class SynchronousPeriode(
 
         val taskUrl = regelApiPeriodeHttpClient.startPeriodeSubsumsjon(parametere)
 
-        var taskResponse = regelApiTasksHttpClient.pollTask(taskUrl)
-        while (taskResponse.task?.status == TaskStatus.PENDING) {
-            taskResponse = regelApiTasksHttpClient.pollTask(taskUrl)
-        }
+        val taskResponse = regelApiTasksHttpClient.pollTaskUntilDone(taskUrl)
 
         val ressursLocation = taskResponse.location ?: throw RegelApiArenaAdapterException("Did not get location with task")
 
