@@ -30,6 +30,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.RegelApiSatsHttpClient
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SynchronousSats
 import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.RegelApiTasksHttpClient
+import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.RegelApiTimeoutException
 import org.slf4j.event.Level
 import java.util.concurrent.TimeUnit
 
@@ -77,6 +78,9 @@ fun Application.regelApiAdapter() {
         exception<JsonEncodingException> { cause ->
             badRequest(cause)
         }
+        exception<RegelApiTimeoutException> { cause ->
+            gatewayTimeout(cause)
+        }
         routing {
             route("/v1") {
                 MinsteinntektOgPeriodeApi(synchronousMinsteinntekt, synchronousPeriode)
@@ -91,6 +95,13 @@ private suspend fun <T : Throwable> PipelineContext<Unit, ApplicationCall>.badRe
     cause: T
 ) {
     call.respond(HttpStatusCode.BadRequest)
+    throw cause
+}
+
+private suspend fun <T : Throwable> PipelineContext<Unit, ApplicationCall>.gatewayTimeout(
+    cause: T
+) {
+    call.respond(HttpStatusCode.GatewayTimeout)
     throw cause
 }
 

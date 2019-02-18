@@ -22,10 +22,8 @@ class RegelApiTasksHttpClient(private val regelApiUrl: String) {
                     response.headers["Location"]?.first()
                 )
             } else {
-                throw RegelApiHttpClientException(
-                    response.statusCode,
-                    response.responseMessage,
-                    exception
+                throw RegelApiTasksHttpClientException(
+                    response.responseMessage, exception
                 )
             }
         }
@@ -45,8 +43,10 @@ class RegelApiTasksHttpClient(private val regelApiUrl: String) {
         }
         return taskResponse
     }
-
-    class RegelApiTimeoutException(override val message: String): RuntimeException(message)
-
-    class RegelApiHttpClientException(val statusCode: Int, override val message: String, override val cause: Throwable) : RuntimeException(message, cause)
 }
+
+class RegelApiTasksHttpClientException(
+    override val message: String,
+    override val cause: Throwable) : RuntimeException(message, cause)
+
+class RegelApiTimeoutException(override val message: String): RuntimeException(message)

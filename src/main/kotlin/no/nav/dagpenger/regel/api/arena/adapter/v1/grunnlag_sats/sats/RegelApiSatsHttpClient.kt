@@ -7,7 +7,6 @@ import com.github.kittinunf.fuel.moshi.responseObject
 import com.github.kittinunf.result.Result
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsParametere
-import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.RegelApiTasksHttpClient
 import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.TaskResponse
 
 class RegelApiSatsHttpClient(private val regelApiUrl: String) {
@@ -27,8 +26,8 @@ class RegelApiSatsHttpClient(private val regelApiUrl: String) {
                 responseObject<TaskResponse>()
             }
         return when (result) {
-            is Result.Failure -> throw RegelApiTasksHttpClient.RegelApiHttpClientException(
-                response.statusCode, response.responseMessage, result.getException()
+            is Result.Failure -> throw RegelApiSatsHttpClientException(
+                response.responseMessage, result.getException()
             )
             is Result.Success ->
                 response.headers["Location"].first()
@@ -42,10 +41,14 @@ class RegelApiSatsHttpClient(private val regelApiUrl: String) {
         val (_, response, result) =
             with(url.httpGet()) { responseObject(moshiDeserializerOf(jsonAdapter)) }
         return when (result) {
-            is Result.Failure -> throw RegelApiTasksHttpClient.RegelApiHttpClientException(
-                response.statusCode, response.responseMessage, result.getException()
+            is Result.Failure -> throw RegelApiSatsHttpClientException(
+                response.responseMessage, result.getException()
             )
             is Result.Success -> result.get()
         }
     }
 }
+
+class RegelApiSatsHttpClientException(
+    override val message: String,
+    override val cause: Throwable) : RuntimeException(message, cause)

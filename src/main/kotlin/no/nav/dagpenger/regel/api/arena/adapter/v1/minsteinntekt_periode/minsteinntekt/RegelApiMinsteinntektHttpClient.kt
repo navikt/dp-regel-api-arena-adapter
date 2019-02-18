@@ -28,11 +28,11 @@ class RegelApiMinsteinntektHttpClient(private val regelApiUrl: String) {
                 responseObject<TaskResponse>()
             }
         return when (result) {
-            is Result.Failure -> throw RegelApiTasksHttpClient.RegelApiHttpClientException(
-                response.statusCode, response.responseMessage, result.getException()
+            is Result.Failure -> throw RegelApiMinsteinntektHttpClientException(
+                response.responseMessage, result.getException()
             )
             is Result.Success ->
-                response.headers["Location"]?.first() ?: throw RegelApiArenaAdapterException("No location")
+                response.headers["Location"].first()
         }
     }
 
@@ -43,10 +43,14 @@ class RegelApiMinsteinntektHttpClient(private val regelApiUrl: String) {
         val (_, response, result) =
             with(url.httpGet()) { responseObject(moshiDeserializerOf(jsonAdapter)) }
         return when (result) {
-            is Result.Failure -> throw RegelApiTasksHttpClient.RegelApiHttpClientException(
-                response.statusCode, response.responseMessage, result.getException()
+            is Result.Failure -> throw RegelApiMinsteinntektHttpClientException(
+                response.responseMessage, result.getException()
             )
             is Result.Success -> result.get()
         }
     }
 }
+
+class RegelApiMinsteinntektHttpClientException(
+    override val message: String,
+    override val cause: Throwable) : RuntimeException(message, cause)
