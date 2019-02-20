@@ -20,14 +20,21 @@ fun Route.GrunnlagOgSatsApi(
     route("/dagpengegrunnlag") {
         post {
             val parametere = call.receive<GrunnlagOgSatsParametere>()
+            var grunnlagOgSatsSubsumsjon: GrunnlagOgSatsSubsumsjon
 
-            val grunnlagSubsumsjon = synchronousGrunnlag.getGrunnlagSynchronously(parametere)
+            if (parametere.grunnlag == null) {
+                val grunnlagSubsumsjon = synchronousGrunnlag.getGrunnlagSynchronously(parametere)
 
-            parametere.grunnlag = grunnlagSubsumsjon.resultat.avkortet
+                parametere.grunnlag = grunnlagSubsumsjon.resultat.avkortet
 
-            val satsSubsumsjon = synchronousSats.getSatsSynchronously(parametere)
+                val satsSubsumsjon = synchronousSats.getSatsSynchronously(parametere)
 
-            val grunnlagOgSatsSubsumsjon = mergeGrunnlagOgSatsSubsumsjon(grunnlagSubsumsjon, satsSubsumsjon)
+                grunnlagOgSatsSubsumsjon = mergeGrunnlagOgSatsSubsumsjon(grunnlagSubsumsjon, satsSubsumsjon)
+            } else {
+                val satsSubsumsjon = synchronousSats.getSatsSynchronously(parametere)
+
+                grunnlagOgSatsSubsumsjon = mapGrunnlagOgSatsSubsumsjon(satsSubsumsjon)
+            }
 
             call.respond(HttpStatusCode.OK, grunnlagOgSatsSubsumsjon)
         }
