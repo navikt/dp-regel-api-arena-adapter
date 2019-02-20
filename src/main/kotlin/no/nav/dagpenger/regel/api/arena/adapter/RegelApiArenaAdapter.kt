@@ -88,13 +88,14 @@ fun Application.regelApiAdapter() {
         exception<RegelApiTimeoutException> { cause ->
             gatewayTimeout(cause)
         }
-        routing {
-            route("/v1") {
-                MinsteinntektOgPeriodeApi(synchronousMinsteinntekt, synchronousPeriode)
-                GrunnlagOgSatsApi(synchronousGrunnlag, synchronousSats)
-            }
-            naischecks()
+    }
+
+    routing {
+        route("/v1") {
+            MinsteinntektOgPeriodeApi(synchronousMinsteinntekt, synchronousPeriode)
+            GrunnlagOgSatsApi(synchronousGrunnlag, synchronousSats)
         }
+        naischecks()
     }
 }
 

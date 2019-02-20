@@ -44,8 +44,8 @@ class DagpengergrunnlagApiV1Steps : No {
 
         Så("er vedtak id {int}") { vedtakId: Int ->
             assertEquals(vedtakId, dagpengegrunnlagBeregning.parametere.vedtakId)
-            assertTrue { dagpengegrunnlagBeregning.inntekt.size == 3 }
-            val inntekt = dagpengegrunnlagBeregning.inntekt.map { it.periode to it }.toMap()
+            assertTrue { dagpengegrunnlagBeregning.inntekt!!.size == 3 }
+            val inntekt = dagpengegrunnlagBeregning.inntekt!!.map { it.periode to it }.toMap()
             assertEquals("2019-02", inntekt[1]?.inntektsPeriode?.sisteMaaned.toString())
         }
     }

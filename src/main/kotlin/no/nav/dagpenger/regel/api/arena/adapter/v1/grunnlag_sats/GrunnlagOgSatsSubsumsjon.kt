@@ -1,34 +1,37 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats
 
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.GrunnlagFaktum
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.GrunnlagSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SatsFaktum
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SatsSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.Inntekt
 import java.time.LocalDate
 import java.time.LocalDateTime
 
 data class GrunnlagOgSatsSubsumsjon(
-    val beregningsId: String,
+    val grunnlagSubsumsjonsId: String? = null,
+    val satsSubsumsjonsId: String,
     val opprettet: LocalDateTime,
     val utfort: LocalDateTime,
     val parametere: GrunnlagOgSatsRegelFaktum,
     val resultat: GrunnlagOgSatsResultat,
-    val inntekt: Set<Inntekt>
+    val inntekt: Set<Inntekt>? = null
 
 )
 
 data class GrunnlagOgSatsRegelFaktum(
     val aktorId: String,
     val vedtakId: Int,
-    val beregningsdato: LocalDate,
-    val inntektsId: String,
-    val harAvtjentVerneplikt: Boolean,
-    val oppfyllerKravTilFangstOgFisk: Boolean,
+    val beregningsdato: LocalDate? = null,
+    val inntektsId: String? = null,
+    val harAvtjentVerneplikt: Boolean? = null,
+    val oppfyllerKravTilFangstOgFisk: Boolean? = null,
     val antallBarn: Int,
     val grunnlag: Int
 )
 
 class GrunnlagOgSatsResultat(
-    val grunnlag: Grunnlag,
+    val grunnlag: Grunnlag? = null,
     val sats: Sats,
     val beregningsRegel: Beregningsregel,
     val benyttet90ProsentRegel: Boolean
@@ -47,7 +50,7 @@ class GrunnlagOgSatsResultat(
 
 class Grunnlag(
     val avkortet: Int,
-    val uavkortet: Int
+    val uavkortet: Int? = null
 )
 
 data class Sats(
@@ -66,8 +69,11 @@ fun mergeGrunnlagOgSatsSubsumsjon(
     val satsFaktum = satsSubsumsjon.faktum
     val satsResultat = satsSubsumsjon.resultat
 
+    if (!compareFields(grunnlagFaktum, satsFaktum)) throw UnMatchingFaktumException("Grunnlag and sats faktum dont match")
+
     return GrunnlagOgSatsSubsumsjon(
         grunnlagSubsumsjon.subsumsjonsId,
+        satsSubsumsjon.subsumsjonsId,
         grunnlagSubsumsjon.opprettet,
         grunnlagSubsumsjon.utfort,
         GrunnlagOgSatsRegelFaktum(
@@ -89,3 +95,41 @@ fun mergeGrunnlagOgSatsSubsumsjon(
         grunnlagSubsumsjon.inntekt
     )
 }
+
+fun mapGrunnlagOgSatsSubsumsjon(
+    satsSubsumsjon: SatsSubsumsjon
+): GrunnlagOgSatsSubsumsjon {
+
+    val satsFaktum = satsSubsumsjon.faktum
+    val satsResultat = satsSubsumsjon.resultat
+
+    return GrunnlagOgSatsSubsumsjon(
+        satsSubsumsjonsId = satsSubsumsjon.subsumsjonsId,
+        opprettet = satsSubsumsjon.opprettet,
+        utfort = satsSubsumsjon.utfort,
+        parametere = GrunnlagOgSatsRegelFaktum(
+            satsFaktum.aktorId,
+            satsFaktum.vedtakId,
+            satsFaktum.beregningsdato,
+            antallBarn = satsFaktum.antallBarn,
+            grunnlag = satsFaktum.grunnlag
+        ),
+        resultat = GrunnlagOgSatsResultat(
+            sats = Sats(satsResultat.dagsats, satsResultat.ukesats),
+            beregningsRegel = GrunnlagOgSatsResultat.Beregningsregel.MANUELL_UNDER_6G,
+            benyttet90ProsentRegel = false
+        )
+    )
+}
+
+fun compareFields(grunnlagFaktum: GrunnlagFaktum, satsFaktum: SatsFaktum): Boolean {
+
+    if (grunnlagFaktum.aktorId.equals(satsFaktum.aktorId) &&
+        grunnlagFaktum.vedtakId.equals(satsFaktum.vedtakId) &&
+        grunnlagFaktum.beregningsdato.equals(satsFaktum.beregningsdato)) {
+        return true
+    }
+    return false
+}
+
+class UnMatchingFaktumException(override val message: String) : RuntimeException(message)
