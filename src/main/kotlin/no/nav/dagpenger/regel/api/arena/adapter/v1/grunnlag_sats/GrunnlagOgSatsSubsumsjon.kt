@@ -31,7 +31,7 @@ data class GrunnlagOgSatsRegelFaktum(
 )
 
 class GrunnlagOgSatsResultat(
-    val grunnlag: Grunnlag,
+    val grunnlag: Grunnlag? = null,
     val sats: Sats,
     val beregningsRegel: Beregningsregel,
     val benyttet90ProsentRegel: Boolean
@@ -115,10 +115,9 @@ fun mapGrunnlagOgSatsSubsumsjon(
             grunnlag = satsFaktum.grunnlag
         ),
         resultat = GrunnlagOgSatsResultat(
-            Grunnlag(satsFaktum.grunnlag),
-            Sats(satsResultat.dagsats, satsResultat.ukesats),
-            GrunnlagOgSatsResultat.Beregningsregel.MANUELL_UNDER_6G,
-            false
+            sats = Sats(satsResultat.dagsats, satsResultat.ukesats),
+            beregningsRegel = GrunnlagOgSatsResultat.Beregningsregel.MANUELL_UNDER_6G,
+            benyttet90ProsentRegel = false
         )
     )
 }
@@ -127,8 +126,7 @@ fun compareFields(grunnlagFaktum: GrunnlagFaktum, satsFaktum: SatsFaktum): Boole
 
     if (grunnlagFaktum.aktorId.equals(satsFaktum.aktorId) &&
         grunnlagFaktum.vedtakId.equals(satsFaktum.vedtakId) &&
-        grunnlagFaktum.beregningsdato.equals(satsFaktum.beregningsdato) &&
-        grunnlagFaktum.antallBarn.equals(satsFaktum.antallBarn)) {
+        grunnlagFaktum.beregningsdato.equals(satsFaktum.beregningsdato)) {
         return true
     }
     return false
