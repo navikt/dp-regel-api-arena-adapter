@@ -66,8 +66,8 @@ class LagGrunnlagOgSatsSubsumsjonTest {
         val grunnlagOgSatsSubsumsjon = mergeGrunnlagOgSatsSubsumsjon(grunnlagSubsumsjon, satsSubsumsjon)
 
         assertEquals("222", grunnlagOgSatsSubsumsjon.parametere.aktorId)
-        assertEquals(555, grunnlagOgSatsSubsumsjon.resultat.grunnlag.avkortet)
-        assertEquals(666, grunnlagOgSatsSubsumsjon.resultat.grunnlag.uavkortet)
+        assertEquals(555, grunnlagOgSatsSubsumsjon.resultat.grunnlag!!.avkortet)
+        assertEquals(666, grunnlagOgSatsSubsumsjon.resultat.grunnlag!!.uavkortet)
 
         assertEquals(240, grunnlagOgSatsSubsumsjon.resultat.sats.dagsats)
         assertEquals(240, grunnlagOgSatsSubsumsjon.resultat.sats.ukesats)
