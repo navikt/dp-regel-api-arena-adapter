@@ -9,11 +9,11 @@ class SynchronousSats(
     val regelApiTasksHttpClient: RegelApiTasksHttpClient
 ) {
 
-    fun getSatsSynchronously(parametere: GrunnlagOgSatsParametere): SatsSubsumsjon {
+    suspend fun getSatsSynchronously(parametere: GrunnlagOgSatsParametere): SatsSubsumsjon {
 
         val taskUrl = regelApiSatsHttpClient.startSatsSubsumsjon(parametere)
 
-        val taskResponse = regelApiTasksHttpClient.pollTaskUntilDone(taskUrl)
+        val taskResponse = regelApiTasksHttpClient.pollTask(taskUrl)
 
         val ressursLocation = taskResponse.location ?: throw RegelApiArenaAdapterException("Did not get location with task")
 

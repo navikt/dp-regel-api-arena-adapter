@@ -9,11 +9,11 @@ class SynchronousMinsteinntekt(
     val regelApiTasksHttpClient: RegelApiTasksHttpClient
 ) {
 
-    fun getMinsteinntektSynchronously(parametere: MinsteinntektOgPeriodeParametere): MinsteinntektSubsumsjon {
+    suspend fun getMinsteinntektSynchronously(parametere: MinsteinntektOgPeriodeParametere): MinsteinntektSubsumsjon {
 
         val taskUrl = regelApiMinsteinntektHttpClient.startMinsteinntektSubsumsjon(parametere)
 
-        val taskResponse = regelApiTasksHttpClient.pollTaskUntilDone(taskUrl)
+        val taskResponse = regelApiTasksHttpClient.pollTask(taskUrl)
 
         val ressursLocation = taskResponse.location ?: throw RegelApiArenaAdapterException("Did not get location with task")
 

@@ -2,12 +2,15 @@ package no.nav.dagpenger.regel.api.arena.adapter.v1.tasks
 
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.moshi.responseObject
-import java.lang.Thread.sleep
-import java.time.Instant
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.time.delay
+import kotlinx.coroutines.withTimeout
+import java.time.Duration
 
-class RegelApiTasksHttpClient(private val regelApiUrl: String) {
+class RegelApiTasksHttpClient(private val regelApiUrl: String, private val timeout: Duration = Duration.ofSeconds(5)) {
+    private val delayDuration = Duration.ofMillis(100)
 
-    fun pollTask (taskUrl: String): TaskPollResponse {
+    private fun pollInternal(taskUrl: String): TaskPollResponse {
         val url = "$regelApiUrl$taskUrl"
 
         val (_, response, result) =
@@ -19,7 +22,7 @@ class RegelApiTasksHttpClient(private val regelApiUrl: String) {
             if (response.statusCode == 303) {
                 return TaskPollResponse(
                     null,
-                    response.headers["Location"]?.first()
+                    response.headers["Location"].first()
                 )
             } else {
                 throw RegelApiTasksHttpClientException(
@@ -29,19 +32,27 @@ class RegelApiTasksHttpClient(private val regelApiUrl: String) {
         }
     }
 
-    fun pollTaskUntilDone(taskUrl: String, timeoutSeconds: Int = 10): TaskPollResponse {
-        val runUntilTime = Instant.now().toEpochMilli() + timeoutSeconds * 1000
-
-        var taskResponse = pollTask(taskUrl)
-        while (taskResponse.task?.status == TaskStatus.PENDING) {
-            if (Instant.now().toEpochMilli() > runUntilTime) {
-                throw RegelApiTimeoutException("Polled task status for more than $timeoutSeconds seconds")
+    suspend fun pollTask(taskUrl: String): TaskPollResponse {
+        try {
+            return withTimeout(timeout.toMillis()) {
+                return@withTimeout pollWithDelay(taskUrl)
             }
-
-            sleep(50)
-            taskResponse = pollTask(taskUrl)
+        } catch (e: Exception) {
+            when (e) {
+                is TimeoutCancellationException -> throw RegelApiTimeoutException("Polled task status for more than ${timeout.toSeconds()} seconds")
+                else -> throw RegelApiTasksHttpClientException("Failed", e)
+            }
         }
-        return taskResponse
+    }
+
+    private suspend fun pollWithDelay(taskUrl: String): TaskPollResponse {
+        val task = pollInternal(taskUrl)
+        return if (task.isDone()) {
+            task
+        } else {
+            delay(delayDuration)
+            pollWithDelay(taskUrl)
+        }
     }
 }
 

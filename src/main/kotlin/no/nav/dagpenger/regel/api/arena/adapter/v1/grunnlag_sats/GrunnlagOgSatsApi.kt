@@ -1,6 +1,5 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats
 
-import de.huxhorn.sulky.ulid.ULID
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
@@ -16,7 +15,6 @@ fun Route.GrunnlagOgSatsApi(
     synchronousSats: SynchronousSats
 ) {
 
-    val ulidGenerator = ULID()
     route("/dagpengegrunnlag") {
         post {
             val parametere = call.receive<GrunnlagOgSatsParametere>()
