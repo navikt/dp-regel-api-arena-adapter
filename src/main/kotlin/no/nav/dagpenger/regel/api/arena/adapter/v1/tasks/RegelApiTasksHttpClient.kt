@@ -39,7 +39,7 @@ class RegelApiTasksHttpClient(private val regelApiUrl: String, private val timeo
             }
         } catch (e: Exception) {
             when (e) {
-                is TimeoutCancellationException -> throw RegelApiTimeoutException("Polled task status for more than ${timeout.toSeconds()} seconds")
+                is TimeoutCancellationException -> throw RegelApiTimeoutException("Polled task status for more than ${timeout.toMillis()} milliseconds")
                 else -> throw RegelApiTasksHttpClientException("Failed", e)
             }
         }
