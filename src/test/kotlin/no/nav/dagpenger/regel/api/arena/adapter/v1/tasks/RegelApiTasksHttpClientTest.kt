@@ -29,13 +29,13 @@ internal class RegelApiTasksHttpClientTest {
     }
 
     @Test
-    fun ` Should get response when task is in status DONE  `() {
+    fun ` Should get response when task is task is done and redirected to the result  `() {
         mockBackend.dispatcher = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest?): MockResponse {
                 return when (request?.path) {
                     "/task/123" -> MockResponse()
-                        .setBody(responseBody(TaskStatus.DONE))
-                        .addHeader("Location", "/task/123")
+                        .setResponseCode(303)
+                        .addHeader("Location", "/minsteinntekt/123")
                     else -> MockResponse()
                         .setResponseCode(404)
                 }
@@ -45,11 +45,11 @@ internal class RegelApiTasksHttpClientTest {
         val client = RegelApiTasksHttpClient(regelApiUrl = mockBackend.url("").toString())
 
         val response = runBlocking { client.pollTask("task/123") }
-        assertEquals(TaskStatus.DONE, response.task?.status)
+        assertEquals("/minsteinntekt/123", response.location)
     }
 
     @Test
-    fun ` Should retry query until task have status DONE `() {
+    fun ` Should retry query until task have status DONE (and redirected) `() {
         mockBackend.enqueue(
             MockResponse()
                 .setBody(responseBody(TaskStatus.PENDING))
@@ -63,6 +63,7 @@ internal class RegelApiTasksHttpClientTest {
         mockBackend.enqueue(
             MockResponse()
                 .setBody(responseBody(TaskStatus.DONE))
+                .setResponseCode(303)
                 .addHeader("Location", "/task/123")
         )
         val client = RegelApiTasksHttpClient(regelApiUrl = mockBackend.url("").toString())
