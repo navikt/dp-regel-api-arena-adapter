@@ -9,11 +9,11 @@ class SynchronousPeriode(
     val regelApiTasksHttpClient: RegelApiTasksHttpClient
 ) {
 
-    fun getPeriodeSynchronously(parametere: MinsteinntektOgPeriodeParametere): PeriodeSubsumsjon {
+    suspend fun getPeriodeSynchronously(parametere: MinsteinntektOgPeriodeParametere): PeriodeSubsumsjon {
 
         val taskUrl = regelApiPeriodeHttpClient.startPeriodeSubsumsjon(parametere)
 
-        val taskResponse = regelApiTasksHttpClient.pollTaskUntilDone(taskUrl)
+        val taskResponse = regelApiTasksHttpClient.pollTask(taskUrl)
 
         val ressursLocation = taskResponse.location ?: throw RegelApiArenaAdapterException("Did not get location with task")
 

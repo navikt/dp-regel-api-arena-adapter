@@ -9,11 +9,11 @@ class SynchronousGrunnlag(
     val regelApiTasksHttpClient: RegelApiTasksHttpClient
 ) {
 
-    fun getGrunnlagSynchronously(parametere: GrunnlagOgSatsParametere): GrunnlagSubsumsjon {
+    suspend fun getGrunnlagSynchronously(parametere: GrunnlagOgSatsParametere): GrunnlagSubsumsjon {
 
         val taskUrl = regelApiGrunnlagHttpClient.startGrunnlagSubsumsjon(parametere)
 
-        val taskResponse = regelApiTasksHttpClient.pollTaskUntilDone(taskUrl)
+        val taskResponse = regelApiTasksHttpClient.pollTask(taskUrl)
 
         val ressursLocation = taskResponse.location ?: throw RegelApiArenaAdapterException("Did not get location with task")
 

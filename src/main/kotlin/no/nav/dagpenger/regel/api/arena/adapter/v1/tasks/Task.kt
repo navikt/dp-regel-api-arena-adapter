@@ -17,4 +17,6 @@ data class TaskResponse(
 data class TaskPollResponse(
     val task: TaskResponse?,
     val location: String?
-)
+) {
+    fun isDone(): Boolean = task?.status == TaskStatus.DONE
+}
