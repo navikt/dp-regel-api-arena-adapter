@@ -7,7 +7,7 @@ import kotlinx.coroutines.time.delay
 import kotlinx.coroutines.withTimeout
 import java.time.Duration
 
-class RegelApiTasksHttpClient(private val regelApiUrl: String, private val timeout: Duration = Duration.ofSeconds(5)) {
+class RegelApiTasksHttpClient(private val regelApiUrl: String, private val timeout: Duration = Duration.ofSeconds(10)) {
     private val delayDuration = Duration.ofMillis(100)
 
     private fun pollInternal(taskUrl: String): TaskPollResponse {
