@@ -5,7 +5,8 @@
             <LogstashLayout dateTimeFormatPattern="yyyy-MM-dd'T'HH:mm:ss.SSSZZZ"
                             eventTemplateUri="classpath:LogstashJsonEventLayoutV1.json"
                             prettyPrintEnabled="false"
-                            stackTraceEnabled="true"/>
+                            stackTraceEnabled="true"
+                            maxByteCount="16384"/> <!-- 16Kb -->
         </Console>
     </Appenders>
     <Loggers>
