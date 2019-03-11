@@ -23,13 +23,13 @@ import mu.KotlinLogging
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.RegelApiGrunnlagHttpClient
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.SynchronousGrunnlag
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.RegelApiSatsHttpClient
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SynchronousSats
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.MinsteinntektOgPeriodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.RegelApiMinsteinntektHttpClient
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.SynchronousMinsteinntekt
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode.RegelApiPeriodeHttpClient
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode.SynchronousPeriode
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.RegelApiSatsHttpClient
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SynchronousSats
 import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.RegelApiTasksHttpClient
 import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.RegelApiTimeoutException
 import org.slf4j.event.Level
@@ -38,19 +38,6 @@ import java.util.concurrent.TimeUnit
 private val LOGGER = KotlinLogging.logger {}
 
 fun main() {
-    val env = Environment()
-
-    val app = embeddedServer(Netty, port = env.httpPort) {
-        regelApiAdapter()
-    }
-
-    app.start(wait = false)
-    Runtime.getRuntime().addShutdownHook(Thread {
-        app.stop(5, 60, TimeUnit.SECONDS)
-    })
-}
-
-fun Application.regelApiAdapter() {
     val env = Environment()
 
     val regelApiTasksHttpClient =
@@ -64,6 +51,27 @@ fun Application.regelApiAdapter() {
     val synchronousPeriode = SynchronousPeriode(regelApiPeriodeHttpClient, regelApiTasksHttpClient)
     val synchronousGrunnlag = SynchronousGrunnlag(regelApiGrunnlagHttpClient, regelApiTasksHttpClient)
     val synchronousSats = SynchronousSats(regelApiSatsHttpClient, regelApiTasksHttpClient)
+    val app = embeddedServer(Netty, port = env.httpPort) {
+        regelApiAdapter(
+            synchronousMinsteinntekt,
+            synchronousPeriode,
+            synchronousGrunnlag,
+            synchronousSats
+        )
+    }
+
+    app.start(wait = false)
+    Runtime.getRuntime().addShutdownHook(Thread {
+        app.stop(5, 60, TimeUnit.SECONDS)
+    })
+}
+
+fun Application.regelApiAdapter(
+    synchronousMinsteinntekt: SynchronousMinsteinntekt,
+    synchronousPeriode: SynchronousPeriode,
+    synchronousGrunnlag: SynchronousGrunnlag,
+    synchronousSats: SynchronousSats
+) {
 
     install(DefaultHeaders)
     install(CallLogging) {

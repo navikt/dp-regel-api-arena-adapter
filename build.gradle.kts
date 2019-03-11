@@ -41,6 +41,7 @@ val jupiterVersion = "5.3.2"
 val moshiVersion = "1.8.0"
 val ktorMoshiVersion = "1.0.1"
 val cucumberVersion = "4.0.0"
+val mockkVersion = "1.9.1"
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -74,6 +75,7 @@ dependencies {
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:$jupiterVersion")
     testImplementation("io.cucumber:cucumber-java8:$cucumberVersion")
     testImplementation("io.cucumber:cucumber-junit:$cucumberVersion")
+    testImplementation("io.mockk:mockk:$mockkVersion")
 }
 
 spotless {

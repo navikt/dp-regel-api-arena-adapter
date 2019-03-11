@@ -17,8 +17,10 @@ class SynchronousMinsteinntekt(
 
         val ressursLocation = taskResponse.location ?: throw RegelApiArenaAdapterException("Did not get location with task")
 
-        val minsteinntektSubsumsjon = regelApiMinsteinntektHttpClient.getMinsteinntekt(ressursLocation)
+        val internalMinsteinntektSubsumsjon = regelApiMinsteinntektHttpClient.getMinsteinntekt(ressursLocation)
 
-        return minsteinntektSubsumsjon
+        // mappe
+
+        return internalMinsteinntektSubsumsjon
     }
 }

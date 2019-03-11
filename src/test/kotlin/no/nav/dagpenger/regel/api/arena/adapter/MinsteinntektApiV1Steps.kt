@@ -8,8 +8,13 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
+import io.mockk.mockkClass
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.SynchronousGrunnlag
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SynchronousSats
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.MinsteinntektOgPeriodeSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.MinsteinntektOgPeriodeParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.SynchronousMinsteinntekt
+import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode.SynchronousPeriode
 import java.time.LocalDate
 import kotlin.test.assertEquals
 
@@ -24,6 +29,10 @@ class MinsteinntektApiV1Steps : No {
 
     init {
 
+        val synchronousMinsteinntekt: SynchronousMinsteinntekt = mockkClass(type = SynchronousMinsteinntekt::class)
+        val synchronousPeriode: SynchronousPeriode = mockkClass(type = SynchronousPeriode::class)
+        val synchronousGrunnlag: SynchronousGrunnlag = mockkClass(type = SynchronousGrunnlag::class)
+        val synchronousSats: SynchronousSats = mockkClass(type = SynchronousSats::class)
         lateinit var minsteinntektInnParametere: MinsteinntektOgPeriodeParametere
         lateinit var minsteinntektBeregning: MinsteinntektOgPeriodeSubsumsjon
         Gitt("at søker med aktør id {string} med vedtak id {int} med beregningsdato {string}") { aktørId: String, vedtakId: Int, beregningsDato: String ->
@@ -35,7 +44,12 @@ class MinsteinntektApiV1Steps : No {
         }
 
         Når("digidag skal vurdere minsteinntektkrav") {
-            withTestApplication({ regelApiAdapter() }) {
+            withTestApplication({ regelApiAdapter(
+                synchronousMinsteinntekt,
+                synchronousPeriode,
+                synchronousGrunnlag,
+                synchronousSats
+            ) }) {
                 handleRequest(HttpMethod.Post, v1MinsteinntektPath) {
                     addHeader(HttpHeaders.ContentType, "application/json")
                     setBody(minsteinntektInnParametereAdapter.toJson(minsteinntektInnParametere))

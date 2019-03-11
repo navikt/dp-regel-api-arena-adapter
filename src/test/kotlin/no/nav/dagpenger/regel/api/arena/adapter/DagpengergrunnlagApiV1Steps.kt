@@ -7,8 +7,13 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsSubsumsjon
+import io.mockk.mockkClass
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.SynchronousGrunnlag
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SynchronousSats
+import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.SynchronousMinsteinntekt
+import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode.SynchronousPeriode
 import java.time.LocalDate
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -20,6 +25,10 @@ class DagpengergrunnlagApiV1Steps : No {
 
     init {
 
+        val synchronousMinsteinntekt: SynchronousMinsteinntekt = mockkClass(type = SynchronousMinsteinntekt::class)
+        val synchronousPeriode: SynchronousPeriode = mockkClass(type = SynchronousPeriode::class)
+        val synchronousGrunnlag: SynchronousGrunnlag = mockkClass(type = SynchronousGrunnlag::class)
+        val synchronousSats: SynchronousSats = mockkClass(type = SynchronousSats::class)
         lateinit var dagpengegrunnlagInnParametere: GrunnlagOgSatsParametere
         lateinit var dagpengegrunnlagBeregning: GrunnlagOgSatsSubsumsjon
         Gitt("at søker med aktør id {string} med vedtak id {int} med beregningsdato {string} i beregning av grunnlag") { aktørId: String, vedtaktId: Int, beregningsDato: String ->
@@ -31,7 +40,12 @@ class DagpengergrunnlagApiV1Steps : No {
         }
 
         Når("digidag skal beregne grunnlag") {
-            withTestApplication({ regelApiAdapter() }) {
+            withTestApplication({ regelApiAdapter(
+                synchronousMinsteinntekt,
+                synchronousPeriode,
+                synchronousGrunnlag,
+                synchronousSats
+            ) }) {
                 handleRequest(HttpMethod.Post, "/v1/dagpengegrunnlag") {
                     addHeader(HttpHeaders.ContentType, "application/json")
                     setBody(dagpengegrunnlagInnParametereAdapter.toJson(dagpengegrunnlagInnParametere))
