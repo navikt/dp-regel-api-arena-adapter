@@ -52,7 +52,7 @@ fun mergeMinsteinntektOgPeriodeSubsumsjon(
     val minsteinntektFaktum = minsteinntektSubsumsjon.faktum
     val periodeFaktum = periodeSubsumsjon.faktum
 
-    if (!compareFields(minsteinntektFaktum, periodeFaktum)) throw UnMatchingFaktumException("Minsteinntekt and periode faktum dont match")
+    if (!compareFields(minsteinntektFaktum, periodeFaktum)) throw UnMatchingFaktumException("Minsteinntekt and periode faktum don not match")
 
     return MinsteinntektOgPeriodeSubsumsjon(
         minsteinntektSubsumsjon.subsumsjonsId,
@@ -78,9 +78,9 @@ fun mergeMinsteinntektOgPeriodeSubsumsjon(
 
 fun compareFields(minsteinntektFaktum: MinsteinntektFaktum, periodeFaktum: PeriodeFaktum): Boolean {
 
-    if (minsteinntektFaktum.aktorId.equals(periodeFaktum.aktorId) &&
-        minsteinntektFaktum.beregningsdato.equals(periodeFaktum.beregningsdato) &&
-        minsteinntektFaktum.vedtakId.equals(periodeFaktum.vedtakId) &&
+    if (minsteinntektFaktum.aktorId == periodeFaktum.aktorId &&
+        minsteinntektFaktum.beregningsdato == periodeFaktum.beregningsdato &&
+        minsteinntektFaktum.vedtakId == periodeFaktum.vedtakId &&
         minsteinntektFaktum.harAvtjentVerneplikt == periodeFaktum.harAvtjentVerneplikt &&
         minsteinntektFaktum.oppfyllerKravTilFangstOgFisk == periodeFaktum.oppfyllerKravTilFangstOgFisk &&
         minsteinntektFaktum.bruktInntektsPeriode?.equals(periodeFaktum.bruktInntektsPeriode) ?: (periodeFaktum.bruktInntektsPeriode === null)) {
