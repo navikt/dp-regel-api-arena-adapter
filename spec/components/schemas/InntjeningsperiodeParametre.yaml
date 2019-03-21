@@ -1,0 +1,29 @@
+type: object
+required:
+  - aktorId
+  - vedtakId
+  - beregningsdato
+  - inntektsId
+properties:
+  aktorId:
+    type: string
+    description: Identifikasjon av bruker
+    example: 01938420203
+  vedtakId:
+    type: integer
+    description: Identifikasjon av dagpengevedtak
+    format: int32
+    example: 12345678
+  beregningsdato:
+    type: string
+    description: >-
+      Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt
+      skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
+    example: '2019-01-11'
+  inntektsId:
+    type: string
+    format: ulid
+    description: >-
+      Identifiserer hvilke inntekter som lå til grunn for tidligere?
+      beregningen.
+    example: 01D2FB328P06WD808P22N9CFY5
