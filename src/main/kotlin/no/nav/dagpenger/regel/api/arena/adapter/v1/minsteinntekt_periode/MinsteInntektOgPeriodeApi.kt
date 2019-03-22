@@ -76,7 +76,7 @@ fun mergeMinsteinntektOgPeriodeSubsumsjon(
             minsteinntektSubsumsjon.resultat.oppfyllerKravTilMinsteArbeidsinntekt,
             periodeSubsumsjon.resultat.antallUker
         ),
-        minsteinntektSubsumsjon.inntekt.map { Inntekt(it.inntekt, it.periode, InntektsPeriode(it.inntektsPeriode.foersteMaaned, it.inntektsPeriode.sisteMaaned), it.inneholderFangstOgFisk, it.andel) }
+        minsteinntektSubsumsjon.inntekt.map { Inntekt(it.inntekt, it.periode, InntektsPeriode(it.inntektsPeriode.foersteMaaned, it.inntektsPeriode.sisteMaaned), it.inneholderFangstOgFisk, it.andel) }.toSet()
     )
 }
 

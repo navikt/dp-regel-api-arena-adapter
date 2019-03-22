@@ -9,7 +9,7 @@ data class MinsteinntektSubsumsjon(
     val utfort: LocalDateTime,
     val faktum: MinsteinntektFaktum,
     val resultat: MinsteinntektResultat,
-    val inntekt: List<Inntekt>
+    val inntekt: Set<Inntekt>
 )
 
 data class MinsteinntektResultat(

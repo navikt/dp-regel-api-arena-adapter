@@ -128,7 +128,7 @@ class MinsteinntektOgPeriodeApiSpec() {
             resultat = MinsteinntektResultat(
                 oppfyllerKravTilMinsteArbeidsinntekt = true
             ),
-            inntekt = listOf(
+            inntekt = setOf(
                 Inntekt(
                     inntekt = 4999423,
                     inntektsPeriode = InntektsPeriode(

@@ -9,7 +9,7 @@ data class GrunnlagSubsumsjon(
     val utfort: LocalDateTime,
     val faktum: GrunnlagFaktum,
     val resultat: GrunnlagResultat,
-    val inntekt: List<Inntekt>
+    val inntekt: Set<Inntekt>
 )
 
 data class GrunnlagResultat(

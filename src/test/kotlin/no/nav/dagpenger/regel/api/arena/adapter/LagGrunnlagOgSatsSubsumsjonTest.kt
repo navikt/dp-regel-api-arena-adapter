@@ -1,10 +1,10 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.mapGrunnlagOgSatsSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.mergeGrunnlagOgSatsSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.GrunnlagFaktum
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.GrunnlagResultat
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.GrunnlagSubsumsjon
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena.mapGrunnlagOgSatsSubsumsjon
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena.mergeGrunnlagOgSatsSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.SatsFaktum
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.SatsResultat
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.SatsSubsumsjon
