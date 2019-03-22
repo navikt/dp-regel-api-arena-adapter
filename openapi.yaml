@@ -53,7 +53,7 @@ paths:
     post:
       tags:
         - Inntjeningsperiode
-      summary: Sjekk gyldighet av beregningsdato
+      summary: Sjekk gyldighet av beregningsdato (BETA!)
       requestBody:
         description: Hvilke parametere som skal brukes for beregningen
         content:
