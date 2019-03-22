@@ -1,5 +1,5 @@
 allOf:
-  - $ref: '#/components/schemas/Subsumsjon'
+  - $ref: '#/components/schemas/GrunnlagOgSatsSubsumsjon'
   - type: object
     required:
       - parametere

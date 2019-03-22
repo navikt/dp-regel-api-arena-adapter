@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 data class MinsteinntektOgPeriodeSubsumsjon(
     val minsteinntektSubsumsjonsId: String,
-    val periodeSubsumsjonsId: String,
+    val periodeSubsumsjonsId: String? = null,
     val opprettet: LocalDateTime, // todo: ZonedDateTime?
     val utfort: LocalDateTime, // todo: ZonedDateTime?,
     val parametere: MinsteinntektOgPeriodeRegelfaktum,

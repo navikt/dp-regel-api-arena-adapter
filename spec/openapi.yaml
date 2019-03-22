@@ -21,3 +21,7 @@ tags:
     externalDocs:
       description: Folketrygdloven $4-11
       url: 'https://lovdata.no/lov/1997-02-28-19/%C2%A74-11'
+  - name: Inntjeningsperiode
+    description: >-
+      Operasjon for å vurdere om inntektene fremdeles er gyldige for gitt
+      beregningsdatoen.

@@ -1,0 +1,10 @@
+type: object
+properties:
+  sammeInntjeningsPeriode:
+    type: boolean
+    description: >-
+      Indikerer om inntektene fremdeles er gyldige eller ikke for den nye
+      beregningsdatoen.
+    example: true
+  parametere:
+    $ref: '#/components/schemas/InntjeningsperiodeParametre'

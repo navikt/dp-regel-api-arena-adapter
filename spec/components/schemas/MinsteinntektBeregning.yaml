@@ -1,5 +1,5 @@
 allOf:
-  - $ref: '#/components/schemas/Subsumsjon'
+  - $ref: '#/components/schemas/MinsteinntektOgPeriodeSubsumsjon'
   - type: object
     required:
       - parametere
