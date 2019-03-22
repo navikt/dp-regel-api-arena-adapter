@@ -1,13 +1,17 @@
 type: object
 required:
-  - beregningsId
+  - minsteinntektSubsumsjonsId
   - opprettet
   - utfort
 properties:
-  beregningsId:
+  minsteinntektSubsumsjonsId:
     type: string
     example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
-    description: Unik ID for denne beregningen
+    description: Unik ID for minsteinntektberegning
+  periodeSubsumsjonsId:
+    type: string
+    example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+    description: Unik ID for periodeberegning
   opprettet:
     type: string
     description: Dato for når kjøringen ble opprettet
