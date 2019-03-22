@@ -97,7 +97,7 @@ fun mergeGrunnlagOgSatsSubsumsjon(
             GrunnlagOgSatsResultat.Beregningsregel.VERNEPLIKT,
             false
         ),
-        grunnlagSubsumsjon.inntekt.map { Inntekt(it.inntekt, it.periode, InntektsPeriode(it.inntektsPeriode.foersteMaaned, it.inntektsPeriode.sisteMaaned), it.inneholderFangstOgFisk, it.andel) }.toSet()
+        grunnlagSubsumsjon.inntekt.map { Inntekt(it.inntekt, it.periode, InntektsPeriode(it.inntektsPeriode.førsteMåned, it.inntektsPeriode.sisteMåned), it.inneholderFangstOgFisk, it.andel) }.toSet()
     )
 }
 

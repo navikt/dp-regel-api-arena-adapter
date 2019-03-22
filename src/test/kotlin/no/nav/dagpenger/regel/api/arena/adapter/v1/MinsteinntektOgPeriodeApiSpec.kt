@@ -84,8 +84,8 @@ class MinsteinntektOgPeriodeApiSpec() {
                 harAvtjentVerneplikt = false,
                 oppfyllerKravTilFangstOgFisk = false,
                 bruktInntektsPeriode = InntektsPeriode(
-                    foersteMaaned = YearMonth.of(2018, 1),
-                    sisteMaaned = YearMonth.of(2019, 1)
+                    førsteMåned = YearMonth.of(2018, 1),
+                    sisteMåned = YearMonth.of(2019, 1)
                 )
 
             ),
@@ -94,8 +94,8 @@ class MinsteinntektOgPeriodeApiSpec() {
                 Inntekt(
                     inntekt = 4999423,
                     inntektsPeriode = InntektsPeriode(
-                        foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1)
+                        førsteMåned = YearMonth.of(2018, 1),
+                        sisteMåned = YearMonth.of(2019, 1)
                     ),
                     andel = 111,
                     inneholderFangstOgFisk = false,
@@ -120,8 +120,8 @@ class MinsteinntektOgPeriodeApiSpec() {
                 harAvtjentVerneplikt = false,
                 oppfyllerKravTilFangstOgFisk = false,
                 bruktInntektsPeriode = InntektsPeriode(
-                    foersteMaaned = YearMonth.of(2018, 1),
-                    sisteMaaned = YearMonth.of(2019, 1)
+                    førsteMåned = YearMonth.of(2018, 1),
+                    sisteMåned = YearMonth.of(2019, 1)
                 )
 
             ),
@@ -132,8 +132,8 @@ class MinsteinntektOgPeriodeApiSpec() {
                 Inntekt(
                     inntekt = 4999423,
                     inntektsPeriode = InntektsPeriode(
-                        foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1)
+                        førsteMåned = YearMonth.of(2018, 1),
+                        sisteMåned = YearMonth.of(2019, 1)
                     ),
                     andel = 111,
                     inneholderFangstOgFisk = false,

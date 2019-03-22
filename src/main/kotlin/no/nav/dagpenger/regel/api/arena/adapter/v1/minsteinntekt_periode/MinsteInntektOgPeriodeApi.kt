@@ -70,13 +70,13 @@ fun mergeMinsteinntektOgPeriodeSubsumsjon(
             minsteinntektFaktum.inntektsId,
             minsteinntektFaktum.harAvtjentVerneplikt,
             minsteinntektFaktum.oppfyllerKravTilFangstOgFisk,
-            if (minsteinntektFaktum.bruktInntektsPeriode != null) InntektsPeriode(minsteinntektFaktum.bruktInntektsPeriode.foersteMaaned, minsteinntektFaktum.bruktInntektsPeriode.sisteMaaned) else null
+            if (minsteinntektFaktum.bruktInntektsPeriode != null) InntektsPeriode(minsteinntektFaktum.bruktInntektsPeriode.førsteMåned, minsteinntektFaktum.bruktInntektsPeriode.sisteMåned) else null
         ),
         MinsteinntektOgPeriodeResultat(
             minsteinntektSubsumsjon.resultat.oppfyllerKravTilMinsteArbeidsinntekt,
             periodeSubsumsjon.resultat.antallUker
         ),
-        minsteinntektSubsumsjon.inntekt.map { Inntekt(it.inntekt, it.periode, InntektsPeriode(it.inntektsPeriode.foersteMaaned, it.inntektsPeriode.sisteMaaned), it.inneholderFangstOgFisk, it.andel) }.toSet()
+        minsteinntektSubsumsjon.inntekt.map { Inntekt(it.inntekt, it.periode, InntektsPeriode(it.inntektsPeriode.førsteMåned, it.inntektsPeriode.sisteMåned), it.inneholderFangstOgFisk, it.andel) }.toSet()
     )
 }
 
