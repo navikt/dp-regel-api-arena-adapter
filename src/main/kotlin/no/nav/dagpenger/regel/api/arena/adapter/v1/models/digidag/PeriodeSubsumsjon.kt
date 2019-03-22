@@ -8,8 +8,7 @@ data class PeriodeSubsumsjon(
     val opprettet: LocalDateTime,
     val utfort: LocalDateTime,
     val faktum: PeriodeFaktum,
-    val resultat: PeriodeResultat,
-    val inntekt: Set<Inntekt>
+    val resultat: PeriodeResultat
 )
 
 data class PeriodeResultat(

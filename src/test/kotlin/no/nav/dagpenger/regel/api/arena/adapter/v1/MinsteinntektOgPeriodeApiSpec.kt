@@ -89,20 +89,7 @@ class MinsteinntektOgPeriodeApiSpec() {
                 )
 
             ),
-            resultat = PeriodeResultat(104),
-            inntekt = setOf(
-                Inntekt(
-                    inntekt = 4999423,
-                    inntektsPeriode = InntektsPeriode(
-                        førsteMåned = YearMonth.of(2018, 1),
-                        sisteMåned = YearMonth.of(2019, 1)
-                    ),
-                    andel = 111,
-                    inneholderFangstOgFisk = false,
-                    periode = 1
-                )
-            )
-
+            resultat = PeriodeResultat(104)
         )
     }
 
