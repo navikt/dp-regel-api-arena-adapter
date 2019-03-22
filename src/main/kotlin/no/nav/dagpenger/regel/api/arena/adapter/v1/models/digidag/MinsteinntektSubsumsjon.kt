@@ -1,7 +1,5 @@
-package no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt
+package no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag
 
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.Inntekt
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.InntektsPeriode
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -11,7 +9,7 @@ data class MinsteinntektSubsumsjon(
     val utfort: LocalDateTime,
     val faktum: MinsteinntektFaktum,
     val resultat: MinsteinntektResultat,
-    val inntekt: Set<Inntekt>
+    val inntekt: List<Inntekt>
 )
 
 data class MinsteinntektResultat(

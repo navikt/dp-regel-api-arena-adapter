@@ -9,6 +9,10 @@ import io.ktor.routing.post
 import io.ktor.routing.route
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.SynchronousGrunnlag
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SynchronousSats
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena.GrunnlagOgSatsParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena.GrunnlagOgSatsSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena.mapGrunnlagOgSatsSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena.mergeGrunnlagOgSatsSubsumsjon
 
 fun Route.GrunnlagOgSatsApi(
     synchronousGrunnlag: SynchronousGrunnlag,
@@ -27,11 +31,16 @@ fun Route.GrunnlagOgSatsApi(
 
                 val satsSubsumsjon = synchronousSats.getSatsSynchronously(parametere)
 
-                grunnlagOgSatsSubsumsjon = mergeGrunnlagOgSatsSubsumsjon(grunnlagSubsumsjon, satsSubsumsjon)
+                grunnlagOgSatsSubsumsjon =
+                    mergeGrunnlagOgSatsSubsumsjon(
+                        grunnlagSubsumsjon,
+                        satsSubsumsjon
+                    )
             } else {
                 val satsSubsumsjon = synchronousSats.getSatsSynchronously(parametere)
 
-                grunnlagOgSatsSubsumsjon = mapGrunnlagOgSatsSubsumsjon(satsSubsumsjon)
+                grunnlagOgSatsSubsumsjon =
+                    mapGrunnlagOgSatsSubsumsjon(satsSubsumsjon)
             }
 
             call.respond(HttpStatusCode.OK, grunnlagOgSatsSubsumsjon)

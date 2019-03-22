@@ -11,10 +11,10 @@ import io.ktor.server.testing.withTestApplication
 import io.mockk.mockkClass
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.SynchronousGrunnlag
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SynchronousSats
-import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.MinsteinntektOgPeriodeSubsumsjon
-import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.MinsteinntektOgPeriodeParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.SynchronousMinsteinntekt
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode.SynchronousPeriode
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena.MinsteinntektOgPeriodeSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena.MinsteinntektOgPeriodeParametere
 import java.time.LocalDate
 import kotlin.test.assertEquals
 
@@ -23,9 +23,11 @@ class MinsteinntektApiV1Steps : No {
     val v1MinsteinntektPath = "/v1/minsteinntekt"
 
     val minsteinntektInnParametereAdapter: JsonAdapter<MinsteinntektOgPeriodeParametere> =
-        moshiInstance.adapter<MinsteinntektOgPeriodeParametere>(MinsteinntektOgPeriodeParametere::class.java)
+        moshiInstance.adapter<MinsteinntektOgPeriodeParametere>(
+            MinsteinntektOgPeriodeParametere::class.java)
     val minsteinntektBeregningAdapter: JsonAdapter<MinsteinntektOgPeriodeSubsumsjon> =
-        moshiInstance.adapter<MinsteinntektOgPeriodeSubsumsjon>(MinsteinntektOgPeriodeSubsumsjon::class.java)
+        moshiInstance.adapter<MinsteinntektOgPeriodeSubsumsjon>(
+            MinsteinntektOgPeriodeSubsumsjon::class.java)
 
     init {
 
@@ -36,11 +38,12 @@ class MinsteinntektApiV1Steps : No {
         lateinit var minsteinntektInnParametere: MinsteinntektOgPeriodeParametere
         lateinit var minsteinntektBeregning: MinsteinntektOgPeriodeSubsumsjon
         Gitt("at søker med aktør id {string} med vedtak id {int} med beregningsdato {string}") { aktørId: String, vedtakId: Int, beregningsDato: String ->
-            minsteinntektInnParametere = MinsteinntektOgPeriodeParametere(
-                aktorId = aktørId,
-                vedtakId = vedtakId,
-                beregningsdato = LocalDate.parse(beregningsDato)
-            )
+            minsteinntektInnParametere =
+                MinsteinntektOgPeriodeParametere(
+                    aktorId = aktørId,
+                    vedtakId = vedtakId,
+                    beregningsdato = LocalDate.parse(beregningsDato)
+                )
         }
 
         Når("digidag skal vurdere minsteinntektkrav") {

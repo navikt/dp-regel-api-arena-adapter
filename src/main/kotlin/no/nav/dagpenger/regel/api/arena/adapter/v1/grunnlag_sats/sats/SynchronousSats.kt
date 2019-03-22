@@ -1,7 +1,8 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats
 
 import no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterException
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena.GrunnlagOgSatsParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.SatsSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.RegelApiTasksHttpClient
 
 class SynchronousSats(

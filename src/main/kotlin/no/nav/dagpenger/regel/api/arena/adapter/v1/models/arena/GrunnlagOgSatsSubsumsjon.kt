@@ -1,10 +1,10 @@
-package no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats
+package no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena
 
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.GrunnlagFaktum
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.GrunnlagSubsumsjon
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SatsFaktum
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SatsSubsumsjon
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.Inntekt
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.GrunnlagFaktum
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.GrunnlagSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.SatsFaktum
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.SatsSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.Inntekt
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -69,7 +69,11 @@ fun mergeGrunnlagOgSatsSubsumsjon(
     val satsFaktum = satsSubsumsjon.faktum
     val satsResultat = satsSubsumsjon.resultat
 
-    if (!compareFields(grunnlagFaktum, satsFaktum)) throw UnMatchingFaktumException("Grunnlag and sats faktum dont match")
+    if (!compareFields(
+            grunnlagFaktum,
+            satsFaktum
+        )
+    ) throw UnMatchingFaktumException("Grunnlag and sats faktum dont match")
 
     return GrunnlagOgSatsSubsumsjon(
         grunnlagSubsumsjon.subsumsjonsId,
@@ -87,7 +91,10 @@ fun mergeGrunnlagOgSatsSubsumsjon(
             satsFaktum.grunnlag
         ),
         GrunnlagOgSatsResultat(
-            Grunnlag(grunnlagResultat.avkortet, grunnlagResultat.uavkortet),
+            Grunnlag(
+                grunnlagResultat.avkortet,
+                grunnlagResultat.uavkortet
+            ),
             Sats(satsResultat.dagsats, satsResultat.ukesats),
             GrunnlagOgSatsResultat.Beregningsregel.VERNEPLIKT,
             false
@@ -115,7 +122,10 @@ fun mapGrunnlagOgSatsSubsumsjon(
             grunnlag = satsFaktum.grunnlag
         ),
         resultat = GrunnlagOgSatsResultat(
-            sats = Sats(satsResultat.dagsats, satsResultat.ukesats),
+            sats = Sats(
+                satsResultat.dagsats,
+                satsResultat.ukesats
+            ),
             beregningsRegel = GrunnlagOgSatsResultat.Beregningsregel.MANUELL_UNDER_6G,
             benyttet90ProsentRegel = false
         )

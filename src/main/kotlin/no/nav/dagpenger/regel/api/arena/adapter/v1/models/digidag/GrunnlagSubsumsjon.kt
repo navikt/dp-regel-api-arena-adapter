@@ -1,6 +1,5 @@
-package no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag
+package no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag
 
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.Inntekt
 import java.time.LocalDate
 import java.time.LocalDateTime
 

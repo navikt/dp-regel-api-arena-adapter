@@ -1,6 +1,6 @@
-package no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats
+package no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena
 
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.InntektsPeriode
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.InntektsPeriode
 import java.time.LocalDate
 
 data class GrunnlagOgSatsParametere(

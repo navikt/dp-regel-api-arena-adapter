@@ -10,16 +10,16 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.regel.api.arena.adapter.regelApiAdapter
-import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.MinsteinntektFaktum
-import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.MinsteinntektResultat
-import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.MinsteinntektSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.SynchronousMinsteinntekt
-import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode.PeriodeFaktum
-import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode.PeriodeResultat
-import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode.PeriodeSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode.SynchronousPeriode
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.Inntekt
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.InntektsPeriode
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.Inntekt
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.InntektsPeriode
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.MinsteinntektFaktum
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.MinsteinntektResultat
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.MinsteinntektSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.PeriodeFaktum
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.PeriodeResultat
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.PeriodeSubsumsjon
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -98,7 +98,7 @@ class MinsteinntektOgPeriodeApiSpec() {
                         sisteMaaned = YearMonth.of(2019, 1)
                     ),
                     andel = 111,
-                    inneholderNaeringsinntekter = false,
+                    inneholderFangstOgFisk = false,
                     periode = 1
                 )
             )
@@ -128,7 +128,7 @@ class MinsteinntektOgPeriodeApiSpec() {
             resultat = MinsteinntektResultat(
                 oppfyllerKravTilMinsteArbeidsinntekt = true
             ),
-            inntekt = setOf(
+            inntekt = listOf(
                 Inntekt(
                     inntekt = 4999423,
                     inntektsPeriode = InntektsPeriode(
@@ -136,7 +136,7 @@ class MinsteinntektOgPeriodeApiSpec() {
                         sisteMaaned = YearMonth.of(2019, 1)
                     ),
                     andel = 111,
-                    inneholderNaeringsinntekter = false,
+                    inneholderFangstOgFisk = false,
                     periode = 1
                 )
             )
