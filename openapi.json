@@ -481,6 +481,10 @@
       },
       "InntjeningsperiodeResultat": {
         "type": "object",
+        "required": [
+          "sammeInntjeningsPeriode",
+          "parametere"
+        ],
         "properties": {
           "sammeInntjeningsPeriode": {
             "type": "boolean",

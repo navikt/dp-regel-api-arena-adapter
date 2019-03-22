@@ -338,6 +338,9 @@ components:
           example: 01D2FB328P06WD808P22N9CFY5
     InntjeningsperiodeResultat:
       type: object
+      required:
+        - sammeInntjeningsPeriode
+        - parametere
       properties:
         sammeInntjeningsPeriode:
           type: boolean
