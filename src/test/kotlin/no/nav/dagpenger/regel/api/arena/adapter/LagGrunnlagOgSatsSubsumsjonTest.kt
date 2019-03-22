@@ -1,15 +1,15 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.GrunnlagFaktum
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.GrunnlagResultat
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.GrunnlagSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.mapGrunnlagOgSatsSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.mergeGrunnlagOgSatsSubsumsjon
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SatsFaktum
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SatsResultat
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SatsSubsumsjon
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.Inntekt
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.InntektsPeriode
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.GrunnlagFaktum
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.GrunnlagResultat
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.GrunnlagSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.SatsFaktum
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.SatsResultat
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.SatsSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.Inntekt
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.InntektsPeriode
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -31,16 +31,18 @@ class LagGrunnlagOgSatsSubsumsjonTest {
                 "888",
                 false,
                 false,
-                0),
+                0
+            ),
             GrunnlagResultat(
                 555,
-                666),
+                666
+            ),
             setOf(
                 Inntekt(
                     inntekt = 0,
                     periode = 1,
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2018, 2), YearMonth.of(2019, 1)),
-                    inneholderNaeringsinntekter = false,
+                    inneholderFangstOgFisk = false,
                     andel = 0
                 )
             )
@@ -63,7 +65,11 @@ class LagGrunnlagOgSatsSubsumsjonTest {
             )
         )
 
-        val grunnlagOgSatsSubsumsjon = mergeGrunnlagOgSatsSubsumsjon(grunnlagSubsumsjon, satsSubsumsjon)
+        val grunnlagOgSatsSubsumsjon =
+            mergeGrunnlagOgSatsSubsumsjon(
+                grunnlagSubsumsjon,
+                satsSubsumsjon
+            )
 
         assertEquals("222", grunnlagOgSatsSubsumsjon.parametere.aktorId)
         assertEquals(555, grunnlagOgSatsSubsumsjon.resultat.grunnlag!!.avkortet)
@@ -94,7 +100,8 @@ class LagGrunnlagOgSatsSubsumsjonTest {
 
         )
 
-        val grunnlagSatsSubsumsjon = mapGrunnlagOgSatsSubsumsjon(satsSubsumsjon)
+        val grunnlagSatsSubsumsjon =
+            mapGrunnlagOgSatsSubsumsjon(satsSubsumsjon)
 
         assertEquals("222", grunnlagSatsSubsumsjon.parametere.aktorId)
         assertEquals(240, grunnlagSatsSubsumsjon.resultat.sats.dagsats)

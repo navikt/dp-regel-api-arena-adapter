@@ -8,8 +8,8 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.mockk.mockkClass
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsParametere
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena.GrunnlagOgSatsParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena.GrunnlagOgSatsSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.SynchronousGrunnlag
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SynchronousSats
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.SynchronousMinsteinntekt
@@ -20,8 +20,10 @@ import kotlin.test.assertTrue
 
 class DagpengergrunnlagApiV1Steps : No {
 
-    val dagpengegrunnlagInnParametereAdapter = moshiInstance.adapter<GrunnlagOgSatsParametere>(GrunnlagOgSatsParametere::class.java)
-    val dagpengegrunnlagBeregningAdapter = moshiInstance.adapter<GrunnlagOgSatsSubsumsjon>(GrunnlagOgSatsSubsumsjon::class.java)
+    val dagpengegrunnlagInnParametereAdapter = moshiInstance.adapter<GrunnlagOgSatsParametere>(
+        GrunnlagOgSatsParametere::class.java)
+    val dagpengegrunnlagBeregningAdapter = moshiInstance.adapter<GrunnlagOgSatsSubsumsjon>(
+        GrunnlagOgSatsSubsumsjon::class.java)
 
     init {
 
@@ -32,11 +34,12 @@ class DagpengergrunnlagApiV1Steps : No {
         lateinit var dagpengegrunnlagInnParametere: GrunnlagOgSatsParametere
         lateinit var dagpengegrunnlagBeregning: GrunnlagOgSatsSubsumsjon
         Gitt("at søker med aktør id {string} med vedtak id {int} med beregningsdato {string} i beregning av grunnlag") { aktørId: String, vedtaktId: Int, beregningsDato: String ->
-            dagpengegrunnlagInnParametere = GrunnlagOgSatsParametere(
-                aktorId = aktørId,
-                vedtakId = vedtaktId,
-                beregningsdato = LocalDate.parse(beregningsDato)
-            )
+            dagpengegrunnlagInnParametere =
+                GrunnlagOgSatsParametere(
+                    aktorId = aktørId,
+                    vedtakId = vedtaktId,
+                    beregningsdato = LocalDate.parse(beregningsDato)
+                )
         }
 
         Når("digidag skal beregne grunnlag") {

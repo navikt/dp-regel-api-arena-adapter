@@ -10,16 +10,16 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.regel.api.arena.adapter.regelApiAdapter
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.GrunnlagFaktum
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.GrunnlagResultat
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.GrunnlagSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.GrunnlagFaktum
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.GrunnlagResultat
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.GrunnlagSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.SynchronousGrunnlag
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SatsFaktum
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SatsResultat
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SatsSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.SatsFaktum
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.SatsResultat
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.SatsSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SynchronousSats
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.Inntekt
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.InntektsPeriode
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.Inntekt
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.InntektsPeriode
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -119,7 +119,7 @@ class GrunnlagOgSatsSpec {
                         sisteMaaned = YearMonth.of(2019, 1)
                     ),
                     andel = 111,
-                    inneholderNaeringsinntekter = false,
+                    inneholderFangstOgFisk = false,
                     periode = 1
                 )
             )

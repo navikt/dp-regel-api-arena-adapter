@@ -7,7 +7,8 @@ import com.github.kittinunf.fuel.moshi.responseObject
 import com.github.kittinunf.result.Result
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.TaskResponse
-import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.MinsteinntektOgPeriodeParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena.MinsteinntektOgPeriodeParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.MinsteinntektSubsumsjon
 
 class RegelApiMinsteinntektHttpClient(private val regelApiUrl: String) {
 

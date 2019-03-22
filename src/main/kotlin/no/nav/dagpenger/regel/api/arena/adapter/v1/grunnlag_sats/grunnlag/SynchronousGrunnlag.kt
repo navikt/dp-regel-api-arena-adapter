@@ -1,7 +1,8 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag
 
 import no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterException
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.GrunnlagOgSatsParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena.GrunnlagOgSatsParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.GrunnlagSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.tasks.RegelApiTasksHttpClient
 
 class SynchronousGrunnlag(
@@ -17,8 +18,8 @@ class SynchronousGrunnlag(
 
         val ressursLocation = taskResponse.location ?: throw RegelApiArenaAdapterException("Did not get location with task")
 
-        val minsteinntektSubsumsjon = regelApiGrunnlagHttpClient.getGrunnlag(ressursLocation)
+        val grunnlagSubsumsjon = regelApiGrunnlagHttpClient.getGrunnlag(ressursLocation)
 
-        return minsteinntektSubsumsjon
+        return grunnlagSubsumsjon
     }
 }

@@ -1,27 +1,26 @@
-package no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode
+package no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag
 
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.Inntekt
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.common.InntektsPeriode
 import java.time.LocalDate
 import java.time.LocalDateTime
 
-data class PeriodeSubsumsjon(
+data class MinsteinntektSubsumsjon(
     val subsumsjonsId: String,
     val opprettet: LocalDateTime,
     val utfort: LocalDateTime,
-    val faktum: PeriodeFaktum,
-    val resultat: PeriodeResultat,
+    val faktum: MinsteinntektFaktum,
+    val resultat: MinsteinntektResultat,
     val inntekt: Set<Inntekt>
 )
 
-data class PeriodeResultat(
-    val antallUker: Int
+data class MinsteinntektResultat(
+    val oppfyllerKravTilMinsteArbeidsinntekt: Boolean
 )
 
-data class PeriodeFaktum(
+data class MinsteinntektFaktum(
     val aktorId: String,
     val vedtakId: Int,
     val beregningsdato: LocalDate,
+    val inntektsId: String,
     val harAvtjentVerneplikt: Boolean? = false,
     val oppfyllerKravTilFangstOgFisk: Boolean? = false,
     val bruktInntektsPeriode: InntektsPeriode? = null
