@@ -1,0 +1,22 @@
+type: object
+required:
+  - satsSubsumsjonsId
+  - opprettet
+  - utfort
+properties:
+  grunnlagSubsumsjonsId:
+    type: string
+    example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+    description: Unik ID for denne beregningen
+  satsSubsumsjonsId:
+    type: string
+    example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+    description: Unik ID for denne beregningen
+  opprettet:
+    type: string
+    description: Dato for når kjøringen ble opprettet
+    example: '2018-12-26T14:42:09Z'
+  utfort:
+    type: string
+    description: Dato for når kjøringen ble oppdatert
+    example: '2018-12-26T14:43:12Z'
