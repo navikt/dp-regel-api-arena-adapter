@@ -21,6 +21,8 @@ tags:
     externalDocs:
       description: Folketrygdloven $4-11
       url: 'https://lovdata.no/lov/1997-02-28-19/%C2%A74-11'
+  - name: Inntjeningsperiode
+    description: Operasjon for å vurdere om inntektene fremdeles er gyldige for gitt beregningsdatoen.
 paths:
   /dagpengegrunnlag:
     post:
@@ -47,6 +49,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/DagpengegrunnlagBeregning'
+  /inntjeningsperiode:
+    post:
+      tags:
+        - Inntjeningsperiode
+      summary: Sjekk gyldighet av beregningsdato
+      requestBody:
+        description: Hvilke parametere som skal brukes for beregningen
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InntjeningsperiodeParametre'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InntjeningsperiodeResultat'
+        '400':
+          description: Invalid input
+        '500':
+          description: System error
   /minsteinntekt:
     post:
       tags:
@@ -99,7 +123,7 @@ components:
           description: Fiks ferdig utregnet grunnlag uten å være avkortet til 6G
     DagpengegrunnlagBeregning:
       allOf:
-        - $ref: '#/components/schemas/Subsumsjon'
+        - $ref: '#/components/schemas/GrunnlagOgSatsSubsumsjon'
         - type: object
           required:
             - parametere
@@ -220,6 +244,29 @@ components:
           type: integer
           nullable: true
           description: 'Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum her'
+    GrunnlagOgSatsSubsumsjon:
+      type: object
+      required:
+        - satsSubsumsjonsId
+        - opprettet
+        - utfort
+      properties:
+        grunnlagSubsumsjonsId:
+          type: string
+          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          description: Unik ID for denne beregningen
+        satsSubsumsjonsId:
+          type: string
+          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          description: Unik ID for denne beregningen
+        opprettet:
+          type: string
+          description: Dato for når kjøringen ble opprettet
+          example: '2018-12-26T14:42:09Z'
+        utfort:
+          type: string
+          description: Dato for når kjøringen ble oppdatert
+          example: '2018-12-26T14:43:12Z'
     Inntekt:
       type: object
       required:
@@ -263,9 +310,44 @@ components:
         sisteMaaned:
           type: string
           example: 2018-01
+    InntjeningsperiodeParametre:
+      type: object
+      required:
+        - aktorId
+        - vedtakId
+        - beregningsdato
+        - inntektsId
+      properties:
+        aktorId:
+          type: string
+          description: Identifikasjon av bruker
+          example: 01938420203
+        vedtakId:
+          type: integer
+          description: Identifikasjon av dagpengevedtak
+          format: int32
+          example: 12345678
+        beregningsdato:
+          type: string
+          description: Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
+          example: '2019-01-11'
+        inntektsId:
+          type: string
+          format: ulid
+          description: Identifiserer hvilke inntekter som lå til grunn for tidligere? beregningen.
+          example: 01D2FB328P06WD808P22N9CFY5
+    InntjeningsperiodeResultat:
+      type: object
+      properties:
+        sammeInntjeningsPeriode:
+          type: boolean
+          description: Indikerer om inntektene fremdeles er gyldige eller ikke for den nye beregningsdatoen.
+          example: true
+        parametere:
+          $ref: '#/components/schemas/InntjeningsperiodeParametre'
     MinsteinntektBeregning:
       allOf:
-        - $ref: '#/components/schemas/Subsumsjon'
+        - $ref: '#/components/schemas/MinsteinntektOgPeriodeSubsumsjon'
         - type: object
           required:
             - parametere
@@ -310,6 +392,29 @@ components:
           description: Om bruker oppfyller særvilkårene for fangst og fisk.
         bruktInntektsPeriode:
           $ref: '#/components/schemas/InntektsPeriode'
+    MinsteinntektOgPeriodeSubsumsjon:
+      type: object
+      required:
+        - minsteinntektSubsumsjonsId
+        - opprettet
+        - utfort
+      properties:
+        minsteinntektSubsumsjonsId:
+          type: string
+          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          description: Unik ID for minsteinntektberegning
+        periodeSubsumsjonsId:
+          type: string
+          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          description: Unik ID for periodeberegning
+        opprettet:
+          type: string
+          description: Dato for når kjøringen ble opprettet
+          example: '2018-12-26T14:42:09Z'
+        utfort:
+          type: string
+          description: Dato for når kjøringen ble oppdatert
+          example: '2018-12-26T14:43:12Z'
     MinsteinntektResultat:
       required:
         - oppfyllerKravTilMinsteArbeidsinntekt
@@ -376,25 +481,6 @@ components:
           type: integer
           example: 1065
           description: Ukesats. Ukesats inneholder barnetillegg
-    Subsumsjon:
-      type: object
-      required:
-        - beregningsId
-        - opprettet
-        - utfort
-      properties:
-        beregningsId:
-          type: string
-          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
-          description: Unik ID for denne beregningen
-        opprettet:
-          type: string
-          description: Dato for når kjøringen ble opprettet
-          example: '2018-12-26T14:42:09Z'
-        utfort:
-          type: string
-          description: Dato for når kjøringen ble oppdatert
-          example: '2018-12-26T14:43:12Z'
   examples:
     dagpengegrunnlag-bareSats:
       summary: Eksempel for å fastsette kun sats
