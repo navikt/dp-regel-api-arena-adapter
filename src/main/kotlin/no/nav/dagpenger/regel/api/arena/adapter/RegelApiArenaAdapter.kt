@@ -25,6 +25,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.RegelA
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.SynchronousGrunnlag
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.RegelApiSatsHttpClient
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SynchronousSats
+import no.nav.dagpenger.regel.api.arena.adapter.v1.inntjeningsperiode.InntjeningsperiodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.MinsteinntektOgPeriodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.RegelApiMinsteinntektHttpClient
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.SynchronousMinsteinntekt
@@ -102,6 +103,7 @@ fun Application.regelApiAdapter(
         route("/v1") {
             MinsteinntektOgPeriodeApi(synchronousMinsteinntekt, synchronousPeriode)
             GrunnlagOgSatsApi(synchronousGrunnlag, synchronousSats)
+            InntjeningsperiodeApi()
         }
         naischecks()
     }
