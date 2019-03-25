@@ -20,7 +20,7 @@ class RegelApiPeriodeHttpClient(private val regelApiUrl: String) {
             with(url.httpGet()) { responseObject(moshiDeserializerOf(jsonAdapter)) }
         return when (result) {
             is Result.Failure -> throw RegelApiPeriodeHttpClientException(
-                response.responseMessage, result.getException()
+                "Failed to run minsteinntekt. Response message ${response.responseMessage}. Error message: ${result.error.message}"
             )
             is Result.Success -> result.get()
         }
@@ -33,14 +33,16 @@ class RegelApiPeriodeHttpClient(private val regelApiUrl: String) {
         val json = jsonAdapter.toJson(payload)
 
         val (_, response, result) =
-            with(url.httpPost()
-                .header(mapOf("Content-Type" to "application/json"))
-                .body(json)) {
+            with(
+                url.httpPost()
+                    .header(mapOf("Content-Type" to "application/json"))
+                    .body(json)
+            ) {
                 responseObject<TaskResponse>()
             }
         return when (result) {
             is Result.Failure -> throw RegelApiPeriodeHttpClientException(
-                response.responseMessage, result.getException()
+                "Failed to run minsteinntekt. Response message ${response.responseMessage}. Error message: ${result.error.message}"
             )
             is Result.Success ->
                 response.headers["Location"].first()
@@ -49,6 +51,5 @@ class RegelApiPeriodeHttpClient(private val regelApiUrl: String) {
 }
 
 class RegelApiPeriodeHttpClientException(
-    override val message: String,
-    override val cause: Throwable
-) : RuntimeException(message, cause)
+    override val message: String
+) : RuntimeException(message)
