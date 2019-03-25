@@ -9,12 +9,12 @@ import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.mockk.mockkClass
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.grunnlag.SynchronousGrunnlag
-import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag_sats.sats.SynchronousSats
-import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.minsteinntekt.SynchronousMinsteinntekt
-import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.periode.SynchronousPeriode
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena.MinsteinntektOgPeriodeSubsumsjon
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.arena.MinsteinntektOgPeriodeParametere
+import no.nav.dagpenger.regel.api.internal.grunnlag.SynchronousGrunnlag
+import no.nav.dagpenger.regel.api.internal.sats.SynchronousSats
+import no.nav.dagpenger.regel.api.internal.minsteinntekt.SynchronousMinsteinntekt
+import no.nav.dagpenger.regel.api.internal.periode.SynchronousPeriode
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeParametere
 import java.time.LocalDate
 import kotlin.test.assertEquals
 

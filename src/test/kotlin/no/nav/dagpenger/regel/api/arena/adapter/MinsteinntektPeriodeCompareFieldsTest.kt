@@ -1,16 +1,16 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
-import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntekt_periode.compareFields
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.MinsteinntektFaktum
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.PeriodeFaktum
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.digidag.InntektsPeriode
-import org.junit.jupiter.api.Assertions.assertTrue
+import no.nav.dagpenger.regel.api.arena.adapter.v1.compareFields
+import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
+import no.nav.dagpenger.regel.api.internal.models.MinsteinntektFaktum
+import no.nav.dagpenger.regel.api.internal.models.PeriodeFaktum
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.YearMonth
 
-class MinsteinntektPeriodeCompareFieldsTest {
+internal class MinsteinntektPeriodeCompareFieldsTest {
 
     @Test
     fun ` should return true if fields are the same `() {
