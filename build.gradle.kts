@@ -88,6 +88,23 @@ spotless {
     }
 }
 
+sourceSets {
+    create("end-to-end-Test") {
+        java.srcDir(file("src/endToEndTest/kotlin"))
+        resources.srcDir(file("src/endToEndTest/resources"))
+        compileClasspath += sourceSets["main"].output + configurations["testRuntimeClasspath"]
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+tasks.register<Test>("end-to-end-Test") {
+    description = "Runs the integration tests."
+    group = "verification"
+    testClassesDirs = sourceSets["end-to-end-Test"].output.classesDirs
+    classpath = sourceSets["end-to-end-Test"].runtimeClasspath
+    mustRunAfter(tasks["test"])
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
     testLogging {
