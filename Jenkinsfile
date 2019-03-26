@@ -73,11 +73,42 @@ pipeline {
     }
 
     stage('Deploy to non-production') {
+      when { branch 'master' }
       steps {
         script {
           response = naisDeploy.createNaisAutodeployment(env.APPLICATION_NAME, env.VERSION,"t5",env.ZONE ,env.NAMESPACE, "")
         }
       }
     }
+
+    stage('Run tests') {
+        // Since these tests usually are quite expensive, running them as
+        // separate stages allows distributing them on seperate agents
+        failFast true
+            parallel {
+                stage('User Acceptance Tests') {
+                  agent any
+
+                  when {
+                    beforeAgent true
+                    expression {
+                      sh(
+                        label: 'Does the repository define any UAT tests?',
+                        script: 'test -f ./scripts/test/uat',
+                        returnStatus: true
+                      ) == 0
+                    }
+                  }
+
+                  steps {
+                    sh label: 'User Acceptance Tests', script: """
+                      ./scripts/test/uat || true
+                    """
+                  }
+                }
+            }
+        }
+    }
+
   }
 }

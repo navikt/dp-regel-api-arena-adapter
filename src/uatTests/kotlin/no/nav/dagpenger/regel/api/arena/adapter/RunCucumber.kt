@@ -10,7 +10,7 @@ import org.junit.runner.RunWith
         "pretty",
         "json:build/cucumber.json"
     ],
-    features = ["src/endToEndTest/resources/features"],
+    features = ["src/uatTests/resources/features"],
     tags = ["not @ignored"]
 )
 class RunCucumber

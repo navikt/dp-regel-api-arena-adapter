@@ -4,11 +4,8 @@ import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
 import com.squareup.moshi.JsonAdapter
 import cucumber.api.java8.No
-
-
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeParametere
-
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
 import java.time.LocalDate
 import kotlin.test.assertEquals
 
@@ -30,7 +27,6 @@ class MinsteinntektApiV1Steps : No {
         lateinit var minsteinntektInnParametere: MinsteinntektOgPeriodeParametere
         lateinit var minsteinntektBeregning: MinsteinntektOgPeriodeSubsumsjon
 
-
         Gitt("at søker med aktør id {string} med vedtak id {int} med beregningsdato {string}") { aktørId: String, vedtakId: Int, beregningsDato: String ->
             minsteinntektInnParametere =
                 MinsteinntektOgPeriodeParametere(
@@ -41,13 +37,8 @@ class MinsteinntektApiV1Steps : No {
         }
 
         Når("digidag skal vurdere minsteinntektkrav") {
-
-           val response =  apiRequest(minsteinntektInnParametere)
-            minsteinntektBeregning  = response.parseJsonFrom(minsteinntektBeregningAdapter)
-
-
-
-
+            val response = apiRequest(minsteinntektInnParametereAdapter.toJson(minsteinntektInnParametere))
+            minsteinntektBeregning = response.parseJsonFrom(minsteinntektBeregningAdapter)
         }
 
         Så("kravet til minsteinntekt er {string}") { utfall: String ->
@@ -176,13 +167,12 @@ class MinsteinntektApiV1Steps : No {
         }
     }
 
-    private fun apiRequest(minsteinntektInnParametere: MinsteinntektOgPeriodeParametere): String {
+    private fun apiRequest(body: String): String {
         val (_, response, result) = with(
             "https://dp-regel-api-arena-adapter.nais.preprod.local/v1/minsteinntekt".httpPost()
                 .header("Content-Type" to "application/json")
-                .body(minsteinntektInnParametereAdapter.toJson(minsteinntektInnParametere))
-        )
-        {
+                .body(body)
+        ) {
             responseString()
         }
 
