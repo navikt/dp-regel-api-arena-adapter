@@ -1,5 +1,7 @@
 # Dagpenger Regel API - Arena Adapter
 
+Adapter for Arena mot DigiDag Dagpenger regel API
+
 
 ## Working on specification
 ### Install
