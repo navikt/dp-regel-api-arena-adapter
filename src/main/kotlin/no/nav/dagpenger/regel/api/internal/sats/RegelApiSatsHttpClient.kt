@@ -7,16 +7,26 @@ import com.github.kittinunf.fuel.moshi.responseObject
 import com.github.kittinunf.result.Result
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsParametere
+import no.nav.dagpenger.regel.api.internal.models.SatsParametere
 import no.nav.dagpenger.regel.api.internal.models.SatsSubsumsjon
 import no.nav.dagpenger.regel.api.internal.models.TaskResponse
 
 class RegelApiSatsHttpClient(private val regelApiUrl: String) {
 
+    private val jsonAdapter = moshiInstance.adapter(SatsParametere::class.java)
     fun startSatsSubsumsjon(payload: GrunnlagOgSatsParametere): String {
         val url = "$regelApiUrl/sats"
 
-        val jsonAdapter = moshiInstance.adapter(GrunnlagOgSatsParametere::class.java)
-        val json = jsonAdapter.toJson(payload)
+        val internalParametere = SatsParametere(
+            aktorId = payload.aktorId,
+            vedtakId = payload.vedtakId,
+            beregningsdato = payload.beregningsdato,
+            grunnlag = payload.grunnlag,
+            antallBarn = payload.antallBarn
+
+        )
+
+        val json = jsonAdapter.toJson(internalParametere)
 
         val (_, response, result) =
             with(

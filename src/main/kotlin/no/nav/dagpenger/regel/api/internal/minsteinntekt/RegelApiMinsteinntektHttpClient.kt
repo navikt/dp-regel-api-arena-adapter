@@ -13,12 +13,12 @@ import no.nav.dagpenger.regel.api.internal.models.TaskResponse
 
 class RegelApiMinsteinntektHttpClient(private val regelApiUrl: String) {
     private val jsonAdapter =
-        moshiInstance.adapter(no.nav.dagpenger.regel.api.internal.models.MinsteinntektOgPeriodeParametere::class.java)
+        moshiInstance.adapter(no.nav.dagpenger.regel.api.internal.models.MinsteinntektParametere::class.java)
 
     fun startMinsteinntektSubsumsjon(payload: MinsteinntektOgPeriodeParametere): String {
         val url = "$regelApiUrl/minsteinntekt"
 
-        val internalParams = no.nav.dagpenger.regel.api.internal.models.MinsteinntektOgPeriodeParametere(
+        val internalParams = no.nav.dagpenger.regel.api.internal.models.MinsteinntektParametere(
             aktorId = payload.aktorId,
             vedtakId = payload.vedtakId,
             beregningsdato = payload.beregningsdato,

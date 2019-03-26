@@ -13,25 +13,22 @@ import no.nav.dagpenger.regel.api.internal.models.TaskResponse
 
 class RegelApiGrunnlagHttpClient(private val regelApiUrl: String) {
 
-    private val jsonAdapter = moshiInstance.adapter(no.nav.dagpenger.regel.api.internal.models.GrunnlagOgSatsParametere::class.java)
+    private val jsonAdapter = moshiInstance.adapter(no.nav.dagpenger.regel.api.internal.models.GrunnlagParametere::class.java)
 
     fun startGrunnlagSubsumsjon(payload: GrunnlagOgSatsParametere): String {
         val url = "$regelApiUrl/grunnlag"
 
-        val internalParameters = no.nav.dagpenger.regel.api.internal.models.GrunnlagOgSatsParametere(
+        val internalParameters = no.nav.dagpenger.regel.api.internal.models.GrunnlagParametere(
             aktorId = payload.aktorId,
             vedtakId = payload.vedtakId,
             beregningsdato = payload.beregningsdato,
             harAvtjentVerneplikt = payload.harAvtjentVerneplikt,
-            oppfyllerKravTilFangstOgFisk = payload.oppfyllerKravTilFangstOgFisk,
             bruktInntektsPeriode = payload.bruktInntektsPeriode?.let {
                 InntektsPeriode(
                     førsteMåned = it.foersteMaaned,
                     sisteMåned = it.sisteMaaned
                 )
-            },
-            antallBarn = payload.antallBarn,
-            grunnlag = payload.grunnlag
+            }
         )
 
         val json = jsonAdapter.toJson(internalParameters)
