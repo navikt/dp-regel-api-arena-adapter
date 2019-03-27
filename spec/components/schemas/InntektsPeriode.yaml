@@ -6,7 +6,9 @@ required:
 properties:
   foersteMaaned:
     type: string
-    example: 2019-01
+    example: 2018-01
+    description: Første måned kronologisk i perioden
   sisteMaaned:
     type: string
-    example: 2018-01
+    example: 2019-01
+    description: Siste måned kronologisk i perioden

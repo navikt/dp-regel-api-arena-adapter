@@ -12,5 +12,6 @@ allOf:
         $ref: '#/components/schemas/DagpengegrunnlagResultat'
       inntekt:
         type: array
+        description: Hvis manuelt grunnlag er satt så vil tom Inntekt returneres.
         items:
           $ref: '#/components/schemas/Inntekt'
