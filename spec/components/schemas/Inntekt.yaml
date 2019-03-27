@@ -13,7 +13,7 @@ properties:
     description: Inntekt for perioden
   periode:
     type: integer
-    description: 'Siste-, nestsiste- eller tredjesiste-periode.'
+    description: 'Siste-, nestsiste- eller tredjesiste-periode, der 1 vil si siste periode nærmest beregningsdato, og 3 vil si tredje siste periode lengst tilbake i tid.'
     example: 1
     enum:
       - 1
