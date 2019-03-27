@@ -136,6 +136,7 @@ components:
               $ref: '#/components/schemas/DagpengegrunnlagResultat'
             inntekt:
               type: array
+              description: Hvis manuelt grunnlag er satt så vil tom Inntekt returneres.
               items:
                 $ref: '#/components/schemas/Inntekt'
     DagpengegrunnlagInnParametere:
@@ -189,10 +190,8 @@ components:
         beregningsregel:
           type: string
           example: ORDINAER_ETTAAR
+          description: Beskriver hvilken regel som er lagt til grunn. ORDINAER_OVER_6G_SISTE_2019 og ORDINAER_OVER_6G_3SISTE_2019 betyr at grunnlag er beregnet av henholdsvis siste 12 eller 36 måneders inntekt. MANUELL_OVER_6G og MANUELL_UNDER_6G betyr henholdsvis om manuelt grunnlag ble kuttet ned fordi det oversteg 6G eller ikke. VERNEPLIKT betyr at grunnlag ble satt utifra regler for verneplikt.
           enum:
-            - ORDINAER_ETTAAR
-            - ORDINAER_TREAAR
-            - ORDINAER_OVER_6G
             - ORDINAER_OVER_6G_SISTE_2019
             - ORDINAER_OVER_6G_3SISTE_2019
             - MANUELL_UNDER_6G
@@ -283,7 +282,7 @@ components:
           description: Inntekt for perioden
         periode:
           type: integer
-          description: 'Siste-, nestsiste- eller tredjesiste-periode.'
+          description: 'Siste-, nestsiste- eller tredjesiste-periode, der 1 vil si siste periode nærmest beregningsdato, og 3 vil si tredje siste periode lengst tilbake i tid.'
           example: 1
           enum:
             - 1
@@ -306,10 +305,12 @@ components:
       properties:
         foersteMaaned:
           type: string
-          example: 2019-01
+          example: 2018-01
+          description: Første måned kronologisk i perioden
         sisteMaaned:
           type: string
-          example: 2018-01
+          example: 2019-01
+          description: Siste måned kronologisk i perioden
     InntjeningsperiodeParametre:
       type: object
       required:
