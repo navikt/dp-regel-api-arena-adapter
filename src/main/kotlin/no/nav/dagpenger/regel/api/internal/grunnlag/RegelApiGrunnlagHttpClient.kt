@@ -8,7 +8,6 @@ import com.github.kittinunf.result.Result
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsParametere
 import no.nav.dagpenger.regel.api.internal.models.GrunnlagSubsumsjon
-import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.internal.models.TaskResponse
 
 class RegelApiGrunnlagHttpClient(private val regelApiUrl: String) {
@@ -24,13 +23,7 @@ class RegelApiGrunnlagHttpClient(private val regelApiUrl: String) {
             beregningsdato = payload.beregningsdato,
             harAvtjentVerneplikt = payload.harAvtjentVerneplikt,
             oppfyllerKravTilFangstOgFisk = payload.oppfyllerKravTilFangstOgFisk,
-            manueltGrunnlag = payload.grunnlag,
-            bruktInntektsPeriode = payload.bruktInntektsPeriode?.let {
-                InntektsPeriode(
-                    førsteMåned = it.foersteMaaned,
-                    sisteMåned = it.sisteMaaned
-                )
-            }
+            manueltGrunnlag = payload.grunnlag
         )
 
         val json = jsonAdapter.toJson(internalParameters)

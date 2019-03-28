@@ -6,6 +6,5 @@ data class SatsParametere(
     val aktorId: String,
     val vedtakId: Int,
     val beregningsdato: LocalDate,
-    val bruktInntektsPeriode: InntektsPeriode? = null,
     val antallBarn: Int? = 0
 )
