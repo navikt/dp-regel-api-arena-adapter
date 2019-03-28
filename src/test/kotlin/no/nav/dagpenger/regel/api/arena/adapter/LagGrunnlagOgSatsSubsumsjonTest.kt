@@ -1,6 +1,5 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
-import no.nav.dagpenger.regel.api.arena.adapter.v1.mapGrunnlagOgSatsSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.mergeGrunnlagOgSatsSubsumsjon
 import no.nav.dagpenger.regel.api.internal.models.GrunnlagFaktum
 import no.nav.dagpenger.regel.api.internal.models.GrunnlagResultat
@@ -31,6 +30,7 @@ class LagGrunnlagOgSatsSubsumsjonTest {
                 "888",
                 false,
                 false,
+                0,
                 0
             ),
             GrunnlagResultat(
@@ -56,12 +56,12 @@ class LagGrunnlagOgSatsSubsumsjonTest {
                 "222",
                 999,
                 LocalDate.of(20, 2, 19),
-                10000,
-                0
+                10000
             ),
             SatsResultat(
                 240,
-                240
+                240,
+                false
             )
         )
 
@@ -77,34 +77,5 @@ class LagGrunnlagOgSatsSubsumsjonTest {
 
         assertEquals(240, grunnlagOgSatsSubsumsjon.resultat.sats.dagsats)
         assertEquals(240, grunnlagOgSatsSubsumsjon.resultat.sats.ukesats)
-    }
-
-    @Test
-    fun ` skal kunne mappe grunnlagOgSatsSubsumsjon `() {
-
-        val satsSubsumsjon = SatsSubsumsjon(
-            "123",
-            LocalDateTime.now(),
-            LocalDateTime.now(),
-            SatsFaktum(
-                "222",
-                999,
-                LocalDate.now(),
-                10000,
-                0
-            ),
-            SatsResultat(
-                240,
-                240
-            )
-
-        )
-
-        val grunnlagSatsSubsumsjon =
-            mapGrunnlagOgSatsSubsumsjon(satsSubsumsjon)
-
-        assertEquals("222", grunnlagSatsSubsumsjon.parametere.aktorId)
-        assertEquals(240, grunnlagSatsSubsumsjon.resultat.sats.dagsats)
-        assertEquals(240, grunnlagSatsSubsumsjon.resultat.sats.ukesats)
     }
 }

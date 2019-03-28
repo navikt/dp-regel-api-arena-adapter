@@ -38,8 +38,7 @@ class GrunnlagOgSatsSpec {
         val synchronousSats: SynchronousSats = mockk()
 
         every { runBlocking { synchronousGrunnlag.getGrunnlagSynchronously(parametere = any()) } } returns grunnlagSubsumsjon()
-        every { runBlocking { synchronousSats.getSatsSynchronously(parametere = any()) } } returns satsSubsumson()
-        // every { runBlocking { synchronousPeriode.getPeriodeSynchronously(parametere = any()) } } returns periodeSubsumsjon()
+        every { runBlocking { synchronousSats.getSatsSynchronously(parametere = any()) } } returns satsSubsumsjon()
 
         withTestApplication({
             regelApiAdapter(
@@ -71,9 +70,9 @@ class GrunnlagOgSatsSpec {
     }
 
     private val expectedJson =
-        """{"grunnlagSubsumsjonsId":"1234","satsSubsumsjonsId":"4567","opprettet":"2000-08-11T15:30:11","utfort":"2000-08-11T15:30:11","parametere":{"aktorId":"1234","vedtakId":123,"beregningsdato":"2019-02-10","inntektsId":"1234","harAvtjentVerneplikt":false,"oppfyllerKravTilFangstOgFisk":false,"antallBarn":0,"grunnlag":0},"resultat":{"grunnlag":{"avkortet":12345,"uavkortet":12345},"sats":{"dagsats":124,"ukesats":234},"beregningsRegel":"VERNEPLIKT","benyttet90ProsentRegel":false},"inntekt":[{"inntekt":4999423,"periode":1,"inntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"},"inneholderNaeringsinntekter":false,"andel":111}]}"""
+        """{"grunnlagSubsumsjonsId":"1234","satsSubsumsjonsId":"4567","opprettet":"2000-08-11T15:30:11","utfort":"2000-08-11T15:30:11","parametere":{"aktorId":"1234","vedtakId":123,"beregningsdato":"2019-02-10","inntektsId":"1234","harAvtjentVerneplikt":false,"oppfyllerKravTilFangstOgFisk":false,"antallBarn":0,"grunnlag":12345},"resultat":{"grunnlag":{"avkortet":12345,"uavkortet":12345},"sats":{"dagsats":124,"ukesats":234},"beregningsRegel":"VERNEPLIKT","benyttet90ProsentRegel":false},"inntekt":[{"inntekt":4999423,"periode":1,"inntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"},"inneholderNaeringsinntekter":false,"andel":111}]}"""
 
-    private fun satsSubsumson(): SatsSubsumsjon {
+    private fun satsSubsumsjon(): SatsSubsumsjon {
         return SatsSubsumsjon(
             subsumsjonsId = "4567",
             opprettet = localDateTime,
@@ -82,12 +81,12 @@ class GrunnlagOgSatsSpec {
                 aktorId = "1234",
                 vedtakId = 123,
                 beregningsdato = beregningsdato,
-                grunnlag = 0,
                 antallBarn = 0
             ),
             resultat = SatsResultat(
                 dagsats = 124,
-                ukesats = 234
+                ukesats = 234,
+                benyttet90ProsentRegel = false
             )
 
         )
@@ -104,7 +103,8 @@ class GrunnlagOgSatsSpec {
                 beregningsdato = beregningsdato,
                 inntektsId = "1234",
                 harAvtjentVerneplikt = false,
-                oppfyllerKravTilFangstOgFisk = false
+                oppfyllerKravTilFangstOgFisk = false,
+                manueltGrunnlag = 12345
 
             ),
             resultat = GrunnlagResultat(

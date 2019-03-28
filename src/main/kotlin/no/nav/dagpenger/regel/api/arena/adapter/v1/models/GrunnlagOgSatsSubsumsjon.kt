@@ -22,7 +22,7 @@ data class GrunnlagOgSatsRegelFaktum(
     val harAvtjentVerneplikt: Boolean? = null,
     val oppfyllerKravTilFangstOgFisk: Boolean? = null,
     val antallBarn: Int,
-    val grunnlag: Int
+    val grunnlag: Int?
 )
 
 class GrunnlagOgSatsResultat(
