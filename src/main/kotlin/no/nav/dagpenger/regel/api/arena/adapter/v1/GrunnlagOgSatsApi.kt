@@ -30,26 +30,16 @@ fun Route.GrunnlagOgSatsApi(
     route("/dagpengegrunnlag") {
         post {
             val parametere = call.receive<GrunnlagOgSatsParametere>()
-            var grunnlagOgSatsSubsumsjon: GrunnlagOgSatsSubsumsjon
 
-            if (parametere.grunnlag == null) {
-                val grunnlagSubsumsjon = synchronousGrunnlag.getGrunnlagSynchronously(parametere)
+            val grunnlagSubsumsjon = synchronousGrunnlag.getGrunnlagSynchronously(parametere)
 
-                parametere.grunnlag = grunnlagSubsumsjon.resultat.avkortet
+            val satsSubsumsjon = synchronousSats.getSatsSynchronously(parametere)
 
-                val satsSubsumsjon = synchronousSats.getSatsSynchronously(parametere)
-
-                grunnlagOgSatsSubsumsjon =
-                    mergeGrunnlagOgSatsSubsumsjon(
-                        grunnlagSubsumsjon,
-                        satsSubsumsjon
-                    )
-            } else {
-                val satsSubsumsjon = synchronousSats.getSatsSynchronously(parametere)
-
-                grunnlagOgSatsSubsumsjon =
-                    mapGrunnlagOgSatsSubsumsjon(satsSubsumsjon)
-            }
+            val grunnlagOgSatsSubsumsjon =
+                mergeGrunnlagOgSatsSubsumsjon(
+                    grunnlagSubsumsjon,
+                    satsSubsumsjon
+                )
 
             call.respond(HttpStatusCode.OK, grunnlagOgSatsSubsumsjon)
         }
@@ -86,7 +76,7 @@ fun mergeGrunnlagOgSatsSubsumsjon(
             grunnlagFaktum.harAvtjentVerneplikt,
             grunnlagFaktum.oppfyllerKravTilFangstOgFisk,
             satsFaktum.antallBarn,
-            satsFaktum.grunnlag
+            grunnlagFaktum.manueltGrunnlag
         ),
         GrunnlagOgSatsResultat(
             Grunnlag(
@@ -95,7 +85,7 @@ fun mergeGrunnlagOgSatsSubsumsjon(
             ),
             Sats(satsResultat.dagsats, satsResultat.ukesats),
             GrunnlagOgSatsResultat.Beregningsregel.VERNEPLIKT,
-            false
+            satsResultat.benyttet90ProsentRegel
         ),
         grunnlagSubsumsjon.inntekt.map {
             Inntekt(
@@ -109,35 +99,6 @@ fun mergeGrunnlagOgSatsSubsumsjon(
                 it.andel
             )
         }.toSet()
-    )
-}
-
-fun mapGrunnlagOgSatsSubsumsjon(
-    satsSubsumsjon: SatsSubsumsjon
-): GrunnlagOgSatsSubsumsjon {
-
-    val satsFaktum = satsSubsumsjon.faktum
-    val satsResultat = satsSubsumsjon.resultat
-
-    return GrunnlagOgSatsSubsumsjon(
-        satsSubsumsjonsId = satsSubsumsjon.subsumsjonsId,
-        opprettet = satsSubsumsjon.opprettet,
-        utfort = satsSubsumsjon.utfort,
-        parametere = GrunnlagOgSatsRegelFaktum(
-            satsFaktum.aktorId,
-            satsFaktum.vedtakId,
-            satsFaktum.beregningsdato,
-            antallBarn = satsFaktum.antallBarn,
-            grunnlag = satsFaktum.grunnlag
-        ),
-        resultat = GrunnlagOgSatsResultat(
-            sats = Sats(
-                satsResultat.dagsats,
-                satsResultat.ukesats
-            ),
-            beregningsRegel = GrunnlagOgSatsResultat.Beregningsregel.MANUELL_UNDER_6G,
-            benyttet90ProsentRegel = false
-        )
     )
 }
 

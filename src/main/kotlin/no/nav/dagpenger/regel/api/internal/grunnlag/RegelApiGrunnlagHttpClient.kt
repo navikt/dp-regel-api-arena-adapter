@@ -24,6 +24,7 @@ class RegelApiGrunnlagHttpClient(private val regelApiUrl: String) {
             beregningsdato = payload.beregningsdato,
             harAvtjentVerneplikt = payload.harAvtjentVerneplikt,
             oppfyllerKravTilFangstOgFisk = payload.oppfyllerKravTilFangstOgFisk,
+            manueltGrunnlag = payload.grunnlag,
             bruktInntektsPeriode = payload.bruktInntektsPeriode?.let {
                 InntektsPeriode(
                     førsteMåned = it.foersteMaaned,

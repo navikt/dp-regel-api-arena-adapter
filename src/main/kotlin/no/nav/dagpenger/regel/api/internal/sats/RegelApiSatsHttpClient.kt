@@ -7,6 +7,7 @@ import com.github.kittinunf.fuel.moshi.responseObject
 import com.github.kittinunf.result.Result
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsParametere
+import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.internal.models.SatsParametere
 import no.nav.dagpenger.regel.api.internal.models.SatsSubsumsjon
 import no.nav.dagpenger.regel.api.internal.models.TaskResponse
@@ -21,9 +22,13 @@ class RegelApiSatsHttpClient(private val regelApiUrl: String) {
             aktorId = payload.aktorId,
             vedtakId = payload.vedtakId,
             beregningsdato = payload.beregningsdato,
-            grunnlag = payload.grunnlag,
-            antallBarn = payload.antallBarn
-
+            antallBarn = payload.antallBarn,
+            bruktInntektsPeriode = payload.bruktInntektsPeriode?.let {
+                InntektsPeriode(
+                    førsteMåned = it.foersteMaaned,
+                    sisteMåned = it.sisteMaaned
+                )
+            }
         )
 
         val json = jsonAdapter.toJson(internalParametere)
