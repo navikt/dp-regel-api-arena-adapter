@@ -14,6 +14,7 @@ import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.path
 import io.ktor.response.respond
+import io.ktor.response.respondText
 import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
@@ -26,6 +27,7 @@ import no.nav.dagpenger.regel.api.internal.grunnlag.SynchronousGrunnlag
 import no.nav.dagpenger.regel.api.internal.sats.RegelApiSatsHttpClient
 import no.nav.dagpenger.regel.api.internal.sats.SynchronousSats
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InntjeningsperiodeApi
+import no.nav.dagpenger.regel.api.arena.adapter.v1.InvalidInnteksperiodeException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektOgPeriodeApi
 import no.nav.dagpenger.regel.api.internal.minsteinntekt.RegelApiMinsteinntektHttpClient
 import no.nav.dagpenger.regel.api.internal.minsteinntekt.SynchronousMinsteinntekt
@@ -94,6 +96,9 @@ fun Application.regelApiAdapter(
         exception<JsonEncodingException> { cause ->
             badRequest(cause)
         }
+        exception<InvalidInnteksperiodeException> { cause ->
+            badRequest(cause, cause.message)
+        }
         exception<RegelApiTimeoutException> { cause ->
             gatewayTimeout(cause)
         }
@@ -110,10 +115,14 @@ fun Application.regelApiAdapter(
 }
 
 private suspend fun <T : Throwable> PipelineContext<Unit, ApplicationCall>.badRequest(
-    cause: T
+    cause: T,
+    message: String? = null
 ) {
-    call.respond(HttpStatusCode.BadRequest)
-    throw cause
+    if (message != null)
+        call.respondText(status = HttpStatusCode.BadRequest, text = message)
+    else
+        call.respond(HttpStatusCode.BadRequest)
+    LOGGER.error { "Bad request: ${cause.stackTrace}" }
 }
 
 private suspend fun <T : Throwable> PipelineContext<Unit, ApplicationCall>.gatewayTimeout(

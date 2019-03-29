@@ -31,6 +31,35 @@ class MinsteinntektOgPeriodeApiSpec() {
     val localDateTime = LocalDateTime.of(2000, 8, 11, 15, 30, 11)
 
     @Test
+    fun `Minsteinntekt and Periode API specification test - should validate bruktInntektsPeriode`() {
+        withTestApplication({
+            regelApiAdapter(mockk(), mockk(), mockk(), mockk())
+        }) {
+            runBlocking { handleRequest(HttpMethod.Post, "/v1/minsteinntekt") {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(
+                    """
+                    {
+                      "aktorId": "1234",
+                      "vedtakId": 5678,
+                      "beregningsdato": "2019-02-27",
+                      "harAvtjentVerneplikt": false,
+                      "oppfyllerKravTilFangstOgFisk": false,
+                      "bruktInntektsPeriode": {
+                            "foersteMaaned": "2019-01",
+                            "sisteMaaned": "2018-01"
+                       }
+                    }
+                """.trimIndent()
+                ) }
+            }.apply {
+                assertEquals(HttpStatusCode.BadRequest, response.status())
+                assertEquals("Invalid inntektsPeriode: foersteMaaned=2019-01 is after sisteMaaned=2018-01", response.content)
+            }
+        }
+    }
+
+    @Test
     fun `Minsteinntekt and Periode API specification test - Should match json field names and formats`() {
 
         val synchronousMinsteinntekt: SynchronousMinsteinntekt = mockk()
@@ -56,9 +85,12 @@ class MinsteinntektOgPeriodeApiSpec() {
                       "vedtakId": 5678,
                       "beregningsdato": "2019-02-27",
                       "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
+                      "oppfyllerKravTilFangstOgFisk": false,
+                      "bruktInntektsPeriode": {
+                            "foersteMaaned": "2018-01",
+                            "sisteMaaned": "2019-01"
+                       }
                     }
-
                 """.trimIndent()
                 )
             }.apply {
@@ -67,7 +99,6 @@ class MinsteinntektOgPeriodeApiSpec() {
             }
         }
     }
-
     private val expectedJson =
         """{"minsteinntektSubsumsjonsId":"12345","periodeSubsumsjonsId":"1234","opprettet":"2000-08-11T15:30:11","utfort":"2000-08-11T15:30:11","parametere":{"aktorId":"1234","vedtakId":123,"beregningsdato":"2019-02-10","inntektsId":"13445","harAvtjentVerneplikt":false,"oppfyllerKravTilFangstOgFisk":false,"bruktInntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"}},"resultat":{"oppfyllerKravTilMinsteArbeidsinntekt":true,"periodeAntallUker":104},"inntekt":[{"inntekt":4999423,"periode":1,"inntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"},"inneholderNaeringsinntekter":false,"andel":111}]}"""
 
