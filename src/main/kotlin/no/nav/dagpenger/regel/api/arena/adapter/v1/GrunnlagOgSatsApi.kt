@@ -111,7 +111,7 @@ fun findBeregningsregel(grunnlagResultat: GrunnlagResultat): GrunnlagOgSatsResul
         "Verneplikt" -> GrunnlagOgSatsResultat.Beregningsregel.VERNEPLIKT
         "Manuell under 6G" -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_UNDER_6G
         "Manuell over 6G" -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_OVER_6G
-        else -> throw FeilBeregningsregelException("Ukjent beregningsregel")
+        else -> throw FeilBeregningsregelException("Ukjent beregningsregel: '$beregningsregel'")
     }
 }
 
