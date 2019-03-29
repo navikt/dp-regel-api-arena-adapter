@@ -4,5 +4,5 @@ value:
   vedtakId: 1234
   beregningsdato: '2019-01-11'
   bruktInntektsPeriode:
-    foersteMaaned: 2019-01
-    sisteMaaned: 2018-01
+    foersteMaaned: 2018-01
+    sisteMaaned: 2019-01

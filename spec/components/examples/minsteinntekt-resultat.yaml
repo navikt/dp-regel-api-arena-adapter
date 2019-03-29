@@ -22,19 +22,19 @@ value:
       andel: 32212
       inneholderNaeringsinntekter: false
       inntektsPeriode:
-        foersteMaaned: 2018-06
+        foersteMaaned: 2018-07
         sisteMaaned: 2019-06
     - inntekt: 1892112
       periode: 2
       andel: 19921
       inneholderNaeringsinntekter: false
       inntektsPeriode:
-        foersteMaaned: 2017-06
-        sisteMaaned: 2016-06
+        foersteMaaned: 2017-07
+        sisteMaaned: 2018-06
     - inntekt: 297090
       periode: 3
       andel: 1212
       inneholderNaeringsinntekter: false
       inntektsPeriode:
-        foersteMaaned: 2017-06
-        sisteMaaned: 2016-06
+        foersteMaaned: 2016-07
+        sisteMaaned: 2017-06
