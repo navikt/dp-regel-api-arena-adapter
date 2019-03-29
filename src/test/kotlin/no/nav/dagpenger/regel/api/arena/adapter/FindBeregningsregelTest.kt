@@ -1,9 +1,11 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
+import no.nav.dagpenger.regel.api.arena.adapter.v1.FeilBeregningsregelException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.findBeregningsregel
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsResultat
 import no.nav.dagpenger.regel.api.internal.models.GrunnlagResultat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 
 class FindBeregningsregelTest {
@@ -55,5 +57,12 @@ class FindBeregningsregelTest {
         val grunnlagResultat = GrunnlagResultat(123, 123, "Manuell over 6G")
 
         assertEquals(GrunnlagOgSatsResultat.Beregningsregel.MANUELL_OVER_6G, findBeregningsregel(grunnlagResultat))
+    }
+
+    @Test
+    fun `Skal gi feil dersom det er en ukjent regel benyttet`() {
+        val grunnlagResultat = GrunnlagResultat(123, 123, "Ukjent")
+
+        assertThrows<FeilBeregningsregelException> { findBeregningsregel(grunnlagResultat) }
     }
 }

@@ -105,31 +105,14 @@ fun mergeGrunnlagOgSatsSubsumsjon(
 
 fun findBeregningsregel(grunnlagResultat: GrunnlagResultat): GrunnlagOgSatsResultat.Beregningsregel {
     val beregningsregel = grunnlagResultat.beregningsregel
-    return when(beregningsregel) {
-        "ArbeidsinntektSiste12","FangstOgFiskSiste12" -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_SISTE_2019
+    return when (beregningsregel) {
+        "ArbeidsinntektSiste12", "FangstOgFiskSiste12" -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_SISTE_2019
         "ArbeidsinntektSiste36", "FangstOgFiskSiste36" -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_3SISTE_2019
         "Verneplikt" -> GrunnlagOgSatsResultat.Beregningsregel.VERNEPLIKT
         "Manuell under 6G" -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_UNDER_6G
         "Manuell over 6G" -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_OVER_6G
         else -> throw FeilBeregningsregelException("Ukjent beregningsregel")
     }
-}
-
-    val beregningsregel = grunnlagResultat.beregningsregel
-
-    if (beregningsregel == "ArbeidsinntektSiste12" || beregningsregel == "FangstOgFiskSiste12") {
-        return GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_SISTE_2019
-    } else if (beregningsregel == "ArbeidsinntektSiste36" || beregningsregel == "FangstOgFiskSiste36") {
-        return GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_3SISTE_2019
-    } else if (beregningsregel == "Verneplikt") {
-        return GrunnlagOgSatsResultat.Beregningsregel.VERNEPLIKT
-    } else if (beregningsregel == "Manuell under 6G") {
-        return GrunnlagOgSatsResultat.Beregningsregel.MANUELL_UNDER_6G
-    } else if (beregningsregel == "Manuell over 6G") {
-        return GrunnlagOgSatsResultat.Beregningsregel.MANUELL_OVER_6G
-    }
-
-    throw FeilBeregningsregelException("Ukjent beregningsregel")
 }
 
 fun compareFields(grunnlagFaktum: GrunnlagFaktum, satsFaktum: SatsFaktum): Boolean {
