@@ -104,6 +104,16 @@ fun mergeGrunnlagOgSatsSubsumsjon(
 }
 
 fun findBeregningsregel(grunnlagResultat: GrunnlagResultat): GrunnlagOgSatsResultat.Beregningsregel {
+    val beregningsregel = grunnlagResultat.beregningsregel
+    return when(beregningsregel) {
+        "ArbeidsinntektSiste12","FangstOgFiskSiste12" -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_SISTE_2019
+        "ArbeidsinntektSiste36", "FangstOgFiskSiste36" -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_3SISTE_2019
+        "Verneplikt" -> GrunnlagOgSatsResultat.Beregningsregel.VERNEPLIKT
+        "Manuell under 6G" -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_UNDER_6G
+        "Manuell over 6G" -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_OVER_6G
+        else -> throw FeilBeregningsregelException("Ukjent beregningsregel")
+    }
+}
 
     val beregningsregel = grunnlagResultat.beregningsregel
 
