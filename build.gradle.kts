@@ -33,6 +33,8 @@ java {
     targetCompatibility = JavaVersion.VERSION_11
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions.jvmTarget = "1.8" }
+
 val ktorVersion = "1.1.1"
 val fuelVersion = "2.0.1"
 val kotlinLoggingVersion = "1.6.22"

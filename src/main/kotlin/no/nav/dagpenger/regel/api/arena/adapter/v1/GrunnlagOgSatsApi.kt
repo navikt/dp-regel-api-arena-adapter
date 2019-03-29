@@ -17,6 +17,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Sats
 import no.nav.dagpenger.regel.api.internal.grunnlag.SynchronousGrunnlag
 import no.nav.dagpenger.regel.api.internal.models.GrunnlagFaktum
+import no.nav.dagpenger.regel.api.internal.models.GrunnlagResultat
 import no.nav.dagpenger.regel.api.internal.models.GrunnlagSubsumsjon
 import no.nav.dagpenger.regel.api.internal.models.SatsFaktum
 import no.nav.dagpenger.regel.api.internal.models.SatsSubsumsjon
@@ -84,7 +85,7 @@ fun mergeGrunnlagOgSatsSubsumsjon(
                 grunnlagResultat.uavkortet
             ),
             Sats(satsResultat.dagsats, satsResultat.ukesats),
-            GrunnlagOgSatsResultat.Beregningsregel.VERNEPLIKT,
+            findBeregningsregel(grunnlagResultat),
             satsResultat.benyttet90ProsentRegel
         ),
         grunnlagSubsumsjon.inntekt.map {
@@ -102,6 +103,18 @@ fun mergeGrunnlagOgSatsSubsumsjon(
     )
 }
 
+fun findBeregningsregel(grunnlagResultat: GrunnlagResultat): GrunnlagOgSatsResultat.Beregningsregel {
+    val beregningsregel = grunnlagResultat.beregningsregel
+    return when (beregningsregel) {
+        "ArbeidsinntektSiste12", "FangstOgFiskSiste12" -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_SISTE_2019
+        "ArbeidsinntektSiste36", "FangstOgFiskSiste36" -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_3SISTE_2019
+        "Verneplikt" -> GrunnlagOgSatsResultat.Beregningsregel.VERNEPLIKT
+        "Manuell under 6G" -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_UNDER_6G
+        "Manuell over 6G" -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_OVER_6G
+        else -> throw FeilBeregningsregelException("Ukjent beregningsregel: '$beregningsregel'")
+    }
+}
+
 fun compareFields(grunnlagFaktum: GrunnlagFaktum, satsFaktum: SatsFaktum): Boolean {
 
     if (grunnlagFaktum.aktorId.equals(satsFaktum.aktorId) &&
@@ -112,3 +125,5 @@ fun compareFields(grunnlagFaktum: GrunnlagFaktum, satsFaktum: SatsFaktum): Boole
     }
     return false
 }
+
+class FeilBeregningsregelException(message: String) : RuntimeException(message)
