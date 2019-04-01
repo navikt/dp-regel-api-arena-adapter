@@ -1,20 +1,11 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
+import com.github.kittinunf.fuel.httpPost
+import com.github.kittinunf.result.Result
 import com.squareup.moshi.JsonAdapter
 import cucumber.api.java8.No
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
-import io.ktor.server.testing.withTestApplication
-import io.mockk.mockkClass
-import no.nav.dagpenger.regel.api.internal.grunnlag.SynchronousGrunnlag
-import no.nav.dagpenger.regel.api.internal.sats.SynchronousSats
-import no.nav.dagpenger.regel.api.internal.minsteinntekt.SynchronousMinsteinntekt
-import no.nav.dagpenger.regel.api.internal.periode.SynchronousPeriode
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
 import java.time.LocalDate
 import kotlin.test.assertEquals
 
@@ -24,19 +15,18 @@ class MinsteinntektApiV1Steps : No {
 
     val minsteinntektInnParametereAdapter: JsonAdapter<MinsteinntektOgPeriodeParametere> =
         moshiInstance.adapter<MinsteinntektOgPeriodeParametere>(
-            MinsteinntektOgPeriodeParametere::class.java)
+            MinsteinntektOgPeriodeParametere::class.java
+        )
     val minsteinntektBeregningAdapter: JsonAdapter<MinsteinntektOgPeriodeSubsumsjon> =
         moshiInstance.adapter<MinsteinntektOgPeriodeSubsumsjon>(
-            MinsteinntektOgPeriodeSubsumsjon::class.java)
+            MinsteinntektOgPeriodeSubsumsjon::class.java
+        )
 
     init {
 
-        val synchronousMinsteinntekt: SynchronousMinsteinntekt = mockkClass(type = SynchronousMinsteinntekt::class)
-        val synchronousPeriode: SynchronousPeriode = mockkClass(type = SynchronousPeriode::class)
-        val synchronousGrunnlag: SynchronousGrunnlag = mockkClass(type = SynchronousGrunnlag::class)
-        val synchronousSats: SynchronousSats = mockkClass(type = SynchronousSats::class)
         lateinit var minsteinntektInnParametere: MinsteinntektOgPeriodeParametere
         lateinit var minsteinntektBeregning: MinsteinntektOgPeriodeSubsumsjon
+
         Gitt("at søker med aktør id {string} med vedtak id {int} med beregningsdato {string}") { aktørId: String, vedtakId: Int, beregningsDato: String ->
             minsteinntektInnParametere =
                 MinsteinntektOgPeriodeParametere(
@@ -47,20 +37,8 @@ class MinsteinntektApiV1Steps : No {
         }
 
         Når("digidag skal vurdere minsteinntektkrav") {
-            withTestApplication({ regelApiAdapter(
-                synchronousMinsteinntekt,
-                synchronousPeriode,
-                synchronousGrunnlag,
-                synchronousSats
-            ) }) {
-                handleRequest(HttpMethod.Post, v1MinsteinntektPath) {
-                    addHeader(HttpHeaders.ContentType, "application/json")
-                    setBody(minsteinntektInnParametereAdapter.toJson(minsteinntektInnParametere))
-                }.apply {
-                    assertEquals(HttpStatusCode.OK, response.status())
-                    minsteinntektBeregning = response.content.parseJsonFrom(minsteinntektBeregningAdapter)
-                }
-            }
+            val response = apiRequest(minsteinntektInnParametereAdapter.toJson(minsteinntektInnParametere))
+            minsteinntektBeregning = response.parseJsonFrom(minsteinntektBeregningAdapter)
         }
 
         Så("kravet til minsteinntekt er {string}") { utfall: String ->
@@ -186,6 +164,23 @@ class MinsteinntektApiV1Steps : No {
         Så("skal denne trekkes fra") {
             // Write code here that turns the phrase above into concrete actions
             throw cucumber.api.PendingException()
+        }
+    }
+
+    private fun apiRequest(body: String): String {
+        val (_, response, result) = with(
+            "https://dp-regel-api-arena-adapter.nais.preprod.local/v1/minsteinntekt".httpPost()
+                .header("Content-Type" to "application/json")
+                .body(body)
+        ) {
+            responseString()
+        }
+
+        return when (result) {
+            is Result.Failure -> throw AssertionError(
+                "Failed post to adapter. Response message ${response.responseMessage}. Error message: ${result.error.message}"
+            )
+            is Result.Success -> result.get()
         }
     }
 }

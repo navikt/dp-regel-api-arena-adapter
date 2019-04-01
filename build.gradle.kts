@@ -90,6 +90,23 @@ spotless {
     }
 }
 
+sourceSets {
+    create("uat") {
+        java.srcDir(file("src/uatTests/kotlin"))
+        resources.srcDir(file("src/uatTests/resources"))
+        compileClasspath += sourceSets["main"].output + configurations["testRuntimeClasspath"]
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+tasks.register<Test>("uat") {
+    description = "Runs the user acceptance tests."
+    group = "verification"
+    testClassesDirs = sourceSets["uat"].output.classesDirs
+    classpath = sourceSets["uat"].runtimeClasspath
+    mustRunAfter(tasks["test"])
+}
+
 tasks.withType<Test> {
     useJUnitPlatform()
     testLogging {
