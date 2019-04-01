@@ -21,7 +21,8 @@ class RegelApiSatsHttpClient(private val regelApiUrl: String) {
             aktorId = payload.aktorId,
             vedtakId = payload.vedtakId,
             beregningsdato = payload.beregningsdato,
-            antallBarn = payload.antallBarn
+            antallBarn = payload.antallBarn,
+            manueltGrunnlag = payload.grunnlag
         )
 
         val json = jsonAdapter.toJson(internalParametere)
