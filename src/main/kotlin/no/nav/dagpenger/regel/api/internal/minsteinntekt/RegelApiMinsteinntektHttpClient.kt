@@ -44,7 +44,7 @@ class RegelApiMinsteinntektHttpClient(private val regelApiUrl: String) {
             }
         return when (result) {
             is Result.Failure -> throw RegelApiMinsteinntektHttpClientException(
-                "Failed to run minsteinntekt. Response message ${response.responseMessage}. Error message: ${result.error.message}. Response: ${response.data}"
+                "Failed to run minsteinntekt. Response message ${response.responseMessage}. Error message: ${result.error.message}. Response: ${response.body().asString("application/json")}"
             )
             is Result.Success ->
                 response.headers["Location"].first()
@@ -59,7 +59,7 @@ class RegelApiMinsteinntektHttpClient(private val regelApiUrl: String) {
             with(url.httpGet()) { responseObject(moshiDeserializerOf(jsonAdapter)) }
         return when (result) {
             is Result.Failure -> throw RegelApiMinsteinntektHttpClientException(
-                "Failed to run minsteinntekt. Response message ${response.responseMessage}. Error message: ${result.error.message}. Response: ${response.data}"
+                "Failed to run minsteinntekt. Response message ${response.responseMessage}. Error message: ${result.error.message}. Response: ${response.body().asString("application/json")}"
             )
             is Result.Success -> result.get()
         }
