@@ -44,7 +44,7 @@ class RegelApiMinsteinntektHttpClient(private val regelApiUrl: String) {
             }
         return when (result) {
             is Result.Failure -> throw RegelApiMinsteinntektHttpClientException(
-                "Failed to run minsteinntekt. Response message ${response.responseMessage}. Error message: ${result.error.message}"
+                "Failed to run minsteinntekt. Response message ${response.responseMessage}. Error message: ${result.error.message}. Response: ${response.data}"
             )
             is Result.Success ->
                 response.headers["Location"].first()
