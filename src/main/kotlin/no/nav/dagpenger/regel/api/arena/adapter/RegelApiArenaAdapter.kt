@@ -122,7 +122,7 @@ private suspend fun <T : Throwable> PipelineContext<Unit, ApplicationCall>.badRe
         call.respondText(status = HttpStatusCode.BadRequest, text = message)
     else
         call.respond(HttpStatusCode.BadRequest)
-    LOGGER.error { "Bad request: ${cause.stackTrace}" }
+    LOGGER.error("Bad request", cause)
 }
 
 private suspend fun <T : Throwable> PipelineContext<Unit, ApplicationCall>.gatewayTimeout(
