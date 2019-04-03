@@ -33,7 +33,7 @@ class MinsteinntektOgPeriodeApiSpec() {
     @Test
     fun `Minsteinntekt and Periode API specification test - should validate bruktInntektsPeriode`() {
         withTestApplication({
-            regelApiAdapter(mockk(), mockk(), mockk(), mockk())
+            regelApiAdapter(mockk(), mockk(), mockk(), mockk(), mockk())
         }) {
             runBlocking { handleRequest(HttpMethod.Post, "/v1/minsteinntekt") {
                 addHeader(HttpHeaders.ContentType, "application/json")
@@ -72,6 +72,7 @@ class MinsteinntektOgPeriodeApiSpec() {
             regelApiAdapter(
                 synchronousMinsteinntekt,
                 synchronousPeriode,
+                mockk(),
                 mockk(),
                 mockk()
             )

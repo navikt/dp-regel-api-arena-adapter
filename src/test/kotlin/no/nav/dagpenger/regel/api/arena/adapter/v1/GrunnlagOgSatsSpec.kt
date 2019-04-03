@@ -45,7 +45,8 @@ class GrunnlagOgSatsSpec {
                 mockk(),
                 mockk(),
                 synchronousGrunnlag,
-                synchronousSats
+                synchronousSats,
+                mockk()
             )
         }) {
             handleRequest(HttpMethod.Post, "/v1/dagpengegrunnlag") {

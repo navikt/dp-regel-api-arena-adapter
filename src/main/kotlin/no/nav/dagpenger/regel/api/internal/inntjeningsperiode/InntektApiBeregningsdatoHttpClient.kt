@@ -9,7 +9,7 @@ import java.time.LocalDate
 class InntektApiBeregningsdatoHttpClient(private val inntektApiUrl: String) {
 
     fun getBeregningsdato(inntektsId: String): LocalDate {
-        val url = "$inntektApiUrl/beregningsdato/$inntektsId"
+        val url = "$inntektApiUrl/v1/beregningsdato/$inntektsId"
         val jsonAdapter = moshiInstance.adapter(BeregningsdatoResponse::class.java)
 
         val (_, response, result) =
