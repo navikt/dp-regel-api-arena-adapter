@@ -106,15 +106,15 @@ fun findBeregningsregel(grunnlagResultat: GrunnlagResultat): GrunnlagOgSatsResul
 
     return when {
         grunnlagResultat.beregningsregel == "Manuell" && grunnlagResultat.harAvkortet -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_OVER_6G
-        grunnlagResultat.beregningsregel == "Manuell" && !grunnlagResultat.harAvkortet -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_UNDER_6G
+        grunnlagResultat.beregningsregel == "Manuell" -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_UNDER_6G
         grunnlagResultat.beregningsregel == "ArbeidsinntektSiste12" && grunnlagResultat.harAvkortet -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_SISTE_2019
-        grunnlagResultat.beregningsregel == "ArbeidsinntektSiste12" && !grunnlagResultat.harAvkortet -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_ETTAAR
+        grunnlagResultat.beregningsregel == "ArbeidsinntektSiste12" -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_ETTAAR
         grunnlagResultat.beregningsregel == "FangstOgFiskSiste12" && grunnlagResultat.harAvkortet -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_SISTE_2019
-        grunnlagResultat.beregningsregel == "FangstOgFiskSiste12" && !grunnlagResultat.harAvkortet -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_ETTAAR
+        grunnlagResultat.beregningsregel == "FangstOgFiskSiste12" -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_ETTAAR
         grunnlagResultat.beregningsregel == "ArbeidsinntektSiste36" && grunnlagResultat.harAvkortet -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_3SISTE_2019
-        grunnlagResultat.beregningsregel == "ArbeidsinntektSiste36" && !grunnlagResultat.harAvkortet -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_TREAAR
+        grunnlagResultat.beregningsregel == "ArbeidsinntektSiste36" -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_TREAAR
         grunnlagResultat.beregningsregel == "FangstOgFiskSiste36" && grunnlagResultat.harAvkortet -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_3SISTE_2019
-        grunnlagResultat.beregningsregel == "FangstOgFiskSiste36" && !grunnlagResultat.harAvkortet -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_TREAAR
+        grunnlagResultat.beregningsregel == "FangstOgFiskSiste36" -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_TREAAR
         grunnlagResultat.beregningsregel == "Verneplikt" -> GrunnlagOgSatsResultat.Beregningsregel.VERNEPLIKT
         grunnlagResultat.beregningsregel == "Manuell under 6G" -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_UNDER_6G
         grunnlagResultat.beregningsregel == "Manuell over 6G" -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_OVER_6G
