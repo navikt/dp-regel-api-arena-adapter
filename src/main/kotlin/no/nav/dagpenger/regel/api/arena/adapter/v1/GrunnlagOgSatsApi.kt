@@ -88,7 +88,7 @@ fun mergeGrunnlagOgSatsSubsumsjon(
             findBeregningsregel(grunnlagResultat),
             satsResultat.benyttet90ProsentRegel
         ),
-        grunnlagSubsumsjon.inntekt.map {
+        grunnlagSubsumsjon.inntekt?.map {
             InntektGrunnlag(
                 it.inntekt,
                 it.periode,
@@ -98,7 +98,7 @@ fun mergeGrunnlagOgSatsSubsumsjon(
                 ),
                 it.inneholderFangstOgFisk
             )
-        }.toSet()
+        }?.toSet()
     )
 }
 
