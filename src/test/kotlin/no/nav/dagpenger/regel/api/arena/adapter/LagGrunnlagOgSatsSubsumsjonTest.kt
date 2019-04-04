@@ -5,7 +5,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsResultat
 import no.nav.dagpenger.regel.api.internal.models.GrunnlagFaktum
 import no.nav.dagpenger.regel.api.internal.models.GrunnlagResultat
 import no.nav.dagpenger.regel.api.internal.models.GrunnlagSubsumsjon
-import no.nav.dagpenger.regel.api.internal.models.Inntekt
+import no.nav.dagpenger.regel.api.internal.models.InntektGrunnlag
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.internal.models.SatsFaktum
 import no.nav.dagpenger.regel.api.internal.models.SatsResultat
@@ -40,12 +40,11 @@ class LagGrunnlagOgSatsSubsumsjonTest {
                 "ArbeidsinntektSiste12"
             ),
             setOf(
-                Inntekt(
+                InntektGrunnlag(
                     inntekt = 0,
                     periode = 1,
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2018, 2), YearMonth.of(2019, 1)),
-                    inneholderFangstOgFisk = false,
-                    andel = 0
+                    inneholderFangstOgFisk = false
                 )
             )
         )

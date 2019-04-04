@@ -12,7 +12,7 @@ import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.regel.api.arena.adapter.regelApiAdapter
 import no.nav.dagpenger.regel.api.internal.minsteinntekt.SynchronousMinsteinntekt
 import no.nav.dagpenger.regel.api.internal.periode.SynchronousPeriode
-import no.nav.dagpenger.regel.api.internal.models.Inntekt
+import no.nav.dagpenger.regel.api.internal.models.InntektMinsteinntekt
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.internal.models.MinsteinntektFaktum
 import no.nav.dagpenger.regel.api.internal.models.MinsteinntektResultat
@@ -147,7 +147,7 @@ class MinsteinntektOgPeriodeApiSpec() {
                 oppfyllerKravTilMinsteArbeidsinntekt = true
             ),
             inntekt = setOf(
-                Inntekt(
+                InntektMinsteinntekt(
                     inntekt = 4999423,
                     inntektsPeriode = InntektsPeriode(
                         førsteMåned = YearMonth.of(2018, 1),

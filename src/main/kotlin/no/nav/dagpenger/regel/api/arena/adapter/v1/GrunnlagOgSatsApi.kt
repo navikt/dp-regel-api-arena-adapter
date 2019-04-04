@@ -12,7 +12,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsParamete
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsRegelFaktum
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsResultat
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsSubsumsjon
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektGrunnlag
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Sats
 import no.nav.dagpenger.regel.api.internal.grunnlag.SynchronousGrunnlag
@@ -88,18 +88,17 @@ fun mergeGrunnlagOgSatsSubsumsjon(
             findBeregningsregel(grunnlagResultat),
             satsResultat.benyttet90ProsentRegel
         ),
-        grunnlagSubsumsjon.inntekt.map {
-            Inntekt(
+        grunnlagSubsumsjon.inntekt?.map {
+            InntektGrunnlag(
                 it.inntekt,
                 it.periode,
                 InntektsPeriode(
                     it.inntektsPeriode.førsteMåned,
                     it.inntektsPeriode.sisteMåned
                 ),
-                it.inneholderFangstOgFisk,
-                it.andel
+                it.inneholderFangstOgFisk
             )
-        }.toSet()
+        }?.toSet()
     )
 }
 
