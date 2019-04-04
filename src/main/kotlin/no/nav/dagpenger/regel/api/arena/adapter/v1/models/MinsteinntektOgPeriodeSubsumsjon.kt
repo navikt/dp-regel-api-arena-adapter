@@ -10,7 +10,7 @@ data class MinsteinntektOgPeriodeSubsumsjon(
     val utfort: LocalDateTime, // todo: ZonedDateTime?,
     val parametere: MinsteinntektOgPeriodeRegelfaktum,
     val resultat: MinsteinntektOgPeriodeResultat,
-    val inntekt: Set<Inntekt>
+    val inntekt: Set<InntektMinsteinntekt>
 )
 
 data class MinsteinntektOgPeriodeRegelfaktum(

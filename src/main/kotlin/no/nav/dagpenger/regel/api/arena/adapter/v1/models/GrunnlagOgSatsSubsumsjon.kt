@@ -10,7 +10,7 @@ data class GrunnlagOgSatsSubsumsjon(
     val utfort: LocalDateTime,
     val parametere: GrunnlagOgSatsRegelFaktum,
     val resultat: GrunnlagOgSatsResultat,
-    val inntekt: Set<Inntekt>? = null
+    val inntekt: Set<InntektGrunnlag>? = null
 
 )
 
