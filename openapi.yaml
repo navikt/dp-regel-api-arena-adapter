@@ -128,7 +128,6 @@ components:
           required:
             - parametere
             - resultat
-            - inntekt
           properties:
             parametere:
               $ref: '#/components/schemas/DagpengegrunnlagResultatParametere'
@@ -207,7 +206,6 @@ components:
         - aktorId
         - vedtakId
         - beregningsdato
-        - inntektsId
       properties:
         aktorId:
           type: string

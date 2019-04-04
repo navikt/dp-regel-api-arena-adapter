@@ -204,8 +204,7 @@
             "type": "object",
             "required": [
               "parametere",
-              "resultat",
-              "inntekt"
+              "resultat"
             ],
             "properties": {
               "parametere": {
@@ -310,8 +309,7 @@
         "required": [
           "aktorId",
           "vedtakId",
-          "beregningsdato",
-          "inntektsId"
+          "beregningsdato"
         ],
         "properties": {
           "aktorId": {
