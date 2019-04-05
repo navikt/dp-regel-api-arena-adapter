@@ -10,20 +10,29 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.regel.api.arena.adapter.regelApiAdapter
-import no.nav.dagpenger.regel.api.internal.inntjeningsperiode.InntektApiBeregningsdatoHttpClient
+import no.nav.dagpenger.regel.api.internal.inntjeningsperiode.InntektApiInntjeningsperiodeHttpClient
+import no.nav.dagpenger.regel.api.internal.models.InntjeningsperiodeParametre
+import no.nav.dagpenger.regel.api.internal.models.InntjeningsperiodeResultat
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
 import kotlin.test.assertEquals
 
 class InntjeningsperiodeApiSpec {
     @Test
     fun `Inntjeningsperiode API specification test - Should match json field names and formats`() {
 
-        val inntektApiBeregningsdatoHttpClient: InntektApiBeregningsdatoHttpClient = mockk()
+        val inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient = mockk()
 
         every { runBlocking {
-            inntektApiBeregningsdatoHttpClient.getBeregningsdato(any())
-        } } returns LocalDate.of(2019, 2, 27)
+            inntektApiBeregningsdatoHttpClient.getInntjeningsperiode(any())
+        } } returns InntjeningsperiodeResultat(
+            true,
+            InntjeningsperiodeParametre(
+                "1234",
+                5678,
+                "2019-02-27",
+                "12345"
+            )
+        )
 
         withTestApplication({
             regelApiAdapter(

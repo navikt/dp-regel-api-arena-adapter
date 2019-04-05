@@ -35,7 +35,7 @@ import no.nav.dagpenger.regel.api.internal.periode.RegelApiPeriodeHttpClient
 import no.nav.dagpenger.regel.api.internal.periode.SynchronousPeriode
 import no.nav.dagpenger.regel.api.internal.RegelApiTasksHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
-import no.nav.dagpenger.regel.api.internal.inntjeningsperiode.InntektApiBeregningsdatoHttpClient
+import no.nav.dagpenger.regel.api.internal.inntjeningsperiode.InntektApiInntjeningsperiodeHttpClient
 import org.slf4j.event.Level
 import java.util.concurrent.TimeUnit
 
@@ -56,7 +56,7 @@ fun main() {
     val synchronousGrunnlag = SynchronousGrunnlag(regelApiGrunnlagHttpClient, regelApiTasksHttpClient)
     val synchronousSats = SynchronousSats(regelApiSatsHttpClient, regelApiTasksHttpClient)
 
-    val inntektApiBeregningsdatoHttpClient = InntektApiBeregningsdatoHttpClient(env.inntektApiUrl)
+    val inntektApiBeregningsdatoHttpClient = InntektApiInntjeningsperiodeHttpClient(env.inntektApiUrl)
 
     val app = embeddedServer(Netty, port = env.httpPort) {
         regelApiAdapter(
@@ -79,7 +79,7 @@ fun Application.regelApiAdapter(
     synchronousPeriode: SynchronousPeriode,
     synchronousGrunnlag: SynchronousGrunnlag,
     synchronousSats: SynchronousSats,
-    inntektApiBeregningsdatoHttpClient: InntektApiBeregningsdatoHttpClient
+    inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient
 ) {
 
     install(DefaultHeaders)
