@@ -37,7 +37,8 @@ class LagGrunnlagOgSatsSubsumsjonTest {
             GrunnlagResultat(
                 555,
                 666,
-                "ArbeidsinntektSiste12"
+                "ArbeidsinntektSiste12",
+                true
             ),
             setOf(
                 InntektGrunnlag(

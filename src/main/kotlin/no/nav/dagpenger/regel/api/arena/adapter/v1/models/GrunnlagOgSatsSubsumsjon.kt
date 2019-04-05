@@ -34,6 +34,8 @@ class GrunnlagOgSatsResultat(
     enum class Beregningsregel {
         ORDINAER_OVER_6G_SISTE_2019,
         ORDINAER_OVER_6G_3SISTE_2019,
+        ORDINAER_ETTAAR,
+        ORDINAER_TREAAR,
         MANUELL_UNDER_6G,
         MANUELL_OVER_6G,
         VERNEPLIKT
