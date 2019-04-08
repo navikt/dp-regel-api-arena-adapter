@@ -18,10 +18,6 @@ fasitResources:
   used:
     - alias: srvdp-regel-api-arena-adapter
       resourceType: credential
-    - alias: dagpenger-regel-api-rest
-      resourceType: restservice
-    - alias: dagpenger-inntekt-api-rest
-      resourceType: restservice
     - alias: security-token-service-issuer
       resourceType: baseUrl
       propertyMap:
