@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 
+echo $PWD
+
+echo 'Running uat tests'
+
 cd ./../../
 ./gradlew uat
