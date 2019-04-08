@@ -7,6 +7,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
+import io.mockk.mockk
 import io.mockk.mockkClass
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsSubsumsjon
@@ -20,9 +21,10 @@ import kotlin.test.assertTrue
 
 class DagpengergrunnlagApiV1Steps : No {
 
-    val dagpengegrunnlagInnParametereAdapter = moshiInstance.adapter<GrunnlagOgSatsParametere>(
+
+    private val dagpengegrunnlagInnParametereAdapter = moshiInstance.adapter<GrunnlagOgSatsParametere>(
         GrunnlagOgSatsParametere::class.java)
-    val dagpengegrunnlagBeregningAdapter = moshiInstance.adapter<GrunnlagOgSatsSubsumsjon>(
+    private val dagpengegrunnlagBeregningAdapter = moshiInstance.adapter<GrunnlagOgSatsSubsumsjon>(
         GrunnlagOgSatsSubsumsjon::class.java)
 
     init {
@@ -44,10 +46,13 @@ class DagpengergrunnlagApiV1Steps : No {
 
         Når("digidag skal beregne grunnlag") {
             withTestApplication({ regelApiAdapter(
+                mockk(),
+                mockk(),
                 synchronousMinsteinntekt,
                 synchronousPeriode,
                 synchronousGrunnlag,
-                synchronousSats
+                synchronousSats,
+                mockk()
             ) }) {
                 handleRequest(HttpMethod.Post, "/v1/dagpengegrunnlag") {
                     addHeader(HttpHeaders.ContentType, "application/json")
