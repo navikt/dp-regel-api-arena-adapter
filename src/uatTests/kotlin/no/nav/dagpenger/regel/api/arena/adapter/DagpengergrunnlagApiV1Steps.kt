@@ -21,7 +21,6 @@ import kotlin.test.assertTrue
 
 class DagpengergrunnlagApiV1Steps : No {
 
-
     private val dagpengegrunnlagInnParametereAdapter = moshiInstance.adapter<GrunnlagOgSatsParametere>(
         GrunnlagOgSatsParametere::class.java)
     private val dagpengegrunnlagBeregningAdapter = moshiInstance.adapter<GrunnlagOgSatsSubsumsjon>(
