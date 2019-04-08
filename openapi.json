@@ -78,6 +78,31 @@
                 }
               }
             }
+          },
+          "400": {
+            "description": "Invalid input - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System error - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "inntektFeil": {
+                    "$ref": "#/components/examples/hent-inntekt-feilet"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -110,10 +135,24 @@
             }
           },
           "400": {
-            "description": "Invalid input"
+            "description": "Invalid input - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                }
+              }
+            }
           },
           "500": {
-            "description": "System error"
+            "description": "System error - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                }
+              }
+            }
           }
         }
       }
@@ -165,10 +204,34 @@
             }
           },
           "400": {
-            "description": "Invalid input"
+            "description": "Invalid input - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "datoFeil": {
+                    "$ref": "#/components/examples/dato-feil"
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "System error"
+            "description": "System error - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "inntektFeil": {
+                    "$ref": "#/components/examples/hent-inntekt-feilet"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -383,6 +446,41 @@
             "type": "string",
             "description": "Dato for når kjøringen ble oppdatert",
             "example": "2018-12-26T14:43:12Z"
+          }
+        }
+      },
+      "HttpProblem": {
+        "type": "object",
+        "required": [
+          "type",
+          "title",
+          "status"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "example": "about:blank",
+            "description": "URI referanse [RFC3986] som identifiserer problemtypen. Standard verdi er \"about:blank\""
+          },
+          "title": {
+            "type": "string",
+            "example": "En feil har oppstått ved beregningen",
+            "description": "Tittel, kort oppsummering av problemtypen."
+          },
+          "status": {
+            "type": "integer",
+            "example": 500,
+            "description": "HTTP status-kode [RFC7231] generert av tjenesten der feilen oppstod."
+          },
+          "detail": {
+            "type": "string",
+            "example": "Beregningen feilet - inntektskomponenten svarte ikke",
+            "description": "Menneskelesbar beskrivelse spesifikt til dette problemet"
+          },
+          "instance": {
+            "type": "string",
+            "example": "/inntekt/1234",
+            "description": "URI referanse [RFC3986] som identifiserer den spesifikke ressursen der problemet oppstod"
           }
         }
       },
@@ -752,6 +850,23 @@
               "ukesats": 1065
             }
           }
+        }
+      },
+      "dato-feil": {
+        "summary": "Datovalideringsfeil",
+        "value": {
+          "type": "urn:dp:error:parameter",
+          "status": 400,
+          "title": "Feil bruktInntektsPeriode: foersteMaaned=2018-12 er etter sisteMaaned=2019-01"
+        }
+      },
+      "hent-inntekt-feilet": {
+        "summary": "Datovalideringsfeil",
+        "value": {
+          "type": "urn:dp:error:inntektskomponenten",
+          "title": "Klarte ikke å hente inntekt for beregningen",
+          "status": 500,
+          "detail": "Innhenting av inntekt mot inntektskomponenten feilet."
         }
       },
       "minsteinntekt-bruktInntekt": {
