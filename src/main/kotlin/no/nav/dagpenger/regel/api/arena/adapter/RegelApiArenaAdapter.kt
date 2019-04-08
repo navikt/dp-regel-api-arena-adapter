@@ -4,7 +4,6 @@ import com.ryanharter.ktor.moshi.moshi
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonEncodingException
 import io.ktor.application.Application
-import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.features.CallLogging
@@ -14,29 +13,28 @@ import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.path
 import io.ktor.response.respond
-import io.ktor.response.respondText
 import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import io.ktor.util.pipeline.PipelineContext
 import mu.KotlinLogging
 import no.nav.dagpenger.regel.api.arena.adapter.v1.GrunnlagOgSatsApi
-import no.nav.dagpenger.regel.api.internal.grunnlag.RegelApiGrunnlagHttpClient
-import no.nav.dagpenger.regel.api.internal.grunnlag.SynchronousGrunnlag
-import no.nav.dagpenger.regel.api.internal.sats.RegelApiSatsHttpClient
-import no.nav.dagpenger.regel.api.internal.sats.SynchronousSats
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InntjeningsperiodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InvalidInnteksperiodeException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektOgPeriodeApi
+import no.nav.dagpenger.regel.api.internal.RegelApiTasksHttpClient
+import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
+import no.nav.dagpenger.regel.api.internal.grunnlag.RegelApiGrunnlagHttpClient
+import no.nav.dagpenger.regel.api.internal.grunnlag.SynchronousGrunnlag
+import no.nav.dagpenger.regel.api.internal.inntjeningsperiode.InntektApiInntjeningsperiodeHttpClient
 import no.nav.dagpenger.regel.api.internal.minsteinntekt.RegelApiMinsteinntektHttpClient
 import no.nav.dagpenger.regel.api.internal.minsteinntekt.SynchronousMinsteinntekt
 import no.nav.dagpenger.regel.api.internal.periode.RegelApiPeriodeHttpClient
 import no.nav.dagpenger.regel.api.internal.periode.SynchronousPeriode
-import no.nav.dagpenger.regel.api.internal.RegelApiTasksHttpClient
-import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
-import no.nav.dagpenger.regel.api.internal.inntjeningsperiode.InntektApiInntjeningsperiodeHttpClient
+import no.nav.dagpenger.regel.api.internal.sats.RegelApiSatsHttpClient
+import no.nav.dagpenger.regel.api.internal.sats.SynchronousSats
 import org.slf4j.event.Level
+import java.net.URI
 import java.util.concurrent.TimeUnit
 
 private val LOGGER = KotlinLogging.logger {}
@@ -96,17 +94,50 @@ fun Application.regelApiAdapter(
         moshi(moshiInstance)
     }
     install(StatusPages) {
+        exception<Throwable> { cause ->
+            LOGGER.error("Unhåndtert feil ved beregning av regel", cause)
+            val problem = Problem(
+                title = "Uhåndtert feil",
+                detail = cause.message
+            )
+            call.respond(HttpStatusCode.InternalServerError, problem)
+        }
         exception<JsonDataException> { cause ->
-            badRequest(cause)
+            LOGGER.warn(cause.message, cause)
+            val problem = Problem(
+                type = URI.create("urn:dp:error:parameter"),
+                title = "Parameteret er ikke gyldig, mangler obligatorisk felt: '${cause.message}'",
+                status = 400
+            )
+            call.respond(HttpStatusCode.BadRequest, problem)
         }
         exception<JsonEncodingException> { cause ->
-            badRequest(cause)
+            LOGGER.warn(cause.message, cause)
+            val problem = Problem(
+                type = URI.create("urn:dp:error:parameter"),
+                title = "Parameteret er ikke gyldig json",
+                status = 400
+            )
+            call.respond(HttpStatusCode.BadRequest, problem)
         }
         exception<InvalidInnteksperiodeException> { cause ->
-            badRequest(cause, cause.message)
+            LOGGER.warn(cause.message)
+            val problem = Problem(
+                type = URI.create("urn:dp:error:parameter"),
+                title = cause.message,
+                status = 400
+            )
+            call.respond(HttpStatusCode.BadRequest, problem)
         }
         exception<RegelApiTimeoutException> { cause ->
-            gatewayTimeout(cause)
+            LOGGER.error("Tidsavbrudd ved beregning av regel", cause)
+            val problem = Problem(
+                type = URI.create("urn:dp:error:regelberegning:tidsavbrudd"),
+                title = "Tidsavbrudd ved beregning av regel",
+                detail = cause.message,
+                status = 502
+            )
+            call.respond(HttpStatusCode.GatewayTimeout, problem)
         }
     }
 
@@ -118,24 +149,6 @@ fun Application.regelApiAdapter(
         }
         naischecks()
     }
-}
-
-private suspend fun <T : Throwable> PipelineContext<Unit, ApplicationCall>.badRequest(
-    cause: T,
-    message: String? = null
-) {
-    if (message != null)
-        call.respondText(status = HttpStatusCode.BadRequest, text = message)
-    else
-        call.respond(HttpStatusCode.BadRequest)
-    LOGGER.error("Bad request", cause)
-}
-
-private suspend fun <T : Throwable> PipelineContext<Unit, ApplicationCall>.gatewayTimeout(
-    cause: T
-) {
-    call.respond(HttpStatusCode.GatewayTimeout)
-    throw cause
 }
 
 class RegelApiArenaAdapterException(override val message: String) : RuntimeException(message)

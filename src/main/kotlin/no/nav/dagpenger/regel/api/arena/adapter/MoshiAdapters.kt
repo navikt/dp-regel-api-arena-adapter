@@ -14,6 +14,7 @@ val moshiInstance: Moshi = Moshi.Builder()
     .add(LocalDateTimeJsonAdapter())
     .add(LocalDateJsonAdapter())
     .add(KotlinJsonAdapterFactory())
+    .add(URIJsonAdapter())
     .build()!!
 
 class YearMonthJsonAdapter {
