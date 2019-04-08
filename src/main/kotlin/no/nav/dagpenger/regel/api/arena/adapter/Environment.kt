@@ -4,7 +4,8 @@ data class Environment(
     val username: String = getEnvVar("SRVDP_REGEL_API_ARENA_ADAPTER_USERNAME"),
     val password: String = getEnvVar("SRVDP_REGEL_API_ARENA_ADAPTER_PASSWORD"),
     val oicdStsUrl: String = getEnvVar("OIDC_STS_ISSUERURL"),
-    val dpRegelApiUrl: String = getEnvVar("DAGPENGER_REGEL_API_REST_URL"),
+    val dpRegelApiUrl: String = "http://dp-regel-api",
+    val inntektApiUrl: String = "http://dp-inntekt-api",
     val httpPort: Int = 8093
 )
 
