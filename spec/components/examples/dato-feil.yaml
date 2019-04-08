@@ -1,0 +1,7 @@
+summary: Datovalideringsfeil
+value:
+  type: 'urn:dp:error:parameter'
+  status: 400
+  title: >-
+    Feil bruktInntektsPeriode: foersteMaaned=2018-12 er etter
+    sisteMaaned=2019-01

@@ -1,0 +1,6 @@
+summary: Datovalideringsfeil
+value:
+  type: 'urn:dp:error:inntektskomponenten'
+  title: Klarte ikke å hente inntekt for beregningen
+  status: 500
+  detail: Innhenting av inntekt mot inntektskomponenten feilet.

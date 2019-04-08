@@ -22,3 +22,22 @@ post:
         application/json:
           schema:
             $ref: '#/components/schemas/DagpengegrunnlagBeregning'
+    '400':
+      description: >-
+        Invalid input - feilmelding i henhold til [RFC7807]
+        https://tools.ietf.org/html/rfc7807
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpProblem'
+    '500':
+      description: >-
+        System error - feilmelding i henhold til [RFC7807]
+        https://tools.ietf.org/html/rfc7807
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpProblem'
+          examples:
+            inntektFeil:
+              $ref: '#/components/examples/hent-inntekt-feilet'

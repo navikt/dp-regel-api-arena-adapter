@@ -50,7 +50,7 @@ fun Route.MinsteinntektOgPeriodeApi(
 fun validateParameters(parameters: MinsteinntektOgPeriodeParametere) {
     parameters.bruktInntektsPeriode?.let {
         if (it.foersteMaaned.isAfter(it.sisteMaaned)) throw InvalidInnteksperiodeException(
-            "Invalid inntektsPeriode: foersteMaaned=${it.foersteMaaned} is after sisteMaaned=${it.sisteMaaned}"
+            "Feil bruktInntektsPeriode: foersteMaaned=${it.foersteMaaned} er etter sisteMaaned=${it.sisteMaaned}"
         )
     }
 }

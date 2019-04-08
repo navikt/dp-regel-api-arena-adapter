@@ -28,6 +28,24 @@ post:
             minsteinntekt-resultat:
               $ref: '#/components/examples/minsteinntekt-resultat'
     '400':
-      description: Invalid input
+      description: >-
+        Invalid input - feilmelding i henhold til [RFC7807]
+        https://tools.ietf.org/html/rfc7807
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpProblem'
+          examples:
+            datoFeil:
+              $ref: '#/components/examples/dato-feil'
     '500':
-      description: System error
+      description: >-
+        System error - feilmelding i henhold til [RFC7807]
+        https://tools.ietf.org/html/rfc7807
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpProblem'
+          examples:
+            inntektFeil:
+              $ref: '#/components/examples/hent-inntekt-feilet'
