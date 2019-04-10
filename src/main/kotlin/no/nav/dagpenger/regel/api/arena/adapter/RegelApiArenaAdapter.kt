@@ -79,7 +79,8 @@ fun main() {
             synchronousPeriode,
             synchronousGrunnlag,
             synchronousSats,
-            inntektApiBeregningsdatoHttpClient
+            inntektApiBeregningsdatoHttpClient,
+            config.application.disableJwt
         )
     }
 
@@ -96,7 +97,8 @@ fun Application.regelApiAdapter(
     synchronousPeriode: SynchronousPeriode,
     synchronousGrunnlag: SynchronousGrunnlag,
     synchronousSats: SynchronousSats,
-    inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient
+    inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient,
+    disableJwt: Boolean = false
 ) {
 
     install(DefaultHeaders)
@@ -133,54 +135,59 @@ fun Application.regelApiAdapter(
         }
         exception<JsonDataException> { cause ->
             LOGGER.warn(cause.message, cause)
+            val status = HttpStatusCode.BadRequest
             val problem = Problem(
                 type = URI.create("urn:dp:error:parameter"),
                 title = "Parameteret er ikke gyldig, mangler obligatorisk felt: '${cause.message}'",
-                status = 400
+                status = status.value
             )
-            call.respond(HttpStatusCode.BadRequest, problem)
+            call.respond(status, problem)
         }
         exception<JsonEncodingException> { cause ->
             LOGGER.warn(cause.message, cause)
+            val status = HttpStatusCode.BadRequest
             val problem = Problem(
                 type = URI.create("urn:dp:error:parameter"),
                 title = "Parameteret er ikke gyldig json",
-                status = 400
+                status = status.value
             )
-            call.respond(HttpStatusCode.BadRequest, problem)
+            call.respond(status, problem)
         }
         exception<InvalidInnteksperiodeException> { cause ->
             LOGGER.warn(cause.message)
+            val status = HttpStatusCode.BadRequest
             val problem = Problem(
                 type = URI.create("urn:dp:error:parameter"),
                 title = cause.message,
-                status = 400
+                status = status.value
             )
-            call.respond(HttpStatusCode.BadRequest, problem)
+            call.respond(status, problem)
         }
         exception<RegelApiTimeoutException> { cause ->
             LOGGER.error("Tidsavbrudd ved beregning av regel", cause)
+            val status = HttpStatusCode.GatewayTimeout
             val problem = Problem(
                 type = URI.create("urn:dp:error:regelberegning:tidsavbrudd"),
                 title = "Tidsavbrudd ved beregning av regel",
                 detail = cause.message,
-                status = 502
+                status = status.value
             )
-            call.respond(HttpStatusCode.GatewayTimeout, problem)
+            call.respond(status, problem)
         }
         status(HttpStatusCode.Unauthorized) {
+            val status = HttpStatusCode.Unauthorized
             LOGGER.warn("Unauthorized call")
             val problem = Problem(
                 type = URI.create("urn:dp:error:uautorisert"),
                 title = "Uautorisert",
-                status = 401
+                status = status.value
             )
-            call.respond(HttpStatusCode.Unauthorized, problem)
+            call.respond(status, problem)
         }
     }
 
     routing {
-        authenticate(optional = true) {
+        authenticate(optional = disableJwt) {
             // Check that token is present, but do not validate it
             route("/v1") {
                 MinsteinntektOgPeriodeApi(synchronousMinsteinntekt, synchronousPeriode)

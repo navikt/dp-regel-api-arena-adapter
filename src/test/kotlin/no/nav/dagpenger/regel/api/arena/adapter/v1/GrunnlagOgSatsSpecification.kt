@@ -152,7 +152,7 @@ class GrunnlagOgSatsSpecification {
                 val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
                 assertEquals("urn:dp:error:regelberegning:tidsavbrudd", problem?.type.toString())
                 assertEquals("Tidsavbrudd ved beregning av regel", problem?.title)
-                assertEquals(502, problem?.status)
+                assertEquals(504, problem?.status)
             }
         }
     }

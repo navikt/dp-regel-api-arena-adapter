@@ -4,6 +4,7 @@ import com.natpryce.konfig.ConfigurationMap
 import com.natpryce.konfig.ConfigurationProperties
 import com.natpryce.konfig.EnvironmentVariables
 import com.natpryce.konfig.Key
+import com.natpryce.konfig.booleanType
 import com.natpryce.konfig.intType
 import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
@@ -19,7 +20,8 @@ private val localProperties = ConfigurationMap(
         "dp.regel.api.url" to "https://localhost",
         "dp.inntekt.api.url" to "https://localhost",
         "jwks.url" to "https://localhost",
-        "jwks.issuer" to "https://localhost"
+        "jwks.issuer" to "https://localhost",
+        "enable.jwt" to "false"
     )
 )
 private val devProperties = ConfigurationMap(
@@ -29,7 +31,8 @@ private val devProperties = ConfigurationMap(
         "dp.regel.api.url" to "http://dp-regel-api",
         "dp.inntekt.api.url" to "http://dp-inntekt-api",
         "jwks.url" to "http://security-token-service/rest/v1/sts/jwks",
-        "jwks.issuer" to "https://security-token-service.nais.preprod.local"
+        "jwks.issuer" to "https://security-token-service.nais.preprod.local",
+        "enable.jwt" to "true"
 
     )
 )
@@ -40,7 +43,8 @@ private val prodProperties = ConfigurationMap(
         "dp.regel.api.url" to "http://dp-regel-api",
         "dp.inntekt.api.url" to "http://dp-inntekt-api",
         "jwks.url" to "http://security-token-service/rest/v1/sts/jwks",
-        "jwks.issuer" to "https://security-token-service.nais.adeo.no"
+        "jwks.issuer" to "https://security-token-service.nais.adeo.no",
+        "enable.jwt" to "true"
     )
 )
 
@@ -57,7 +61,8 @@ data class Configuration(
         val dpRegelApiUrl: String = config()[Key("dp.regel.api.url", stringType)],
         val dpInntektApiUrl: String = config()[Key("dp.inntekt.api.url", stringType)],
         val jwksUrl: String = config()[Key("jwks.url", stringType)],
-        val jwksIssuer: String = config()[Key("jwks.issuer", stringType)]
+        val jwksIssuer: String = config()[Key("jwks.issuer", stringType)],
+        val disableJwt: Boolean = config()[Key("enable.jwt", booleanType)]
 
     )
 }
