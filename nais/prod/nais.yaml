@@ -1,0 +1,8 @@
+apiVersion: "nais.io/v1alpha1"
+kind: "Application"
+metadata:
+  name: dp-regel-api-arena-adapter
+spec:
+  ingresses:
+    - "https://dp-regel-api-arena-adapter.nais.adeo.no"
+
