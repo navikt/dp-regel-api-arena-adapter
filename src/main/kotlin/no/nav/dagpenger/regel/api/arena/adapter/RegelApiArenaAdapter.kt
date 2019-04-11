@@ -20,6 +20,7 @@ import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.path
 import io.ktor.response.respond
+import io.ktor.routing.get
 import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
@@ -187,12 +188,18 @@ fun Application.regelApiAdapter(
     }
 
     routing {
+
+        route("/v1") {
+            MinsteinntektOgPeriodeApi(synchronousMinsteinntekt, synchronousPeriode)
+            GrunnlagOgSatsApi(synchronousGrunnlag, synchronousSats)
+            InntjeningsperiodeApi(inntektApiBeregningsdatoHttpClient)
+        }
         authenticate(optional = disableJwt) {
             // Check that token is present, but do not validate it
-            route("/v1") {
-                MinsteinntektOgPeriodeApi(synchronousMinsteinntekt, synchronousPeriode)
-                GrunnlagOgSatsApi(synchronousGrunnlag, synchronousSats)
-                InntjeningsperiodeApi(inntektApiBeregningsdatoHttpClient)
+            route("testauth") {
+                get {
+                    call.respond("imok")
+                }
             }
         }
 
