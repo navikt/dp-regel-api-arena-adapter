@@ -7,11 +7,11 @@ properties:
   minsteinntektSubsumsjonsId:
     type: string
     example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
-    description: Unik ID for minsteinntektberegning
+    description: 'Unik ID for denne beregningen - ULID https://github.com/ulid/spec'
   periodeSubsumsjonsId:
     type: string
     example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
-    description: Unik ID for periodeberegning
+    description: 'Unik ID for denne beregningen - ULID https://github.com/ulid/spec'
   opprettet:
     type: string
     description: Dato for når kjøringen ble opprettet

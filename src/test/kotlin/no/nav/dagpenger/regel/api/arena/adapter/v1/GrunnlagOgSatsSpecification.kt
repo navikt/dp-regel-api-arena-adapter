@@ -9,9 +9,10 @@ import io.ktor.server.testing.withTestApplication
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
+import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
+import no.nav.dagpenger.regel.api.arena.adapter.mockedRegelApiAdapter
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
-import no.nav.dagpenger.regel.api.arena.adapter.regelApiAdapter
 import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
 import no.nav.dagpenger.regel.api.internal.grunnlag.SynchronousGrunnlag
 import no.nav.dagpenger.regel.api.internal.models.GrunnlagFaktum
@@ -23,8 +24,8 @@ import no.nav.dagpenger.regel.api.internal.models.SatsFaktum
 import no.nav.dagpenger.regel.api.internal.models.SatsResultat
 import no.nav.dagpenger.regel.api.internal.models.SatsSubsumsjon
 import no.nav.dagpenger.regel.api.internal.sats.SynchronousSats
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import java.lang.RuntimeException
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
@@ -37,6 +38,9 @@ class GrunnlagOgSatsSpecification {
 
     private val dagpengegrunnlagPath = "/v1/dagpengegrunnlag"
 
+    private val jwkStub = JwtStub()
+    private val token = jwkStub.createTokenFor("systembrukeren")
+
     @Test
     fun `Grunnlag and Sats API specification test - Should match json field names and formats`() {
 
@@ -47,16 +51,15 @@ class GrunnlagOgSatsSpecification {
         every { runBlocking { synchronousSats.getSatsSynchronously(parametere = any()) } } returns satsSubsumsjon()
 
         withTestApplication({
-            regelApiAdapter(
-                mockk(),
-                mockk(),
-                synchronousGrunnlag,
-                synchronousSats,
-                mockk()
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider(),
+                synchronousGrunnlag = synchronousGrunnlag,
+                synchronousSats = synchronousSats
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
                 addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -85,16 +88,15 @@ class GrunnlagOgSatsSpecification {
         every { runBlocking { synchronousSats.getSatsSynchronously(parametere = any()) } } throws RuntimeException()
 
         withTestApplication({
-            regelApiAdapter(
-                mockk(),
-                mockk(),
-                synchronousGrunnlag,
-                synchronousSats,
-                mockk()
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider(),
+                synchronousGrunnlag = synchronousGrunnlag,
+                synchronousSats = synchronousSats
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
                 addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -125,15 +127,14 @@ class GrunnlagOgSatsSpecification {
         every { runBlocking { synchronousSats.getSatsSynchronously(parametere = any()) } } throws RegelApiTimeoutException("timeout")
 
         withTestApplication({
-            regelApiAdapter(
-                mockk(),
-                mockk(),
-                synchronousGrunnlag,
-                synchronousSats,
-                mockk()
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider(),
+                synchronousGrunnlag = synchronousGrunnlag,
+                synchronousSats = synchronousSats
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
                 addHeader(HttpHeaders.ContentType, "application/json")
                 setBody(
                     """
@@ -152,7 +153,7 @@ class GrunnlagOgSatsSpecification {
                 val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
                 assertEquals("urn:dp:error:regelberegning:tidsavbrudd", problem?.type.toString())
                 assertEquals("Tidsavbrudd ved beregning av regel", problem?.title)
-                assertEquals(502, problem?.status)
+                assertEquals(504, problem?.status)
             }
         }
     }
@@ -161,16 +162,13 @@ class GrunnlagOgSatsSpecification {
     fun ` Should give API errors as HTTP problems rfc7807 for dagpengegrunnlag on bad json request`() {
 
         withTestApplication({
-            regelApiAdapter(
-                mockk(),
-                mockk(),
-                mockk(),
-                mockk(),
-                mockk()
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider()
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
                 addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                         { "badjson" : "error}
@@ -190,16 +188,13 @@ class GrunnlagOgSatsSpecification {
     fun ` Should give API errors as HTTP problems rfc7807 for dagpengegrunnlag on unmatched json - missing mandatory fields`() {
 
         withTestApplication({
-            regelApiAdapter(
-                mockk(),
-                mockk(),
-                mockk(),
-                mockk(),
-                mockk()
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider()
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
                 addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                         {  "aktorId": "1234" }
@@ -211,6 +206,38 @@ class GrunnlagOgSatsSpecification {
                 assertEquals("Parameteret er ikke gyldig, mangler obligatorisk felt: 'Required value 'vedtakId' missing at \$'", problem?.title)
                 assertEquals("urn:dp:error:parameter", problem?.type.toString())
                 assertEquals(400, problem?.status)
+            }
+        }
+    }
+
+    @Test
+    @Disabled("Diabled until jwt is up an running")
+    fun ` Should give 401 - Not authorized if token is missing `() {
+        withTestApplication({
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider()
+            )
+        }) {
+            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                setBody(
+                    """
+                         {
+                      "aktorId": "1234",
+                      "vedtakId": 5678,
+                      "beregningsdato": "2019-02-27",
+                      "harAvtjentVerneplikt": false,
+                      "oppfyllerKravTilFangstOgFisk": false
+                    }
+
+                    """.trimIndent()
+                )
+            }.apply {
+                assertEquals(HttpStatusCode.Unauthorized, response.status())
+                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
+                assertEquals("Uautorisert", problem?.title)
+                assertEquals("urn:dp:error:uautorisert", problem?.type.toString())
+                assertEquals(401, problem?.status)
             }
         }
     }
