@@ -46,6 +46,7 @@ val ktorMoshiVersion = "1.0.1"
 val cucumberVersion = "4.0.0"
 val mockkVersion = "1.9.1"
 val konfigVersion = "1.6.10.0"
+val prometheusVersion = "0.6.0"
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -74,6 +75,9 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4j2Version")
     implementation("com.vlkan.log4j2:log4j2-logstash-layout-fatjar:0.15")
 
+    implementation("io.prometheus:simpleclient_common:$prometheusVersion")
+    implementation("io.prometheus:simpleclient_hotspot:$prometheusVersion")
+
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.2.0")
 
     testImplementation(kotlin("test"))
@@ -84,6 +88,7 @@ dependencies {
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:$jupiterVersion")
     testImplementation("io.cucumber:cucumber-java8:$cucumberVersion")
     testImplementation("io.cucumber:cucumber-junit:$cucumberVersion")
+    testImplementation("io.kotlintest:kotlintest-runner-junit5:3.3.0")
     testImplementation("io.mockk:mockk:$mockkVersion")
 }
 
