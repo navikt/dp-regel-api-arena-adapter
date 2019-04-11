@@ -1,5 +1,6 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 plugins {
     application
@@ -102,13 +103,18 @@ spotless {
 }
 
 sourceSets {
+
     create("uat") {
-        java.srcDir(file("src/uatTests/kotlin"))
-        resources.srcDir(file("src/uatTests/resources"))
-        compileClasspath += sourceSets["main"].output + configurations["testRuntimeClasspath"]
-        runtimeClasspath += output + compileClasspath
+        withConvention(KotlinSourceSet::class) {
+            java.srcDir(file("src/uatTests/kotlin"))
+            resources.srcDir(file("src/uatTests/resources"))
+            compileClasspath += sourceSets.main.get().output + configurations["testRuntimeClasspath"] + configurations["runtimeClasspath"]
+            runtimeClasspath += output + compileClasspath
+        }
     }
 }
+
+configurations["uatCompile"].extendsFrom(configurations["testCompile"])
 
 tasks.register<Test>("uat") {
     description = "Runs the user acceptance tests."
