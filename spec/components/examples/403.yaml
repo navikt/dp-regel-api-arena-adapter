@@ -1,0 +1,5 @@
+summary: 'Kaller er autorisert, men har ikke tilgang'
+value:
+  type: 'urn:dp:error:tilgang'
+  title: Ikke tilgang
+  status: 403

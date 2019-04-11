@@ -1,0 +1,5 @@
+summary: Kan ikke autorisere kaller
+value:
+  type: 'urn:dp:error:uautorisert'
+  title: Uautorisert
+  status: 401
