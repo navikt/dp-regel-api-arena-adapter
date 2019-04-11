@@ -9,9 +9,9 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Root name="io.ktor.auth.jwt" level="trace">
+        <Logger name="io.ktor.auth.jwt" level="trace">
             <AppenderRef ref="ConsoleAppender"/>
-        </Root>
+        </Logger>
         <Root level="info">
             <AppenderRef ref="ConsoleAppender"/>
         </Root>
