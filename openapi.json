@@ -85,6 +85,41 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "400": {
+                    "$ref": "#/components/examples/400"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Uautorisert - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "401": {
+                    "$ref": "#/components/examples/401"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Ikke tilgang - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "403": {
+                    "$ref": "#/components/examples/403"
+                  }
                 }
               }
             }
@@ -140,6 +175,41 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "400": {
+                    "$ref": "#/components/examples/400"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Uautorisert - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "401": {
+                    "$ref": "#/components/examples/401"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Ikke tilgang - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "403": {
+                    "$ref": "#/components/examples/403"
+                  }
                 }
               }
             }
@@ -211,8 +281,41 @@
                   "$ref": "#/components/schemas/HttpProblem"
                 },
                 "examples": {
+                  "400": {
+                    "$ref": "#/components/examples/400"
+                  },
                   "datoFeil": {
                     "$ref": "#/components/examples/dato-feil"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Uautorisert - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "401": {
+                    "$ref": "#/components/examples/401"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Ikke tilgang - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "403": {
+                    "$ref": "#/components/examples/403"
                   }
                 }
               }
@@ -430,12 +533,12 @@
           "grunnlagSubsumsjonsId": {
             "type": "string",
             "example": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
-            "description": "Unik ID for denne beregningen"
+            "description": "Unik ID for denne beregningen - ULID https://github.com/ulid/spec"
           },
           "satsSubsumsjonsId": {
             "type": "string",
             "example": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
-            "description": "Unik ID for denne beregningen"
+            "description": "Unik ID for denne beregningen - ULID https://github.com/ulid/spec"
           },
           "opprettet": {
             "type": "string",
@@ -672,12 +775,12 @@
           "minsteinntektSubsumsjonsId": {
             "type": "string",
             "example": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
-            "description": "Unik ID for minsteinntektberegning"
+            "description": "Unik ID for denne beregningen - ULID https://github.com/ulid/spec"
           },
           "periodeSubsumsjonsId": {
             "type": "string",
             "example": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
-            "description": "Unik ID for periodeberegning"
+            "description": "Unik ID for denne beregningen - ULID https://github.com/ulid/spec"
           },
           "opprettet": {
             "type": "string",
@@ -780,6 +883,30 @@
       }
     },
     "examples": {
+      "400": {
+        "summary": "Valideringsfeil",
+        "value": {
+          "type": "urn:dp:error:parameter",
+          "status": 400,
+          "title": "Kunne ikke tolke request"
+        }
+      },
+      "401": {
+        "summary": "Kan ikke autorisere kaller",
+        "value": {
+          "type": "urn:dp:error:uautorisert",
+          "title": "Uautorisert",
+          "status": 401
+        }
+      },
+      "403": {
+        "summary": "Kaller er autorisert, men har ikke tilgang",
+        "value": {
+          "type": "urn:dp:error:tilgang",
+          "title": "Ikke tilgang",
+          "status": 403
+        }
+      },
       "dagpengegrunnlag-bareSats": {
         "summary": "Eksempel for å fastsette kun sats",
         "value": {
