@@ -174,8 +174,7 @@ pipeline {
     }
 
     stage('Release') {
-      //when { branch 'master' }
-      when { false }
+      when { branch 'master' }
 
       steps {
         sh "echo true"
