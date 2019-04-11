@@ -17,8 +17,8 @@ private val localProperties = ConfigurationMap(
         "srvdp.regel.api.arena.adapter.username" to "username",
         "srvdp.regel.api.arena.adapter.password" to "password",
         "oidc.sts.issuerurl" to "https://localhost",
-        "dp.regel.api.url" to "https://localhost",
-        "dp.inntekt.api.url" to "https://localhost",
+        "dp.regel.api.url" to "http://dp-regel-api",
+        "dp.inntekt.api.url" to "http://dp-inntekt-api",
         "jwks.url" to "https://localhost",
         "jwks.issuer" to "https://localhost",
         "enable.jwt" to "false"
