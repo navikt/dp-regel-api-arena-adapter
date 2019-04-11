@@ -44,6 +44,7 @@ val moshiVersion = "1.8.0"
 val ktorMoshiVersion = "1.0.1"
 val cucumberVersion = "4.0.0"
 val mockkVersion = "1.9.1"
+val konfigVersion = "1.6.10.0"
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -51,6 +52,9 @@ dependencies {
     implementation("io.ktor:ktor-server:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
     implementation("io.ktor:ktor-auth:$ktorVersion")
+    implementation("io.ktor:ktor-auth-jwt:$ktorVersion") {
+        exclude(group = "junit")
+    }
 
     implementation("com.squareup.moshi:moshi-adapters:$moshiVersion")
     implementation("com.squareup.moshi:moshi-kotlin:$moshiVersion")
@@ -61,6 +65,8 @@ dependencies {
 
     implementation("com.github.kittinunf.fuel:fuel:$fuelVersion")
     implementation("com.github.kittinunf.fuel:fuel-moshi:$fuelVersion")
+
+    implementation("com.natpryce:konfig:$konfigVersion")
 
     implementation("org.apache.logging.log4j:log4j-api:$log4j2Version")
     implementation("org.apache.logging.log4j:log4j-core:$log4j2Version")
