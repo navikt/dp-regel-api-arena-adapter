@@ -7,7 +7,6 @@ import cucumber.api.java8.No
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
 import java.time.LocalDate
-import java.util.concurrent.TimeUnit
 import kotlin.test.assertEquals
 
 class MinsteinntektApiV1Steps : No {
@@ -168,13 +167,9 @@ class MinsteinntektApiV1Steps : No {
         }
     }
 
-    private val token: String = ""
-
     private fun apiRequest(body: String): String {
         val (_, response, result) = with(
             "https://dp-regel-api-arena-adapter.nais.preprod.local/v1/minsteinntekt".httpPost()
-                .timeoutRead(TimeUnit.SECONDS.toMillis(60).toInt())
-                .timeout(TimeUnit.SECONDS.toMillis(60).toInt())
                 .header("Content-Type" to "application/json")
                 .body(body)
         ) {

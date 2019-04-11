@@ -45,8 +45,6 @@ class DagpengergrunnlagApiV1Steps : No {
 
         Når("digidag skal beregne grunnlag") {
             withTestApplication({ regelApiAdapter(
-                mockk(),
-                mockk(),
                 synchronousMinsteinntekt,
                 synchronousPeriode,
                 synchronousGrunnlag,
