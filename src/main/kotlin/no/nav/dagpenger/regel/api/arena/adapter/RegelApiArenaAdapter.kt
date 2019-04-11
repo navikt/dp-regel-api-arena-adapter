@@ -204,6 +204,7 @@ fun Application.regelApiAdapter(
         }
 
         naischecks()
+        metrics()
     }
 }
 

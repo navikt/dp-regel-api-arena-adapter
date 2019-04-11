@@ -9,7 +9,7 @@ out/*
 ### Kotlin ###
 # Compiled class file
 *.class
-
+.kotlintest/*
 # Log file
 *.log
 
