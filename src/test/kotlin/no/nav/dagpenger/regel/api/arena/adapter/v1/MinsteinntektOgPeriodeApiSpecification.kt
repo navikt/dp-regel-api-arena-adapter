@@ -9,10 +9,9 @@ import io.ktor.server.testing.withTestApplication
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
-import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
-import no.nav.dagpenger.regel.api.arena.adapter.mockedRegelApiAdapter
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
+import no.nav.dagpenger.regel.api.arena.adapter.regelApiAdapter
 import no.nav.dagpenger.regel.api.internal.minsteinntekt.SynchronousMinsteinntekt
 import no.nav.dagpenger.regel.api.internal.models.InntektMinsteinntekt
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
@@ -23,17 +22,13 @@ import no.nav.dagpenger.regel.api.internal.models.PeriodeFaktum
 import no.nav.dagpenger.regel.api.internal.models.PeriodeResultat
 import no.nav.dagpenger.regel.api.internal.models.PeriodeSubsumsjon
 import no.nav.dagpenger.regel.api.internal.periode.SynchronousPeriode
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
 import kotlin.test.assertEquals
 
-class MinsteinntektOgPeriodeApiSpecification {
-
-    private val jwkStub = JwtStub()
-    private val token = jwkStub.createTokenFor("systembrukeren")
+class MinsteinntektOgPeriodeApiSpecification() {
 
     private val minsteinntektPath: String = "/v1/minsteinntekt"
     private val beregningsdato = LocalDate.of(2019, 2, 10)
@@ -56,14 +51,11 @@ class MinsteinntektOgPeriodeApiSpecification {
     @Test
     fun `Minsteinntekt and Periode API specification test - should validate bruktInntektsPeriode`() {
         withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider()
-            )
+            regelApiAdapter(mockk(), mockk(), mockk(), mockk(), mockk())
         }) {
             runBlocking {
                 handleRequest(HttpMethod.Post, minsteinntektPath) {
                     addHeader(HttpHeaders.ContentType, "application/json")
-                    addHeader(HttpHeaders.Authorization, "Bearer $token")
                     setBody(
                         """
                     {
@@ -103,15 +95,16 @@ class MinsteinntektOgPeriodeApiSpecification {
         every { runBlocking { synchronousPeriode.getPeriodeSynchronously(parametere = any()) } } returns periodeSubsumsjon()
 
         withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousMinsteinntekt = synchronousMinsteinntekt,
-                synchronousPeriode = synchronousPeriode
+            regelApiAdapter(
+                synchronousMinsteinntekt,
+                synchronousPeriode,
+                mockk(),
+                mockk(),
+                mockk()
             )
         }) {
             handleRequest(HttpMethod.Post, minsteinntektPath) {
                 addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     validjson
                 )
@@ -132,15 +125,16 @@ class MinsteinntektOgPeriodeApiSpecification {
         every { runBlocking { synchronousPeriode.getPeriodeSynchronously(parametere = any()) } } throws RuntimeException()
 
         withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousMinsteinntekt = synchronousMinsteinntekt,
-                synchronousPeriode = synchronousPeriode
+            regelApiAdapter(
+                synchronousMinsteinntekt,
+                synchronousPeriode,
+                mockk(),
+                mockk(),
+                mockk()
             )
         }) {
             handleRequest(HttpMethod.Post, minsteinntektPath) {
                 addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     validjson
                 )
@@ -158,13 +152,16 @@ class MinsteinntektOgPeriodeApiSpecification {
     fun ` Should give API errors as HTTP problems rfc7807 for minsteinntekt on bad json request`() {
 
         withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider()
+            regelApiAdapter(
+                mockk(),
+                mockk(),
+                mockk(),
+                mockk(),
+                mockk()
             )
         }) {
             handleRequest(HttpMethod.Post, minsteinntektPath) {
                 addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                         { "badjson" : "error}
@@ -184,13 +181,16 @@ class MinsteinntektOgPeriodeApiSpecification {
     fun ` Should give API errors as HTTP problems rfc7807 for minsteinntekt on unmatched json - missing mandatory fields`() {
 
         withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider()
+            regelApiAdapter(
+                mockk(),
+                mockk(),
+                mockk(),
+                mockk(),
+                mockk()
             )
         }) {
             handleRequest(HttpMethod.Post, minsteinntektPath) {
                 addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                         {  "aktorId": "1234" }
@@ -202,38 +202,6 @@ class MinsteinntektOgPeriodeApiSpecification {
                 assertEquals("Parameteret er ikke gyldig, mangler obligatorisk felt: 'Required value 'vedtakId' missing at \$'", problem?.title)
                 assertEquals("urn:dp:error:parameter", problem?.type.toString())
                 assertEquals(400, problem?.status)
-            }
-        }
-    }
-
-    @Test
-    @Disabled("Diabled until jwt is up an running")
-    fun ` Should give 401 - Not authorized if token is missing `() {
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider()
-            )
-        }) {
-            handleRequest(HttpMethod.Post, minsteinntektPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                setBody(
-                    """
-                         {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
-                    }
-
-                    """.trimIndent()
-                )
-            }.apply {
-                assertEquals(HttpStatusCode.Unauthorized, response.status())
-                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals("Uautorisert", problem?.title)
-                assertEquals("urn:dp:error:uautorisert", problem?.type.toString())
-                assertEquals(401, problem?.status)
             }
         }
     }

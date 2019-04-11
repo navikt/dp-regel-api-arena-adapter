@@ -1,5 +1,0 @@
-summary: Valideringsfeil
-value:
-  type: 'urn:dp:error:parameter'
-  status: 400
-  title: Kunne ikke tolke request

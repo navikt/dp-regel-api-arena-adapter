@@ -23,31 +23,6 @@ post:
         application/json:
           schema:
             $ref: '#/components/schemas/HttpProblem'
-          examples:
-            '400':
-              $ref: '#/components/examples/400'
-    '401':
-      description: >-
-        Uautorisert - feilmelding i henhold til [RFC7807]
-        https://tools.ietf.org/html/rfc7807
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/HttpProblem'
-          examples:
-            '401':
-              $ref: '#/components/examples/401'
-    '403':
-      description: >-
-        Ikke tilgang - feilmelding i henhold til [RFC7807]
-        https://tools.ietf.org/html/rfc7807
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/HttpProblem'
-          examples:
-            '403':
-              $ref: '#/components/examples/403'
     '500':
       description: >-
         System error - feilmelding i henhold til [RFC7807]
