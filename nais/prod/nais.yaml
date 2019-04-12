@@ -5,4 +5,3 @@ metadata:
 spec:
   ingresses:
     - "https://dp-regel-api-arena-adapter.nais.adeo.no"
-

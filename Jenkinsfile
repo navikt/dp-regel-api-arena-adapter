@@ -46,6 +46,9 @@ pipeline {
         sh label: 'Prepare dev service contract', script: """
            kustomize build ./nais/dev -o ./nais/nais-dev-deploy.yaml &&  cat ./nais/nais-dev-deploy.yaml
         """
+        sh label: 'Prepare dev t10 service contract', script: """
+           kustomize build ./nais/t10 -o ./nais/nais-dev-t10-deploy.yaml &&  cat ./nais/nais-dev-t10-deploy.yaml
+        """
         sh label: 'Prepare prod service contract', script: """
            kustomize build ./nais/prod -o ./nais/nais-prod-deploy.yaml &&  cat ./nais/nais-prod-deploy.yaml
         """
@@ -73,14 +76,22 @@ pipeline {
           when { branch 'master' }
           steps {
 
-
             sh label: 'Deploy with kubectl', script: """
               kubectl config use-context dev-${env.ZONE}
               kubectl apply -f ./nais/nais-dev-deploy.yaml --wait
               kubectl rollout status -w deployment/${APPLICATION_NAME}
             """
-
             archiveArtifacts artifacts: 'nais/nais-dev-deploy.yaml', fingerprint: true
+          }
+
+          steps {
+
+            sh label: 'Deploy to t10 with kubectl', script: """
+              kubectl config use-context dev-${env.ZONE}
+              kubectl apply -f ./nais/nais-dev-t10-deploy.yaml --wait
+              kubectl rollout status -w deployment/${APPLICATION_NAME} -n t10
+            """
+            archiveArtifacts artifacts: 'nais/nais-dev-t10-deploy.yaml', fingerprint: true
           }
         }
 
