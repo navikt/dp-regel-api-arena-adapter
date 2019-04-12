@@ -82,9 +82,7 @@ pipeline {
               kubectl rollout status -w deployment/${APPLICATION_NAME}
             """
             archiveArtifacts artifacts: 'nais/nais-dev-deploy.yaml', fingerprint: true
-          }
 
-          steps {
 
             sh label: 'Deploy to t10 with kubectl', script: """
               kubectl config use-context dev-${env.ZONE}
@@ -92,8 +90,9 @@ pipeline {
               kubectl rollout status -w deployment/${APPLICATION_NAME} -n t10
             """
             archiveArtifacts artifacts: 'nais/nais-dev-t10-deploy.yaml', fingerprint: true
+
           }
-        }
+       }
 
         stage('Run tests') {
           // Since these tests usually are quite expensive, running them as
