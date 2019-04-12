@@ -1,7 +1,7 @@
 apiVersion: "nais.io/v1alpha1"
 kind: "Alert"
 metadata:
-  name: dp-regel-api
+  name: dp-regel-api-arena-adapter
 spec:
   receivers:
     slack:
