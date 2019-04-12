@@ -36,6 +36,7 @@ internal class ConfigurationTest {
                 this.application.profile shouldBe Profile.PROD
                 this.application.jwksIssuer shouldBe "https://security-token-service.nais.adeo.no"
                 this.application.jwksUrl shouldBe "http://security-token-service/rest/v1/sts/jwks"
+                this.application.secondjwksUrl shouldBe null
                 this.application.dpInntektApiUrl shouldBe "http://dp-inntekt-api"
                 this.application.dpRegelApiUrl shouldBe "http://dp-regel-api"
             }
