@@ -1,7 +1,6 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
 import com.auth0.jwk.JwkProvider
-import com.auth0.jwk.JwkProviderBuilder
 import com.ryanharter.ktor.moshi.moshi
 import com.squareup.moshi.JsonDataException
 import com.squareup.moshi.JsonEncodingException
@@ -20,13 +19,13 @@ import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.path
 import io.ktor.response.respond
-import io.ktor.routing.get
 import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import mu.KotlinLogging
 import no.nav.dagpenger.regel.api.Configuration
+import no.nav.dagpenger.regel.api.JwkProviders
 import no.nav.dagpenger.regel.api.arena.adapter.v1.GrunnlagOgSatsApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InntjeningsperiodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InvalidInnteksperiodeException
@@ -53,10 +52,9 @@ fun main() {
 
     val config = Configuration()
 
-    val jwkProvider = JwkProviderBuilder(URL(config.application.jwksUrl))
-        .cached(10, 24, TimeUnit.HOURS)
-        .rateLimited(10, 1, TimeUnit.MINUTES)
-        .build()
+    val maybeJwkUrls = config.application.secondjwksUrl?.let { listOf(URL(it)) } ?: emptyList()
+    val jwkUrls = listOf(URL(config.application.jwksUrl)) + maybeJwkUrls
+    val jwkProvider = JwkProviders(jwkUrls)
 
     val regelApiTasksHttpClient =
         RegelApiTasksHttpClient(config.application.dpRegelApiUrl)
