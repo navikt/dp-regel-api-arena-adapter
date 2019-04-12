@@ -1,6 +1,10 @@
 bases:
  - ../base
 
+commonLabels:
+  app: dp-regel-api-arena-adapter
+  team: teamdagpenger
+
 resources:
  - alerts.yaml
 

@@ -4,5 +4,9 @@ bases:
 resources:
   - alerts.yaml
 
+commonLabels:
+  app: dp-regel-api-arena-adapter
+  team: teamdagpenger
+
 patchesStrategicMerge:
   - nais.yaml
