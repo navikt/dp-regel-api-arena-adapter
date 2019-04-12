@@ -16,4 +16,3 @@ commonAnnotations:
 # markers ("---").
 resources:
 - nais.yaml
-- alerts.yaml

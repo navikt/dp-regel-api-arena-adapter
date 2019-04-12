@@ -1,8 +1,5 @@
+namespace: t10
 bases:
-  - ./../base
-
-resources:
-  - alerts.yaml
-
+  - ../base
 patchesStrategicMerge:
   - nais.yaml
