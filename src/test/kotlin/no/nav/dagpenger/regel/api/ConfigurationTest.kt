@@ -22,12 +22,7 @@ internal class ConfigurationTest {
         val dummyConfigs = dummyConfigs.associate { it to "test" }
         withProps(dummyConfigs + mapOf("NAIS_CLUSTER_NAME" to "dev-fss")) {
             with(Configuration()) {
-                this.application.profile shouldBe Profile.DEV
-                this.application.jwksIssuer shouldBe "https://security-token-service.nais.preprod.local"
-                this.application.jwksUrl shouldBe "https://security-token-service.nais.preprod.local/rest/v1/sts/jwks"
-                this.application.secondjwksUrl shouldBe "https://security-token-service-t10.nais.preprod.local/rest/v1/sts/jwks"
-                this.application.dpInntektApiUrl shouldBe "http://dp-inntekt-api"
-                this.application.dpRegelApiUrl shouldBe "http://dp-regel-api"
+                kotlin.test.assertEquals(Profile.DEV, this.application.profile)
             }
         }
 
@@ -36,7 +31,6 @@ internal class ConfigurationTest {
                 this.application.profile shouldBe Profile.PROD
                 this.application.jwksIssuer shouldBe "https://security-token-service.nais.adeo.no"
                 this.application.jwksUrl shouldBe "http://security-token-service/rest/v1/sts/jwks"
-                this.application.secondjwksUrl shouldBe null
                 this.application.dpInntektApiUrl shouldBe "http://dp-inntekt-api"
                 this.application.dpRegelApiUrl shouldBe "http://dp-regel-api"
             }

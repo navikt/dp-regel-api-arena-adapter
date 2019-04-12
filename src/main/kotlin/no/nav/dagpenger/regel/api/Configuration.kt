@@ -29,8 +29,7 @@ private val devProperties = ConfigurationMap(
         "application.httpPort" to "8093",
         "dp.regel.api.url" to "http://dp-regel-api",
         "dp.inntekt.api.url" to "http://dp-inntekt-api",
-        "jwks.url" to "https://security-token-service.nais.preprod.local/rest/v1/sts/jwks",
-        "secondjwks.url" to "https://security-token-service-t10.nais.preprod.local/rest/v1/sts/jwks",
+        "jwks.url" to "http://security-token-service/rest/v1/sts/jwks",
         "jwks.issuer" to "https://security-token-service.nais.preprod.local",
         "enable.jwt" to "true"
 
@@ -60,7 +59,6 @@ data class Configuration(
         val dpRegelApiUrl: String = config()[Key("dp.regel.api.url", stringType)],
         val dpInntektApiUrl: String = config()[Key("dp.inntekt.api.url", stringType)],
         val jwksUrl: String = config()[Key("jwks.url", stringType)],
-        val secondjwksUrl: String? = config().getOrNull(Key("secondjwks.url", stringType)),
         val jwksIssuer: String = config()[Key("jwks.issuer", stringType)],
         val disableJwt: Boolean = config()[Key("enable.jwt", booleanType)]
 
