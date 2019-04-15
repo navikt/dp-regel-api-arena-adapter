@@ -1,17 +1,18 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
-import com.github.kittinunf.fuel.httpPost
-import com.github.kittinunf.result.Result
 import com.squareup.moshi.JsonAdapter
 import cucumber.api.java8.No
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
+import org.apache.logging.log4j.LogManager
 import java.time.LocalDate
+import java.time.YearMonth
 import kotlin.test.assertEquals
 
-class MinsteinntektApiV1Steps : No {
+private val logger = LogManager.getLogger()
 
-    val v1MinsteinntektPath = "/v1/minsteinntekt"
+class MinsteinntektApiV1Steps : No {
 
     val minsteinntektInnParametereAdapter: JsonAdapter<MinsteinntektOgPeriodeParametere> =
         moshiInstance.adapter<MinsteinntektOgPeriodeParametere>(
@@ -36,8 +37,9 @@ class MinsteinntektApiV1Steps : No {
                 )
         }
 
-        Når("digidag skal vurdere minsteinntektkrav") {
-            val response = apiRequest(minsteinntektInnParametereAdapter.toJson(minsteinntektInnParametere))
+        Når("digidag skal vurdere minsteinntektkrav og periode") {
+            val response =
+                testApiClient.minsteinntektOgPeriode(minsteinntektInnParametereAdapter.toJson(minsteinntektInnParametere))
             minsteinntektBeregning = response.parseJsonFrom(minsteinntektBeregningAdapter)
         }
 
@@ -46,141 +48,34 @@ class MinsteinntektApiV1Steps : No {
         }
 
         Og("har krav på {int} uker") { periodeAntallUker: Int ->
-            if (periodeAntallUker > 0) {
+            if (periodeAntallUker > 0) { // todo Should not have perioderesultat if minsteinntektOgPeriode not validated
                 assertEquals(periodeAntallUker, minsteinntektBeregning.resultat.periodeAntallUker)
             }
         }
 
-        Gitt("at søker har ingen inntekt siste {int} måneder") { måneder: Int ->
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Når("digidag skal vurdere minsteinntektkrav og periode") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
         Gitt("har avtjent verneplikt") {
             // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
+            minsteinntektInnParametere = minsteinntektInnParametere.copy(harAvtjentVerneplikt = true)
         }
 
-        Så("er kravet til minsteinntekt {string}") { string: String ->
+        Gitt("hvor brukt inntekt er fra førstemåned {string} og sistemåned {string}") { førstemåned: String, sistemåned: String ->
             // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Så("perioden er {int} uker") { int1: Int ->
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Så("grunnlaget er XXX") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Så("satsen er XXX") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Gitt("at grunnlag er satt manuelt til XXX") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Når("digidag skal sette sats") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Så("er ukessats satt til XXX") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Så("dagsats satt til XXX") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Gitt("at søker har fått minsteinntekt oppfylt") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Gitt("søker skal få barnetilleg") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Så("er det lagt til {int} * {int} * antall barn på ukessats") { int1: Int, int2: Int ->
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Gitt("at søker har tjent {double}G siste {int} måneder") { double1: Double, int1: Int ->
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Når("digidag skal vurdere søknaden") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Så("grunnlaget er satt til XXX") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Så("dagsatsen er satt til XXX") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Så("ukessatsen er satt til XXX") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
+            minsteinntektInnParametere = minsteinntektInnParametere.copy(
+                bruktInntektsPeriode = InntektsPeriode(
+                    foersteMaaned = YearMonth.parse(førstemåned),
+                    sisteMaaned = YearMonth.parse(sistemåned)
+                )
+            )
         }
 
         Gitt("at søker skal ha medberegnet inntekt fra fangst og fisk") {
             // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
+            minsteinntektInnParametere = minsteinntektInnParametere.copy(oppfyllerKravTilFangstOgFisk = true)
         }
 
-        Så("tas denne inntekten med") {
+        Så("inntektene inneholder fangs og fisk") {
             // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Gitt("at noe av inntekten er benyttet fra før") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-
-        Så("skal denne trekkes fra") {
-            // Write code here that turns the phrase above into concrete actions
-            throw cucumber.api.PendingException()
-        }
-    }
-
-    private fun apiRequest(body: String): String {
-        val (_, response, result) = with(
-            "https://dp-regel-api-arena-adapter.nais.preprod.local/v1/minsteinntekt".httpPost()
-                .header("Content-Type" to "application/json")
-                .body(body)
-        ) {
-            responseString()
-        }
-
-        return when (result) {
-            is Result.Failure -> throw AssertionError(
-                "Failed post to adapter. Response message ${response.responseMessage}. Error message: ${result.error.message}"
-            )
-            is Result.Success -> result.get()
+            minsteinntektBeregning.inntekt.first().inneholderNaeringsinntekter
         }
     }
 }

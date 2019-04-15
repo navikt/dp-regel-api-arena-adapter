@@ -115,9 +115,16 @@ pipeline {
               }
 
               steps {
-                sh label: 'User Acceptance Tests', script: """
-                  ./scripts/test/uat || true
-                """
+               withCredentials([usernamePassword(
+                    credentialsId: 'srvdp-regel-api-ar',
+                    usernameVariable: 'CUCUMBER_TEST_USERNAME',
+                    passwordVariable: 'CUCUMBER_TEST_PASSWORD'
+                    )]) {
+                        sh label: 'User Acceptance Tests', script: """
+                        ./scripts/test/uat || true
+                       """
+                    }
+
               }
             }
 
