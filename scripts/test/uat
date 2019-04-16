@@ -16,4 +16,4 @@ echo 'Env vars stop *******************************************'
 
 
 
-./gradlew uat --debug
+./gradlew uat
