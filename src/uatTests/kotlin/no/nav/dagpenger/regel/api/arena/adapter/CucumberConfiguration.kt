@@ -24,7 +24,7 @@ private val devProperties = ConfigurationMap(
     mapOf(
         "application.profile" to "DEV",
         "dp.regel.api.arena.adapter.url" to "https://dp-regel-api-arena-adapter.nais.preprod.local",
-        "oidc.sts.issuerurl" to "https://vtpmock.local:8063/stsrest/rest/v1/sts/token",
+        "oidc.sts.issuerurl" to "https://security-token-service.nais.preprod.local/rest/v1/sts/token",
         "disable.ssl" to "false"
 
     )

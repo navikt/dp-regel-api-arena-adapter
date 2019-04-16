@@ -122,6 +122,7 @@ tasks.register<Test>("uat") {
     classpath = sourceSets["uat"].runtimeClasspath
     mustRunAfter(tasks["test"])
     useJUnitPlatform()
+    environment(mapOf("CUCUMBER_ENV" to "dev"))
     testLogging {
         showExceptions = true
         showStackTraces = true
