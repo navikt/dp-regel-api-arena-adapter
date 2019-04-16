@@ -2,18 +2,14 @@
 
 echo $PWD
 
-
-CUCUMBER_ENV=dev
-
-
 echo 'Running uat tests'
 
-echo 'Env vars *******************************************'
+echo 'Gradle properties  *******************************************'
 
-env
+ ./gradlew properties
 
-echo 'Env vars stop *******************************************'
 
+echo 'Gradle properties stop *******************************************'
 
 
 ./gradlew uat
