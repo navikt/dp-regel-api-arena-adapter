@@ -120,6 +120,7 @@ pipeline {
                     usernameVariable: 'CUCUMBER_TEST_USERNAME',
                     passwordVariable: 'CUCUMBER_TEST_PASSWORD'
                     )]) {
+                         export CUCUMBER_ENV=dev
                         sh label: 'User Acceptance Tests', script: """
                         ./scripts/test/uat || true
                        """
