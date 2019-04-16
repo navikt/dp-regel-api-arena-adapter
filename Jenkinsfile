@@ -124,7 +124,21 @@ pipeline {
                         ./scripts/test/uat || true
                        """
                     }
+                 post {
+                         always {
+                           publishHTML target: [
+                             allowMissing: true,
+                             alwaysLinkToLastBuild: false,
+                             keepAll: true,
+                             reportDir: 'build/reports/tests/uat',
+                             reportFiles: 'index.html',
+                             reportName: 'Test coverage'
+                           ]
 
+                           cucumber 'build/cucumber.json'
+
+                           junit 'build/test-results/uat/*.xml'
+                         }
               }
             }
 
