@@ -6,8 +6,13 @@ Adapter for Arena mot DigiDag Dagpenger regel API
 
 ## Starte applikasjonen lokalt
 
-Se https://github.com/navikt/dagpenger og docker-compose
+Se [Dagpenger docker compose](https://github.com/navikt/dagpenger/blob/master/docker-compose/README.md) og docker-compose
 
+## Kjør "user acceptance tests" (Cucumber)
+
+Etter å ha starte docker-compose i forrige avsnitt, kjør:
+
+'./gradlew uatLocal'
 
 ## Kjøre mot testmiljø (preprod, eller dev)
 

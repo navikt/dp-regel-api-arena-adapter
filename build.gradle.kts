@@ -115,7 +115,22 @@ sourceSets {
 
 configurations["uatCompile"].extendsFrom(configurations["testCompile"])
 
-tasks.register<Test>("uat") {
+tasks.register<Test>("uatLocal") {
+    description = "Runs the user acceptance tests."
+    group = "verification"
+    testClassesDirs = sourceSets["uat"].output.classesDirs
+    classpath = sourceSets["uat"].runtimeClasspath
+    mustRunAfter(tasks["test"])
+    useJUnitPlatform()
+    testLogging {
+        showExceptions = true
+        showStackTraces = true
+        exceptionFormat = TestExceptionFormat.FULL
+        events = setOf(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
+    }
+}
+
+tasks.register<Test>("uatDev") {
     description = "Runs the user acceptance tests."
     group = "verification"
     testClassesDirs = sourceSets["uat"].output.classesDirs
