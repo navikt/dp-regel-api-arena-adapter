@@ -17,4 +17,4 @@ export CUCUMBER_ENV=dev
 
 
 
-./gradlew uat --debug
+./gradlew uat
