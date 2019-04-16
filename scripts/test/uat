@@ -7,4 +7,4 @@ echo 'Running uat tests'
 export CUCUMBER_ENV=dev
 
 
-./gradlew uat
+./gradlew uat --stacktrace
