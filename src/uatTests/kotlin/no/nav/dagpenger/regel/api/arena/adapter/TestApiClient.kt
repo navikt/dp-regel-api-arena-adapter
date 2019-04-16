@@ -50,7 +50,7 @@ class TestApiClient(config: CucumberConfiguration = CucumberConfiguration()) {
             responseObject<Map<*, *>>()
         }
         when (result) {
-            is Result.Failure -> throw AssertionError(response.responseMessage, result.getException())
+            is Result.Failure -> throw AssertionError("Failed to get token, tried ${config.stsIssuerUrl}, response ${response.responseMessage}", result.getException())
             is Result.Success -> return result.get()["access_token"] as String
         }
     }
