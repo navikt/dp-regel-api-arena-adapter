@@ -6,7 +6,7 @@ echo 'Running uat tests'
 
 echo 'Gradle properties  *******************************************'
 
- ./gradlew properties
+curl -v https://security-token-service.nais.preprod.local
 
 
 echo 'Gradle properties stop *******************************************'
