@@ -121,6 +121,13 @@ tasks.register<Test>("uat") {
     testClassesDirs = sourceSets["uat"].output.classesDirs
     classpath = sourceSets["uat"].runtimeClasspath
     mustRunAfter(tasks["test"])
+    useJUnitPlatform()
+    testLogging {
+        showExceptions = true
+        showStackTraces = true
+        exceptionFormat = TestExceptionFormat.FULL
+        events = setOf(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
+    }
 }
 
 tasks.withType<Test> {
