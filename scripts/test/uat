@@ -4,7 +4,17 @@ echo $PWD
 
 echo 'Running uat tests'
 
+echo 'Env vars *******************************************'
+
+env
+
+echo 'Env vars stop *******************************************'
+
+
 export CUCUMBER_ENV=dev
 
 
-./gradlew uat --stacktrace
+
+
+
+./gradlew uat --debug
