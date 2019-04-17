@@ -32,7 +32,6 @@ Egenskap: Vurderer minsteinntektskrav
     Så kravet til minsteinntekt er "ikke oppfylt"
     Og inntektene inneholder fangs og fisk
 
-  @ignored # Fangst og fisk parameter blir ikke tatt med i beregningen - ref JIRA..
   Scenario: Inntekt fra fangst og fisk skal kun tas med hvis saksbehandler vurderer det
     Gitt at søker med aktør id "FF_INNTEKT" med vedtak id 12345 med beregningsdato "2019-07-01"
     Og at søker skal ha medberegnet inntekt fra fangst og fisk
