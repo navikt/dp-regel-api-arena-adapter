@@ -8,6 +8,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriode
 import org.apache.logging.log4j.LogManager
 import java.time.LocalDate
 import java.time.YearMonth
+
 import kotlin.test.assertEquals
 
 private val logger = LogManager.getLogger()

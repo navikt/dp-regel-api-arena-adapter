@@ -103,6 +103,7 @@ spotless {
 }
 
 sourceSets {
+
     create("uat") {
         withConvention(KotlinSourceSet::class) {
             java.srcDir(file("src/uatTests/kotlin"))
@@ -114,6 +115,8 @@ sourceSets {
 }
 
 configurations["uatCompile"].extendsFrom(configurations["testCompile"])
+
+
 
 tasks.register<Test>("uatLocal") {
     description = "Runs the user acceptance tests."

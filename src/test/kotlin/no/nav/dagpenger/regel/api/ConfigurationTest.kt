@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.api
 
+import io.kotlintest.shouldBe
 import org.junit.jupiter.api.Test
 
 internal class ConfigurationTest {
@@ -26,7 +27,11 @@ internal class ConfigurationTest {
 
         withProps(dummyConfigs + mapOf("NAIS_CLUSTER_NAME" to "prod-fss")) {
             with(Configuration()) {
-                kotlin.test.assertEquals(Profile.PROD, this.application.profile)
+                this.application.profile shouldBe Profile.PROD
+                this.application.jwksIssuer shouldBe "https://security-token-service.nais.adeo.no"
+                this.application.jwksUrl shouldBe "http://security-token-service/rest/v1/sts/jwks"
+                this.application.dpInntektApiUrl shouldBe "http://dp-inntekt-api"
+                this.application.dpRegelApiUrl shouldBe "http://dp-regel-api"
             }
         }
     }
