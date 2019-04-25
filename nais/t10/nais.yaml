@@ -11,6 +11,6 @@ spec:
     - name:  DP_INNTEKT_API_URL
       value: "http://dp-inntekt-api.default"
     - name:  JWKS_ISSUER
-      value: "https://security-token-service.nais.preprod.local/"
+      value: "https://security-token-service-t10.nais.preprod.local"
     - name:  JWKS_URL
       value: "https://security-token-service-t10.nais.preprod.local/rest/v1/sts/jwks"
