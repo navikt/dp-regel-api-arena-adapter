@@ -8,6 +8,9 @@ import com.natpryce.konfig.booleanType
 import com.natpryce.konfig.intType
 import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
+import mu.KotlinLogging
+
+private val LOGGER = KotlinLogging.logger {}
 
 private val localProperties = ConfigurationMap(
     mapOf(
@@ -61,7 +64,11 @@ data class Configuration(
         val jwksIssuer: String = config()[Key("jwks.issuer", stringType)],
         val disableJwt: Boolean = config()[Key("enable.jwt", booleanType)]
 
-    )
+    ) {
+        init {
+            LOGGER.info { "Using jwksurl $jwksUrl and issuer $jwksIssuer" }
+        }
+    }
 }
 
 enum class Profile {
