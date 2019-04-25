@@ -1,0 +1,5 @@
+namespace: t10
+bases:
+  - ../base
+patchesStrategicMerge:
+  - nais.yaml

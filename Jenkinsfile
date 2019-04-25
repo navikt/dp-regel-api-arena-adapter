@@ -46,6 +46,9 @@ pipeline {
         sh label: 'Prepare dev service contract', script: """
            kustomize build ./nais/dev -o ./nais/nais-dev-deploy.yaml &&  cat ./nais/nais-dev-deploy.yaml
         """
+        sh label: 'Prepare dev t10 service contract', script: """
+           kustomize build ./nais/t10 -o ./nais/nais-dev-t10-deploy.yaml &&  cat ./nais/nais-dev-t10-deploy.yaml
+        """
         sh label: 'Prepare prod service contract', script: """
            kustomize build ./nais/prod -o ./nais/nais-prod-deploy.yaml &&  cat ./nais/nais-prod-deploy.yaml
         """
@@ -73,16 +76,23 @@ pipeline {
           when { branch 'master' }
           steps {
 
-
             sh label: 'Deploy with kubectl', script: """
               kubectl config use-context dev-${env.ZONE}
               kubectl apply -f ./nais/nais-dev-deploy.yaml --wait
               kubectl rollout status -w deployment/${APPLICATION_NAME}
             """
-
             archiveArtifacts artifacts: 'nais/nais-dev-deploy.yaml', fingerprint: true
+
+
+            sh label: 'Deploy to t10 with kubectl', script: """
+              kubectl config use-context dev-${env.ZONE}
+              kubectl apply -f ./nais/nais-dev-t10-deploy.yaml --wait
+              kubectl rollout status -w deployment/${APPLICATION_NAME} -n t10
+            """
+            archiveArtifacts artifacts: 'nais/nais-dev-t10-deploy.yaml', fingerprint: true
+
           }
-        }
+       }
 
         stage('Run tests') {
           // Since these tests usually are quite expensive, running them as
@@ -105,10 +115,34 @@ pipeline {
               }
 
               steps {
-                sh label: 'User Acceptance Tests', script: """
-                  ./scripts/test/uat || true
-                """
-              }
+               withCredentials([usernamePassword(
+                    credentialsId: 'srvdp-regel-api-ar',
+                    usernameVariable: 'CUCUMBER_TEST_USERNAME',
+                    passwordVariable: 'CUCUMBER_TEST_PASSWORD'
+                    )]) {
+                        sh label: 'User Acceptance Tests', script: """
+                        ./scripts/test/uat || true
+                       """
+                    }
+
+
+                 post {
+                    always {
+                        publishHTML target: [
+                            allowMissing: true,
+                            alwaysLinkToLastBuild: false,
+                            keepAll: true,
+                            reportDir: 'build/reports/tests/uat',
+                            reportFiles: 'index.html',
+                            reportName: 'Test coverage'
+                        ]
+
+                        cucumber 'build/cucumber.json'
+
+                        junit 'build/test-results/uat/*.xml'
+                    }
+                 }
+               }
             }
 
             stage('Integration Tests') {

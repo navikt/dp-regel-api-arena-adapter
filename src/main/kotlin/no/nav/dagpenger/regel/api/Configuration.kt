@@ -13,7 +13,6 @@ private val localProperties = ConfigurationMap(
     mapOf(
         "application.profile" to "LOCAL",
         "application.httpPort" to "8093",
-        "oidc.sts.issuerurl" to "http://localhost/",
         "srvdp.regel.api.arena.adapter.username" to "username",
         "srvdp.regel.api.arena.adapter.password" to "password",
         "dp.regel.api.url" to "https://localhost",
