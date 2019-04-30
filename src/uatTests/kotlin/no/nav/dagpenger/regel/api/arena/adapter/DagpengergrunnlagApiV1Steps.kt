@@ -55,5 +55,9 @@ class DagpengergrunnlagApiV1Steps : No {
         Så("dagsats satt til {int}") { dagsats: Int ->
             assertEquals(dagsats, dagpengegrunnlagBeregning.resultat.sats.dagsats)
         }
+
+        Så("da er parameteret barn {int}") { antallBarn: Int ->
+            assertEquals(antallBarn, dagpengegrunnlagBeregning.parametere.antallBarn)
+        }
     }
 }

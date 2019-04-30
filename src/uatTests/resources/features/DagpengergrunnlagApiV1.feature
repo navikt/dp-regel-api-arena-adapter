@@ -29,4 +29,5 @@ Egenskap: Hent dagpengergrunnlag
     Når digidag skal beregne grunnlag
     Så er grunnlag satt til avkortet satt til 175000 og uavkortet til 175000
     Og er ukessats satt til 2865
-    Og dagsats satt til 420
+    Og dagsats satt til 573
+    Og da er parameteret barn 9
