@@ -18,8 +18,8 @@ class SynchronousSats(
 
         val ressursLocation = taskResponse.location ?: throw RegelApiArenaAdapterException("Did not get location with task")
 
-        val minsteinntektSubsumsjon = regelApiSatsHttpClient.getSats(ressursLocation)
+        val satsSubsumsjon = regelApiSatsHttpClient.getSats(ressursLocation)
 
-        return minsteinntektSubsumsjon
+        return satsSubsumsjon
     }
 }
