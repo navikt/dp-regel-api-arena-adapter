@@ -35,7 +35,6 @@ internal class SatsParametereKtTest {
             harAvtjentVerneplikt shouldBe true
             antallBarn shouldBe 1
             manueltGrunnlag shouldBe 100
-
         }
     }
 }

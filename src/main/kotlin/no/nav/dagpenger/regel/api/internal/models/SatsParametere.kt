@@ -21,4 +21,3 @@ fun GrunnlagOgSatsParametere.toSatsParametere(): SatsParametere =
         antallBarn = this.antallBarn,
         manueltGrunnlag = this.grunnlag
     )
-
