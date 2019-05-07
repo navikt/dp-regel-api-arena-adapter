@@ -10,6 +10,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsParamete
 import no.nav.dagpenger.regel.api.internal.models.SatsParametere
 import no.nav.dagpenger.regel.api.internal.models.SatsSubsumsjon
 import no.nav.dagpenger.regel.api.internal.models.TaskResponse
+import no.nav.dagpenger.regel.api.internal.models.toSatsParametere
 
 class RegelApiSatsHttpClient(private val regelApiUrl: String) {
 
@@ -17,13 +18,7 @@ class RegelApiSatsHttpClient(private val regelApiUrl: String) {
     fun startSatsSubsumsjon(payload: GrunnlagOgSatsParametere): String {
         val url = "$regelApiUrl/sats"
 
-        val internalParametere = SatsParametere(
-            aktorId = payload.aktorId,
-            vedtakId = payload.vedtakId,
-            beregningsdato = payload.beregningsdato,
-            antallBarn = payload.antallBarn,
-            manueltGrunnlag = payload.grunnlag
-        )
+        val internalParametere = payload.toSatsParametere()
 
         val json = jsonAdapter.toJson(internalParametere)
 
