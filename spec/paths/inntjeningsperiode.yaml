@@ -1,7 +1,7 @@
 post:
   tags:
     - Inntjeningsperiode
-  summary: Sjekk gyldighet av beregningsdato (BETA!)
+  summary: Sjekk gyldighet av beregningsdato
   requestBody:
     description: Hvilke parametere som skal brukes for beregningen
     content:
