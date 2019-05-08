@@ -14,3 +14,11 @@ allOf:
         description: Hvis manuelt grunnlag er satt så vil tom Inntekt returneres.
         items:
           $ref: '#/components/schemas/Inntekt'
+      inntektManueltRedigert:
+        type: boolean
+        description: Indikerer at inntekten er redigert manuelt av saksbehandler
+        example: false
+      inntektAvvik:
+        type: boolean
+        description: Indikerer at inntektet inneholder avvik som ikke er med i beregningen
+        example: true
