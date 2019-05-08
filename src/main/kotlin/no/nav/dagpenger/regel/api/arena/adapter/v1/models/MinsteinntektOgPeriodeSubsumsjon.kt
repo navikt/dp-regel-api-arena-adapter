@@ -6,11 +6,13 @@ import java.time.LocalDateTime
 data class MinsteinntektOgPeriodeSubsumsjon(
     val minsteinntektSubsumsjonsId: String,
     val periodeSubsumsjonsId: String? = null,
-    val opprettet: LocalDateTime, // todo: ZonedDateTime?
-    val utfort: LocalDateTime, // todo: ZonedDateTime?,
+    val opprettet: LocalDateTime,
+    val utfort: LocalDateTime,
     val parametere: MinsteinntektOgPeriodeRegelfaktum,
     val resultat: MinsteinntektOgPeriodeResultat,
-    val inntekt: Set<InntektMinsteinntekt>
+    val inntekt: Set<InntektMinsteinntekt>,
+    val inntektManueltRedigert: Boolean? = null,
+    val inntektAvvik: Boolean? = null
 )
 
 data class MinsteinntektOgPeriodeRegelfaktum(
@@ -26,13 +28,4 @@ data class MinsteinntektOgPeriodeRegelfaktum(
 data class MinsteinntektOgPeriodeResultat(
     val oppfyllerKravTilMinsteArbeidsinntekt: Boolean,
     val periodeAntallUker: Int? = null
-) {
-    /*
-    init {
-        val gyldigeUker = setOf(26, 52, 104)
-        if (!gyldigeUker.contains(periodeAntallUker)) {
-            throw IllegalArgumentException("Ugyldig antall uker for minsteinntekt, gyldige verdier er ${gyldigeUker.joinToString { "$it" }}")
-        }
-    }
-    */
-}
+)
