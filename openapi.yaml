@@ -89,7 +89,7 @@ paths:
     post:
       tags:
         - Inntjeningsperiode
-      summary: Sjekk gyldighet av beregningsdato (BETA!)
+      summary: Sjekk gyldighet av beregningsdato
       requestBody:
         description: Hvilke parametere som skal brukes for beregningen
         content:
@@ -237,6 +237,14 @@ components:
               description: Hvis manuelt grunnlag er satt så vil tom Inntekt returneres.
               items:
                 $ref: '#/components/schemas/Inntekt'
+            inntektManueltRedigert:
+              type: boolean
+              description: Indikerer at inntekten er redigert manuelt av saksbehandler
+              example: false
+            inntektAvvik:
+              type: boolean
+              description: Indikerer at inntektet inneholder avvik som ikke er med i beregningen
+              example: true
     DagpengegrunnlagInnParametere:
       type: object
       required:
@@ -490,6 +498,14 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Inntekt'
+            inntektManueltRedigert:
+              type: boolean
+              description: Indikerer at inntekten er redigert manuelt av saksbehandler
+              example: false
+            inntektAvvik:
+              type: boolean
+              description: Indikerer at inntektet inneholder avvik som ikke er med i beregningen
+              example: true
     MinsteinntektInnParametere:
       required:
         - aktorId

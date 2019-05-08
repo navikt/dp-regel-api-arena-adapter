@@ -147,7 +147,7 @@
         "tags": [
           "Inntjeningsperiode"
         ],
-        "summary": "Sjekk gyldighet av beregningsdato (BETA!)",
+        "summary": "Sjekk gyldighet av beregningsdato",
         "requestBody": {
           "description": "Hvilke parametere som skal brukes for beregningen",
           "content": {
@@ -385,6 +385,16 @@
                 "items": {
                   "$ref": "#/components/schemas/Inntekt"
                 }
+              },
+              "inntektManueltRedigert": {
+                "type": "boolean",
+                "description": "Indikerer at inntekten er redigert manuelt av saksbehandler",
+                "example": false
+              },
+              "inntektAvvik": {
+                "type": "boolean",
+                "description": "Indikerer at inntektet inneholder avvik som ikke er med i beregningen",
+                "example": true
               }
             }
           }
@@ -720,6 +730,16 @@
                 "items": {
                   "$ref": "#/components/schemas/Inntekt"
                 }
+              },
+              "inntektManueltRedigert": {
+                "type": "boolean",
+                "description": "Indikerer at inntekten er redigert manuelt av saksbehandler",
+                "example": false
+              },
+              "inntektAvvik": {
+                "type": "boolean",
+                "description": "Indikerer at inntektet inneholder avvik som ikke er med i beregningen",
+                "example": true
               }
             }
           }
