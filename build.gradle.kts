@@ -77,6 +77,7 @@ dependencies {
 
     implementation("io.prometheus:simpleclient_common:$prometheusVersion")
     implementation("io.prometheus:simpleclient_hotspot:$prometheusVersion")
+    implementation("io.prometheus:simpleclient_log4j2:$prometheusVersion")
 
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.2.0")
 
