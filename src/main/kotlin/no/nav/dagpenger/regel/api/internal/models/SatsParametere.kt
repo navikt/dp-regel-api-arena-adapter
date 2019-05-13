@@ -9,7 +9,8 @@ data class SatsParametere(
     val beregningsdato: LocalDate,
     val harAvtjentVerneplikt: Boolean = false,
     val manueltGrunnlag: Int? = null,
-    val antallBarn: Int? = 0
+    val antallBarn: Int? = 0,
+    val oppfyllerKravTilFangstOgFisk: Boolean = false
 )
 
 fun GrunnlagOgSatsParametere.toSatsParametere(): SatsParametere =
@@ -19,5 +20,6 @@ fun GrunnlagOgSatsParametere.toSatsParametere(): SatsParametere =
         beregningsdato = this.beregningsdato,
         harAvtjentVerneplikt = this.harAvtjentVerneplikt,
         antallBarn = this.antallBarn,
-        manueltGrunnlag = this.grunnlag
+        manueltGrunnlag = this.grunnlag,
+        oppfyllerKravTilFangstOgFisk = this.oppfyllerKravTilFangstOgFisk
     )

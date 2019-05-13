@@ -21,7 +21,7 @@ internal class SatsParametereKtTest {
             vedtakId = 1234,
             beregningsdato = localDate,
             harAvtjentVerneplikt = true,
-            oppfyllerKravTilFangstOgFisk = false,
+            oppfyllerKravTilFangstOgFisk = true,
             antallBarn = 1,
             bruktInntektsPeriode = inntektsPeriode,
             grunnlag = 100
@@ -35,6 +35,7 @@ internal class SatsParametereKtTest {
             harAvtjentVerneplikt shouldBe true
             antallBarn shouldBe 1
             manueltGrunnlag shouldBe 100
+            oppfyllerKravTilFangstOgFisk shouldBe true
         }
     }
 }
