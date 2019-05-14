@@ -98,7 +98,10 @@ fun mergeGrunnlagOgSatsSubsumsjon(
                 ),
                 it.inneholderFangstOgFisk
             )
-        }?.toSet()
+        }?.toSet(),
+        grunnlagFaktum.inntektManueltRedigert,
+        grunnlagFaktum.inntektAvvik
+
     )
 }
 
