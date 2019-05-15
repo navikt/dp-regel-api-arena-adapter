@@ -20,6 +20,7 @@ apply {
 }
 
 repositories {
+    maven("https://jitpack.io")
     jcenter()
     maven("https://dl.bintray.com/kittinunf/maven")
 }
@@ -67,6 +68,7 @@ dependencies {
 
     implementation("com.github.kittinunf.fuel:fuel:$fuelVersion")
     implementation("com.github.kittinunf.fuel:fuel-moshi:$fuelVersion")
+    implementation("com.github.navikt:dp-biblioteker:71770fe827")
 
     implementation("com.natpryce:konfig:$konfigVersion")
 

@@ -5,11 +5,12 @@ import com.github.kittinunf.fuel.moshi.responseObject
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.time.delay
 import kotlinx.coroutines.withTimeout
+import no.nav.dagpenger.oidc.OidcClient
 import no.nav.dagpenger.regel.api.internal.models.TaskPollResponse
 import no.nav.dagpenger.regel.api.internal.models.TaskResponse
 import java.time.Duration
 
-class RegelApiTasksHttpClient(private val regelApiUrl: String, private val timeout: Duration = Duration.ofSeconds(20)) {
+class RegelApiTasksHttpClient(private val regelApiUrl: String, private val timeout: Duration = Duration.ofSeconds(20), oidcClient: OidcClient) : RegelApiClient(oidcClient) {
     private val delayDuration = Duration.ofMillis(100)
 
     private fun pollInternal(taskUrl: String): TaskPollResponse {

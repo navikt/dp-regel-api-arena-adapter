@@ -26,6 +26,8 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import mu.KotlinLogging
+import no.nav.dagpenger.oidc.OidcClient
+import no.nav.dagpenger.oidc.StsOidcClient
 import no.nav.dagpenger.regel.api.Configuration
 import no.nav.dagpenger.regel.api.arena.adapter.v1.GrunnlagOgSatsApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InntjeningsperiodeApi
@@ -58,19 +60,20 @@ fun main() {
         .rateLimited(10, 1, TimeUnit.MINUTES)
         .build()
 
+    val oidcClient: OidcClient = StsOidcClient(config.application.jwksUrl, config.application.username, config.application.password)
     val regelApiTasksHttpClient =
-        RegelApiTasksHttpClient(config.application.dpRegelApiUrl)
-    val regelApiMinsteinntektHttpClient = RegelApiMinsteinntektHttpClient(config.application.dpRegelApiUrl)
-    val regelApiPeriodeHttpClient = RegelApiPeriodeHttpClient(config.application.dpRegelApiUrl)
-    val regelApiGrunnlagHttpClient = RegelApiGrunnlagHttpClient(config.application.dpRegelApiUrl)
-    val regelApiSatsHttpClient = RegelApiSatsHttpClient(config.application.dpRegelApiUrl)
+        RegelApiTasksHttpClient(config.application.dpRegelApiUrl, oidcClient = oidcClient)
+    val regelApiMinsteinntektHttpClient = RegelApiMinsteinntektHttpClient(config.application.dpRegelApiUrl, oidcClient)
+    val regelApiPeriodeHttpClient = RegelApiPeriodeHttpClient(config.application.dpRegelApiUrl, oidcClient)
+    val regelApiGrunnlagHttpClient = RegelApiGrunnlagHttpClient(config.application.dpRegelApiUrl, oidcClient)
+    val regelApiSatsHttpClient = RegelApiSatsHttpClient(config.application.dpRegelApiUrl, oidcClient)
 
     val synchronousMinsteinntekt = SynchronousMinsteinntekt(regelApiMinsteinntektHttpClient, regelApiTasksHttpClient)
     val synchronousPeriode = SynchronousPeriode(regelApiPeriodeHttpClient, regelApiTasksHttpClient)
     val synchronousGrunnlag = SynchronousGrunnlag(regelApiGrunnlagHttpClient, regelApiTasksHttpClient)
     val synchronousSats = SynchronousSats(regelApiSatsHttpClient, regelApiTasksHttpClient)
 
-    val inntektApiBeregningsdatoHttpClient = InntektApiInntjeningsperiodeHttpClient(config.application.dpInntektApiUrl)
+    val inntektApiBeregningsdatoHttpClient = InntektApiInntjeningsperiodeHttpClient(config.application.dpInntektApiUrl, oidcClient)
 
     val app = embeddedServer(Netty, port = config.application.httpPort) {
         regelApiAdapter(
@@ -80,8 +83,7 @@ fun main() {
             synchronousPeriode,
             synchronousGrunnlag,
             synchronousSats,
-            inntektApiBeregningsdatoHttpClient,
-            config.application.disableJwt
+            inntektApiBeregningsdatoHttpClient
         )
     }
 
@@ -98,8 +100,7 @@ fun Application.regelApiAdapter(
     synchronousPeriode: SynchronousPeriode,
     synchronousGrunnlag: SynchronousGrunnlag,
     synchronousSats: SynchronousSats,
-    inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient,
-    disableJwt: Boolean = false
+    inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient
 ) {
 
     install(DefaultHeaders)
@@ -188,7 +189,7 @@ fun Application.regelApiAdapter(
     }
 
     routing {
-        authenticate(optional = disableJwt) {
+        authenticate {
             route("/v1") {
                 MinsteinntektOgPeriodeApi(synchronousMinsteinntekt, synchronousPeriode)
                 GrunnlagOgSatsApi(synchronousGrunnlag, synchronousSats)

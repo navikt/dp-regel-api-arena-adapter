@@ -1,16 +1,19 @@
 package no.nav.dagpenger.regel.api.internal.grunnlag
 
+import com.github.kittinunf.fuel.core.extensions.authentication
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.moshi.moshiDeserializerOf
 import com.github.kittinunf.fuel.moshi.responseObject
 import com.github.kittinunf.result.Result
+import no.nav.dagpenger.oidc.OidcClient
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsParametere
+import no.nav.dagpenger.regel.api.internal.RegelApiClient
 import no.nav.dagpenger.regel.api.internal.models.GrunnlagSubsumsjon
 import no.nav.dagpenger.regel.api.internal.models.TaskResponse
 
-class RegelApiGrunnlagHttpClient(private val regelApiUrl: String) {
+class RegelApiGrunnlagHttpClient(private val regelApiUrl: String, oidcClient: OidcClient) : RegelApiClient(oidcClient) {
 
     private val jsonAdapter = moshiInstance.adapter(no.nav.dagpenger.regel.api.internal.models.GrunnlagParametere::class.java)
 
@@ -32,6 +35,7 @@ class RegelApiGrunnlagHttpClient(private val regelApiUrl: String) {
             with(
                 url.httpPost()
                     .header(mapOf("Content-Type" to "application/json"))
+                    .authentication().bearer(getOidcToken())
                     .body(json)
             ) {
                 responseObject<TaskResponse>()

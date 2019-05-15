@@ -1,6 +1,8 @@
 package no.nav.dagpenger.regel.api.internal
 
+import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
+import no.nav.dagpenger.oidc.OidcClient
 import no.nav.dagpenger.regel.api.internal.models.TaskStatus
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
@@ -21,9 +23,11 @@ internal class RegelApiTasksHttpClientTest {
 
     @Test
     fun `Should honor timeout `() {
+        val oidcClient: OidcClient = mockk(relaxed = true)
         val client = RegelApiTasksHttpClient(
             regelApiUrl = mockBackend.url("/").toString(),
-            timeout = Duration.ZERO
+            timeout = Duration.ZERO,
+            oidcClient = oidcClient
         )
         assertThrows(
             RegelApiTimeoutException::class.java
@@ -34,6 +38,7 @@ internal class RegelApiTasksHttpClientTest {
 
     @Test
     fun ` Should get response when task is task is done and redirected to the result  `() {
+        val oidcClient: OidcClient = mockk(relaxed = true)
         mockBackend.dispatcher = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest?): MockResponse {
                 return when (request?.path) {
@@ -47,7 +52,7 @@ internal class RegelApiTasksHttpClientTest {
         }
 
         val client =
-            RegelApiTasksHttpClient(regelApiUrl = mockBackend.url("").toString())
+            RegelApiTasksHttpClient(regelApiUrl = mockBackend.url("").toString(), oidcClient = oidcClient)
 
         val response = runBlocking { client.pollTask("task/123") }
         assertEquals("/minsteinntekt/123", response.location)
@@ -55,6 +60,7 @@ internal class RegelApiTasksHttpClientTest {
 
     @Test
     fun ` Should retry query until task have status DONE (and redirected) `() {
+        val oidcClient: OidcClient = mockk(relaxed = true)
         mockBackend.enqueue(
             MockResponse()
                 .setBody(responseBody(TaskStatus.PENDING))
@@ -72,7 +78,7 @@ internal class RegelApiTasksHttpClientTest {
                 .addHeader("Location", "/task/123")
         )
         val client =
-            RegelApiTasksHttpClient(regelApiUrl = mockBackend.url("").toString())
+            RegelApiTasksHttpClient(regelApiUrl = mockBackend.url("").toString(), oidcClient = oidcClient)
 
         val response = runBlocking { client.pollTask("task/123") }
         assertEquals(TaskStatus.DONE, response.task?.status)

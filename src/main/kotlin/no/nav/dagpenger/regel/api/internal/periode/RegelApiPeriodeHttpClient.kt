@@ -1,18 +1,21 @@
 package no.nav.dagpenger.regel.api.internal.periode
 
+import com.github.kittinunf.fuel.core.extensions.authentication
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.moshi.moshiDeserializerOf
 import com.github.kittinunf.fuel.moshi.responseObject
 import com.github.kittinunf.result.Result
+import no.nav.dagpenger.oidc.OidcClient
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeParametere
+import no.nav.dagpenger.regel.api.internal.RegelApiClient
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.internal.models.PeriodeParametere
 import no.nav.dagpenger.regel.api.internal.models.PeriodeSubsumsjon
 import no.nav.dagpenger.regel.api.internal.models.TaskResponse
 
-class RegelApiPeriodeHttpClient(private val regelApiUrl: String) {
+class RegelApiPeriodeHttpClient(private val regelApiUrl: String, oidcClient: OidcClient) : RegelApiClient(oidcClient) {
 
     private val jsonAdapter = moshiInstance.adapter(PeriodeParametere::class.java)
     fun getPeriode(ressursUrl: String): PeriodeSubsumsjon {
@@ -20,7 +23,7 @@ class RegelApiPeriodeHttpClient(private val regelApiUrl: String) {
         val jsonAdapter = moshiInstance.adapter(PeriodeSubsumsjon::class.java)
 
         val (_, response, result) =
-            with(url.httpGet()) { responseObject(moshiDeserializerOf(jsonAdapter)) }
+            with(url.httpGet().authentication().bearer(getOidcToken())) { responseObject(moshiDeserializerOf(jsonAdapter)) }
         return when (result) {
             is Result.Failure -> throw RegelApiPeriodeHttpClientException(
                 "Failed to run periode. Response message ${response.responseMessage}. Error message: ${result.error.message}. Response: ${response.body().asString("application/json")}}"
