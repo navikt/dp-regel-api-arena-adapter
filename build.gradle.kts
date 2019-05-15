@@ -68,7 +68,7 @@ dependencies {
 
     implementation("com.github.kittinunf.fuel:fuel:$fuelVersion")
     implementation("com.github.kittinunf.fuel:fuel-moshi:$fuelVersion")
-    implementation("com.github.navikt:dp-biblioteker:1.2019.05.15-09.50.8d6053f59a15")
+    implementation("com.github.navikt:dp-biblioteker:1.2019.05.15-09.58.e3ed5405e8ef")
 
     implementation("com.natpryce:konfig:$konfigVersion")
 
