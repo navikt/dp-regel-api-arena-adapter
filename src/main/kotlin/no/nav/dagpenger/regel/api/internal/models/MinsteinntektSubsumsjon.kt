@@ -23,5 +23,7 @@ data class MinsteinntektFaktum(
     val inntektsId: String,
     val harAvtjentVerneplikt: Boolean? = false,
     val oppfyllerKravTilFangstOgFisk: Boolean? = false,
-    val bruktInntektsPeriode: InntektsPeriode? = null
+    val bruktInntektsPeriode: InntektsPeriode? = null,
+    val inntektManueltRedigert: Boolean? = null,
+    val inntektAvvik: Boolean? = null
 )

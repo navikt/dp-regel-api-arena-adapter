@@ -101,7 +101,9 @@ fun mergeMinsteinntektOgPeriodeSubsumsjon(
                 it.inneholderFangstOgFisk,
                 it.andel
             )
-        }.toSet()
+        }.toSet(),
+        minsteinntektFaktum.inntektManueltRedigert,
+        minsteinntektFaktum.inntektAvvik
     )
 }
 

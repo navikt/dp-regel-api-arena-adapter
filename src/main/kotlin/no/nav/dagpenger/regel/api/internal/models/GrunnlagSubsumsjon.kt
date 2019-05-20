@@ -27,5 +27,7 @@ data class GrunnlagFaktum(
     val harAvtjentVerneplikt: Boolean = false,
     val oppfyllerKravTilFangstOgFisk: Boolean = false,
     val antallBarn: Int = 0,
-    val manueltGrunnlag: Int?
+    val manueltGrunnlag: Int?,
+    val inntektManueltRedigert: Boolean? = null,
+    val inntektAvvik: Boolean? = null
 )
