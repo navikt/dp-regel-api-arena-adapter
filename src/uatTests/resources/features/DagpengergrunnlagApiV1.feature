@@ -20,7 +20,7 @@ Egenskap: Hent dagpengergrunnlag
     Og det er beregnet med et manuelt grunnlag på 600000
     Når digidag skal beregne grunnlag
     Så er grunnlag satt til avkortet satt til 581298 og uavkortet til 600000
-    Og er ukessats satt til 6976
+    Og er ukessats satt til 6975
     Og dagsats satt til 1395
 
   Scenario: Beregn grunnlag og sats gitt barnetillegg
@@ -29,5 +29,5 @@ Egenskap: Hent dagpengergrunnlag
     Når digidag skal beregne grunnlag
     Så er grunnlag satt til avkortet satt til 175000 og uavkortet til 175000
     Og er ukessats satt til 2865
-    Og dagsats satt til 573
+    Og dagsats satt til 420
     Og da er parameteret barn 9
