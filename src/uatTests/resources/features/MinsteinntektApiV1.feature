@@ -44,3 +44,4 @@ Egenskap: Vurderer minsteinntektskrav
     Når digidag skal vurdere minsteinntektkrav og periode
     Så kravet til minsteinntekt er "ikke oppfylt"
     Og har krav på 0 uker
+    Og parameteret inneholder bruktInntektsPeriode

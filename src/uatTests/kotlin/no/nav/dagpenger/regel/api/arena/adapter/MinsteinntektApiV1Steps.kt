@@ -10,6 +10,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 private val logger = LogManager.getLogger()
 
@@ -55,12 +56,10 @@ class MinsteinntektApiV1Steps : No {
         }
 
         Gitt("har avtjent verneplikt") {
-            // Write code here that turns the phrase above into concrete actions
             minsteinntektInnParametere = minsteinntektInnParametere.copy(harAvtjentVerneplikt = true)
         }
 
         Gitt("hvor brukt inntekt er fra førstemåned {string} og sistemåned {string}") { førstemåned: String, sistemåned: String ->
-            // Write code here that turns the phrase above into concrete actions
             minsteinntektInnParametere = minsteinntektInnParametere.copy(
                 bruktInntektsPeriode = InntektsPeriode(
                     foersteMaaned = YearMonth.parse(førstemåned),
@@ -70,13 +69,15 @@ class MinsteinntektApiV1Steps : No {
         }
 
         Gitt("at søker skal ha medberegnet inntekt fra fangst og fisk") {
-            // Write code here that turns the phrase above into concrete actions
             minsteinntektInnParametere = minsteinntektInnParametere.copy(oppfyllerKravTilFangstOgFisk = true)
         }
 
         Så("inntektene inneholder fangs og fisk") {
-            // Write code here that turns the phrase above into concrete actions
             minsteinntektBeregning.inntekt.first().inneholderNaeringsinntekter
+        }
+
+        Så("parameteret inneholder bruktInntektsPeriode") {
+            assertTrue {  minsteinntektBeregning.parametere.bruktInntektsPeriode != null }
         }
     }
 }
