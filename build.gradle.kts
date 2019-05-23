@@ -59,6 +59,8 @@ dependencies {
     implementation("io.ktor:ktor-auth-jwt:$ktorVersion") {
         exclude(group = "junit")
     }
+    implementation("io.ktor:ktor-metrics-micrometer:$ktorVersion")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.1.4")
     implementation("com.github.navikt.dp-biblioteker:ktor-utils:$dpBibliotekerVersion")
 
     implementation("com.squareup.moshi:moshi-adapters:$moshiVersion")
