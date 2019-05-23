@@ -77,7 +77,7 @@ class MinsteinntektApiV1Steps : No {
         }
 
         Så("parameteret inneholder bruktInntektsPeriode") {
-            assertTrue {  minsteinntektBeregning.parametere.bruktInntektsPeriode != null }
+            assertTrue { minsteinntektBeregning.parametere.bruktInntektsPeriode != null }
         }
     }
 }
