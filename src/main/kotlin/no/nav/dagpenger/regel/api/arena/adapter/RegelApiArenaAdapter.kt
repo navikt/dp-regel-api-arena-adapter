@@ -18,13 +18,17 @@ import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode
+import io.ktor.metrics.micrometer.MicrometerMetrics
 import io.ktor.request.path
 import io.ktor.response.respond
-import io.ktor.routing.get
 import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import io.micrometer.core.instrument.Clock
+import io.micrometer.prometheus.PrometheusConfig
+import io.micrometer.prometheus.PrometheusMeterRegistry
+import io.prometheus.client.CollectorRegistry
 import mu.KotlinLogging
 import no.nav.dagpenger.regel.api.Configuration
 import no.nav.dagpenger.regel.api.arena.adapter.v1.GrunnlagOgSatsApi
@@ -124,6 +128,10 @@ fun Application.regelApiAdapter(
     }
     install(ContentNegotiation) {
         moshi(moshiInstance)
+    }
+
+    install(MicrometerMetrics) {
+        registry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT, CollectorRegistry.defaultRegistry, Clock.SYSTEM)
     }
     install(StatusPages) {
         exception<Throwable> { cause ->
