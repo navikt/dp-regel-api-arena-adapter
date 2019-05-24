@@ -20,7 +20,6 @@ import io.ktor.features.StatusPages
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.path
 import io.ktor.response.respond
-import io.ktor.routing.get
 import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
@@ -31,6 +30,8 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.GrunnlagOgSatsApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InntjeningsperiodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InvalidInnteksperiodeException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektOgPeriodeApi
+import no.nav.dagpenger.regel.api.arena.adapter.v2.GrunnlagOgSatsApiV2
+import no.nav.dagpenger.regel.api.arena.adapter.v2.MinsteinntektOgPeriodeApiV2
 import no.nav.dagpenger.regel.api.internal.RegelApiTasksHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
 import no.nav.dagpenger.regel.api.internal.grunnlag.RegelApiGrunnlagHttpClient
@@ -42,6 +43,9 @@ import no.nav.dagpenger.regel.api.internal.periode.RegelApiPeriodeHttpClient
 import no.nav.dagpenger.regel.api.internal.periode.SynchronousPeriode
 import no.nav.dagpenger.regel.api.internal.sats.RegelApiSatsHttpClient
 import no.nav.dagpenger.regel.api.internal.sats.SynchronousSats
+import no.nav.dagpenger.regel.api.internalV2.RegelApiBehovHttpClient
+import no.nav.dagpenger.regel.api.internalV2.RegelApiStatusHttpClient
+import no.nav.dagpenger.regel.api.internalV2.RegelApiSubsumsjonHttpClient
 import org.slf4j.event.Level
 import java.net.URI
 import java.net.URL
@@ -72,6 +76,10 @@ fun main() {
 
     val inntektApiBeregningsdatoHttpClient = InntektApiInntjeningsperiodeHttpClient(config.application.dpInntektApiUrl)
 
+    val behovHttpClient = RegelApiBehovHttpClient(config.application.dpRegelApiV2Url)
+    val statusHttpClient = RegelApiStatusHttpClient(config.application.dpRegelApiV2Url)
+    val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(config.application.dpRegelApiV2Url)
+
     val app = embeddedServer(Netty, port = config.application.httpPort) {
         regelApiAdapter(
             config.application.jwksIssuer,
@@ -81,6 +89,9 @@ fun main() {
             synchronousGrunnlag,
             synchronousSats,
             inntektApiBeregningsdatoHttpClient,
+            behovHttpClient,
+            statusHttpClient,
+            subsumsjonHttpClient,
             config.application.disableJwt
         )
     }
@@ -99,6 +110,9 @@ fun Application.regelApiAdapter(
     synchronousGrunnlag: SynchronousGrunnlag,
     synchronousSats: SynchronousSats,
     inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient,
+    behovHttpClient: RegelApiBehovHttpClient,
+    statusHttpClient: RegelApiStatusHttpClient,
+    subsumsjonHttpClient: RegelApiSubsumsjonHttpClient,
     disableJwt: Boolean = false
 ) {
 
@@ -175,6 +189,17 @@ fun Application.regelApiAdapter(
             )
             call.respond(status, problem)
         }
+        exception<no.nav.dagpenger.regel.api.internalV2.RegelApiTimeoutException> { cause ->
+            LOGGER.error("Tidsavbrudd ved beregning av regel", cause)
+            val status = HttpStatusCode.GatewayTimeout
+            val problem = Problem(
+                type = URI.create("urn:dp:error:regelberegning:tidsavbrudd"),
+                title = "Tidsavbrudd ved beregning av regel",
+                detail = cause.message,
+                status = status.value
+            )
+            call.respond(status, problem)
+        }
         status(HttpStatusCode.Unauthorized) {
             val status = HttpStatusCode.Unauthorized
             LOGGER.warn("Unauthorized call")
@@ -193,6 +218,10 @@ fun Application.regelApiAdapter(
                 MinsteinntektOgPeriodeApi(synchronousMinsteinntekt, synchronousPeriode)
                 GrunnlagOgSatsApi(synchronousGrunnlag, synchronousSats)
                 InntjeningsperiodeApi(inntektApiBeregningsdatoHttpClient)
+            }
+            route("/v2") {
+                GrunnlagOgSatsApiV2(behovHttpClient, statusHttpClient, subsumsjonHttpClient)
+                MinsteinntektOgPeriodeApiV2(behovHttpClient, statusHttpClient, subsumsjonHttpClient)
             }
         }
 

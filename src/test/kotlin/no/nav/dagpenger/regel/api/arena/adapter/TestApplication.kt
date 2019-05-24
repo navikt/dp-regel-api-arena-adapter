@@ -8,6 +8,9 @@ import no.nav.dagpenger.regel.api.internal.inntjeningsperiode.InntektApiInntjeni
 import no.nav.dagpenger.regel.api.internal.minsteinntekt.SynchronousMinsteinntekt
 import no.nav.dagpenger.regel.api.internal.periode.SynchronousPeriode
 import no.nav.dagpenger.regel.api.internal.sats.SynchronousSats
+import no.nav.dagpenger.regel.api.internalV2.RegelApiBehovHttpClient
+import no.nav.dagpenger.regel.api.internalV2.RegelApiStatusHttpClient
+import no.nav.dagpenger.regel.api.internalV2.RegelApiSubsumsjonHttpClient
 
 fun Application.mockedRegelApiAdapter(
     jwtIssuer: String = "test issuer",
@@ -16,7 +19,10 @@ fun Application.mockedRegelApiAdapter(
     synchronousPeriode: SynchronousPeriode = mockk(),
     synchronousGrunnlag: SynchronousGrunnlag = mockk(),
     synchronousSats: SynchronousSats = mockk(),
-    inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient = mockk()
+    inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient = mockk(),
+    behovHttpClient: RegelApiBehovHttpClient = mockk(),
+    statusHttpClient: RegelApiStatusHttpClient = mockk(),
+    subsumsjonHttpClient: RegelApiSubsumsjonHttpClient = mockk()
 ) {
     return regelApiAdapter(
         jwtIssuer,
@@ -25,6 +31,9 @@ fun Application.mockedRegelApiAdapter(
         synchronousPeriode,
         synchronousGrunnlag,
         synchronousSats,
-        inntektApiBeregningsdatoHttpClient
+        inntektApiBeregningsdatoHttpClient,
+        behovHttpClient,
+        statusHttpClient,
+        subsumsjonHttpClient
     )
 }

@@ -1,18 +1,15 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="INFO" packages="com.vlkan.log4j2.logstash.layout,io.prometheus.client.log4j2">
+log4j2.xml
+        <?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
     <Appenders>
-        <Console name="ConsoleAppender" target="SYSTEM_OUT">
-            <LogstashLayout dateTimeFormatPattern="yyyy-MM-dd'T'HH:mm:ss.SSSZZZ"
-                            eventTemplateUri="classpath:LogstashJsonEventLayoutV1.json"
-                            prettyPrintEnabled="false"
-                            stackTraceEnabled="true"/>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n" />
         </Console>
-        <Prometheus name="metrics"/>
     </Appenders>
     <Loggers>
-        <Root level="info">
-            <AppenderRef ref="ConsoleAppender"/>
-            <AppenderRef ref="metrics"/>
+        <Root level="debug" additivity="false">
+            <AppenderRef ref="console" />
         </Root>
     </Loggers>
 </Configuration>
