@@ -54,7 +54,7 @@ class GrunnlagOgSatsApiTest {
             bruktInntektsPeriode = InntektsPeriode(YearMonth.of(2019, 4), YearMonth.of(2019, 7))
         )
 
-        val expectedBehovRequest = BehovRequest (
+        val expectedBehovRequest = BehovRequest(
             aktorId = "12345",
             vedtakId = 123,
             beregningsdato = LocalDate.of(2019, 5, 13),
