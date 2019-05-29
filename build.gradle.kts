@@ -96,7 +96,7 @@ dependencies {
     testImplementation("io.cucumber:cucumber-junit:$cucumberVersion")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.3.0")
     testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("com.github.tomakehurst:wiremock-standalone:2.23.2")
+    testImplementation("com.github.tomakehurst:wiremock-standalone:2.20.0")
     testImplementation("org.skyscreamer:jsonassert:1.5.0")
 }
 
