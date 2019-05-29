@@ -1,10 +1,10 @@
-package no.nav.dagpenger.regel.api.arena.adapter.v1.models
+package no.nav.dagpenger.regel.api.internalV2.models
 
 data class Inntekt(
     val inntekt: Int,
     val periode: Int, // todo: enum?
     val inntektsPeriode: InntektsPeriode,
-    val inneholderNaeringsinntekter: Boolean,
+    val inneholderFangstOgFisk: Boolean,
     val andel: Int? = null
 ) {
     init {

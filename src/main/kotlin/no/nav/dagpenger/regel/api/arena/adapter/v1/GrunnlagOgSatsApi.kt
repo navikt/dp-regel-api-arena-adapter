@@ -7,12 +7,13 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.post
 import io.ktor.routing.route
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagBeregningsregel
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Grunnlag
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsRegelFaktum
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsResultat
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsSubsumsjon
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektGrunnlag
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Sats
 import no.nav.dagpenger.regel.api.internal.grunnlag.SynchronousGrunnlag
@@ -89,7 +90,7 @@ fun mergeGrunnlagOgSatsSubsumsjon(
             satsResultat.benyttet90ProsentRegel
         ),
         grunnlagSubsumsjon.inntekt?.map {
-            InntektGrunnlag(
+            Inntekt(
                 it.inntekt,
                 it.periode,
                 InntektsPeriode(
@@ -105,22 +106,22 @@ fun mergeGrunnlagOgSatsSubsumsjon(
     )
 }
 
-fun findBeregningsregel(grunnlagResultat: GrunnlagResultat): GrunnlagOgSatsResultat.Beregningsregel {
+fun findBeregningsregel(grunnlagResultat: GrunnlagResultat): GrunnlagBeregningsregel {
 
     return when {
-        grunnlagResultat.beregningsregel == "Manuell" && grunnlagResultat.harAvkortet -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_OVER_6G
-        grunnlagResultat.beregningsregel == "Manuell" -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_UNDER_6G
-        grunnlagResultat.beregningsregel == "ArbeidsinntektSiste12" && grunnlagResultat.harAvkortet -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_SISTE_2019
-        grunnlagResultat.beregningsregel == "ArbeidsinntektSiste12" -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_ETTAAR
-        grunnlagResultat.beregningsregel == "FangstOgFiskSiste12" && grunnlagResultat.harAvkortet -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_SISTE_2019
-        grunnlagResultat.beregningsregel == "FangstOgFiskSiste12" -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_ETTAAR
-        grunnlagResultat.beregningsregel == "ArbeidsinntektSiste36" && grunnlagResultat.harAvkortet -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_3SISTE_2019
-        grunnlagResultat.beregningsregel == "ArbeidsinntektSiste36" -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_TREAAR
-        grunnlagResultat.beregningsregel == "FangstOgFiskSiste36" && grunnlagResultat.harAvkortet -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_3SISTE_2019
-        grunnlagResultat.beregningsregel == "FangstOgFiskSiste36" -> GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_TREAAR
-        grunnlagResultat.beregningsregel == "Verneplikt" -> GrunnlagOgSatsResultat.Beregningsregel.VERNEPLIKT
-        grunnlagResultat.beregningsregel == "Manuell under 6G" -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_UNDER_6G
-        grunnlagResultat.beregningsregel == "Manuell over 6G" -> GrunnlagOgSatsResultat.Beregningsregel.MANUELL_OVER_6G
+        grunnlagResultat.beregningsregel == "Manuell" && grunnlagResultat.harAvkortet -> GrunnlagBeregningsregel.MANUELL_OVER_6G
+        grunnlagResultat.beregningsregel == "Manuell" -> GrunnlagBeregningsregel.MANUELL_UNDER_6G
+        grunnlagResultat.beregningsregel == "ArbeidsinntektSiste12" && grunnlagResultat.harAvkortet -> GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019
+        grunnlagResultat.beregningsregel == "ArbeidsinntektSiste12" -> GrunnlagBeregningsregel.ORDINAER_ETTAAR
+        grunnlagResultat.beregningsregel == "FangstOgFiskSiste12" && grunnlagResultat.harAvkortet -> GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019
+        grunnlagResultat.beregningsregel == "FangstOgFiskSiste12" -> GrunnlagBeregningsregel.ORDINAER_ETTAAR
+        grunnlagResultat.beregningsregel == "ArbeidsinntektSiste36" && grunnlagResultat.harAvkortet -> GrunnlagBeregningsregel.ORDINAER_OVER_6G_3SISTE_2019
+        grunnlagResultat.beregningsregel == "ArbeidsinntektSiste36" -> GrunnlagBeregningsregel.ORDINAER_TREAAR
+        grunnlagResultat.beregningsregel == "FangstOgFiskSiste36" && grunnlagResultat.harAvkortet -> GrunnlagBeregningsregel.ORDINAER_OVER_6G_3SISTE_2019
+        grunnlagResultat.beregningsregel == "FangstOgFiskSiste36" -> GrunnlagBeregningsregel.ORDINAER_TREAAR
+        grunnlagResultat.beregningsregel == "Verneplikt" -> GrunnlagBeregningsregel.VERNEPLIKT
+        grunnlagResultat.beregningsregel == "Manuell under 6G" -> GrunnlagBeregningsregel.MANUELL_UNDER_6G
+        grunnlagResultat.beregningsregel == "Manuell over 6G" -> GrunnlagBeregningsregel.MANUELL_OVER_6G
         else -> throw FeilBeregningsregelException("Ukjent beregningsregel: '${grunnlagResultat.beregningsregel}'")
     }
 }

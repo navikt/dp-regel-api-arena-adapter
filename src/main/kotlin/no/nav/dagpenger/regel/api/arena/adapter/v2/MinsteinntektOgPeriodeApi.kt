@@ -1,0 +1,46 @@
+package no.nav.dagpenger.regel.api.arena.adapter.v2
+
+import io.ktor.application.call
+import io.ktor.http.HttpStatusCode
+import io.ktor.request.receive
+import io.ktor.response.respond
+import io.ktor.routing.Route
+import io.ktor.routing.post
+import io.ktor.routing.route
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeParametere
+import no.nav.dagpenger.regel.api.internalV2.BehovRequest
+import no.nav.dagpenger.regel.api.internalV2.SynchronousSubsumsjonClient
+import no.nav.dagpenger.regel.api.internalV2.extractMinsteinntektOgPeriode
+import no.nav.dagpenger.regel.api.internalV2.models.InntektsPeriode
+
+fun Route.MinsteinntektOgPeriodeApiV2(
+    synchronousSubsumsjonClient: SynchronousSubsumsjonClient
+) {
+
+    route("/minsteinntekt") {
+        post {
+            val parametere = call.receive<MinsteinntektOgPeriodeParametere>()
+
+            val behovRequest = behovFromParametere(parametere)
+
+            val minsteinntektOgPeriodeSubsumsjon =
+                synchronousSubsumsjonClient.getSubsumsjonSynchronously(behovRequest, ::extractMinsteinntektOgPeriode)
+
+            call.respond(HttpStatusCode.OK, minsteinntektOgPeriodeSubsumsjon)
+        }
+    }
+}
+
+fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequest {
+    return BehovRequest(
+        parametere.aktorId,
+        parametere.vedtakId,
+        parametere.beregningsdato,
+        harAvtjentVerneplikt = parametere.harAvtjentVerneplikt,
+        oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,
+        bruktInntektsPeriode = parametere.bruktInntektsPeriode?.let { InntektsPeriode(
+            førsteMåned = parametere.bruktInntektsPeriode.foersteMaaned,
+            sisteMåned = parametere.bruktInntektsPeriode.sisteMaaned)
+        }
+    )
+}

@@ -1,7 +1,7 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
 import no.nav.dagpenger.regel.api.arena.adapter.v1.mergeGrunnlagOgSatsSubsumsjon
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsResultat
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagBeregningsregel
 import no.nav.dagpenger.regel.api.internal.models.GrunnlagFaktum
 import no.nav.dagpenger.regel.api.internal.models.GrunnlagResultat
 import no.nav.dagpenger.regel.api.internal.models.GrunnlagSubsumsjon
@@ -76,7 +76,7 @@ class LagGrunnlagOgSatsSubsumsjonTest {
         assertEquals("222", grunnlagOgSatsSubsumsjon.parametere.aktorId)
         assertEquals(555, grunnlagOgSatsSubsumsjon.resultat.grunnlag!!.avkortet)
         assertEquals(666, grunnlagOgSatsSubsumsjon.resultat.grunnlag!!.uavkortet)
-        assertEquals(GrunnlagOgSatsResultat.Beregningsregel.ORDINAER_OVER_6G_SISTE_2019, grunnlagOgSatsSubsumsjon.resultat.beregningsRegel)
+        assertEquals(GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019, grunnlagOgSatsSubsumsjon.resultat.beregningsRegel)
 
         assertEquals(240, grunnlagOgSatsSubsumsjon.resultat.sats.dagsats)
         assertEquals(240, grunnlagOgSatsSubsumsjon.resultat.sats.ukesats)
