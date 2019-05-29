@@ -1,0 +1,5 @@
+namespace: t5
+bases:
+  - ../base
+patchesStrategicMerge:
+  - nais.yaml
