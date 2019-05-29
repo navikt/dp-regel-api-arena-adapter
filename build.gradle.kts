@@ -21,6 +21,7 @@ apply {
 
 repositories {
     jcenter()
+    mavenCentral()
     maven("https://dl.bintray.com/kittinunf/maven")
     maven("https://jitpack.io")
 }
@@ -96,7 +97,7 @@ dependencies {
     testImplementation("io.cucumber:cucumber-junit:$cucumberVersion")
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.3.0")
     testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("com.github.tomakehurst:wiremock-standalone:2.20.0")
+    testImplementation("com.github.tomakehurst:wiremock-standalone:2.23.2")
     testImplementation("org.skyscreamer:jsonassert:1.5.0")
 }
 
