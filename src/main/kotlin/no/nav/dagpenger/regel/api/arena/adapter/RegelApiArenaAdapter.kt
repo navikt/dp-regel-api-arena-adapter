@@ -46,6 +46,7 @@ import no.nav.dagpenger.regel.api.internal.sats.SynchronousSats
 import no.nav.dagpenger.regel.api.internalV2.RegelApiBehovHttpClient
 import no.nav.dagpenger.regel.api.internalV2.RegelApiStatusHttpClient
 import no.nav.dagpenger.regel.api.internalV2.RegelApiSubsumsjonHttpClient
+import no.nav.dagpenger.regel.api.internalV2.SynchronousSubsumsjonClient
 import org.slf4j.event.Level
 import java.net.URI
 import java.net.URL
@@ -80,6 +81,8 @@ fun main() {
     val statusHttpClient = RegelApiStatusHttpClient(config.application.dpRegelApiV2Url)
     val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(config.application.dpRegelApiV2Url)
 
+    val synchronousSubsumsjonClient = SynchronousSubsumsjonClient(behovHttpClient, statusHttpClient, subsumsjonHttpClient)
+
     val app = embeddedServer(Netty, port = config.application.httpPort) {
         regelApiAdapter(
             config.application.jwksIssuer,
@@ -89,9 +92,7 @@ fun main() {
             synchronousGrunnlag,
             synchronousSats,
             inntektApiBeregningsdatoHttpClient,
-            behovHttpClient,
-            statusHttpClient,
-            subsumsjonHttpClient,
+            synchronousSubsumsjonClient,
             config.application.disableJwt
         )
     }
@@ -110,9 +111,7 @@ fun Application.regelApiAdapter(
     synchronousGrunnlag: SynchronousGrunnlag,
     synchronousSats: SynchronousSats,
     inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient,
-    behovHttpClient: RegelApiBehovHttpClient,
-    statusHttpClient: RegelApiStatusHttpClient,
-    subsumsjonHttpClient: RegelApiSubsumsjonHttpClient,
+    synchronousSubsumsjonClient: SynchronousSubsumsjonClient,
     disableJwt: Boolean = false
 ) {
 
@@ -220,8 +219,8 @@ fun Application.regelApiAdapter(
                 InntjeningsperiodeApi(inntektApiBeregningsdatoHttpClient)
             }
             route("/v2") {
-                GrunnlagOgSatsApiV2(behovHttpClient, statusHttpClient, subsumsjonHttpClient)
-                MinsteinntektOgPeriodeApiV2(behovHttpClient, statusHttpClient, subsumsjonHttpClient)
+                GrunnlagOgSatsApiV2(synchronousSubsumsjonClient)
+                MinsteinntektOgPeriodeApiV2(synchronousSubsumsjonClient)
             }
         }
 

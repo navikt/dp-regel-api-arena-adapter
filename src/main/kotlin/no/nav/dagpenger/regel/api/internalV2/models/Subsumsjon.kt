@@ -20,7 +20,7 @@ data class GrunnlagResultat(
     val uavkortet: BigDecimal,
     val harAvkortet: Boolean,
     val beregningsregel: String,
-    val grunnlagInntektsPerioder: List<Inntekt>
+    val grunnlagInntektsPerioder: List<Inntekt>?
 )
 
 data class MinsteinntektResultat(

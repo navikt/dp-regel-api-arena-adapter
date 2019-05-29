@@ -1,4 +1,4 @@
-package no.nav.dagpenger.regel.api.internalV2
+package no.nav.dagpenger.regel.api.internalV2.models
 
 enum class BehovStatus {
     PENDING

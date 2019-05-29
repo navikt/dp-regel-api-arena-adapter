@@ -4,6 +4,7 @@ import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.moshi.responseObject
 import com.github.kittinunf.result.Result
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
+import no.nav.dagpenger.regel.api.internalV2.models.BehovStatusResponse
 import no.nav.dagpenger.regel.api.internalV2.models.InntektsPeriode
 import java.time.LocalDate
 

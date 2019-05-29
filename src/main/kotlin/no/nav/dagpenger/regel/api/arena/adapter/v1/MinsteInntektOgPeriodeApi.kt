@@ -7,8 +7,7 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.post
 import io.ktor.routing.route
-
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektMinsteinntekt
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeRegelfaktum
@@ -91,7 +90,7 @@ fun mergeMinsteinntektOgPeriodeSubsumsjon(
             periodeSubsumsjon.resultat.antallUker
         ),
         minsteinntektSubsumsjon.inntekt.map {
-            InntektMinsteinntekt(
+            Inntekt(
                 it.inntekt,
                 it.periode,
                 InntektsPeriode(

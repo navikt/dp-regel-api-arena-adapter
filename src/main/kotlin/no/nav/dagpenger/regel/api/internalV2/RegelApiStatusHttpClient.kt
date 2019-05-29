@@ -6,6 +6,8 @@ import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.time.delay
 import kotlinx.coroutines.withTimeout
 import no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterException
+import no.nav.dagpenger.regel.api.internalV2.models.BehovStatus
+import no.nav.dagpenger.regel.api.internalV2.models.BehovStatusResponse
 import java.time.Duration
 
 class RegelApiStatusHttpClient(private val regelApiUrl: String, private val timeout: Duration = Duration.ofSeconds(20)) {

@@ -56,11 +56,11 @@ class TestApiClient(config: CucumberConfiguration = CucumberConfiguration()) {
     }
 
     fun minsteinntektOgPeriode(body: String): String {
-        return apiRequest(body, "/v1/minsteinntekt")
+        return apiRequest(body, "/v2/minsteinntekt")
     }
 
     fun grunnlagOgSats(body: String): String {
-        return apiRequest(body, "/v1/dagpengegrunnlag")
+        return apiRequest(body, "/v2/dagpengegrunnlag")
     }
 
     private fun apiRequest(body: String, path: String): String {
