@@ -33,8 +33,8 @@ bruk token i request mot APIet:
 ## Working on Open API specification
 ### Install
 
-1. Install [Node JS](https://nodejs.org/)
-2. Clone repo and run `npm install` in the repo root
+1. Install [Node JS](https://nodejs.org/).
+2. Clone repo and run `npm install` in the repo root.
 
 ### Usage
 
