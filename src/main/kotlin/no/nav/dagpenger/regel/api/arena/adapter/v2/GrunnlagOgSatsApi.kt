@@ -11,7 +11,6 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsParamete
 import no.nav.dagpenger.regel.api.internalV2.BehovRequest
 import no.nav.dagpenger.regel.api.internalV2.SynchronousSubsumsjonClient
 import no.nav.dagpenger.regel.api.internalV2.extractGrunnlagOgSats
-import no.nav.dagpenger.regel.api.internalV2.models.InntektsPeriode
 
 fun Route.GrunnlagOgSatsApiV2(
     synchronousSubsumsjonClient: SynchronousSubsumsjonClient
@@ -39,12 +38,6 @@ fun behovFromParametere(parametere: GrunnlagOgSatsParametere): BehovRequest {
         harAvtjentVerneplikt = parametere.harAvtjentVerneplikt,
         oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,
         manueltGrunnlag = parametere.grunnlag,
-        antallBarn = parametere.antallBarn,
-        bruktInntektsPeriode = parametere.bruktInntektsPeriode?.let {
-            InntektsPeriode(
-                it.foersteMaaned,
-                it.sisteMaaned
-            )
-        }
+        antallBarn = parametere.antallBarn
     )
 }

@@ -21,6 +21,8 @@ fun Route.MinsteinntektOgPeriodeApiV2(
         post {
             val parametere = call.receive<MinsteinntektOgPeriodeParametere>()
 
+            validateParameters(parametere)
+
             val behovRequest = behovFromParametere(parametere)
 
             val minsteinntektOgPeriodeSubsumsjon =
@@ -28,6 +30,14 @@ fun Route.MinsteinntektOgPeriodeApiV2(
 
             call.respond(HttpStatusCode.OK, minsteinntektOgPeriodeSubsumsjon)
         }
+    }
+}
+
+fun validateParameters(parameters: MinsteinntektOgPeriodeParametere) {
+    parameters.bruktInntektsPeriode?.let {
+        if (it.foersteMaaned.isAfter(it.sisteMaaned)) throw InvalidInnteksperiodeException(
+                "Feil bruktInntektsPeriode: foersteMaaned=${it.foersteMaaned} er etter sisteMaaned=${it.sisteMaaned}"
+        )
     }
 }
 

@@ -50,8 +50,7 @@ class GrunnlagOgSatsApiTest {
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = false,
             grunnlag = 3000,
-            antallBarn = 3,
-            bruktInntektsPeriode = InntektsPeriode(YearMonth.of(2019, 4), YearMonth.of(2019, 7))
+            antallBarn = 3
         )
 
         val expectedBehovRequest = BehovRequest(
@@ -61,10 +60,7 @@ class GrunnlagOgSatsApiTest {
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = false,
             manueltGrunnlag = 3000,
-            antallBarn = 3,
-            bruktInntektsPeriode = no.nav.dagpenger.regel.api.internalV2.models.InntektsPeriode(
-                YearMonth.of(2019, 4),
-                YearMonth.of(2019, 7))
+            antallBarn = 3
         )
 
         val result = behovFromParametere(parametere)
