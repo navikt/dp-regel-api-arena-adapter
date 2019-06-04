@@ -13,7 +13,7 @@ import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import no.nav.dagpenger.regel.api.arena.adapter.mockedRegelApiAdapter
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
-import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
+import no.nav.dagpenger.regel.api.internal.inntjeningsperiode.InntektApiInntjeningsperiodeHttpClient
 import no.nav.dagpenger.regel.api.internal.models.InntjeningsperiodeParametre
 import no.nav.dagpenger.regel.api.internal.models.InntjeningsperiodeResultat
 import org.junit.jupiter.api.Test

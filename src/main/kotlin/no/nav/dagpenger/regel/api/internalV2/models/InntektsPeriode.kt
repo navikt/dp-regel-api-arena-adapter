@@ -1,4 +1,4 @@
-package no.nav.dagpenger.regel.api.internal.models
+package no.nav.dagpenger.regel.api.internalV2.models
 
 import java.time.YearMonth
 

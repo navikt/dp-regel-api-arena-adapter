@@ -9,7 +9,7 @@ import io.ktor.routing.post
 import io.ktor.routing.route
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntjeningsperiodeParametre
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntjeningsperiodeResultat
-import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
+import no.nav.dagpenger.regel.api.internal.inntjeningsperiode.InntektApiInntjeningsperiodeHttpClient
 
 fun Route.InntjeningsperiodeApi(inntektApiberegningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient) {
 
