@@ -7,10 +7,10 @@ spec:
     - "https://dp-regel-api-arena-adapter-t5.nais.preprod.local"
   env:
     - name:  DP_REGEL_API_URL
-      value: "http://dp-regel-api.default"
+      value: "http://dp-regel-api.dp"
     - name:  DP_INNTEKT_API_URL
       value: "http://dp-inntekt-api.default"
     - name:  JWKS_ISSUER
-      value: "https://security-token-service-t10.nais.preprod.local"
+      value: "https://security-token-service-t4.nais.preprod.local"
     - name:  JWKS_URL
-      value: "https://security-token-service-t10.nais.preprod.local/rest/v1/sts/jwks"
+      value: "https://security-token-service-t4.nais.preprod.local/rest/v1/sts/jwks"

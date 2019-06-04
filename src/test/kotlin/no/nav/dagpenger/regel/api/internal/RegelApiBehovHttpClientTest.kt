@@ -38,7 +38,7 @@ class RegelApiBehovHttpClientTest {
     fun ` Should get url to behov status `() {
 
         WireMock.stubFor(
-            WireMock.post(WireMock.urlEqualTo("/behov"))
+            WireMock.post(WireMock.urlEqualTo("//behov"))
                 .withRequestBody(EqualToJsonPattern("""
                     {
                         "aktorId": "001",

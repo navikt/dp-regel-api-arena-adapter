@@ -12,7 +12,7 @@ class RegelApiBehovHttpClient(private val regelApiUrl: String) {
     private val jsonAdapter = moshiInstance.adapter(BehovRequest::class.java)
 
     fun run(behovRequest: BehovRequest): String {
-        val behovUrl = "${regelApiUrl}behov"
+        val behovUrl = "$regelApiUrl/behov"
 
         val json = jsonAdapter.toJson(behovRequest)
 
