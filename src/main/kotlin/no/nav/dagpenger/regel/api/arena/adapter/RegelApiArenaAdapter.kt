@@ -35,23 +35,12 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.GrunnlagOgSatsApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InntjeningsperiodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InvalidInnteksperiodeException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektOgPeriodeApi
-import no.nav.dagpenger.regel.api.arena.adapter.v2.GrunnlagOgSatsApiV2
-import no.nav.dagpenger.regel.api.arena.adapter.v2.MinsteinntektOgPeriodeApiV2
-import no.nav.dagpenger.regel.api.internal.RegelApiTasksHttpClient
+import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
+import no.nav.dagpenger.regel.api.internal.RegelApiBehovHttpClient
+import no.nav.dagpenger.regel.api.internal.RegelApiStatusHttpClient
+import no.nav.dagpenger.regel.api.internal.RegelApiSubsumsjonHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
-import no.nav.dagpenger.regel.api.internal.grunnlag.RegelApiGrunnlagHttpClient
-import no.nav.dagpenger.regel.api.internal.grunnlag.SynchronousGrunnlag
-import no.nav.dagpenger.regel.api.internal.inntjeningsperiode.InntektApiInntjeningsperiodeHttpClient
-import no.nav.dagpenger.regel.api.internal.minsteinntekt.RegelApiMinsteinntektHttpClient
-import no.nav.dagpenger.regel.api.internal.minsteinntekt.SynchronousMinsteinntekt
-import no.nav.dagpenger.regel.api.internal.periode.RegelApiPeriodeHttpClient
-import no.nav.dagpenger.regel.api.internal.periode.SynchronousPeriode
-import no.nav.dagpenger.regel.api.internal.sats.RegelApiSatsHttpClient
-import no.nav.dagpenger.regel.api.internal.sats.SynchronousSats
-import no.nav.dagpenger.regel.api.internalV2.RegelApiBehovHttpClient
-import no.nav.dagpenger.regel.api.internalV2.RegelApiStatusHttpClient
-import no.nav.dagpenger.regel.api.internalV2.RegelApiSubsumsjonHttpClient
-import no.nav.dagpenger.regel.api.internalV2.SynchronousSubsumsjonClient
+import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 import org.slf4j.event.Level
 import java.net.URI
 import java.net.URL
@@ -68,23 +57,11 @@ fun main() {
         .rateLimited(10, 1, TimeUnit.MINUTES)
         .build()
 
-    val regelApiTasksHttpClient =
-        RegelApiTasksHttpClient(config.application.dpRegelApiUrl)
-    val regelApiMinsteinntektHttpClient = RegelApiMinsteinntektHttpClient(config.application.dpRegelApiUrl)
-    val regelApiPeriodeHttpClient = RegelApiPeriodeHttpClient(config.application.dpRegelApiUrl)
-    val regelApiGrunnlagHttpClient = RegelApiGrunnlagHttpClient(config.application.dpRegelApiUrl)
-    val regelApiSatsHttpClient = RegelApiSatsHttpClient(config.application.dpRegelApiUrl)
-
-    val synchronousMinsteinntekt = SynchronousMinsteinntekt(regelApiMinsteinntektHttpClient, regelApiTasksHttpClient)
-    val synchronousPeriode = SynchronousPeriode(regelApiPeriodeHttpClient, regelApiTasksHttpClient)
-    val synchronousGrunnlag = SynchronousGrunnlag(regelApiGrunnlagHttpClient, regelApiTasksHttpClient)
-    val synchronousSats = SynchronousSats(regelApiSatsHttpClient, regelApiTasksHttpClient)
-
     val inntektApiBeregningsdatoHttpClient = InntektApiInntjeningsperiodeHttpClient(config.application.dpInntektApiUrl)
 
-    val behovHttpClient = RegelApiBehovHttpClient(config.application.dpRegelApiV2Url)
-    val statusHttpClient = RegelApiStatusHttpClient(config.application.dpRegelApiV2Url)
-    val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(config.application.dpRegelApiV2Url)
+    val behovHttpClient = RegelApiBehovHttpClient(config.application.dpRegelApiUrl)
+    val statusHttpClient = RegelApiStatusHttpClient(config.application.dpRegelApiUrl)
+    val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(config.application.dpRegelApiUrl)
 
     val synchronousSubsumsjonClient = SynchronousSubsumsjonClient(behovHttpClient, statusHttpClient, subsumsjonHttpClient)
 
@@ -92,10 +69,6 @@ fun main() {
         regelApiAdapter(
             config.application.jwksIssuer,
             jwkProvider,
-            synchronousMinsteinntekt,
-            synchronousPeriode,
-            synchronousGrunnlag,
-            synchronousSats,
             inntektApiBeregningsdatoHttpClient,
             synchronousSubsumsjonClient,
             config.application.disableJwt
@@ -111,10 +84,6 @@ fun main() {
 fun Application.regelApiAdapter(
     jwtIssuer: String,
     jwkProvider: JwkProvider,
-    synchronousMinsteinntekt: SynchronousMinsteinntekt,
-    synchronousPeriode: SynchronousPeriode,
-    synchronousGrunnlag: SynchronousGrunnlag,
-    synchronousSats: SynchronousSats,
     inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient,
     synchronousSubsumsjonClient: SynchronousSubsumsjonClient,
     disableJwt: Boolean = false
@@ -197,7 +166,7 @@ fun Application.regelApiAdapter(
             )
             call.respond(status, problem)
         }
-        exception<no.nav.dagpenger.regel.api.internalV2.RegelApiTimeoutException> { cause ->
+        exception<RegelApiTimeoutException> { cause ->
             LOGGER.error("Tidsavbrudd ved beregning av regel", cause)
             val status = HttpStatusCode.GatewayTimeout
             val problem = Problem(
@@ -223,13 +192,9 @@ fun Application.regelApiAdapter(
     routing {
         authenticate(optional = disableJwt) {
             route("/v1") {
-                MinsteinntektOgPeriodeApi(synchronousMinsteinntekt, synchronousPeriode)
-                GrunnlagOgSatsApi(synchronousGrunnlag, synchronousSats)
+                GrunnlagOgSatsApi(synchronousSubsumsjonClient)
+                MinsteinntektOgPeriodeApi(synchronousSubsumsjonClient)
                 InntjeningsperiodeApi(inntektApiBeregningsdatoHttpClient)
-            }
-            route("/v2") {
-                GrunnlagOgSatsApiV2(synchronousSubsumsjonClient)
-                MinsteinntektOgPeriodeApiV2(synchronousSubsumsjonClient)
             }
         }
 
