@@ -43,6 +43,7 @@ enum class GrunnlagBeregningsregel {
     MANUELL_OVER_6G,
     VERNEPLIKT
 }
+
 data class Grunnlag(
     val avkortet: Int,
     val uavkortet: Int? = null
