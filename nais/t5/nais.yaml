@@ -13,4 +13,4 @@ spec:
     - name:  JWKS_ISSUER
       value: "https://security-token-service-t4.nais.preprod.local"
     - name:  JWKS_URL
-      value: "https://security-token-service-t4.nais.preprod.local//rest/v1/sts/jwks"
+      value: "https://security-token-service-t4.nais.preprod.local/rest/v1/sts/jwks"
