@@ -31,15 +31,15 @@ class SynchronousSubsumsjonClientTest {
         } returns subsumsjon()
 
         val synchronousSubsumsjonClient = SynchronousSubsumsjonClient(
-                behovHttpClient,
-                statusHttpClient,
-                subsumsjonHttpClient
+            behovHttpClient,
+            statusHttpClient,
+            subsumsjonHttpClient
         )
 
         val behovRequest = BehovRequest(
-                aktorId = "1234",
-                vedtakId = 123,
-                beregningsdato = LocalDate.of(2019, 4, 14)
+            aktorId = "1234",
+            vedtakId = 123,
+            beregningsdato = LocalDate.of(2019, 4, 14)
         )
 
         val testFunction = { subsumsjon: Subsumsjon, _: LocalDateTime, _: LocalDateTime -> subsumsjon.behovId }
@@ -51,17 +51,18 @@ class SynchronousSubsumsjonClientTest {
 
     private fun subsumsjon(): Subsumsjon {
         return Subsumsjon(
-                id = "",
-                behovId = "565656",
-                faktum = Faktum(
-                        aktorId = "1234",
-                        vedtakId = 123,
-                        beregningsdato = LocalDate.of(2019, 4, 14)
-                ),
-                minsteinntektResultat = null,
-                periodeResultat = null,
-                grunnlagResultat = null,
-                satsResultat = null
+            id = "",
+            behovId = "565656",
+            faktum = Faktum(
+                aktorId = "1234",
+                vedtakId = 123,
+                beregningsdato = LocalDate.of(2019, 4, 14)
+            ),
+            minsteinntektResultat = null,
+            periodeResultat = null,
+            grunnlagResultat = null,
+            satsResultat = null,
+            problem = null
         )
     }
 }

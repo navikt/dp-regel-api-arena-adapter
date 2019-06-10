@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.api.internal.models
 
+import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import java.math.BigDecimal
 
 data class Subsumsjon(
@@ -9,7 +10,8 @@ data class Subsumsjon(
     val grunnlagResultat: GrunnlagResultat?,
     val minsteinntektResultat: MinsteinntektResultat?,
     val periodeResultat: PeriodeResultat?,
-    val satsResultat: SatsResultat?
+    val satsResultat: SatsResultat?,
+    val problem: Problem?
 )
 
 data class GrunnlagResultat(
