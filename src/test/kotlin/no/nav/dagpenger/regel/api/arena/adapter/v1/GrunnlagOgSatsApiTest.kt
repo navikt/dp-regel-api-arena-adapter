@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1
 
+import io.kotlintest.shouldBe
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -53,13 +54,13 @@ class GrunnlagOgSatsApiTest {
         )
 
         val expectedBehovRequest = BehovRequest(
-                aktorId = "12345",
-                vedtakId = 123,
-                beregningsdato = LocalDate.of(2019, 5, 13),
-                harAvtjentVerneplikt = true,
-                oppfyllerKravTilFangstOgFisk = false,
-                manueltGrunnlag = 3000,
-                antallBarn = 3
+            aktorId = "12345",
+            vedtakId = 123,
+            beregningsdato = LocalDate.of(2019, 5, 13),
+            harAvtjentVerneplikt = true,
+            oppfyllerKravTilFangstOgFisk = false,
+            manueltGrunnlag = 3000,
+            antallBarn = 3
         )
 
         val result = behovFromParametere(parametere)
@@ -114,9 +115,10 @@ class GrunnlagOgSatsApiTest {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
-        every { synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-            any(),
-            any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>())
+        every {
+            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                any(),
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>())
         } throws RuntimeException()
 
         withTestApplication({
@@ -151,13 +153,56 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
+    fun ` Should give API errors as HTTP problems rfc7807 for dagpengegrunnlag on Subsumsjon Problem`() {
+
+        val problem = Problem(title = "subsumsjon problem")
+        val synchronousSubsumsjonClient = mockk<SynchronousSubsumsjonClient>().apply {
+            every {
+                this@apply.getSubsumsjonSynchronously(
+                    any(),
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>())
+            } throws SubsumsjonProblem(problem)
+        }
+
+        withTestApplication({
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider(),
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+            )
+        }) {
+            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+                setBody(
+                    """
+                    {
+                      "aktorId": "1234",
+                      "vedtakId": 5678,
+                      "beregningsdato": "2019-02-27",
+                      "harAvtjentVerneplikt": false,
+                      "oppfyllerKravTilFangstOgFisk": false
+                    }
+
+                """.trimIndent()
+                )
+            }.apply {
+                assertEquals(HttpStatusCode.BadGateway, response.status())
+                moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!).apply {
+                    this shouldBe problem
+                }
+            }
+        }
+    }
+
+    @Test
     fun ` Should give API errors as HTTP problems rfc7807 for dagpengegrunnlag on timout errors`() {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
-        every { synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-            any(),
-            any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>())
+        every {
+            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                any(),
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>())
         } throws RegelApiTimeoutException("timeout")
 
         withTestApplication({
@@ -301,15 +346,15 @@ class GrunnlagOgSatsApiTest {
                 benyttet90ProsentRegel = false
             ),
             inntekt =
-                setOf(no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
-                    inntekt = 4999423,
-                    inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                        foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1)
-                    ),
-                    inneholderNaeringsinntekter = false,
-                    periode = 1
-                )),
+            setOf(no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
+                inntekt = 4999423,
+                inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                    foersteMaaned = YearMonth.of(2018, 1),
+                    sisteMaaned = YearMonth.of(2019, 1)
+                ),
+                inneholderNaeringsinntekter = false,
+                periode = 1
+            )),
             inntektManueltRedigert = true,
             inntektAvvik = true
         )

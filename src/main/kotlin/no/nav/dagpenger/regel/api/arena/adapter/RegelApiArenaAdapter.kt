@@ -35,6 +35,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.GrunnlagOgSatsApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InntjeningsperiodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InvalidInnteksperiodeException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektOgPeriodeApi
+import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiBehovHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiStatusHttpClient
@@ -177,6 +178,13 @@ fun Application.regelApiAdapter(
             )
             call.respond(status, problem)
         }
+
+        exception<SubsumsjonProblem> { cause ->
+            call.respond(HttpStatusCode.BadGateway, cause.problem).also {
+                LOGGER.error("Problem ved beregning av subsumsjon", cause)
+            }
+        }
+
         status(HttpStatusCode.Unauthorized) {
             val status = HttpStatusCode.Unauthorized
             LOGGER.warn("Unauthorized call")

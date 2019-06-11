@@ -20,9 +20,9 @@ class ExtractMinsteinntektOgPeriodeTest {
     @Test
     fun `Convert Subsumsjon to MinsteinntektOgPeriodeSubsumsjon`() {
         val result = extractMinsteinntektOgPeriode(
-                subsumsjon,
-                LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-                LocalDateTime.of(2019, 4, 25, 1, 1, 1)
+            subsumsjon,
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1)
         )
 
         assertEquals(minsteinntektOgPeriodeSubsumsjon, result)
@@ -83,55 +83,56 @@ class ExtractMinsteinntektOgPeriodeTest {
     )
 
     private val subsumsjon = Subsumsjon(
-            id = "id123",
-            behovId = "behov123",
-            faktum = Faktum(
-                    "aktoer123",
-                    123456,
-                    beregningsdato = LocalDate.of(2019, 5, 14),
-                    inntektsId = "inntekt123",
-                    inntektAvvik = true,
-                    inntektManueltRedigert = true,
-                    harAvtjentVerneplikt = true,
-                    oppfyllerKravTilFangstOgFisk = true,
-                    bruktInntektsPeriode = InntektsPeriode(
-                            YearMonth.of(2018, 5),
-                            YearMonth.of(2019, 1)
-                    )
-            ),
-            minsteinntektResultat = MinsteinntektResultat(
-                    subsumsjonsId = "sub123456",
-                    sporingsId = "sporing123",
-                    regelIdentifikator = "minsteinntektregel",
-                    oppfyllerMinsteinntekt = true,
-                    minsteinntektInntektsPerioder = listOf(
-                            Inntekt(
-                                    inntekt = 600000,
-                                    periode = 1,
-                                    inntektsPeriode = InntektsPeriode(YearMonth.of(2018, 5), YearMonth.of(2019, 5)),
-                                    inneholderFangstOgFisk = true
-                            ),
-                            Inntekt(
-                                    inntekt = 500000,
-                                    periode = 2,
-                                    inntektsPeriode = InntektsPeriode(YearMonth.of(2017, 5), YearMonth.of(2018, 5)),
-                                    inneholderFangstOgFisk = false
-                            ),
-                            Inntekt(
-                                    inntekt = 400000,
-                                    periode = 3,
-                                    inntektsPeriode = InntektsPeriode(YearMonth.of(2016, 5), YearMonth.of(2017, 5)),
-                                    inneholderFangstOgFisk = true
-                            )
-                    )
-            ),
-            periodeResultat = PeriodeResultat(
-                    subsumsjonsId = "sub654321",
-                    sporingsId = "sporing321",
-                    regelIdentifikator = "perioderegel",
-                    periodeAntallUker = 104
-            ),
-            grunnlagResultat = null,
-            satsResultat = null
+        id = "id123",
+        behovId = "behov123",
+        faktum = Faktum(
+            "aktoer123",
+            123456,
+            beregningsdato = LocalDate.of(2019, 5, 14),
+            inntektsId = "inntekt123",
+            inntektAvvik = true,
+            inntektManueltRedigert = true,
+            harAvtjentVerneplikt = true,
+            oppfyllerKravTilFangstOgFisk = true,
+            bruktInntektsPeriode = InntektsPeriode(
+                YearMonth.of(2018, 5),
+                YearMonth.of(2019, 1)
+            )
+        ),
+        minsteinntektResultat = MinsteinntektResultat(
+            subsumsjonsId = "sub123456",
+            sporingsId = "sporing123",
+            regelIdentifikator = "minsteinntektregel",
+            oppfyllerMinsteinntekt = true,
+            minsteinntektInntektsPerioder = listOf(
+                Inntekt(
+                    inntekt = 600000,
+                    periode = 1,
+                    inntektsPeriode = InntektsPeriode(YearMonth.of(2018, 5), YearMonth.of(2019, 5)),
+                    inneholderFangstOgFisk = true
+                ),
+                Inntekt(
+                    inntekt = 500000,
+                    periode = 2,
+                    inntektsPeriode = InntektsPeriode(YearMonth.of(2017, 5), YearMonth.of(2018, 5)),
+                    inneholderFangstOgFisk = false
+                ),
+                Inntekt(
+                    inntekt = 400000,
+                    periode = 3,
+                    inntektsPeriode = InntektsPeriode(YearMonth.of(2016, 5), YearMonth.of(2017, 5)),
+                    inneholderFangstOgFisk = true
+                )
+            )
+        ),
+        periodeResultat = PeriodeResultat(
+            subsumsjonsId = "sub654321",
+            sporingsId = "sporing321",
+            regelIdentifikator = "perioderegel",
+            periodeAntallUker = 104
+        ),
+        grunnlagResultat = null,
+        satsResultat = null,
+        problem = null
     )
 }

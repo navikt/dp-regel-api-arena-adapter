@@ -1,6 +1,7 @@
 package no.nav.dagpenger.regel.api.internal
 
 import kotlinx.coroutines.runBlocking
+import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 import java.time.LocalDateTime
 
@@ -23,6 +24,7 @@ class SynchronousSubsumsjonClient(
 
         val utfort = LocalDateTime.now()
 
-        return extractResult(subsumsjon, opprettet, utfort)
+        return subsumsjon.problem?.let { throw SubsumsjonProblem(it) }
+            ?: extractResult(subsumsjon, opprettet, utfort)
     }
 }

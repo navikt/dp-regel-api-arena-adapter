@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1
 
+import io.kotlintest.shouldBe
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -50,14 +51,14 @@ class MinsteinntektOgPeriodeApiTest {
         )
 
         val expectedBehovRequest = BehovRequest(
-                aktorId = "12345",
-                vedtakId = 123,
-                beregningsdato = LocalDate.of(2019, 5, 13),
-                harAvtjentVerneplikt = true,
-                oppfyllerKravTilFangstOgFisk = false,
-                bruktInntektsPeriode = no.nav.dagpenger.regel.api.internal.models.InntektsPeriode(
-                        YearMonth.of(2019, 4),
-                        YearMonth.of(2019, 7))
+            aktorId = "12345",
+            vedtakId = 123,
+            beregningsdato = LocalDate.of(2019, 5, 13),
+            harAvtjentVerneplikt = true,
+            oppfyllerKravTilFangstOgFisk = false,
+            bruktInntektsPeriode = no.nav.dagpenger.regel.api.internal.models.InntektsPeriode(
+                YearMonth.of(2019, 4),
+                YearMonth.of(2019, 7))
         )
 
         val result = behovFromParametere(parametere)
@@ -144,6 +145,48 @@ class MinsteinntektOgPeriodeApiTest {
                 assertEquals("Uhåndtert feil", problem?.title)
                 assertEquals("about:blank", problem?.type.toString())
                 assertEquals(500, problem?.status)
+            }
+        }
+    }
+
+    @Test
+    fun ` Should give API errors as HTTP problems rfc7807 for Subsumsjon with problem`() {
+
+        val problem = Problem(title = "problem")
+        val synchronousSubsumsjonClient = mockk<SynchronousSubsumsjonClient>().apply {
+            every {
+                this@apply.getSubsumsjonSynchronously(
+                    any(),
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>())
+            } throws SubsumsjonProblem(problem)
+        }
+
+        withTestApplication({
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider(),
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+            )
+        }) {
+            handleRequest(HttpMethod.Post, minsteinntektPath) {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+                setBody(
+                    """
+                    {
+                      "aktorId": "1234",
+                      "vedtakId": 5678,
+                      "beregningsdato": "2019-02-27",
+                      "harAvtjentVerneplikt": false,
+                      "oppfyllerKravTilFangstOgFisk": false
+                    }
+
+                """.trimIndent()
+                )
+            }.apply {
+                assertEquals(HttpStatusCode.BadGateway, response.status())
+                moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!).apply {
+                    this@apply shouldBe problem
+                }
             }
         }
     }
@@ -296,15 +339,15 @@ class MinsteinntektOgPeriodeApiTest {
                 periodeAntallUker = 104
             ),
             inntekt = setOf(no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
-                    inntekt = 4999423,
-                    inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                        foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1)
-                    ),
-                    andel = 111,
-                    inneholderNaeringsinntekter = false,
-                    periode = 1
-                )),
+                inntekt = 4999423,
+                inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                    foersteMaaned = YearMonth.of(2018, 1),
+                    sisteMaaned = YearMonth.of(2019, 1)
+                ),
+                andel = 111,
+                inneholderNaeringsinntekter = false,
+                periode = 1
+            )),
             inntektManueltRedigert = true,
             inntektAvvik = true
         )
