@@ -5,7 +5,7 @@ Egenskap: Vurderer minsteinntektskrav
     Gitt at søker med aktør id "INGEN_INNTEKT" med vedtak id 12345 med beregningsdato "2019-07-01"
     Når digidag skal vurdere minsteinntektkrav og periode
     Så kravet til minsteinntekt er "ikke oppfylt"
-    Og har krav på 0 uker
+    Og antall uker er ikke satt
 
   Scenario: Ingen inntekt og verneplikt skal gi 26 uker
     Gitt at søker med aktør id "INGEN_INNTEKT" med vedtak id 12345 med beregningsdato "2019-07-01"
@@ -43,5 +43,5 @@ Egenskap: Vurderer minsteinntektskrav
     Og hvor brukt inntekt er fra førstemåned "2018-06" og sistemåned "2019-06"
     Når digidag skal vurdere minsteinntektkrav og periode
     Så kravet til minsteinntekt er "ikke oppfylt"
-    Og har krav på 0 uker
+    Og antall uker er ikke satt
     Og parameteret inneholder bruktInntektsPeriode

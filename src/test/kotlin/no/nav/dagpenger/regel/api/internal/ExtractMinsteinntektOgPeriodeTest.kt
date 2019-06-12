@@ -9,6 +9,7 @@ import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.internal.models.MinsteinntektResultat
 import no.nav.dagpenger.regel.api.internal.models.PeriodeResultat
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -20,12 +21,24 @@ class ExtractMinsteinntektOgPeriodeTest {
     @Test
     fun `Convert Subsumsjon to MinsteinntektOgPeriodeSubsumsjon`() {
         val result = extractMinsteinntektOgPeriode(
-            subsumsjon,
+            subsumsjonWithBothResults,
+                LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+                LocalDateTime.of(2019, 4, 25, 1, 1, 1)
+        )
+
+        assertEquals(minsteinntektOgPeriodeSubsumsjon, result)
+    }
+
+    @Test
+    fun `Converted Subsumsjon with oppfyllerMinsteinntekt false sets periodeAntallUker to null`() {
+        val result = extractMinsteinntektOgPeriode(
+            subsumsjonWithOppfyllerMinsteinntektFalse,
             LocalDateTime.of(2019, 4, 25, 1, 1, 1),
             LocalDateTime.of(2019, 4, 25, 1, 1, 1)
         )
 
-        assertEquals(minsteinntektOgPeriodeSubsumsjon, result)
+        assertEquals(false, result.resultat.oppfyllerKravTilMinsteArbeidsinntekt)
+        assertNull(result.resultat.periodeAntallUker)
     }
 
     private val minsteinntektOgPeriodeSubsumsjon = MinsteinntektOgPeriodeSubsumsjon(
@@ -82,7 +95,7 @@ class ExtractMinsteinntektOgPeriodeTest {
         inntektAvvik = true
     )
 
-    private val subsumsjon = Subsumsjon(
+    private val subsumsjonWithBothResults = Subsumsjon(
         id = "id123",
         behovId = "behov123",
         faktum = Faktum(
@@ -119,6 +132,52 @@ class ExtractMinsteinntektOgPeriodeTest {
                 ),
                 Inntekt(
                     inntekt = 400000,
+                    periode = 3,
+                    inntektsPeriode = InntektsPeriode(YearMonth.of(2016, 5), YearMonth.of(2017, 5)),
+                    inneholderFangstOgFisk = true
+                )
+            )
+        ),
+        periodeResultat = PeriodeResultat(
+            subsumsjonsId = "sub654321",
+            sporingsId = "sporing321",
+            regelIdentifikator = "perioderegel",
+            periodeAntallUker = 104
+        ),
+        grunnlagResultat = null,
+        satsResultat = null,
+        problem = null
+    )
+
+    private val subsumsjonWithOppfyllerMinsteinntektFalse = Subsumsjon(
+        id = "id123",
+        behovId = "behov123",
+        faktum = Faktum(
+            "aktoer123",
+            123456,
+            beregningsdato = LocalDate.of(2019, 5, 14),
+            inntektsId = "inntekt123"
+        ),
+        minsteinntektResultat = MinsteinntektResultat(
+            subsumsjonsId = "subAvslag",
+            sporingsId = "sporing123",
+            regelIdentifikator = "minsteinntektregel",
+            oppfyllerMinsteinntekt = false,
+            minsteinntektInntektsPerioder = listOf(
+                Inntekt(
+                    inntekt = 0,
+                    periode = 1,
+                    inntektsPeriode = InntektsPeriode(YearMonth.of(2018, 5), YearMonth.of(2019, 5)),
+                    inneholderFangstOgFisk = true
+                ),
+                Inntekt(
+                    inntekt = 0,
+                    periode = 2,
+                    inntektsPeriode = InntektsPeriode(YearMonth.of(2017, 5), YearMonth.of(2018, 5)),
+                    inneholderFangstOgFisk = false
+                ),
+                Inntekt(
+                    inntekt = 0,
                     periode = 3,
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2016, 5), YearMonth.of(2017, 5)),
                     inneholderFangstOgFisk = true
