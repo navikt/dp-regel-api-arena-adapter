@@ -10,6 +10,7 @@ import java.time.LocalDate
 import java.time.YearMonth
 
 import kotlin.test.assertEquals
+import kotlin.test.assertNull
 import kotlin.test.assertTrue
 
 private val logger = LogManager.getLogger()
@@ -50,9 +51,13 @@ class MinsteinntektApiV1Steps : No {
         }
 
         Og("har krav på {int} uker") { periodeAntallUker: Int ->
-            if (periodeAntallUker > 0) { // todo Should not have perioderesultat if minsteinntektOgPeriode not validated
+            if (periodeAntallUker > 0) {
                 assertEquals(periodeAntallUker, minsteinntektBeregning.resultat.periodeAntallUker)
             }
+        }
+
+        Og("antall uker er ikke satt") {
+            assertNull(minsteinntektBeregning.resultat.periodeAntallUker)
         }
 
         Gitt("har avtjent verneplikt") {
