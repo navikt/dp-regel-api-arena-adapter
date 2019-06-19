@@ -3,6 +3,7 @@ package no.nav.dagpenger.regel.api.internal
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
+import com.github.tomakehurst.wiremock.matching.EqualToPattern
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
@@ -38,15 +39,17 @@ class RegelApiSubsumsjonHttpClientTest {
         val responseBodyJson = RegelApiSubsumsjonHttpClientTest::class.java
             .getResource("/test-data/example-subsumsjon-payload.json").readText()
 
+        val equalToPattern = EqualToPattern("regelApiKey")
         WireMock.stubFor(
             WireMock.get(WireMock.urlEqualTo("//subsumsjon/112233"))
+                .withHeader("X-API-KEY", equalToPattern)
                 .willReturn(
                     WireMock.aResponse()
                         .withBody(responseBodyJson)
                 )
         )
 
-        val client = RegelApiSubsumsjonHttpClient(server.url(""))
+        val client = RegelApiSubsumsjonHttpClient(server.url(""), equalToPattern.value)
 
         val subsumsjon = client.getSubsumsjon("/subsumsjon/112233")
 

@@ -60,9 +60,9 @@ fun main() {
 
     val inntektApiBeregningsdatoHttpClient = InntektApiInntjeningsperiodeHttpClient(config.application.dpInntektApiUrl)
 
-    val behovHttpClient = RegelApiBehovHttpClient(config.application.dpRegelApiUrl)
-    val statusHttpClient = RegelApiStatusHttpClient(config.application.dpRegelApiUrl)
-    val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(config.application.dpRegelApiUrl)
+    val behovHttpClient = RegelApiBehovHttpClient(config.application.dpRegelApiUrl, config.auth.regelApiKey)
+    val statusHttpClient = RegelApiStatusHttpClient(config.application.dpRegelApiUrl, config.auth.regelApiKey)
+    val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(config.application.dpRegelApiUrl, config.auth.regelApiKey)
 
     val synchronousSubsumsjonClient = SynchronousSubsumsjonClient(behovHttpClient, statusHttpClient, subsumsjonHttpClient)
 

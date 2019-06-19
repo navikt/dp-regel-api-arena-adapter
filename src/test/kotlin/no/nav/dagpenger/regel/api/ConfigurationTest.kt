@@ -13,7 +13,9 @@ internal class ConfigurationTest {
 
     private val dummyConfigs = listOf(
         "srvdp.regel.api.arena.adapter.username",
-        "srvdp.regel.api.arena.adapter.password"
+        "srvdp.regel.api.arena.adapter.password",
+        "auth.regelapi.secret",
+        "auth.regelapi.key"
     )
 
     @Test

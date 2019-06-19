@@ -3,6 +3,7 @@ package no.nav.dagpenger.regel.api.internal
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
+import com.github.tomakehurst.wiremock.matching.EqualToPattern
 import com.github.tomakehurst.wiremock.stubbing.Scenario
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
@@ -39,8 +40,9 @@ internal class RegelApiStatusHttpClientTest {
     @Test
     fun `Should honor timeout `() {
         val client = RegelApiStatusHttpClient(
-                regelApiUrl = server.url("/"),
-                timeout = Duration.ZERO
+            regelApiUrl = server.url("/"),
+            regelApiKey = "regelApiKey",
+            timeout = Duration.ZERO
         )
         assertThrows(
             RegelApiTimeoutException::class.java
@@ -51,9 +53,11 @@ internal class RegelApiStatusHttpClientTest {
 
     @Test
     fun ` Should retry query until response redirects to the result `() {
+        val pattern = EqualToPattern("regelApiKey")
 
         WireMock.stubFor(
             WireMock.get(WireMock.urlEqualTo("//behov/status/123"))
+                .withHeader("X-API-KEY", pattern)
                 .inScenario("Retry Scenario")
                 .whenScenarioStateIs(Scenario.STARTED)
                 .willReturn(
@@ -65,6 +69,7 @@ internal class RegelApiStatusHttpClientTest {
 
         WireMock.stubFor(
             WireMock.get(WireMock.urlEqualTo("//behov/status/123"))
+                .withHeader("X-API-KEY", pattern)
                 .inScenario("Retry Scenario")
                 .whenScenarioStateIs("First pending")
                 .willReturn(
@@ -76,6 +81,7 @@ internal class RegelApiStatusHttpClientTest {
 
         WireMock.stubFor(
             WireMock.get(WireMock.urlEqualTo("//behov/status/123"))
+                .withHeader("X-API-KEY", pattern)
                 .inScenario("Retry Scenario")
                 .whenScenarioStateIs("Second pending")
                 .willReturn(
@@ -86,7 +92,7 @@ internal class RegelApiStatusHttpClientTest {
         )
 
         val client =
-                RegelApiStatusHttpClient(regelApiUrl = server.url(""))
+            RegelApiStatusHttpClient(regelApiUrl = server.url(""), regelApiKey = pattern.value)
 
         val response = runBlocking { client.pollStatus("/behov/status/123") }
         assertEquals("54321", response)
