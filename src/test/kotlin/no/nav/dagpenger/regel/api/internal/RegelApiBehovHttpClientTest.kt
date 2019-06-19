@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import com.github.tomakehurst.wiremock.matching.EqualToJsonPattern
+import com.github.tomakehurst.wiremock.matching.EqualToPattern
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
@@ -37,8 +38,10 @@ class RegelApiBehovHttpClientTest {
     @Test
     fun ` Should get url to behov status `() {
 
+        val equalToPattern = EqualToPattern("regelApiKey")
         WireMock.stubFor(
             WireMock.post(WireMock.urlEqualTo("//behov"))
+                .withHeader("X-API-KEY", equalToPattern)
                 .withRequestBody(EqualToJsonPattern("""
                     {
                         "aktorId": "001",
@@ -53,12 +56,12 @@ class RegelApiBehovHttpClientTest {
                 )
         )
 
-        val client = RegelApiBehovHttpClient(server.url(""))
+        val client = RegelApiBehovHttpClient(server.url(""), equalToPattern.value)
 
         val behovRequest = BehovRequest(
-                "001",
-                123456,
-                LocalDate.of(2019, 4, 14)
+            "001",
+            123456,
+            LocalDate.of(2019, 4, 14)
         )
 
         val response = client.run(behovRequest)

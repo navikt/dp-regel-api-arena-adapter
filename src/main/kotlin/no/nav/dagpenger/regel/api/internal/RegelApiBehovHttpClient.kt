@@ -8,7 +8,7 @@ import no.nav.dagpenger.regel.api.internal.models.BehovStatusResponse
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 import java.time.LocalDate
 
-class RegelApiBehovHttpClient(private val regelApiUrl: String) {
+class RegelApiBehovHttpClient(private val regelApiUrl: String, private val regelApiKey: String) {
     private val jsonAdapter = moshiInstance.adapter(BehovRequest::class.java)
 
     fun run(behovRequest: BehovRequest): String {
@@ -19,6 +19,7 @@ class RegelApiBehovHttpClient(private val regelApiUrl: String) {
         val (_, response, result) =
             with(
                 behovUrl.httpPost()
+                    .apiKey(regelApiKey)
                     .header(mapOf("Content-Type" to "application/json"))
                     .body(json)
             ) {
@@ -26,7 +27,7 @@ class RegelApiBehovHttpClient(private val regelApiUrl: String) {
             }
         return when (result) {
             is Result.Failure -> throw RegelApiBehovHttpClientException(
-                    "Failed to run behov. Response message ${response.responseMessage}. Error message: ${result.error.message}")
+                "Failed to run behov. Response message ${response.responseMessage}. Error message: ${result.error.message}")
             is Result.Success ->
                 response.headers["Location"].first()
         }

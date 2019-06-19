@@ -9,6 +9,7 @@ import com.natpryce.konfig.intType
 import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
 import mu.KotlinLogging
+import no.nav.dagpenger.ktor.auth.ApiKeyVerifier
 
 private val LOGGER = KotlinLogging.logger {}
 
@@ -22,7 +23,9 @@ private val localProperties = ConfigurationMap(
         "dp.inntekt.api.url" to "https://localhost",
         "jwks.url" to "https://localhost",
         "jwks.issuer" to "https://localhost",
-        "enable.jwt" to "false"
+        "enable.jwt" to "false",
+        "auth.regelapi.secret" to "secret",
+        "auth.regelapi.key" to "secret1"
     )
 )
 private val devProperties = ConfigurationMap(
@@ -50,8 +53,16 @@ private val prodProperties = ConfigurationMap(
 )
 
 data class Configuration(
-    val application: Application = Application()
+    val application: Application = Application(),
+    val auth: Auth = Auth()
 ) {
+
+    class Auth(
+        regelApiSecret: String = config()[Key("auth.regelapi.secret", stringType)],
+        regelApiKeyPlain: String = config()[Key("auth.regelapi.key", stringType)]
+    ) {
+        val regelApiKey = ApiKeyVerifier(regelApiSecret).generate(regelApiKeyPlain)
+    }
 
     data class Application(
         val profile: Profile = config()[Key("application.profile", stringType)].let { Profile.valueOf(it) },
