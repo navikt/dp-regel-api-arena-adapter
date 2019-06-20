@@ -1,20 +1,11 @@
 <custom-interceptors>
     <custom-interceptor>
         <interceptor-class-name>com.singularity.KafkaMarkerMethodInterceptor</interceptor-class-name>
-        <match-class type="matches-class">
+        <match-class type="inherits-class">
             <name filter-type="equals">no.nav.dagpenger.streams.River</name>
         </match-class>
         <match-method>
-            <name>buildTopology</name>
-        </match-method>
-    </custom-interceptor>
-    <custom-interceptor>
-        <interceptor-class-name>com.singularity.KafkaMarkerMethodInterceptor</interceptor-class-name>
-        <match-class type="matches-class">
-            <name filter-type="equals">no.nav.dagpenger.streams.RiverKt</name>
-        </match-class>
-        <match-method>
-            <name>buildTopology</name>
+            <name>onPacket</name>
         </match-method>
     </custom-interceptor>
 </custom-interceptors>
