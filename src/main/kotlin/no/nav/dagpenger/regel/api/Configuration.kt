@@ -23,7 +23,7 @@ private val localProperties = ConfigurationMap(
         "dp.inntekt.api.url" to "https://localhost",
         "jwks.url" to "https://localhost",
         "jwks.issuer" to "https://localhost",
-        "enable.jwt" to "false",
+        "optional.jwt" to "true",
         "auth.regelapi.secret" to "secret",
         "auth.regelapi.key" to "secret1"
     )
@@ -36,7 +36,7 @@ private val devProperties = ConfigurationMap(
         "dp.inntekt.api.url" to "http://dp-inntekt-api",
         "jwks.url" to "http://security-token-service/rest/v1/sts/jwks",
         "jwks.issuer" to "https://security-token-service.nais.preprod.local",
-        "enable.jwt" to "true"
+        "optional.jwt" to "false"
 
     )
 )
@@ -48,7 +48,7 @@ private val prodProperties = ConfigurationMap(
         "dp.inntekt.api.url" to "http://dp-inntekt-api",
         "jwks.url" to "http://security-token-service/rest/v1/sts/jwks",
         "jwks.issuer" to "https://security-token-service.nais.adeo.no",
-        "enable.jwt" to "true"
+        "optional.jwt" to "false"
     )
 )
 
@@ -73,7 +73,7 @@ data class Configuration(
         val dpInntektApiUrl: String = config()[Key("dp.inntekt.api.url", stringType)],
         val jwksUrl: String = config()[Key("jwks.url", stringType)],
         val jwksIssuer: String = config()[Key("jwks.issuer", stringType)],
-        val disableJwt: Boolean = config()[Key("enable.jwt", booleanType)]
+        val optionalJwt: Boolean = config()[Key("optional.jwt", booleanType)]
 
     ) {
         init {

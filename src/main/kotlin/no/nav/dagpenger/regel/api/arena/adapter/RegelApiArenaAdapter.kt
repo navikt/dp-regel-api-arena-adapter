@@ -72,7 +72,7 @@ fun main() {
             jwkProvider,
             inntektApiBeregningsdatoHttpClient,
             synchronousSubsumsjonClient,
-            config.application.disableJwt
+            config.application.optionalJwt
         )
     }
 
@@ -87,7 +87,7 @@ fun Application.regelApiAdapter(
     jwkProvider: JwkProvider,
     inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient,
     synchronousSubsumsjonClient: SynchronousSubsumsjonClient,
-    disableJwt: Boolean = false
+    optionalJwt: Boolean = false
 ) {
 
     install(DefaultHeaders)
@@ -198,7 +198,7 @@ fun Application.regelApiAdapter(
     }
 
     routing {
-        authenticate(optional = disableJwt) {
+        authenticate(optional = optionalJwt) {
             route("/v1") {
                 GrunnlagOgSatsApi(synchronousSubsumsjonClient)
                 MinsteinntektOgPeriodeApi(synchronousSubsumsjonClient)
