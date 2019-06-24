@@ -7,6 +7,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeResultat
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
+import java.math.RoundingMode
 import java.time.LocalDateTime
 
 fun extractMinsteinntektOgPeriode(
@@ -51,7 +52,7 @@ fun extractMinsteinntektOgPeriode(
         ),
         inntekt = minsteinntektResultat.minsteinntektInntektsPerioder.map {
             Inntekt(
-                inntekt = it.inntekt,
+                inntekt = it.inntekt.round().toInt(),
                 periode = it.periode,
                 inntektsPeriode = InntektsPeriode(
                     foersteMaaned = it.inntektsPeriode.førsteMåned,

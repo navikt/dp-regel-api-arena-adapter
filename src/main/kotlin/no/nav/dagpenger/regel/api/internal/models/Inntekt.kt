@@ -1,7 +1,9 @@
 package no.nav.dagpenger.regel.api.internal.models
 
+import java.math.BigDecimal
+
 data class Inntekt(
-    val inntekt: Int,
+    val inntekt: BigDecimal,
     val periode: Int, // todo: enum?
     val inntektsPeriode: InntektsPeriode,
     val inneholderFangstOgFisk: Boolean,
