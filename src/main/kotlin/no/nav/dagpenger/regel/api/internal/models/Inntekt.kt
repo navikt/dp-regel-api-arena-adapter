@@ -7,7 +7,7 @@ data class Inntekt(
     val periode: Int, // todo: enum?
     val inntektsPeriode: InntektsPeriode,
     val inneholderFangstOgFisk: Boolean,
-    val andel: Int? = null
+    val andel: BigDecimal? = null
 ) {
     init {
         val gyldigePerioder = setOf(1, 2, 3)
