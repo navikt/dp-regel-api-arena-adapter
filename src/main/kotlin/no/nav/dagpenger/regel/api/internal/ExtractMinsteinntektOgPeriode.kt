@@ -57,7 +57,7 @@ fun extractMinsteinntektOgPeriode(
                     foersteMaaned = it.inntektsPeriode.førsteMåned,
                     sisteMaaned = it.inntektsPeriode.sisteMåned
                 ),
-                andel = it.andel,
+                andel = it.andel?.round()?.toInt(),
                 inneholderNaeringsinntekter = it.inneholderFangstOgFisk
             )
         }.toSet(),

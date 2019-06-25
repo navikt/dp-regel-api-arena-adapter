@@ -65,6 +65,7 @@ class ExtractMinsteinntektOgPeriodeTest {
         inntekt = setOf(
             no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
                 inntekt = 600000,
+                andel = 600000,
                 inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                     foersteMaaned = YearMonth.of(2018, 5),
                     sisteMaaned = YearMonth.of(2019, 5)
@@ -74,6 +75,7 @@ class ExtractMinsteinntektOgPeriodeTest {
             ),
             no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
                 inntekt = 500000,
+                andel = 200000,
                 inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                     foersteMaaned = YearMonth.of(2017, 5),
                     sisteMaaned = YearMonth.of(2018, 5)
@@ -83,6 +85,7 @@ class ExtractMinsteinntektOgPeriodeTest {
             ),
             no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
                 inntekt = 400000,
+                andel = 300000,
                 inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                     foersteMaaned = YearMonth.of(2016, 5),
                     sisteMaaned = YearMonth.of(2017, 5)
@@ -120,18 +123,21 @@ class ExtractMinsteinntektOgPeriodeTest {
             minsteinntektInntektsPerioder = listOf(
                 Inntekt(
                     inntekt = 600000.toBigDecimal(),
+                    andel = 600000.toBigDecimal(),
                     periode = 1,
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2018, 5), YearMonth.of(2019, 5)),
                     inneholderFangstOgFisk = true
                 ),
                 Inntekt(
                     inntekt = 500000.toBigDecimal(),
+                    andel = 200000.toBigDecimal(),
                     periode = 2,
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2017, 5), YearMonth.of(2018, 5)),
                     inneholderFangstOgFisk = false
                 ),
                 Inntekt(
                     inntekt = 400000.toBigDecimal(),
+                    andel = 300000.toBigDecimal(),
                     periode = 3,
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2016, 5), YearMonth.of(2017, 5)),
                     inneholderFangstOgFisk = true
