@@ -49,7 +49,7 @@ fun extractGrunnlagOgSats(
         ),
         inntekt = grunnlagResultat.grunnlagInntektsPerioder?.map {
             Inntekt(
-                inntekt = it.inntekt,
+                inntekt = it.inntekt.round().toInt(),
                 periode = it.periode,
                 inntektsPeriode = InntektsPeriode(
                     foersteMaaned = it.inntektsPeriode.førsteMåned,

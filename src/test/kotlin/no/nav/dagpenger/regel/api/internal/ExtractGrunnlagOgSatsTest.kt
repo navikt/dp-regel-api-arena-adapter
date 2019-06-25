@@ -116,17 +116,17 @@ class ExtractGrunnlagOgSatsTest {
             harAvkortet = true,
             grunnlagInntektsPerioder = listOf(
                 Inntekt(
-                    inntekt = 600000,
+                    inntekt = 600000.toBigDecimal(),
                     periode = 1,
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2018, 5), YearMonth.of(2019, 5)),
                     inneholderFangstOgFisk = true),
                 Inntekt(
-                    inntekt = 500000,
+                    inntekt = 500000.toBigDecimal(),
                     periode = 2,
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2017, 5), YearMonth.of(2018, 5)),
                     inneholderFangstOgFisk = false),
                 Inntekt(
-                    inntekt = 400000,
+                    inntekt = 400000.toBigDecimal(),
                     periode = 3,
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2016, 5), YearMonth.of(2017, 5)),
                     inneholderFangstOgFisk = true)
