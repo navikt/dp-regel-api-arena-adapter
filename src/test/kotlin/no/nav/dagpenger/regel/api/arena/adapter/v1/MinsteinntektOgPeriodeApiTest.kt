@@ -9,6 +9,7 @@ import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import no.nav.dagpenger.regel.api.arena.adapter.mockedRegelApiAdapter
@@ -58,7 +59,8 @@ class MinsteinntektOgPeriodeApiTest {
             oppfyllerKravTilFangstOgFisk = false,
             bruktInntektsPeriode = no.nav.dagpenger.regel.api.internal.models.InntektsPeriode(
                 YearMonth.of(2019, 4),
-                YearMonth.of(2019, 7))
+                YearMonth.of(2019, 7)
+            )
         )
 
         val result = behovFromParametere(parametere)
@@ -72,15 +74,19 @@ class MinsteinntektOgPeriodeApiTest {
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         every {
-            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>())
+            runBlocking {
+                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                    any(),
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
+                )
+            }
         } returns minsteinntektOgPeriodeSubsumsjon()
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient)
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+            )
         }) {
             handleRequest(HttpMethod.Post, minsteinntektPath) {
                 addHeader(HttpHeaders.ContentType, "application/json")
@@ -102,7 +108,8 @@ class MinsteinntektOgPeriodeApiTest {
                     expectedJson, response.content,
                     CustomComparator(JSONCompareMode.STRICT,
                         Customization("opprettet") { _, _ -> true },
-                        Customization("utfort") { _, _ -> true }))
+                        Customization("utfort") { _, _ -> true })
+                )
             }
         }
     }
@@ -113,9 +120,12 @@ class MinsteinntektOgPeriodeApiTest {
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         every {
-            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>())
+            runBlocking {
+                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                    any(),
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
+                )
+            }
         } throws RuntimeException()
 
         withTestApplication({
@@ -155,9 +165,12 @@ class MinsteinntektOgPeriodeApiTest {
         val problem = Problem(title = "problem")
         val synchronousSubsumsjonClient = mockk<SynchronousSubsumsjonClient>().apply {
             every {
-                this@apply.getSubsumsjonSynchronously(
-                    any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>())
+                runBlocking {
+                    this@apply.getSubsumsjonSynchronously(
+                        any(),
+                        any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
+                    )
+                }
             } throws SubsumsjonProblem(problem)
         }
 
@@ -197,10 +210,12 @@ class MinsteinntektOgPeriodeApiTest {
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         every {
-            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
-            )
+            runBlocking {
+                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                    any(),
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
+                )
+            }
         } throws RegelApiTimeoutException("timeout")
 
         withTestApplication({
@@ -279,7 +294,10 @@ class MinsteinntektOgPeriodeApiTest {
             }.apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
                 val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals("Parameteret er ikke gyldig, mangler obligatorisk felt: 'Required value 'vedtakId' missing at \$'", problem?.title)
+                assertEquals(
+                    "Parameteret er ikke gyldig, mangler obligatorisk felt: 'Required value 'vedtakId' missing at \$'",
+                    problem?.title
+                )
                 assertEquals("urn:dp:error:parameter", problem?.type.toString())
                 assertEquals(400, problem?.status)
             }
@@ -332,22 +350,25 @@ class MinsteinntektOgPeriodeApiTest {
                 oppfyllerKravTilFangstOgFisk = false,
                 bruktInntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                     foersteMaaned = YearMonth.of(2018, 1),
-                    sisteMaaned = YearMonth.of(2019, 1))
+                    sisteMaaned = YearMonth.of(2019, 1)
+                )
             ),
             resultat = MinsteinntektOgPeriodeResultat(
                 oppfyllerKravTilMinsteArbeidsinntekt = true,
                 periodeAntallUker = 104
             ),
-            inntekt = setOf(no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
-                inntekt = 4999423,
-                inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                    foersteMaaned = YearMonth.of(2018, 1),
-                    sisteMaaned = YearMonth.of(2019, 1)
-                ),
-                andel = 111,
-                inneholderNaeringsinntekter = false,
-                periode = 1
-            )),
+            inntekt = setOf(
+                no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
+                    inntekt = 4999423,
+                    inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                        foersteMaaned = YearMonth.of(2018, 1),
+                        sisteMaaned = YearMonth.of(2019, 1)
+                    ),
+                    andel = 111,
+                    inneholderNaeringsinntekter = false,
+                    periode = 1
+                )
+            ),
             inntektManueltRedigert = true,
             inntektAvvik = true
         )
