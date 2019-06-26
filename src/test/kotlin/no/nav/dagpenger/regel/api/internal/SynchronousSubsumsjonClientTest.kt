@@ -48,7 +48,7 @@ class SynchronousSubsumsjonClientTest {
 
         val testFunction = { subsumsjon: Subsumsjon, _: LocalDateTime, _: LocalDateTime -> subsumsjon.behovId }
 
-        val behovId = synchronousSubsumsjonClient.getSubsumsjonSynchronously(behovRequest, testFunction)
+        val behovId = runBlocking { synchronousSubsumsjonClient.getSubsumsjonSynchronously(behovRequest, testFunction) }
 
         assertEquals("565656", behovId)
     }
@@ -67,7 +67,13 @@ class SynchronousSubsumsjonClientTest {
         }
 
         shouldThrow<SubsumsjonProblem> {
-            SynchronousSubsumsjonClient(behovHttpClient, statusHttpClient, apply).getSubsumsjonSynchronously(mockk()) { subsumsjon, _, _ -> subsumsjon }
+            runBlocking {
+                SynchronousSubsumsjonClient(
+                    behovHttpClient,
+                    statusHttpClient,
+                    apply
+                ).getSubsumsjonSynchronously(mockk()) { subsumsjon, _, _ -> subsumsjon }
+            }
         }.apply {
             this.problem shouldBe problem
         }

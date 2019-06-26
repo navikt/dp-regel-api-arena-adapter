@@ -9,6 +9,7 @@ import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.mockk.every
 import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import no.nav.dagpenger.regel.api.arena.adapter.mockedRegelApiAdapter
@@ -74,9 +75,12 @@ class GrunnlagOgSatsApiTest {
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         every {
-            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>())
+            runBlocking {
+                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                    any(),
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                )
+            }
         } returns grunnlagOgSatsSubsumsjon()
 
         withTestApplication({
@@ -105,7 +109,8 @@ class GrunnlagOgSatsApiTest {
                     expectedJson, response.content,
                     CustomComparator(JSONCompareMode.LENIENT,
                         Customization("opprettet") { _, _ -> true },
-                        Customization("utfort") { _, _ -> true }))
+                        Customization("utfort") { _, _ -> true })
+                )
             }
         }
     }
@@ -116,9 +121,12 @@ class GrunnlagOgSatsApiTest {
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         every {
-            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>())
+            runBlocking {
+                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                    any(),
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                )
+            }
         } throws RuntimeException()
 
         withTestApplication({
@@ -158,9 +166,12 @@ class GrunnlagOgSatsApiTest {
         val problem = Problem(title = "subsumsjon problem")
         val synchronousSubsumsjonClient = mockk<SynchronousSubsumsjonClient>().apply {
             every {
-                this@apply.getSubsumsjonSynchronously(
-                    any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>())
+                runBlocking {
+                    this@apply.getSubsumsjonSynchronously(
+                        any(),
+                        any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                    )
+                }
             } throws SubsumsjonProblem(problem)
         }
 
@@ -200,9 +211,12 @@ class GrunnlagOgSatsApiTest {
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         every {
-            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>())
+            runBlocking {
+                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                    any(),
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                )
+            }
         } throws RegelApiTimeoutException("timeout")
 
         withTestApplication({
@@ -281,7 +295,10 @@ class GrunnlagOgSatsApiTest {
             }.apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
                 val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals("Parameteret er ikke gyldig, mangler obligatorisk felt: 'Required value 'vedtakId' missing at \$'", problem?.title)
+                assertEquals(
+                    "Parameteret er ikke gyldig, mangler obligatorisk felt: 'Required value 'vedtakId' missing at \$'",
+                    problem?.title
+                )
                 assertEquals("urn:dp:error:parameter", problem?.type.toString())
                 assertEquals(400, problem?.status)
             }
@@ -346,15 +363,17 @@ class GrunnlagOgSatsApiTest {
                 benyttet90ProsentRegel = false
             ),
             inntekt =
-            setOf(no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
-                inntekt = 4999423,
-                inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                    foersteMaaned = YearMonth.of(2018, 1),
-                    sisteMaaned = YearMonth.of(2019, 1)
-                ),
-                inneholderNaeringsinntekter = false,
-                periode = 1
-            )),
+            setOf(
+                no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
+                    inntekt = 4999423,
+                    inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                        foersteMaaned = YearMonth.of(2018, 1),
+                        sisteMaaned = YearMonth.of(2019, 1)
+                    ),
+                    inneholderNaeringsinntekter = false,
+                    periode = 1
+                )
+            ),
             inntektManueltRedigert = true,
             inntektAvvik = true
         )
