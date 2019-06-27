@@ -16,12 +16,22 @@ class SynchronousSubsumsjonClient(
     ): T {
 
         val opprettet = LocalDateTime.now()
+        val totalTimer = clientLatencyStats.labels("total").startTimer()
 
+        val createBehovTimer = clientLatencyStats.labels("create").startTimer()
         val statusUrl = behovHttpClient.run(behovRequest)
+        createBehovTimer.observeDuration()
+
+        val pollBehovTimer = clientLatencyStats.labels("poll_total").startTimer()
         val subsumsjonLocation = statusHttpClient.pollStatus(statusUrl)
+        pollBehovTimer.observeDuration()
+
+        val resultOfBehovTimer = clientLatencyStats.labels("result").startTimer()
         val subsumsjon = subsumsjonHttpClient.getSubsumsjon(subsumsjonLocation)
+        resultOfBehovTimer.observeDuration()
 
         val utfort = LocalDateTime.now()
+        totalTimer.observeDuration()
 
         return subsumsjon.problem?.let { throw SubsumsjonProblem(it) }
             ?: extractResult(subsumsjon, opprettet, utfort)
