@@ -1,9 +1,12 @@
 package no.nav.dagpenger.regel.api.internal
 
+import io.kotlintest.matchers.doubles.shouldBeGreaterThan
 import io.kotlintest.shouldBe
+import io.kotlintest.shouldNotBe
 import io.kotlintest.shouldThrow
 import io.mockk.every
 import io.mockk.mockk
+import io.prometheus.client.CollectorRegistry
 import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
@@ -51,6 +54,50 @@ class SynchronousSubsumsjonClientTest {
         val behovId = runBlocking { synchronousSubsumsjonClient.getSubsumsjonSynchronously(behovRequest, testFunction) }
 
         assertEquals("565656", behovId)
+    }
+
+    @Test
+    fun `Should get metrics from the client `() {
+        val behovHttpClient: RegelApiBehovHttpClient = mockk()
+        val statusHttpClient: RegelApiStatusHttpClient = mockk()
+        val subsumsjonHttpClient: RegelApiSubsumsjonHttpClient = mockk()
+
+        every {
+            behovHttpClient.run(behovRequest = any())
+        } returns "behov/status/123"
+
+        every {
+            runBlocking { statusHttpClient.pollStatus("behov/status/123") }
+        } returns "subsumsjon/0987"
+
+        every {
+            subsumsjonHttpClient.getSubsumsjon("subsumsjon/0987")
+        } returns subsumsjon()
+
+        val synchronousSubsumsjonClient = SynchronousSubsumsjonClient(
+            behovHttpClient,
+            statusHttpClient,
+            subsumsjonHttpClient
+        )
+
+        val behovRequest = BehovRequest(
+            aktorId = "1234",
+            vedtakId = 123,
+            beregningsdato = LocalDate.of(2019, 4, 14)
+        )
+
+        val testFunction = { subsumsjon: Subsumsjon, _: LocalDateTime, _: LocalDateTime -> subsumsjon.behovId }
+
+        val behovId = runBlocking { synchronousSubsumsjonClient.getSubsumsjonSynchronously(behovRequest, testFunction) }
+
+        assertEquals("565656", behovId)
+
+        val registry = CollectorRegistry.defaultRegistry
+
+        registry.metricFamilySamples().asSequence().find { it.name == CLIENT_LATENCY_SECONDS_METRIC_NAME }?.let { metric ->
+            metric.samples[0].value shouldNotBe null
+            metric.samples[0].value shouldBeGreaterThan 0.0
+        }
     }
 
     @Test

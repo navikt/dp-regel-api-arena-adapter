@@ -10,29 +10,41 @@ import no.nav.dagpenger.regel.api.internal.models.BehovStatus
 import no.nav.dagpenger.regel.api.internal.models.BehovStatusResponse
 import java.time.Duration
 
-class RegelApiStatusHttpClient(private val regelApiUrl: String, private val regelApiKey: String, private val timeout: Duration = Duration.ofSeconds(20)) {
+class RegelApiStatusHttpClient(
+    private val regelApiUrl: String,
+    private val regelApiKey: String,
+    private val timeout: Duration = Duration.ofSeconds(20)
+) {
     private val delayDuration = Duration.ofMillis(100)
 
     private fun pollInternal(statusUrl: String): BehovStatusPollResult {
-        val (_, response, result) =
-            with(statusUrl
-                .httpGet()
-                .apiKey(regelApiKey)
-                .allowRedirects(false)) { responseObject<BehovStatusResponse>() }
 
-        return try {
-            BehovStatusPollResult(result.get().status, null)
-        } catch (exception: Exception) {
-            if (response.statusCode == 303) {
-                return BehovStatusPollResult(
-                    null,
-                    response.headers["Location"].first()
-                )
-            } else {
-                throw RegelApiStatusHttpClientException(
-                    response.responseMessage, exception
-                )
+        val timer = clientLatencyStats.labels("poll").startTimer()
+        try {
+            val (_, response, result) =
+                with(
+                    statusUrl
+                        .httpGet()
+                        .apiKey(regelApiKey)
+                        .allowRedirects(false)
+                ) { responseObject<BehovStatusResponse>() }
+
+            return try {
+                BehovStatusPollResult(result.get().status, null)
+            } catch (exception: Exception) {
+                if (response.statusCode == 303) {
+                    return BehovStatusPollResult(
+                        null,
+                        response.headers["Location"].first()
+                    )
+                } else {
+                    throw RegelApiStatusHttpClientException(
+                        response.responseMessage, exception
+                    )
+                }
             }
+        } finally {
+            timer.observeDuration()
         }
     }
 
