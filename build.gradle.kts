@@ -20,7 +20,7 @@ apply {
 }
 
 repositories {
-    mavenCentral()
+    jcenter()
     maven("http://packages.confluent.io/maven/")
     maven("https://jitpack.io")
 }
@@ -36,19 +36,6 @@ java {
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions.jvmTarget = "1.8" }
-
-val ktorVersion = "1.2.0"
-val fuelVersion = "2.1.0"
-val kotlinLoggingVersion = "1.6.22"
-val log4j2Version = "2.11.1"
-val jupiterVersion = "5.3.2"
-val moshiVersion = "1.8.0"
-val ktorMoshiVersion = "1.0.1"
-val cucumberVersion = "4.0.0"
-val mockkVersion = "1.9.3"
-val konfigVersion = "1.6.10.0"
-val prometheusVersion = "0.6.0"
-val dpBibliotekerVersion = "2019.06.19-09.38.5466af242e44"
 
 dependencies {
     implementation(kotlin("stdlib"))
