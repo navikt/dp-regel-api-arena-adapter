@@ -4,24 +4,24 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 plugins {
     application
-    kotlin("jvm") version "1.3.21"
-    id("com.diffplug.gradle.spotless") version "3.13.0"
-    id("com.github.johnrengelman.shadow") version "4.0.3"
+    kotlin("jvm") version Kotlin.version
+    id(Spotless.spotless) version Spotless.version
+    id(Shadow.shadow) version Shadow.version
 }
 
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
     }
 }
 
 apply {
-    plugin("com.diffplug.gradle.spotless")
+    plugin(Spotless.spotless)
 }
 
 repositories {
     jcenter()
-    maven("https://dl.bintray.com/kittinunf/maven")
+    maven("http://packages.confluent.io/maven/")
     maven("https://jitpack.io")
 }
 
@@ -37,76 +37,65 @@ java {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions.jvmTarget = "1.8" }
 
-val ktorVersion = "1.2.0"
-val fuelVersion = "2.1.0"
-val kotlinLoggingVersion = "1.6.22"
-val log4j2Version = "2.11.1"
-val jupiterVersion = "5.3.2"
-val moshiVersion = "1.8.0"
-val ktorMoshiVersion = "1.0.1"
-val cucumberVersion = "4.0.0"
-val mockkVersion = "1.9.3"
-val konfigVersion = "1.6.10.0"
-val prometheusVersion = "0.6.0"
-val dpBibliotekerVersion = "2019.06.19-09.38.5466af242e44"
-
 dependencies {
     implementation(kotlin("stdlib"))
 
-    implementation("io.ktor:ktor-server:$ktorVersion")
-    implementation("io.ktor:ktor-server-netty:$ktorVersion")
-    implementation("io.ktor:ktor-auth:$ktorVersion")
-    implementation("io.ktor:ktor-auth-jwt:$ktorVersion") {
+    implementation(Ktor.server)
+    implementation(Ktor.serverNetty)
+    implementation(Ktor.auth)
+    implementation(Ktor.authJwt) {
         exclude(group = "junit")
     }
-    implementation("io.ktor:ktor-metrics-micrometer:$ktorVersion")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.1.4")
-    implementation("com.github.navikt.dp-biblioteker:ktor-utils:$dpBibliotekerVersion")
+    implementation(Ktor.micrometerMetrics)
+    implementation(Dagpenger.Biblioteker.ktorUtils)
+    implementation(Micrometer.prometheusRegistry)
 
-    implementation("com.squareup.moshi:moshi-adapters:$moshiVersion")
-    implementation("com.squareup.moshi:moshi-kotlin:$moshiVersion")
-    implementation("com.squareup.moshi:moshi:$moshiVersion")
-    implementation("com.ryanharter.ktor:ktor-moshi:$ktorMoshiVersion")
+    implementation(Moshi.moshi)
+    implementation(Moshi.moshiAdapters)
+    implementation(Moshi.moshiKotlin)
+    implementation(Moshi.moshiKtor)
 
-    implementation("io.github.microutils:kotlin-logging:$kotlinLoggingVersion")
+    implementation(Fuel.fuel)
+    implementation(Fuel.fuelMoshi)
+    implementation(Konfig.konfig)
 
-    implementation("com.github.kittinunf.fuel:fuel:$fuelVersion")
-    implementation("com.github.kittinunf.fuel:fuel-moshi:$fuelVersion")
+    implementation(Log4j2.api)
+    implementation(Log4j2.core)
+    implementation(Log4j2.slf4j)
+    implementation(Log4j2.Logstash.logstashLayout)
+    implementation(Kotlin.Logging.kotlinLogging)
 
-    implementation("com.natpryce:konfig:$konfigVersion")
+    implementation(Prometheus.common)
+    implementation(Prometheus.hotspot)
+    implementation(Prometheus.log4j2)
 
-    implementation("org.apache.logging.log4j:log4j-api:$log4j2Version")
-    implementation("org.apache.logging.log4j:log4j-core:$log4j2Version")
-    implementation("org.apache.logging.log4j:log4j-slf4j-impl:$log4j2Version")
-    implementation("com.vlkan.log4j2:log4j2-logstash-layout-fatjar:0.15")
-
-    implementation("io.prometheus:simpleclient_common:$prometheusVersion")
-    implementation("io.prometheus:simpleclient_hotspot:$prometheusVersion")
-    implementation("io.prometheus:simpleclient_log4j2:$prometheusVersion")
-
-    implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.2.0")
+    implementation(Ulid.ulid)
 
     testImplementation(kotlin("test"))
-    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
-    testImplementation("com.squareup.okhttp3:mockwebserver:3.13.1")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:$jupiterVersion")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jupiterVersion")
-    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:$jupiterVersion")
-    testImplementation("io.cucumber:cucumber-java8:$cucumberVersion")
-    testImplementation("io.cucumber:cucumber-junit:$cucumberVersion")
-    testImplementation("io.kotlintest:kotlintest-runner-junit5:3.3.0")
-    testImplementation("io.mockk:mockk:$mockkVersion")
-    testImplementation("com.github.tomakehurst:wiremock-standalone:2.21.0")
-    testImplementation("org.skyscreamer:jsonassert:1.5.0")
+    testImplementation(Cucumber.java8)
+    testImplementation(Cucumber.junit)
+    testImplementation(Ktor.ktorTest)
+    testImplementation(Junit5.api)
+    testImplementation(Junit5.kotlinRunner)
+    testImplementation(TestContainers.postgresql)
+    testImplementation(TestContainers.kafka)
+    testImplementation(Kafka.streamTestUtils)
+    testImplementation(Wiremock.standalone)
+    testImplementation(JsonAssert.jsonassert)
+
+    testImplementation(Mockk.mockk)
+
+    testRuntimeOnly(Junit5.engine)
+    testRuntimeOnly(Junit5.vintageEngine)
 }
 
 spotless {
     kotlin {
-        ktlint("0.31.0")
+        ktlint(Klint.version)
     }
     kotlinGradle {
         target("*.gradle.kts", "additionalScripts/*.gradle.kts")
-        ktlint("0.31.0")
+        ktlint(Klint.version)
     }
 }
 
