@@ -1,0 +1,10 @@
+allOf:
+  - $ref: '#/components/schemas/DagpengegrunnlagInnParametere'
+type: object
+required:
+  - inntektsId
+properties:
+  inntektsId:
+    format: ulid
+    description: Identifiserer hvilke inntekter som skal legges til grunn for re-beregning
+    example: 01D2FB328P06WD808P22N9CFY5
