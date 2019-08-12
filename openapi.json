@@ -6,16 +6,12 @@
   },
   "servers": [
     {
-      "url": "https://dagpenger-regel-api-arena-adapter.nais.adeo.no:{port}/v1",
-      "variables": {
-        "port": {
-          "default": "443",
-          "enum": [
-            "443",
-            "8443"
-          ]
-        }
-      }
+      "url": "https://dagpenger-regel-api-arena-adapter.nais.adeo.no/v1",
+      "description": "Produksjon (bruker ekte data)"
+    },
+    {
+      "url": "https://dagpenger-regel-api-arena-adapter.nais.preprod.local/v1",
+      "description": "Test (bruker test data)"
     }
   ],
   "tags": [
@@ -40,7 +36,107 @@
       "description": "Operasjon for å vurdere om inntektene fremdeles er gyldige for gitt beregningsdatoen."
     }
   ],
+  "security": [
+    {
+      "stsTokenAuth": []
+    },
+    {
+      "stsOIDC": [
+        "openid"
+      ]
+    }
+  ],
   "paths": {
+    "/dagpengegrunnlag-reberegning": {
+      "post": {
+        "tags": [
+          "Dagpengegrunnlag"
+        ],
+        "summary": "Reberegning av dagpengegrunnlag basert på regulerte G-satser",
+        "requestBody": {
+          "description": "Hvilke parametere som skal brukes for beregningen",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DagpengegrunnlagReberegningInnParametere"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "En beregning av dagpengegrunnlag og/eller sats",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DagpengegrunnlagBeregning"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "400": {
+                    "$ref": "#/components/examples/400"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Uautorisert - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "401": {
+                    "$ref": "#/components/examples/401"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Ikke tilgang - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "403": {
+                    "$ref": "#/components/examples/403"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System error - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "inntektFeil": {
+                    "$ref": "#/components/examples/hent-inntekt-feilet"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/dagpengegrunnlag": {
       "post": {
         "tags": [
@@ -443,6 +539,24 @@
             "type": "integer",
             "nullable": true,
             "description": "Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum her"
+          }
+        }
+      },
+      "DagpengegrunnlagReberegningInnParametere": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/DagpengegrunnlagInnParametere"
+          }
+        ],
+        "type": "object",
+        "required": [
+          "inntektsId"
+        ],
+        "properties": {
+          "inntektsId": {
+            "format": "ulid",
+            "description": "Identifiserer hvilke inntekter som skal legges til grunn for re-beregning",
+            "example": "01D2FB328P06WD808P22N9CFY5"
           }
         }
       },
@@ -1120,6 +1234,18 @@
           "beregningsdato": "2019-01-11",
           "harAvtjentVerneplikt": true
         }
+      }
+    },
+    "securitySchemes": {
+      "stsOIDC": {
+        "type": "openIdConnect",
+        "openIdConnectUrl": "https://security-token-service.nais.preprod.local/rest/v1/sts/.well-known/openid-configuration"
+      },
+      "stsTokenAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Lag OIDC tokens med STS:\n* Prod: <https://security-token-service.nais.adeo.no/>\n* Test: <https://security-token-service.nais.preprod.local/>\n\nTriks for å lage token i CLI: \n\n    DP_TOKEN=$(curl -v --user <SystemBRUKER>:<Passord> \\\n      https://security-token-service.nais.preprod.local/rest/v1/sts/token/\\?grant_type\\=client_credentials\\&scope\\=openid \\\n      | jq -r .access_token)\n"
       }
     }
   }
