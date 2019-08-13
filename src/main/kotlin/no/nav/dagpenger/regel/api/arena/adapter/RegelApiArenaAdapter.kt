@@ -36,6 +36,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.InntjeningsperiodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InvalidInnteksperiodeException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektOgPeriodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.IllegalInntektIdException
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiBehovHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiStatusHttpClient
@@ -156,13 +157,12 @@ fun Application.regelApiAdapter(
             )
             call.respond(status, problem)
         }
-        exception<RegelApiTimeoutException> { cause ->
-            LOGGER.error("Tidsavbrudd ved beregning av regel", cause)
-            val status = HttpStatusCode.GatewayTimeout
+        exception<IllegalInntektIdException> { cause ->
+            LOGGER.warn(cause.message)
+            val status = HttpStatusCode.BadRequest
             val problem = Problem(
-                type = URI.create("urn:dp:error:regelberegning:tidsavbrudd"),
-                title = "Tidsavbrudd ved beregning av regel",
-                detail = cause.message,
+                type = URI.create("urn:dp:error:parameter"),
+                title = "InnteksId er ikke gyldig",
                 status = status.value
             )
             call.respond(status, problem)
@@ -178,7 +178,6 @@ fun Application.regelApiAdapter(
             )
             call.respond(status, problem)
         }
-
         exception<SubsumsjonProblem> { cause ->
             call.respond(HttpStatusCode.BadGateway, cause.problem).also {
                 LOGGER.error("Problem ved beregning av subsumsjon", cause)
