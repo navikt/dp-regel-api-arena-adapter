@@ -154,6 +154,18 @@ tasks.withType<Test> {
     }
 }
 
+tasks.named("shadowJar") {
+    dependsOn("test")
+}
+
+tasks.named("jar") {
+    dependsOn("test")
+}
+
+tasks.named("compileKotlin") {
+    dependsOn("spotlessCheck")
+}
+
 tasks.withType<Wrapper> {
     gradleVersion = "5.5"
 }

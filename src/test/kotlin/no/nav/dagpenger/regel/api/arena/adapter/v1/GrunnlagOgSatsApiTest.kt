@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1
 
+import de.huxhorn.sulky.ulid.ULID
 import io.kotlintest.shouldBe
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
@@ -30,6 +31,7 @@ import org.skyscreamer.jsonassert.Customization
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import org.skyscreamer.jsonassert.comparator.CustomComparator
+import java.net.URI
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
@@ -111,6 +113,69 @@ class GrunnlagOgSatsApiTest {
                         Customization("opprettet") { _, _ -> true },
                         Customization("utfort") { _, _ -> true })
                 )
+            }
+        }
+    }
+
+    @Test
+    fun `Grunnlag and Sats re-beregning API specification test - Should match json field names and format`() {
+
+        withTestApplication({
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider(),
+                synchronousSubsumsjonClient = mockk()
+            )
+        }) {
+            handleRequest(HttpMethod.Post, "$dagpengegrunnlagPath-reberegning") {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+                setBody(
+                    """
+                    {
+                      "aktorId": "1234",
+                      "vedtakId": 5678,
+                      "inntektsId" : "${ULID().nextULID()}",
+                      "beregningsdato": "2019-02-27",
+                      "harAvtjentVerneplikt": false,
+                      "oppfyllerKravTilFangstOgFisk": false
+                    }
+                    """.trimIndent()
+                )
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+            }
+        }
+    }
+
+    @Test
+    fun `Grunnlag and Sats re-beregning API should give 400 on illegal inntektsId`() {
+
+        withTestApplication({
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider(),
+                synchronousSubsumsjonClient = mockk()
+            )
+        }) {
+            handleRequest(HttpMethod.Post, "$dagpengegrunnlagPath-reberegning") {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+                setBody(
+                    """
+                    {
+                      "aktorId": "1234",
+                      "vedtakId": 5678,
+                      "inntektsId" : "bla bla",
+                      "beregningsdato": "2019-02-27",
+                      "harAvtjentVerneplikt": false,
+                      "oppfyllerKravTilFangstOgFisk": false
+                    }
+                    """.trimIndent()
+                )
+            }.apply {
+                assertEquals(HttpStatusCode.BadRequest, response.status())
+                moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!).apply {
+                    this?.type shouldBe URI("urn:dp:error:parameter")
+                }
             }
         }
     }
