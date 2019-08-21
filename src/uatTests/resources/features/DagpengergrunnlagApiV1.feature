@@ -35,9 +35,9 @@ Egenskap: Hent dagpengergrunnlag
     Gitt at søker med aktør id "1.5_G_INNTEKT" med vedtak id 12345 med beregningsdato "2019-07-01" i beregning av grunnlag
     Og søker har 100 barn
     Når digidag skal beregne grunnlag
-    Så er avkortet grunnlag satt til 175000 og uavkortet til 175000
-    Og ukessats satt til 2865
-    Og dagsats satt til 420
+    Så er avkortet grunnlag satt til 180374 og uavkortet til 180374
+    Og ukessats satt til 3122
+    Og dagsats satt til 433
     Og da er parameteret barn 100
     Og da er parameteret brukt90prosentbarn true
 
@@ -45,7 +45,17 @@ Egenskap: Hent dagpengergrunnlag
     Gitt at søker med aktør id "1.5_G_INNTEKT" med vedtak id 12345 med beregningsdato "2019-07-01" i beregning av grunnlag
     Og søker har verneplikt true
     Når digidag skal beregne grunnlag
-    Så er grunnlag satt til avkortet satt til 9999
-    Og ukessats satt til 1000
-    Og dagsats satt til 300
+    Så er avkortet grunnlag satt til 299574 og uavkortet til 299574
+    Og ukessats satt til 3595
+    Og dagsats satt til 719
     Og da er benyttet beregningsregel "Verneplikt"
+
+  Scenario: Ingen inntekt men verneplikt
+    Gitt at søker med aktør id "INGEN_INNTEKT" med vedtak id 12345 med beregningsdato "2019-07-01" i beregning av grunnlag
+    Og søker har fått innvilget minsteinntekt på vernepliktig grunnlag
+    Når digidag skal beregne grunnlag
+    Så er avkortet grunnlag satt til 299574 og uavkortet til 299574
+    Og ukessats satt til 3595
+    Og dagsats satt til 719
+    Og da er benyttet beregningsregel "Verneplikt"
+
