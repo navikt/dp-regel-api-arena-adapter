@@ -20,7 +20,7 @@ Egenskap: Vurderer minsteinntektskrav
     Så kravet til minsteinntekt er "oppfylt"
     Og har krav på 52 uker
 
-  Scenario: Inntekt større enn eller lik 2G siste 36 måneder vil innfri minsteinntektskravet og gi 104 uker
+  Scenario: Inntekt større enn eller lik 3G siste 36 måneder og i snitt mer enn 2G vil innfri minsteinntektskravet og gi 104 uker
     Gitt at søker med aktør id "3_G_INNTEKT" med vedtak id 12345 med beregningsdato "2019-07-01"
     Når digidag skal vurdere minsteinntektkrav og periode
     Så kravet til minsteinntekt er "oppfylt"

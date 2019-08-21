@@ -282,6 +282,49 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
+    fun ` Should give API errors for dagpengegrunnlag når subsumsjonen har problem `() {
+
+        val problem = Problem(title = "Problemets tittel")
+        val synchronousSubsumsjonClient = mockk<SynchronousSubsumsjonClient>().apply {
+            every {
+                this@apply.getSubsumsjonSynchronously(
+                    any(),
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>())
+            } throws SubsumsjonProblem(problem)
+        }
+
+        withTestApplication({
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider(),
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+            )
+        }) {
+            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+                setBody(
+                    """
+                    {
+                      "aktorId": "1234",
+                      "vedtakId": 5678,
+                      "beregningsdato": "2019-02-27",
+                      "harAvtjentVerneplikt": false,
+                      "oppfyllerKravTilFangstOgFisk": false
+                    }
+
+                """.trimIndent()
+                )
+            }.apply {
+                assertEquals(HttpStatusCode.BadGateway, response.status())
+                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!).apply {
+                    this shouldBe problem
+                }
+                assertEquals("Problemets tittel", problem!!.title)
+            }
+        }
+    }
+
+    @Test
     fun ` Should give API errors as HTTP problems rfc7807 for dagpengegrunnlag on timout errors`() {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
