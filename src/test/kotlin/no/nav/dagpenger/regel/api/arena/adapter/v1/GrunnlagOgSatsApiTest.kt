@@ -120,10 +120,21 @@ class GrunnlagOgSatsApiTest {
     @Test
     fun `Grunnlag and Sats re-beregning API specification test - Should match json field names and format`() {
 
+        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+
+        every {
+            runBlocking {
+                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                    any(),
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                )
+            }
+        } returns grunnlagOgSatsSubsumsjon()
+
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = mockk()
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient
             )
         }) {
             handleRequest(HttpMethod.Post, "$dagpengegrunnlagPath-reberegning") {
