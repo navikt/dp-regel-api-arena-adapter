@@ -71,6 +71,8 @@ dependencies {
 
     implementation(Ulid.ulid)
 
+    implementation("com.github.spoptchev:scientist:1.0.2")
+
     testImplementation(kotlin("test"))
     testImplementation(Cucumber.java8)
     testImplementation(Cucumber.junit)
