@@ -20,6 +20,7 @@ class DagpengergrunnlagApiV1Steps : No {
 
         lateinit var dagpengegrunnlagInnParametere: GrunnlagOgSatsParametere
         lateinit var dagpengegrunnlagBeregning: GrunnlagOgSatsSubsumsjon
+        lateinit var problem: Problem
         Gitt("at søker med aktør id {string} med vedtak id {int} med beregningsdato {string} i beregning av grunnlag") { aktørId: String, vedtaktId: Int, beregningsDato: String ->
             dagpengegrunnlagInnParametere =
                 GrunnlagOgSatsParametere(
@@ -31,9 +32,14 @@ class DagpengergrunnlagApiV1Steps : No {
 
         Når("digidag skal beregne grunnlag") {
 
-            val response =
-                testApiClient.grunnlagOgSats(dagpengegrunnlagInnParametereAdapter.toJson(dagpengegrunnlagInnParametere))
-            dagpengegrunnlagBeregning = response.parseJsonFrom(dagpengegrunnlagBeregningAdapter)
+            try {
+                val response =
+                    testApiClient.grunnlagOgSats(dagpengegrunnlagInnParametereAdapter.toJson(dagpengegrunnlagInnParametere))
+                dagpengegrunnlagBeregning = response.parseJsonFrom(dagpengegrunnlagBeregningAdapter)
+            } catch (ex: RegelApiArenaAdapterException) {
+                problem = ex.problem
+            }
+
         }
 
         Og("det er beregnet med et manuelt grunnlag på {int}") { manueltGrunnlag: Int ->
@@ -71,8 +77,8 @@ class DagpengergrunnlagApiV1Steps : No {
 
         Så("returneres en feil {string}") { feilmelding: String ->
             // assertThrows<RuntimeException> { dagpengegrunnlagBeregning. }
+            assertEquals(problem.title, feilmelding)
 
-            assertTrue(true)
         }
     }
 }

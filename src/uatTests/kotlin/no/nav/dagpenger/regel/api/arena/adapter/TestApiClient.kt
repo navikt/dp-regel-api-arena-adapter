@@ -6,6 +6,7 @@ import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.moshi.responseObject
 import com.github.kittinunf.result.Result
+import java.net.URI
 import java.security.cert.X509Certificate
 import javax.net.ssl.HostnameVerifier
 import javax.net.ssl.SSLContext
@@ -38,6 +39,8 @@ class TestApiClient(config: CucumberConfiguration = CucumberConfiguration()) {
     }
 
     private val token = getToken(config)
+
+    private val problemAdapter = moshiInstance.adapter(Problem::class.java)!!
 
     private fun getToken(config: CucumberConfiguration): String {
         val parameters = listOf(
@@ -74,12 +77,25 @@ class TestApiClient(config: CucumberConfiguration = CucumberConfiguration()) {
         }
 
         return when (result) {
-            is Result.Failure -> throw AssertionError(
-                "Failed post to adapter. Response body ${result.error.response.body().asString("application/json")}. Error message: ${result.error.message}"
-            )
+            is Result.Failure -> {
+                val problem = runCatching {
+                    problemAdapter.fromJson(result.error.response.body().asString("application/json"))!!
+                }.getOrDefault(
+                    Problem(
+                        URI.create("urn:dp:error:test"),
+                        "Feil ved testkjøring mot adapteret"
+                    )
+                )
+                throw RegelApiArenaAdapterException(
+                    problem
+                )
+            }
             is Result.Success -> result.get()
         }
     }
 }
+
+class RegelApiArenaAdapterException(val problem: Problem) : RuntimeException(problem.toString())
+
 
 val testApiClient = TestApiClient()

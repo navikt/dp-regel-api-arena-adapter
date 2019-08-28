@@ -30,6 +30,7 @@ class MinsteinntektApiV1Steps : No {
 
         lateinit var minsteinntektInnParametere: MinsteinntektOgPeriodeParametere
         lateinit var minsteinntektBeregning: MinsteinntektOgPeriodeSubsumsjon
+        lateinit var problem: Problem
 
         Gitt("at søker med aktør id {string} med vedtak id {int} med beregningsdato {string}") { aktørId: String, vedtakId: Int, beregningsDato: String ->
             minsteinntektInnParametere =
@@ -41,10 +42,19 @@ class MinsteinntektApiV1Steps : No {
         }
 
         Når("digidag skal vurdere minsteinntektkrav og periode") {
-            val response =
-                testApiClient.minsteinntektOgPeriode(minsteinntektInnParametereAdapter.toJson(minsteinntektInnParametere))
-            minsteinntektBeregning = response.parseJsonFrom(minsteinntektBeregningAdapter)
+            try {
+                val response =
+                    testApiClient.minsteinntektOgPeriode(
+                        minsteinntektInnParametereAdapter.toJson(
+                            minsteinntektInnParametere
+                        )
+                    )
+                minsteinntektBeregning = response.parseJsonFrom(minsteinntektBeregningAdapter)
+            } catch (ex: RegelApiArenaAdapterException) {
+                problem = ex.problem
+            }
         }
+
 
         Så("kravet til minsteinntekt er {string}") { utfall: String ->
             assertEquals(utfall == "oppfylt", minsteinntektBeregning.resultat.oppfyllerKravTilMinsteArbeidsinntekt)
