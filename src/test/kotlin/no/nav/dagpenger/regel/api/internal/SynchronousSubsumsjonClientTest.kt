@@ -128,7 +128,6 @@ class SynchronousSubsumsjonClientTest {
 
     private fun subsumsjon(): Subsumsjon {
         return Subsumsjon(
-            id = "",
             behovId = "565656",
             faktum = Faktum(
                 aktorId = "1234",

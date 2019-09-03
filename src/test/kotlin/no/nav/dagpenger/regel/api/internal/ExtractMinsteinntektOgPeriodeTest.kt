@@ -99,7 +99,6 @@ class ExtractMinsteinntektOgPeriodeTest {
     )
 
     private val subsumsjonWithBothResults = Subsumsjon(
-        id = "id123",
         behovId = "behov123",
         faktum = Faktum(
             "aktoer123",
@@ -156,7 +155,6 @@ class ExtractMinsteinntektOgPeriodeTest {
     )
 
     private val subsumsjonWithOppfyllerMinsteinntektFalse = Subsumsjon(
-        id = "id123",
         behovId = "behov123",
         faktum = Faktum(
             "aktoer123",
