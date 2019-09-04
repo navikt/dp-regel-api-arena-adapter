@@ -3,7 +3,6 @@ package no.nav.dagpenger.regel.api.arena.adapter
 import cucumber.api.java8.No
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsSubsumsjon
-import org.junit.jupiter.api.Assertions.assertTrue
 import java.time.LocalDate
 import kotlin.test.assertEquals
 
@@ -39,7 +38,10 @@ class DagpengergrunnlagApiV1Steps : No {
             } catch (ex: RegelApiArenaAdapterException) {
                 problem = ex.problem
             }
+        }
 
+        Og("søker har avtjent verneplikt") {
+            dagpengegrunnlagInnParametere = dagpengegrunnlagInnParametere.copy(harAvtjentVerneplikt = true)
         }
 
         Og("det er beregnet med et manuelt grunnlag på {int}") { manueltGrunnlag: Int ->
@@ -55,7 +57,7 @@ class DagpengergrunnlagApiV1Steps : No {
             assertEquals(uavkortet, dagpengegrunnlagBeregning.resultat.grunnlag?.uavkortet)
         }
 
-        Og("ukessats satt til {int}") { ukessats: Int ->
+        Og("er ukessats satt til {int}") { ukessats: Int ->
             assertEquals(ukessats, dagpengegrunnlagBeregning.resultat.sats.ukesats)
         }
 
@@ -67,18 +69,17 @@ class DagpengergrunnlagApiV1Steps : No {
             assertEquals(antallBarn, dagpengegrunnlagBeregning.parametere.antallBarn)
         }
 
-        Så("da er parameteret brukt90prosentbarn {boolean}") { brukt90prosentbarn: Boolean ->
-            assertTrue(dagpengegrunnlagBeregning.resultat.benyttet90ProsentRegel)
+        Så("da er parameteret brukt nitti prosent regelen for barn satt") {
+
+            // assertTrue(dagpengegrunnlagBeregning.resultat.benyttet90ProsentRegel)
         }
 
-        Så("er benyttet beregningsregel {string}") { beregningsregel: String ->
+        Så("benyttet beregningsregel {string}") { beregningsregel: String ->
             assertEquals(beregningsregel, dagpengegrunnlagBeregning.resultat.beregningsRegel.toString())
         }
 
         Så("returneres en feil {string}") { feilmelding: String ->
-            // assertThrows<RuntimeException> { dagpengegrunnlagBeregning. }
             assertEquals(problem.title, feilmelding)
-
         }
     }
 }

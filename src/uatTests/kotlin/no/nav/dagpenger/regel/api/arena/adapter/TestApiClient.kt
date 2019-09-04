@@ -97,5 +97,4 @@ class TestApiClient(config: CucumberConfiguration = CucumberConfiguration()) {
 
 class RegelApiArenaAdapterException(val problem: Problem) : RuntimeException(problem.toString())
 
-
 val testApiClient = TestApiClient()

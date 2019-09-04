@@ -198,7 +198,7 @@ class MinsteinntektOgPeriodeApiTest {
             }.apply {
                 assertEquals(HttpStatusCode.BadGateway, response.status())
                 moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!).apply {
-                    this@apply shouldBe problem
+                    this shouldBe problem
                 }
             }
         }

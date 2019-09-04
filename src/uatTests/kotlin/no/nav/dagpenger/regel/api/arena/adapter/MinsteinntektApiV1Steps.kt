@@ -55,7 +55,6 @@ class MinsteinntektApiV1Steps : No {
             }
         }
 
-
         Så("kravet til minsteinntekt er {string}") { utfall: String ->
             assertEquals(utfall == "oppfylt", minsteinntektBeregning.resultat.oppfyllerKravTilMinsteArbeidsinntekt)
         }
@@ -93,6 +92,10 @@ class MinsteinntektApiV1Steps : No {
 
         Så("parameteret inneholder bruktInntektsPeriode") {
             assertTrue { minsteinntektBeregning.parametere.bruktInntektsPeriode != null }
+        }
+
+        Så("returneres en feil {string}") { feilmelding: String ->
+            assertEquals(problem.title, feilmelding)
         }
     }
 }

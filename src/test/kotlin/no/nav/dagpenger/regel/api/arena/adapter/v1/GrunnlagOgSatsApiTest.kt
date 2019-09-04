@@ -287,9 +287,11 @@ class GrunnlagOgSatsApiTest {
         val problem = Problem(title = "Problemets tittel")
         val synchronousSubsumsjonClient = mockk<SynchronousSubsumsjonClient>().apply {
             every {
-                this@apply.getSubsumsjonSynchronously(
-                    any(),
+                runBlocking {
+                    this@apply.getSubsumsjonSynchronously(
+                        any(),
                     any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>())
+                }
             } throws SubsumsjonProblem(problem)
         }
 
