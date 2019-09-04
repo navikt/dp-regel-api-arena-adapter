@@ -51,6 +51,7 @@ class MinsteinntektApiV1Steps : No {
                     )
                 minsteinntektBeregning = response.parseJsonFrom(minsteinntektBeregningAdapter)
             } catch (ex: RegelApiArenaAdapterException) {
+                logger.error("Feil ved kjøring av tester", ex)
                 problem = ex.problem
             }
         }
@@ -94,7 +95,7 @@ class MinsteinntektApiV1Steps : No {
             assertTrue { minsteinntektBeregning.parametere.bruktInntektsPeriode != null }
         }
 
-        Så("returneres en feil {string}") { feilmelding: String ->
+        Så("returneres en feil {string} i minsteinntekt") { feilmelding: String ->
             assertEquals(problem.title, feilmelding)
         }
     }

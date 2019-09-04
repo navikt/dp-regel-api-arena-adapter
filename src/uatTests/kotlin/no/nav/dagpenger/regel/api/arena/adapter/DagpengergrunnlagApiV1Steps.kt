@@ -3,8 +3,13 @@ package no.nav.dagpenger.regel.api.arena.adapter
 import cucumber.api.java8.No
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsSubsumsjon
+import org.apache.logging.log4j.LogManager
 import java.time.LocalDate
 import kotlin.test.assertEquals
+
+
+private val logger = LogManager.getLogger()
+
 
 class DagpengergrunnlagApiV1Steps : No {
 
@@ -36,6 +41,7 @@ class DagpengergrunnlagApiV1Steps : No {
                     testApiClient.grunnlagOgSats(dagpengegrunnlagInnParametereAdapter.toJson(dagpengegrunnlagInnParametere))
                 dagpengegrunnlagBeregning = response.parseJsonFrom(dagpengegrunnlagBeregningAdapter)
             } catch (ex: RegelApiArenaAdapterException) {
+                logger.error("Feil ved kjøring av tester", ex)
                 problem = ex.problem
             }
         }
@@ -69,9 +75,9 @@ class DagpengergrunnlagApiV1Steps : No {
             assertEquals(antallBarn, dagpengegrunnlagBeregning.parametere.antallBarn)
         }
 
-        Så("da er parameteret brukt nitti prosent regelen for barn satt") {
+        Så("da er parameteret brukt nitti prosent regelen er {string}") { brukt90prosentbarn: String ->
 
-            // assertTrue(dagpengegrunnlagBeregning.resultat.benyttet90ProsentRegel)
+            assertEquals(dagpengegrunnlagBeregning.resultat.benyttet90ProsentRegel, brukt90prosentbarn.toBoolean())
         }
 
         Så("benyttet beregningsregel {string}") { beregningsregel: String ->

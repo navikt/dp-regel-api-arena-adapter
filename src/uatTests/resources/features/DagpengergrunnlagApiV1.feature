@@ -39,7 +39,7 @@ Egenskap: Hent dagpengergrunnlag
     Og er ukessats satt til 3122
     Og dagsats satt til 433
     Og da er parameteret barn 100
-    Og da er parameteret brukt nitti prosent regelen for barn satt
+    Og da er parameteret brukt nitti prosent regelen er "true"
 
   Scenario: Verneplikt gir høyere grunnlag enn inntekt
     Gitt at søker med aktør id "1.5_G_INNTEKT" med vedtak id 12345 med beregningsdato "2019-07-01" i beregning av grunnlag
