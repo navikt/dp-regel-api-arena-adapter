@@ -88,7 +88,6 @@ class ExtractGrunnlagOgSatsTest {
     )
 
     private val subsumsjon = Subsumsjon(
-        id = "id123",
         behovId = "behov123",
         faktum = Faktum(
             "aktoer123",

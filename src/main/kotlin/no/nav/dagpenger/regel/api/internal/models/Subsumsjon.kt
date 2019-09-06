@@ -4,7 +4,6 @@ import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import java.math.BigDecimal
 
 data class Subsumsjon(
-    val id: String,
     val behovId: String,
     val faktum: Faktum,
     val grunnlagResultat: GrunnlagResultat?,
