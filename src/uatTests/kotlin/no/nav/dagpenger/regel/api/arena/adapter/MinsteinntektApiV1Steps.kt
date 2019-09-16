@@ -94,9 +94,5 @@ class MinsteinntektApiV1Steps : No {
         Så("parameteret inneholder bruktInntektsPeriode") {
             assertTrue { minsteinntektBeregning.parametere.bruktInntektsPeriode != null }
         }
-
-        Så("returneres en feil {string} i minsteinntekt") { feilmelding: String ->
-            assertEquals(problem.title, feilmelding)
-        }
     }
 }

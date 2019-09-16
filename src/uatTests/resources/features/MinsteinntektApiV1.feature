@@ -4,7 +4,8 @@ Egenskap: Vurderer minsteinntektskrav
   Scenario: Ingen inntekt og avslag
     Gitt at søker med aktør id "INGEN_INNTEKT" med vedtak id 12345 med beregningsdato "2019-07-01"
     Når digidag skal vurdere minsteinntektkrav og periode
-    Så returneres en feil "Inntektene gir 0 eller negativ resultat i grunnlag" i minsteinntekt
+    Så kravet til minsteinntekt er "ikke oppfylt"
+    Og antall uker er ikke satt
 
   Scenario: Ingen inntekt og verneplikt skal gi 26 uker
     Gitt at søker med aktør id "INGEN_INNTEKT" med vedtak id 12345 med beregningsdato "2019-07-01"
@@ -28,7 +29,8 @@ Egenskap: Vurderer minsteinntektskrav
   Scenario: Inntekt fra fangst og fisk skal kun tas med hvis parameter for fangs og fisk er satt
     Gitt at søker med aktør id "FF_INNTEKT" med vedtak id 12345 med beregningsdato "2019-07-01"
     Når digidag skal vurdere minsteinntektkrav og periode
-    Så returneres en feil "Inntektene gir 0 eller negativ resultat i grunnlag"
+    Så kravet til minsteinntekt er "ikke oppfylt"
+    Og antall uker er ikke satt
 
   Scenario: Inntekt fra fangst og fisk skal kun tas med hvis saksbehandler vurderer det
     Gitt at søker med aktør id "FF_INNTEKT" med vedtak id 12345 med beregningsdato "2019-07-01"

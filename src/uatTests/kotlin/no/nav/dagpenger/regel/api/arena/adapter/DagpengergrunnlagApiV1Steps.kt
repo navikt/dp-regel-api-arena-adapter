@@ -7,9 +7,7 @@ import org.apache.logging.log4j.LogManager
 import java.time.LocalDate
 import kotlin.test.assertEquals
 
-
 private val logger = LogManager.getLogger()
-
 
 class DagpengergrunnlagApiV1Steps : No {
 
@@ -82,10 +80,6 @@ class DagpengergrunnlagApiV1Steps : No {
 
         Så("benyttet beregningsregel {string}") { beregningsregel: String ->
             assertEquals(beregningsregel, dagpengegrunnlagBeregning.resultat.beregningsRegel.toString())
-        }
-
-        Så("returneres en feil {string}") { feilmelding: String ->
-            assertEquals(problem.title, feilmelding)
         }
     }
 }

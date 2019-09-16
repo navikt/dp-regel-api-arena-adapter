@@ -4,7 +4,9 @@ Egenskap: Hent dagpengergrunnlag
   Scenario: Beregn grunnlag og sats gitt ingen inntekt
     Gitt at søker med aktør id "INGEN_INNTEKT" med vedtak id 12345 med beregningsdato "2019-07-01" i beregning av grunnlag
     Når digidag skal beregne grunnlag
-    Så returneres en feil "Inntektene gir 0 eller negativ resultat i grunnlag"
+    Så er avkortet grunnlag satt til 0 og uavkortet til 0
+    Og ukessats satt til 0
+    Og dagsats satt til 0
 
   Scenario: Beregn grunnlag og sats gitt inntekt
     Gitt at søker med aktør id "1.5_G_INNTEKT" med vedtak id 12345 med beregningsdato "2019-07-01" i beregning av grunnlag
