@@ -115,33 +115,9 @@ pipeline {
               }
 
               steps {
-               withCredentials([usernamePassword(
-                    credentialsId: 'srvdp-regel-api-ar',
-                    usernameVariable: 'CUCUMBER_TEST_USERNAME',
-                    passwordVariable: 'CUCUMBER_TEST_PASSWORD'
-                    )]) {
-                        sh label: 'User Acceptance Tests', script: """
-                        ./scripts/test/uat || true
-                       """
-                    }
-
-
-                 post {
-                    always {
-                        publishHTML target: [
-                            allowMissing: true,
-                            alwaysLinkToLastBuild: false,
-                            keepAll: true,
-                            reportDir: 'build/reports/tests/uat',
-                            reportFiles: 'index.html',
-                            reportName: 'Test coverage'
-                        ]
-
-                        cucumber 'build/cucumber.json'
-
-                        junit 'build/test-results/uat/*.xml'
-                    }
-                 }
+                sh label: 'User Acceptance Tests', script: """
+                  ./scripts/test/uat || true
+                """
                }
             }
 
