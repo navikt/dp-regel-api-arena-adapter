@@ -8,12 +8,6 @@ Adapter for Arena mot DigiDag Dagpenger regel API
 
 Se [Dagpenger docker compose](https://github.com/navikt/dagpenger/blob/master/docker-compose/README.md) og docker-compose
 
-## Kjør "user acceptance tests" (Cucumber)
-
-Etter å ha starte docker-compose i forrige avsnitt, kjør:
-
-'./gradlew uatLocal'
-
 ## Kjøre mot testmiljø (preprod, eller dev)
 
 dp-regel-api-arena-adapter er beskyttet med jwt autentisering, hent token med: 
