@@ -1,6 +1,5 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 
 plugins {
     application
@@ -72,8 +71,6 @@ dependencies {
     implementation(Ulid.ulid)
 
     testImplementation(kotlin("test"))
-    testImplementation(Cucumber.java8)
-    testImplementation(Cucumber.junit)
     testImplementation(Ktor.ktorTest)
     testImplementation(Junit5.api)
     testImplementation(Junit5.kotlinRunner)
@@ -96,51 +93,6 @@ spotless {
     kotlinGradle {
         target("*.gradle.kts", "additionalScripts/*.gradle.kts")
         ktlint(Klint.version)
-    }
-}
-
-sourceSets {
-
-    create("uat") {
-        withConvention(KotlinSourceSet::class) {
-            java.srcDir(file("src/uatTests/kotlin"))
-            resources.srcDir(file("src/uatTests/resources"))
-            compileClasspath += sourceSets.main.get().output + configurations["testRuntimeClasspath"] + configurations["runtimeClasspath"]
-            runtimeClasspath += output + compileClasspath
-        }
-    }
-}
-
-configurations["uatCompile"].extendsFrom(configurations["testCompile"])
-
-tasks.register<Test>("uatLocal") {
-    description = "Runs the user acceptance tests."
-    group = "verification"
-    testClassesDirs = sourceSets["uat"].output.classesDirs
-    classpath = sourceSets["uat"].runtimeClasspath
-    mustRunAfter(tasks["test"])
-    useJUnitPlatform()
-    testLogging {
-        showExceptions = true
-        showStackTraces = true
-        exceptionFormat = TestExceptionFormat.FULL
-        events = setOf(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
-    }
-}
-
-tasks.register<Test>("uatDev") {
-    description = "Runs the user acceptance tests."
-    group = "verification"
-    testClassesDirs = sourceSets["uat"].output.classesDirs
-    classpath = sourceSets["uat"].runtimeClasspath
-    mustRunAfter(tasks["test"])
-    useJUnitPlatform()
-    environment(mapOf("CUCUMBER_ENV" to "dev"))
-    testLogging {
-        showExceptions = true
-        showStackTraces = true
-        exceptionFormat = TestExceptionFormat.FULL
-        events = setOf(TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
     }
 }
 
