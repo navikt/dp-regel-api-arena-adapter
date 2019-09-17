@@ -1,5 +1,0 @@
-#!/usr/bin/env bash
-
-echo 'Running uat tests'
-
-./gradlew uat
