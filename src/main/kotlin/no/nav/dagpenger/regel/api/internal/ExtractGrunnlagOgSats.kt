@@ -24,8 +24,9 @@ fun extractGrunnlagOgSats(
     val grunnlagResultat = subsumsjon.grunnlagResultat ?: throw MissingSubsumsjonDataException("Missing grunnlagResultat")
 
     if (grunnlagResultat.avkortet.toInt() < 0 || grunnlagResultat.uavkortet.toInt() < 0) {
-        throw NegativtGrunnlagException("Negative grunnlag")
+        throw NegativtGrunnlagException("Negativt grunnlag")
     }
+
     val satsResultat = subsumsjon.satsResultat ?: throw MissingSubsumsjonDataException("Missing satsResultat")
 
     return GrunnlagOgSatsSubsumsjon(

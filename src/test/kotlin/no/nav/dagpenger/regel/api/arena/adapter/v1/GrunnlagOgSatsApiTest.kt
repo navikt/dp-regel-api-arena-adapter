@@ -169,7 +169,7 @@ class GrunnlagOgSatsApiTest {
                     any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
                 )
             }
-        } throws java.lang.RuntimeException()
+        } throws NegativtGrunnlagException("Negativt grunnlag")
 
         withTestApplication({
             mockedRegelApiAdapter(
@@ -195,7 +195,7 @@ class GrunnlagOgSatsApiTest {
             }.apply {
                 assertEquals(HttpStatusCode.PreconditionFailed, response.status())
                 moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!).apply {
-                    this?.type shouldBe URI("urn:dp:error:parameter")
+                    this?.type shouldBe URI("urn:dp:error:negativtGrunnlag")
                 }
             }
         }
