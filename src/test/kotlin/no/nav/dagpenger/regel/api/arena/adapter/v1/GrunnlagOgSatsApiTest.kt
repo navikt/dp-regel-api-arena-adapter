@@ -159,6 +159,49 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
+    fun `Grunnlag and Sats beregning should give problem when grunnlag result is negative`() {
+        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+
+        every {
+            runBlocking {
+                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                    any(),
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                )
+            }
+        } throws java.lang.RuntimeException()
+
+        withTestApplication({
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider(),
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+            )
+        }) {
+            handleRequest(HttpMethod.Post, "$dagpengegrunnlagPath-reberegning") {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+                setBody(
+                    """
+                    {
+                      "aktorId": "1234",
+                      "vedtakId": 5678,
+                      "inntektsId" : "${ULID().nextULID()}",
+                      "beregningsdato": "2019-02-27",
+                      "harAvtjentVerneplikt": false,
+                      "oppfyllerKravTilFangstOgFisk": false
+                    }
+                    """.trimIndent()
+                )
+            }.apply {
+                assertEquals(HttpStatusCode.PreconditionFailed, response.status())
+                moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!).apply {
+                    this?.type shouldBe URI("urn:dp:error:parameter")
+                }
+            }
+        }
+    }
+
+    @Test
     fun `Grunnlag and Sats re-beregning API should give 400 on illegal inntektsId`() {
 
         withTestApplication({
