@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.api.internal
 
+import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagBeregningsregel
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Grunnlag
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsRegelFaktum
@@ -18,6 +19,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
 import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class ExtractGrunnlagOgSatsTest {
 
@@ -29,6 +31,18 @@ class ExtractGrunnlagOgSatsTest {
             LocalDateTime.of(2019, 4, 25, 1, 1, 1))
 
         assertEquals(grunnlagOgSatsSubsumsjon, result)
+    }
+
+    @Test
+    fun `Converting Subsumsjon with negative grunnlag to GrunnlagOgSatsSubsumsjon  should throw exception`() {
+        val subsumsjonMedNegativtGrunnlag = subsumsjon.copy(grunnlagResultat = subsumsjon.grunnlagResultat?.copy(avkortet = BigDecimal(-1), uavkortet = BigDecimal(-1)))
+
+        assertFailsWith<NegativtGrunnlagException> {
+            extractGrunnlagOgSats(
+                    subsumsjonMedNegativtGrunnlag,
+                    LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+                    LocalDateTime.of(2019, 4, 25, 1, 1, 1))
+        }
     }
 
     private val grunnlagOgSatsSubsumsjon = GrunnlagOgSatsSubsumsjon(
