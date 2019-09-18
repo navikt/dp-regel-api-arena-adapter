@@ -31,11 +31,7 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.prometheus.client.CollectorRegistry
 import mu.KotlinLogging
 import no.nav.dagpenger.regel.api.Configuration
-import no.nav.dagpenger.regel.api.arena.adapter.v1.GrunnlagOgSatsApi
-import no.nav.dagpenger.regel.api.arena.adapter.v1.InntjeningsperiodeApi
-import no.nav.dagpenger.regel.api.arena.adapter.v1.InvalidInnteksperiodeException
-import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektOgPeriodeApi
-import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
+import no.nav.dagpenger.regel.api.arena.adapter.v1.*
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.IllegalInntektIdException
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiBehovHttpClient
@@ -182,6 +178,17 @@ fun Application.regelApiAdapter(
             call.respond(HttpStatusCode.BadGateway, cause.problem).also {
                 LOGGER.error("Problem ved beregning av subsumsjon", cause)
             }
+        }
+        exception<NegativtGrunnlagException> { cause ->
+            LOGGER.error("Negativt grunnlag", cause)
+            val status = HttpStatusCode.PreconditionFailed
+            val problem = Problem(
+                    type = URI.create("urn:dp:error:negativtGrunnlag"),
+                    title = "Grunnlag er negativt",
+                    detail = cause.message,
+                    status = status.value
+            )
+            call.respond(status, problem)
         }
 
         status(HttpStatusCode.Unauthorized) {
