@@ -87,4 +87,4 @@ fun findBeregningsregel(beregningsregel: String, harAvkortet: Boolean): Grunnlag
     }
 }
 
-fun GrunnlagResultat.erNegativt() = this.avkortet.toInt() < 0 || (this.uavkortet?.toInt() < 0)
+fun GrunnlagResultat.erNegativt() = this.uavkortet.toInt() < 0
