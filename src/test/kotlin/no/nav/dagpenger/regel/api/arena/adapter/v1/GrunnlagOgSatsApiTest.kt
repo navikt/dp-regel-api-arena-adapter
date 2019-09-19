@@ -195,7 +195,7 @@ class GrunnlagOgSatsApiTest {
             }.apply {
                 assertEquals(HttpStatusCode.PreconditionFailed, response.status())
                 moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!).apply {
-                    this?.type shouldBe URI("urn:dp:error:negativtGrunnlag")
+                    this?.type shouldBe URI("urn:dp:error:regelberegning:grunnlag:negativ")
                 }
             }
         }
