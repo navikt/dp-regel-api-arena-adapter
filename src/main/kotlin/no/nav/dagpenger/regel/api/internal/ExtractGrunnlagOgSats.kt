@@ -10,6 +10,8 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Sats
 import no.nav.dagpenger.regel.api.arena.adapter.v1.FeilBeregningsregelException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MissingSubsumsjonDataException
+import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
+import no.nav.dagpenger.regel.api.internal.models.GrunnlagResultat
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 import java.time.LocalDateTime
 
@@ -21,6 +23,9 @@ fun extractGrunnlagOgSats(
 
     val faktum = subsumsjon.faktum
     val grunnlagResultat = subsumsjon.grunnlagResultat ?: throw MissingSubsumsjonDataException("Missing grunnlagResultat")
+
+    if (grunnlagResultat.erNegativt()) { throw NegativtGrunnlagException("Negativt grunnlag") }
+
     val satsResultat = subsumsjon.satsResultat ?: throw MissingSubsumsjonDataException("Missing satsResultat")
 
     return GrunnlagOgSatsSubsumsjon(
@@ -81,3 +86,5 @@ fun findBeregningsregel(beregningsregel: String, harAvkortet: Boolean): Grunnlag
         else -> throw FeilBeregningsregelException("Ukjent beregningsregel: '$beregningsregel'")
     }
 }
+
+fun GrunnlagResultat.erNegativt() = this.uavkortet.toInt() < 0
