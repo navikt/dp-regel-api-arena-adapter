@@ -140,6 +140,8 @@ paths:
               examples:
                 inntektFeil:
                   $ref: '#/components/examples/hent-inntekt-feilet'
+                negativtDagpengeGrunnlag:
+                  $ref: '#/components/examples/negativt-grunnlag'
   /inntjeningsperiode:
     post:
       tags:
@@ -856,6 +858,12 @@ components:
         vedtakId: 1234
         beregningsdato: '2019-01-11'
         harAvtjentVerneplikt: true
+    negativt-grunnlag:
+      summary: Negativt grunnlag
+      value:
+        type: 'urn:dp:error:regelberegning:grunnlag:negativ'
+        title: Grunnlag er negativt
+        status: 500
   securitySchemes:
     stsOIDC:
       type: openIdConnect
