@@ -1,0 +1,5 @@
+summary: Negativt grunnlag
+value:
+  type: 'urn:dp:error:regelberegning:grunnlag:negativ'
+  title: Grunnlag er negativt
+  status: 500

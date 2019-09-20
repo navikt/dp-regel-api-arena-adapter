@@ -181,7 +181,7 @@ fun Application.regelApiAdapter(
         }
         exception<NegativtGrunnlagException> { cause ->
             LOGGER.error("Negativt grunnlag", cause)
-            val status = HttpStatusCode.PreconditionFailed
+            val status = HttpStatusCode.InternalServerError
             val problem = Problem(
                     type = URI.create("urn:dp:error:regelberegning:grunnlag:negativ"),
                     title = "Grunnlag er negativt",

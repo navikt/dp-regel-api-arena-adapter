@@ -66,3 +66,5 @@ post:
           examples:
             inntektFeil:
               $ref: '#/components/examples/hent-inntekt-feilet'
+            negativtDagpengeGrunnlag:
+              $ref: '#/components/examples/negativt-grunnlag'
