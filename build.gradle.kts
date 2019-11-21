@@ -120,5 +120,5 @@ tasks.named("compileKotlin") {
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = "5.5"
+    gradleVersion = "6.0.1"
 }
