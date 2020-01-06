@@ -5,8 +5,3 @@ metadata:
 spec:
   ingresses:
     - "https://dp-regel-api-arena-adapter-q2.nais.preprod.local"
-  env:
-    - name:  DP_REGEL_API_URL
-      value: "http://dp-regel-api.q2"
-    - name:  DP_INNTEKT_API_URL
-      value: "http://dp-inntekt-api.q2"
