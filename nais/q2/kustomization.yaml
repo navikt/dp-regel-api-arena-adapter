@@ -1,10 +1,5 @@
 bases:
   - ../base
-
-commonLabels:
-  app: dp-regel-api-arena-adapter
-  team: teamdagpenger
-
-
+namespace: q2
 patchesStrategicMerge:
   - nais.yaml
