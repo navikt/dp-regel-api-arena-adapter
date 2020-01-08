@@ -3,3 +3,4 @@ bases:
   - ../base
 patchesStrategicMerge:
   - nais.yaml
+  - alerts.yaml
