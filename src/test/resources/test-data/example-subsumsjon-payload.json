@@ -53,6 +53,7 @@
     "subsumsjonsId": "01DBFXH3N1BSSVXB6X0GVFV7X3",
     "regelIdentifikator": "Minsteinntekt.v1",
     "oppfyllerMinsteinntekt": true,
+    "beregningsregel": "ORDINAER",
     "minsteinntektInntektsPerioder": [
       {
         "andel": "150000",

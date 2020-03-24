@@ -3,6 +3,8 @@ package no.nav.dagpenger.regel.api.internal
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeRegelfaktum
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeResultat
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektRegel
+import no.nav.dagpenger.regel.api.internal.models.Beregningsregel
 import no.nav.dagpenger.regel.api.internal.models.Faktum
 import no.nav.dagpenger.regel.api.internal.models.Inntekt
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
@@ -60,7 +62,8 @@ class ExtractMinsteinntektOgPeriodeTest {
         ),
         resultat = MinsteinntektOgPeriodeResultat(
             oppfyllerKravTilMinsteArbeidsinntekt = true,
-            periodeAntallUker = 104
+            periodeAntallUker = 104,
+            minsteinntektRegel = MinsteinntektRegel.ORDINAER
         ),
         inntekt = setOf(
             no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
@@ -141,7 +144,8 @@ class ExtractMinsteinntektOgPeriodeTest {
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2016, 5), YearMonth.of(2017, 5)),
                     inneholderFangstOgFisk = true
                 )
-            )
+            ),
+            beregningsregel = Beregningsregel.ORDINAER
         ),
         periodeResultat = PeriodeResultat(
             subsumsjonsId = "sub654321",
@@ -186,7 +190,8 @@ class ExtractMinsteinntektOgPeriodeTest {
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2016, 5), YearMonth.of(2017, 5)),
                     inneholderFangstOgFisk = true
                 )
-            )
+            ),
+            beregningsregel = Beregningsregel.ORDINAER
         ),
         periodeResultat = PeriodeResultat(
             subsumsjonsId = "sub654321",
