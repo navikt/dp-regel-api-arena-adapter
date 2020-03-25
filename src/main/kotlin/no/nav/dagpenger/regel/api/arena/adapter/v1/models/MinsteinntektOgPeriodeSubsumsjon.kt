@@ -28,7 +28,7 @@ data class MinsteinntektOgPeriodeRegelfaktum(
 data class MinsteinntektOgPeriodeResultat(
     val oppfyllerKravTilMinsteArbeidsinntekt: Boolean,
     val periodeAntallUker: Int? = null,
-    val minsteinntektRegel: MinsteinntektRegel
+    val minsteinntektRegel: MinsteinntektRegel?
 )
 
 enum class MinsteinntektRegel {

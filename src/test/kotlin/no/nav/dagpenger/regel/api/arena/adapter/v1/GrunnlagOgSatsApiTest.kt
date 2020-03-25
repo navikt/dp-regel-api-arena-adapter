@@ -80,7 +80,7 @@ class GrunnlagOgSatsApiTest {
             runBlocking {
                 synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                     any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime, Boolean) -> GrunnlagOgSatsSubsumsjon>()
                 )
             }
         } returns grunnlagOgSatsSubsumsjon()
@@ -126,7 +126,7 @@ class GrunnlagOgSatsApiTest {
             runBlocking {
                 synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                     any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime, Boolean) -> GrunnlagOgSatsSubsumsjon>()
                 )
             }
         } returns grunnlagOgSatsSubsumsjon()
@@ -166,7 +166,7 @@ class GrunnlagOgSatsApiTest {
             runBlocking {
                 synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                     any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime, Boolean) -> GrunnlagOgSatsSubsumsjon>()
                 )
             }
         } throws NegativtGrunnlagException("Negativt grunnlag")
@@ -243,7 +243,7 @@ class GrunnlagOgSatsApiTest {
             runBlocking {
                 synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                     any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime, Boolean) -> GrunnlagOgSatsSubsumsjon>()
                 )
             }
         } throws RuntimeException()
@@ -288,7 +288,7 @@ class GrunnlagOgSatsApiTest {
                 runBlocking {
                     this@apply.getSubsumsjonSynchronously(
                         any(),
-                        any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                        any<(Subsumsjon, LocalDateTime, LocalDateTime, Boolean) -> GrunnlagOgSatsSubsumsjon>()
                     )
                 }
             } throws SubsumsjonProblem(problem)
@@ -333,7 +333,7 @@ class GrunnlagOgSatsApiTest {
             runBlocking {
                 synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                     any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime, Boolean) -> GrunnlagOgSatsSubsumsjon>()
                 )
             }
         } throws RegelApiTimeoutException("timeout")

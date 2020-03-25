@@ -13,7 +13,8 @@ import java.time.LocalDateTime
 fun extractMinsteinntektOgPeriode(
     subsumsjon: Subsumsjon,
     opprettet: LocalDateTime,
-    utfort: LocalDateTime
+    utfort: LocalDateTime,
+    koronaToggle: Boolean
 ): MinsteinntektOgPeriodeSubsumsjon {
 
     val faktum = subsumsjon.faktum
@@ -49,7 +50,7 @@ fun extractMinsteinntektOgPeriode(
         resultat = MinsteinntektOgPeriodeResultat(
             oppfyllerKravTilMinsteArbeidsinntekt = minsteinntektResultat.oppfyllerMinsteinntekt,
             periodeAntallUker = periodeResultat?.periodeAntallUker,
-            minsteinntektRegel = MinsteinntektRegel.valueOf(minsteinntektResultat.beregningsregel.name)
+            minsteinntektRegel = if (koronaToggle) MinsteinntektRegel.valueOf(minsteinntektResultat.beregningsregel.name) else null
         ),
         inntekt = minsteinntektResultat.minsteinntektInntektsPerioder.map {
             Inntekt(

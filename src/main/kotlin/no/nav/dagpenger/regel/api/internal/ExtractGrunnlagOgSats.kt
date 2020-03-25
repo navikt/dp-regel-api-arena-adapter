@@ -18,7 +18,8 @@ import java.time.LocalDateTime
 fun extractGrunnlagOgSats(
     subsumsjon: Subsumsjon,
     opprettet: LocalDateTime,
-    utfort: LocalDateTime
+    utfort: LocalDateTime,
+    koronaToggle: Boolean
 ): GrunnlagOgSatsSubsumsjon {
 
     val faktum = subsumsjon.faktum

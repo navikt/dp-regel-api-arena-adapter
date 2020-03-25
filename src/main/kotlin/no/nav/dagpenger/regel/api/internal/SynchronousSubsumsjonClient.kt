@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.api.internal
 
+import no.finn.unleash.Unleash
 import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 import java.time.LocalDateTime
@@ -7,12 +8,13 @@ import java.time.LocalDateTime
 class SynchronousSubsumsjonClient(
     private val behovHttpClient: RegelApiBehovHttpClient,
     private val statusHttpClient: RegelApiStatusHttpClient,
-    private val subsumsjonHttpClient: RegelApiSubsumsjonHttpClient
+    private val subsumsjonHttpClient: RegelApiSubsumsjonHttpClient,
+    private val unleash: Unleash
 ) {
 
     suspend fun <T> getSubsumsjonSynchronously(
         behovRequest: BehovRequest,
-        extractResult: (subsumsjon: Subsumsjon, opprettet: LocalDateTime, utfort: LocalDateTime) -> T
+        extractResult: (subsumsjon: Subsumsjon, opprettet: LocalDateTime, utfort: LocalDateTime, koronaToggle: Boolean) -> T
     ): T {
 
         val opprettet = LocalDateTime.now()
@@ -34,6 +36,6 @@ class SynchronousSubsumsjonClient(
         totalTimer.observeDuration()
 
         return subsumsjon.problem?.let { throw SubsumsjonProblem(it) }
-            ?: extractResult(subsumsjon, opprettet, utfort)
+            ?: extractResult(subsumsjon, opprettet, utfort, unleash.isEnabled("dp.koronaToggle", false))
     }
 }

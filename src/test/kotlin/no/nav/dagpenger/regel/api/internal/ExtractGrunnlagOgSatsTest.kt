@@ -28,7 +28,8 @@ class ExtractGrunnlagOgSatsTest {
         val result = extractGrunnlagOgSats(
             subsumsjon,
             LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            LocalDateTime.of(2019, 4, 25, 1, 1, 1))
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            koronaToggle = false)
 
         assertEquals(grunnlagOgSatsSubsumsjon, result)
     }
@@ -41,7 +42,8 @@ class ExtractGrunnlagOgSatsTest {
             extractGrunnlagOgSats(
                     subsumsjonMedNegativtGrunnlag,
                     LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-                    LocalDateTime.of(2019, 4, 25, 1, 1, 1))
+                    LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+                koronaToggle = false)
         }
     }
 

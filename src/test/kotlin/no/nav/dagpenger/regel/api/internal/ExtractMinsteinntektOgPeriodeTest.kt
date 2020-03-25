@@ -17,15 +17,41 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class ExtractMinsteinntektOgPeriodeTest {
+
+    @Test
+    fun `Set minsteinntektregel when toggle is true`() {
+        val result = extractMinsteinntektOgPeriode(
+            subsumsjonWithBothResults,
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            koronaToggle = true
+        )
+
+        assertNotNull(result.resultat.minsteinntektRegel)
+    }
+
+    @Test
+    fun `Set minsteinntektregel to null when toggle is false`() {
+        val result = extractMinsteinntektOgPeriode(
+            subsumsjonWithBothResults,
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            koronaToggle = false
+        )
+
+        assertNull(result.resultat.minsteinntektRegel)
+    }
 
     @Test
     fun `Convert Subsumsjon to MinsteinntektOgPeriodeSubsumsjon`() {
         val result = extractMinsteinntektOgPeriode(
             subsumsjonWithBothResults,
                 LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-                LocalDateTime.of(2019, 4, 25, 1, 1, 1)
+                LocalDateTime.of(2019, 4,25, 1, 1, 1),
+            koronaToggle = true
         )
 
         assertEquals(minsteinntektOgPeriodeSubsumsjon, result)
@@ -36,7 +62,8 @@ class ExtractMinsteinntektOgPeriodeTest {
         val result = extractMinsteinntektOgPeriode(
             subsumsjonWithOppfyllerMinsteinntektFalse,
             LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            LocalDateTime.of(2019, 4, 25, 1, 1, 1)
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            koronaToggle = false
         )
 
         assertEquals(false, result.resultat.oppfyllerKravTilMinsteArbeidsinntekt)
