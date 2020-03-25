@@ -1,6 +1,7 @@
 package no.nav.dagpenger.regel.api.internal.models
 
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.SatsBeregningsregel
 import java.math.BigDecimal
 
 data class Subsumsjon(
@@ -46,7 +47,8 @@ data class SatsResultat(
     val regelIdentifikator: String,
     val dagsats: Int,
     val ukesats: Int,
-    val benyttet90ProsentRegel: Boolean
+    val benyttet90ProsentRegel: Boolean,
+    val beregningsregel: SatsBeregningsregel? = null
 )
 
 enum class Beregningsregel {

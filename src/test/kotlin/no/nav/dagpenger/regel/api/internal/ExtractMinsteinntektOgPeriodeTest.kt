@@ -49,8 +49,8 @@ class ExtractMinsteinntektOgPeriodeTest {
     fun `Convert Subsumsjon to MinsteinntektOgPeriodeSubsumsjon`() {
         val result = extractMinsteinntektOgPeriode(
             subsumsjonWithBothResults,
-                LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-                LocalDateTime.of(2019, 4,25, 1, 1, 1),
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
             koronaToggle = true
         )
 

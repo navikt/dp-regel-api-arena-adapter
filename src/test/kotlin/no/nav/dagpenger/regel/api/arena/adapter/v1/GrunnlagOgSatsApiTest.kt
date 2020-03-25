@@ -15,13 +15,14 @@ import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import no.nav.dagpenger.regel.api.arena.adapter.mockedRegelApiAdapter
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagBeregningsregel
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Grunnlag
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagBeregningsregel
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsRegelFaktum
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsResultat
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Sats
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.SatsBeregningsregel
 import no.nav.dagpenger.regel.api.internal.BehovRequest
 import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
 import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
@@ -109,7 +110,53 @@ class GrunnlagOgSatsApiTest {
                 assertEquals(HttpStatusCode.OK, response.status())
                 JSONAssert.assertEquals(
                     expectedJson, response.content,
-                    CustomComparator(JSONCompareMode.LENIENT,
+                    CustomComparator(JSONCompareMode.STRICT,
+                        Customization("opprettet") { _, _ -> true },
+                        Customization("utfort") { _, _ -> true })
+                )
+            }
+        }
+    }
+
+    @Test
+    fun `Grunnlag and Sats API specification test - Should match json field names and format for v2 with beregningsregel in sats`() {
+
+        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+
+        every {
+            runBlocking {
+                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                    any(),
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime, Boolean) -> GrunnlagOgSatsSubsumsjon>()
+                )
+            }
+        } returns grunnlagOgSatsSubsumsjonWithSatsBeregningsregel()
+
+        withTestApplication({
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider(),
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+            )
+        }) {
+            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+                setBody(
+                    """
+                    {
+                      "aktorId": "1234",
+                      "vedtakId": 5678,
+                      "beregningsdato": "2019-02-27",
+                      "harAvtjentVerneplikt": false,
+                      "oppfyllerKravTilFangstOgFisk": false
+                    }
+                    """.trimIndent()
+                )
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+                JSONAssert.assertEquals(
+                    expectedJsonWithBeregningsregel, response.content,
+                    CustomComparator(JSONCompareMode.STRICT,
                         Customization("opprettet") { _, _ -> true },
                         Customization("utfort") { _, _ -> true })
                 )
@@ -456,7 +503,6 @@ class GrunnlagOgSatsApiTest {
     }
 
     private fun grunnlagOgSatsSubsumsjon(): GrunnlagOgSatsSubsumsjon {
-
         return GrunnlagOgSatsSubsumsjon(
             grunnlagSubsumsjonsId = "1234",
             satsSubsumsjonsId = "4567",
@@ -476,6 +522,7 @@ class GrunnlagOgSatsApiTest {
                 grunnlag = Grunnlag(
                     avkortet = 12345,
                     uavkortet = 12345
+                    // beregningsregel = GrunnlagBeregningsregel.ORDINAER_ETTAAR
                 ),
                 sats = Sats(124, 234),
                 beregningsRegel = GrunnlagBeregningsregel.ORDINAER_ETTAAR,
@@ -498,6 +545,51 @@ class GrunnlagOgSatsApiTest {
         )
     }
 
+    private fun grunnlagOgSatsSubsumsjonWithSatsBeregningsregel(): GrunnlagOgSatsSubsumsjon {
+        return GrunnlagOgSatsSubsumsjon(
+            grunnlagSubsumsjonsId = "1234",
+            satsSubsumsjonsId = "4567",
+            opprettet = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            utfort = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            parametere = GrunnlagOgSatsRegelFaktum(
+                aktorId = "1234",
+                vedtakId = 123,
+                beregningsdato = LocalDate.of(2019, 2, 10),
+                inntektsId = "1234",
+                harAvtjentVerneplikt = false,
+                oppfyllerKravTilFangstOgFisk = false,
+                antallBarn = 0,
+                grunnlag = 12345
+            ),
+            resultat = GrunnlagOgSatsResultat(
+                grunnlag = Grunnlag(
+                    avkortet = 12345,
+                    uavkortet = 12345,
+                    beregningsregel = GrunnlagBeregningsregel.ORDINAER_ETTAAR
+                ),
+                sats = Sats(124, 234, beregningsregel = SatsBeregningsregel.ORDINAER),
+                benyttet90ProsentRegel = false
+            ),
+            inntekt =
+            setOf(
+                no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
+                    inntekt = 4999423,
+                    inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                        foersteMaaned = YearMonth.of(2018, 1),
+                        sisteMaaned = YearMonth.of(2019, 1)
+                    ),
+                    inneholderNaeringsinntekter = false,
+                    periode = 1
+                )
+            ),
+            inntektManueltRedigert = true,
+            inntektAvvik = true
+        )
+    }
+
     private val expectedJson =
         """{"grunnlagSubsumsjonsId":"1234","satsSubsumsjonsId":"4567","opprettet":"2000-08-11T15:30:11","utfort":"2000-08-11T15:30:11","parametere":{"aktorId":"1234","vedtakId":123,"beregningsdato":"2019-02-10","inntektsId":"1234","harAvtjentVerneplikt":false,"oppfyllerKravTilFangstOgFisk":false,"antallBarn":0,"grunnlag":12345},"resultat":{"grunnlag":{"avkortet":12345,"uavkortet":12345},"sats":{"dagsats":124,"ukesats":234},"beregningsRegel":"ORDINAER_ETTAAR","benyttet90ProsentRegel":false},"inntekt":[{"inntekt":4999423,"periode":1,"inntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"},"inneholderNaeringsinntekter":false}],"inntektManueltRedigert":true,"inntektAvvik":true}"""
+
+    private val expectedJsonWithBeregningsregel =
+        """{"grunnlagSubsumsjonsId":"1234","satsSubsumsjonsId":"4567","opprettet":"2000-08-11T15:30:11","utfort":"2000-08-11T15:30:11","parametere":{"aktorId":"1234","vedtakId":123,"beregningsdato":"2019-02-10","inntektsId":"1234","harAvtjentVerneplikt":false,"oppfyllerKravTilFangstOgFisk":false,"antallBarn":0,"grunnlag":12345},"resultat":{"grunnlag":{"avkortet":12345,"uavkortet":12345,"beregningsregel":"ORDINAER_ETTAAR"},"sats":{"dagsats":124,"ukesats":234,"beregningsregel":"ORDINAER"},"benyttet90ProsentRegel":false},"inntekt":[{"inntekt":4999423,"periode":1,"inntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"},"inneholderNaeringsinntekter":false}],"inntektManueltRedigert":true,"inntektAvvik":true}"""
 }

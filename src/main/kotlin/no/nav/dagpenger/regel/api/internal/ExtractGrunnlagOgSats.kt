@@ -1,16 +1,16 @@
 package no.nav.dagpenger.regel.api.internal
 
-import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagBeregningsregel
+import no.nav.dagpenger.regel.api.arena.adapter.v1.FeilBeregningsregelException
+import no.nav.dagpenger.regel.api.arena.adapter.v1.MissingSubsumsjonDataException
+import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Grunnlag
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagBeregningsregel
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsRegelFaktum
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsResultat
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Sats
-import no.nav.dagpenger.regel.api.arena.adapter.v1.FeilBeregningsregelException
-import no.nav.dagpenger.regel.api.arena.adapter.v1.MissingSubsumsjonDataException
-import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
 import no.nav.dagpenger.regel.api.internal.models.GrunnlagResultat
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 import java.time.LocalDateTime
@@ -23,9 +23,12 @@ fun extractGrunnlagOgSats(
 ): GrunnlagOgSatsSubsumsjon {
 
     val faktum = subsumsjon.faktum
-    val grunnlagResultat = subsumsjon.grunnlagResultat ?: throw MissingSubsumsjonDataException("Missing grunnlagResultat")
+    val grunnlagResultat =
+        subsumsjon.grunnlagResultat ?: throw MissingSubsumsjonDataException("Missing grunnlagResultat")
 
-    if (grunnlagResultat.erNegativt()) { throw NegativtGrunnlagException("Negativt grunnlag") }
+    if (grunnlagResultat.erNegativt()) {
+        throw NegativtGrunnlagException("Negativt grunnlag")
+    }
 
     val satsResultat = subsumsjon.satsResultat ?: throw MissingSubsumsjonDataException("Missing satsResultat")
 
@@ -47,10 +50,27 @@ fun extractGrunnlagOgSats(
         resultat = GrunnlagOgSatsResultat(
             grunnlag = Grunnlag(
                 avkortet = grunnlagResultat.avkortet.toInt(),
-                uavkortet = grunnlagResultat.uavkortet.toInt()
+                uavkortet = grunnlagResultat.uavkortet.toInt(),
+                beregningsregel = when (koronaToggle) {
+                    true -> findBeregningsregel(
+                        grunnlagResultat.beregningsregel,
+                        grunnlagResultat.harAvkortet
+                    )
+                    else -> null
+                }
             ),
-            sats = Sats(satsResultat.dagsats, satsResultat.ukesats),
-            beregningsRegel = findBeregningsregel(grunnlagResultat.beregningsregel, grunnlagResultat.harAvkortet),
+            sats = Sats(
+                dagsats = satsResultat.dagsats,
+                ukesats = satsResultat.ukesats,
+                beregningsregel = when (koronaToggle) {
+                    true -> satsResultat.beregningsregel
+                    else -> null
+                }
+            ),
+            beregningsRegel = when (koronaToggle) {
+                false -> findBeregningsregel(grunnlagResultat.beregningsregel, grunnlagResultat.harAvkortet)
+                else -> null
+            },
             benyttet90ProsentRegel = satsResultat.benyttet90ProsentRegel
         ),
         inntekt = grunnlagResultat.grunnlagInntektsPerioder?.map {
