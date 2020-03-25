@@ -36,6 +36,6 @@ class SynchronousSubsumsjonClient(
         totalTimer.observeDuration()
 
         return subsumsjon.problem?.let { throw SubsumsjonProblem(it) }
-            ?: extractResult(subsumsjon, opprettet, utfort, unleash.isEnabled("dp.koronaToggle", false))
+            ?: extractResult(subsumsjon, opprettet, utfort, unleash.isEnabled("dp.korona", false))
     }
 }
