@@ -31,7 +31,12 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.prometheus.client.CollectorRegistry
 import mu.KotlinLogging
 import no.nav.dagpenger.regel.api.Configuration
-import no.nav.dagpenger.regel.api.arena.adapter.v1.*
+import no.nav.dagpenger.regel.api.arena.adapter.v1.GrunnlagOgSatsApi
+import no.nav.dagpenger.regel.api.arena.adapter.v1.InntjeningsperiodeApi
+import no.nav.dagpenger.regel.api.arena.adapter.v1.InvalidInnteksperiodeException
+import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektOgPeriodeApi
+import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
+import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.IllegalInntektIdException
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiBehovHttpClient
@@ -39,6 +44,7 @@ import no.nav.dagpenger.regel.api.internal.RegelApiStatusHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiSubsumsjonHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
 import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
+import no.nav.dagpenger.regel.api.setupUnleash
 import org.slf4j.event.Level
 import java.net.URI
 import java.net.URL
@@ -61,7 +67,9 @@ fun main() {
     val statusHttpClient = RegelApiStatusHttpClient(config.application.dpRegelApiUrl, config.auth.regelApiKey)
     val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(config.application.dpRegelApiUrl, config.auth.regelApiKey)
 
-    val synchronousSubsumsjonClient = SynchronousSubsumsjonClient(behovHttpClient, statusHttpClient, subsumsjonHttpClient)
+    val unleash = setupUnleash(config.application.unleashUrl)
+    val synchronousSubsumsjonClient =
+        SynchronousSubsumsjonClient(behovHttpClient, statusHttpClient, subsumsjonHttpClient, unleash)
 
     val app = embeddedServer(Netty, port = config.application.httpPort) {
         regelApiAdapter(
@@ -183,10 +191,10 @@ fun Application.regelApiAdapter(
             LOGGER.error("Negativt grunnlag", cause)
             val status = HttpStatusCode.InternalServerError
             val problem = Problem(
-                    type = URI.create("urn:dp:error:regelberegning:grunnlag:negativ"),
-                    title = "Grunnlag er negativt",
-                    detail = cause.message,
-                    status = status.value
+                type = URI.create("urn:dp:error:regelberegning:grunnlag:negativ"),
+                title = "Grunnlag er negativt",
+                detail = cause.message,
+                status = status.value
             )
             call.respond(status, problem)
         }

@@ -13,9 +13,9 @@ fun Application.mockedRegelApiAdapter(
     synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 ) {
     return regelApiAdapter(
-        jwtIssuer,
-        jwkProvider,
-        inntektApiBeregningsdatoHttpClient,
-        synchronousSubsumsjonClient
+        jwtIssuer = jwtIssuer,
+        jwkProvider = jwkProvider,
+        inntektApiBeregningsdatoHttpClient = inntektApiBeregningsdatoHttpClient,
+        synchronousSubsumsjonClient = synchronousSubsumsjonClient
     )
 }

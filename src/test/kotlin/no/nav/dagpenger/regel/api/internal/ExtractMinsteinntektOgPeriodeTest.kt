@@ -3,6 +3,8 @@ package no.nav.dagpenger.regel.api.internal
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeRegelfaktum
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeResultat
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektRegel
+import no.nav.dagpenger.regel.api.internal.models.Beregningsregel
 import no.nav.dagpenger.regel.api.internal.models.Faktum
 import no.nav.dagpenger.regel.api.internal.models.Inntekt
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
@@ -15,15 +17,41 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
 import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 
 class ExtractMinsteinntektOgPeriodeTest {
+
+    @Test
+    fun `Set minsteinntektregel when toggle is true`() {
+        val result = extractMinsteinntektOgPeriode(
+            subsumsjonWithBothResults,
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            koronaToggle = true
+        )
+
+        assertNotNull(result.resultat.minsteinntektRegel)
+    }
+
+    @Test
+    fun `Set minsteinntektregel to null when toggle is false`() {
+        val result = extractMinsteinntektOgPeriode(
+            subsumsjonWithBothResults,
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            koronaToggle = false
+        )
+
+        assertNull(result.resultat.minsteinntektRegel)
+    }
 
     @Test
     fun `Convert Subsumsjon to MinsteinntektOgPeriodeSubsumsjon`() {
         val result = extractMinsteinntektOgPeriode(
             subsumsjonWithBothResults,
-                LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-                LocalDateTime.of(2019, 4, 25, 1, 1, 1)
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            koronaToggle = true
         )
 
         assertEquals(minsteinntektOgPeriodeSubsumsjon, result)
@@ -34,7 +62,8 @@ class ExtractMinsteinntektOgPeriodeTest {
         val result = extractMinsteinntektOgPeriode(
             subsumsjonWithOppfyllerMinsteinntektFalse,
             LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            LocalDateTime.of(2019, 4, 25, 1, 1, 1)
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+            koronaToggle = false
         )
 
         assertEquals(false, result.resultat.oppfyllerKravTilMinsteArbeidsinntekt)
@@ -60,7 +89,8 @@ class ExtractMinsteinntektOgPeriodeTest {
         ),
         resultat = MinsteinntektOgPeriodeResultat(
             oppfyllerKravTilMinsteArbeidsinntekt = true,
-            periodeAntallUker = 104
+            periodeAntallUker = 104,
+            minsteinntektRegel = MinsteinntektRegel.ORDINAER
         ),
         inntekt = setOf(
             no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
@@ -141,7 +171,8 @@ class ExtractMinsteinntektOgPeriodeTest {
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2016, 5), YearMonth.of(2017, 5)),
                     inneholderFangstOgFisk = true
                 )
-            )
+            ),
+            beregningsregel = Beregningsregel.ORDINAER
         ),
         periodeResultat = PeriodeResultat(
             subsumsjonsId = "sub654321",
@@ -186,7 +217,8 @@ class ExtractMinsteinntektOgPeriodeTest {
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2016, 5), YearMonth.of(2017, 5)),
                     inneholderFangstOgFisk = true
                 )
-            )
+            ),
+            beregningsregel = Beregningsregel.ORDINAER
         ),
         periodeResultat = PeriodeResultat(
             subsumsjonsId = "sub654321",

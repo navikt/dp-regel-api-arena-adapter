@@ -71,6 +71,9 @@ dependencies {
 
     implementation(Ulid.ulid)
 
+    // unleash
+    implementation("no.finn.unleash:unleash-client-java:3.2.9")
+
     testImplementation(kotlin("test"))
     testImplementation(Ktor.ktorTest)
     testImplementation(Junit5.api)

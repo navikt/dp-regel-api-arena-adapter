@@ -25,8 +25,9 @@ private val localProperties = ConfigurationMap(
         "jwks.issuer" to "https://localhost",
         "optional.jwt" to "true",
         "auth.regelapi.secret" to "secret",
-        "auth.regelapi.key" to "secret1"
-    )
+        "auth.regelapi.key" to "secret1",
+        "unleash.url" to "https://localhost"
+        )
 )
 private val devProperties = ConfigurationMap(
     mapOf(
@@ -36,9 +37,9 @@ private val devProperties = ConfigurationMap(
         "dp.inntekt.api.url" to "http://dp-inntekt-api",
         "jwks.url" to "http://security-token-service.default/rest/v1/sts/jwks",
         "jwks.issuer" to "https://security-token-service.nais.preprod.local",
-        "optional.jwt" to "false"
-
-    )
+        "optional.jwt" to "false",
+        "unleash.url" to "https://unleash.nais.preprod.local/api/"
+        )
 )
 private val prodProperties = ConfigurationMap(
     mapOf(
@@ -48,8 +49,9 @@ private val prodProperties = ConfigurationMap(
         "dp.inntekt.api.url" to "http://dp-inntekt-api",
         "jwks.url" to "http://security-token-service/rest/v1/sts/jwks",
         "jwks.issuer" to "https://security-token-service.nais.adeo.no",
-        "optional.jwt" to "false"
-    )
+        "optional.jwt" to "false",
+        "unleash.url" to "https://unleash.nais.adeo.no/api/"
+        )
 )
 
 data class Configuration(
@@ -73,7 +75,8 @@ data class Configuration(
         val dpInntektApiUrl: String = config()[Key("dp.inntekt.api.url", stringType)],
         val jwksUrl: String = config()[Key("jwks.url", stringType)],
         val jwksIssuer: String = config()[Key("jwks.issuer", stringType)],
-        val optionalJwt: Boolean = config()[Key("optional.jwt", booleanType)]
+        val optionalJwt: Boolean = config()[Key("optional.jwt", booleanType)],
+        val unleashUrl: String = config()[Key("unleash.url", stringType)]
 
     ) {
         init {
