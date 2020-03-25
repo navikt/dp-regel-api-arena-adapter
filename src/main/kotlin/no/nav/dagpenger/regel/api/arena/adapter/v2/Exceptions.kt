@@ -1,4 +1,4 @@
-package no.nav.dagpenger.regel.api.arena.adapter.v1
+package no.nav.dagpenger.regel.api.arena.adapter.v2
 
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 

@@ -1,4 +1,4 @@
-package no.nav.dagpenger.regel.api.arena.adapter.v1.models
+package no.nav.dagpenger.regel.api.arena.adapter.v2.models
 
 class InntjeningsperiodeResultat(
     val sammeInntjeningsPeriode: Boolean,

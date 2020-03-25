@@ -43,6 +43,12 @@ import org.slf4j.event.Level
 import java.net.URI
 import java.net.URL
 import java.util.concurrent.TimeUnit
+import no.nav.dagpenger.regel.api.arena.adapter.v1.GrunnlagOgSatsApi as GrunnlagOgSatsApiV1
+import no.nav.dagpenger.regel.api.arena.adapter.v1.InntjeningsperiodeApi as InntjeningsperiodeApiV1
+import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektOgPeriodeApi as MinsteinntektOgPeriodeApiV1
+import no.nav.dagpenger.regel.api.arena.adapter.v2.GrunnlagOgSatsApi as GrunnlagOgSatsApiV2
+import no.nav.dagpenger.regel.api.arena.adapter.v2.InntjeningsperiodeApi as InntjeningsperiodeApiV2
+import no.nav.dagpenger.regel.api.arena.adapter.v2.MinsteinntektOgPeriodeApi as MinsteinntektOgPeriodeApiV2
 
 private val LOGGER = KotlinLogging.logger {}
 
@@ -206,9 +212,14 @@ fun Application.regelApiAdapter(
     routing {
         authenticate(optional = optionalJwt) {
             route("/v1") {
-                GrunnlagOgSatsApi(synchronousSubsumsjonClient)
-                MinsteinntektOgPeriodeApi(synchronousSubsumsjonClient)
-                InntjeningsperiodeApi(inntektApiBeregningsdatoHttpClient)
+                GrunnlagOgSatsApiV1(synchronousSubsumsjonClient)
+                MinsteinntektOgPeriodeApiV1(synchronousSubsumsjonClient)
+                InntjeningsperiodeApiV1(inntektApiBeregningsdatoHttpClient)
+            }
+            route("/v2") {
+                GrunnlagOgSatsApiV2(synchronousSubsumsjonClient)
+                MinsteinntektOgPeriodeApiV2(synchronousSubsumsjonClient)
+                InntjeningsperiodeApiV2(inntektApiBeregningsdatoHttpClient)
             }
         }
 

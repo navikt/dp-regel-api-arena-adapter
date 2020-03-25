@@ -1,4 +1,4 @@
-package no.nav.dagpenger.regel.api.arena.adapter.v1.models
+package no.nav.dagpenger.regel.api.arena.adapter.v2.models
 
 import java.time.YearMonth
 
