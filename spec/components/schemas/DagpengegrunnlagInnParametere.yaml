@@ -37,3 +37,7 @@ properties:
     description: >-
       Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum
       her
+  laerling:
+    type: boolean
+    nullable: true
+    description: Om bruker oppfyller særvilkårene for lærlinger

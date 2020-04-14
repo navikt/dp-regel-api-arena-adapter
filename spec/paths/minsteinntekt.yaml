@@ -17,6 +17,8 @@ post:
             $ref: '#/components/examples/minsteinntekt-verneplikt'
           fiskBruktInntekt:
             $ref: '#/components/examples/minsteinntekt-fiskBruktInntekt'
+          lærling:
+            $ref: '#/components/examples/minsteinntekt-laerling'
   responses:
     '200':
       description: Ok

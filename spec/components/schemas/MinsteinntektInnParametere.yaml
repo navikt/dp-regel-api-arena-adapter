@@ -29,3 +29,7 @@ properties:
     description: Om bruker oppfyller særvilkårene for fangst og fisk.
   bruktInntektsPeriode:
     $ref: '#/components/schemas/InntektsPeriode'
+  laerling:
+    type: boolean
+    nullable: true
+    description: Om bruker oppfyller særvilkårene for lærlinger
