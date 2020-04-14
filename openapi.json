@@ -548,6 +548,7 @@
           },
           "laerling": {
             "type": "boolean",
+            "default": false,
             "nullable": true,
             "description": "Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger"
           }
@@ -657,6 +658,7 @@
           },
           "laerling": {
             "type": "boolean",
+            "default": false,
             "nullable": true,
             "description": "Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger"
           }
