@@ -44,6 +44,7 @@ properties:
       her
   laerling:
     type: boolean
+    default: false
     nullable: true
     description: >-
       Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen –
