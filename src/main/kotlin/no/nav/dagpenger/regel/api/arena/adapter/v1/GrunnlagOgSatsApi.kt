@@ -59,7 +59,8 @@ fun behovFromParametere(parametere: GrunnlagOgSatsParametere): BehovRequest {
         harAvtjentVerneplikt = parametere.harAvtjentVerneplikt,
         oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,
         manueltGrunnlag = parametere.grunnlag,
-        antallBarn = parametere.antallBarn
+        antallBarn = parametere.antallBarn,
+        lærling = parametere.laerling
     )
 }
 
@@ -72,6 +73,7 @@ fun behovFromParametere(parametere: GrunnlagOgSatsReberegningParametere): BehovR
         oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,
         manueltGrunnlag = parametere.grunnlag,
         antallBarn = parametere.antallBarn,
-        inntektsId = parametere.inntektsId
+        inntektsId = parametere.inntektsId,
+        lærling = parametere.laerling
     )
 }

@@ -54,7 +54,8 @@ class GrunnlagOgSatsApiTest {
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = false,
             grunnlag = 3000,
-            antallBarn = 3
+            antallBarn = 3,
+            laerling = false
         )
 
         val expectedBehovRequest = BehovRequest(
@@ -64,7 +65,8 @@ class GrunnlagOgSatsApiTest {
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = false,
             manueltGrunnlag = 3000,
-            antallBarn = 3
+            antallBarn = 3,
+            lærling = false
         )
 
         val result = behovFromParametere(parametere)
@@ -102,7 +104,8 @@ class GrunnlagOgSatsApiTest {
                       "vedtakId": 5678,
                       "beregningsdato": "2019-02-27",
                       "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
+                      "oppfyllerKravTilFangstOgFisk": false,
+                      "laerling": true
                     }
                     """.trimIndent()
                 )

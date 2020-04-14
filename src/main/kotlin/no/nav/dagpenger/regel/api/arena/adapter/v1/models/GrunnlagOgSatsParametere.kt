@@ -9,5 +9,6 @@ data class GrunnlagOgSatsParametere(
     val harAvtjentVerneplikt: Boolean = false,
     val oppfyllerKravTilFangstOgFisk: Boolean = false,
     val antallBarn: Int = 0,
-    var grunnlag: Int? = null
+    val grunnlag: Int? = null,
+    val laerling: Boolean? = null
 )
