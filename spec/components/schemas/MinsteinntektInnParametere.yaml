@@ -29,3 +29,9 @@ properties:
     description: Om bruker oppfyller særvilkårene for fangst og fisk.
   bruktInntektsPeriode:
     $ref: '#/components/schemas/InntektsPeriode'
+  laerling:
+    type: boolean
+    nullable: true
+    description: >-
+      Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for
+      lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6
