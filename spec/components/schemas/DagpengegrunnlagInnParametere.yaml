@@ -40,4 +40,6 @@ properties:
   laerling:
     type: boolean
     nullable: true
-    description: Om bruker oppfyller særvilkårene for lærlinger
+    description: >-
+      Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen –
+      unntak fra folketrygdloven § 4-12 for lærlinger

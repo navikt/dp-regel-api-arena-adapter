@@ -32,4 +32,6 @@ properties:
   laerling:
     type: boolean
     nullable: true
-    description: Om bruker oppfyller særvilkårene for lærlinger
+    description: >-
+      Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for
+      lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6

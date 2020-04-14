@@ -42,3 +42,9 @@ properties:
     description: >-
       Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum
       her
+  laerling:
+    type: boolean
+    nullable: true
+    description: >-
+      Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen –
+      unntak fra folketrygdloven § 4-12 for lærlinger
