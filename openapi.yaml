@@ -213,6 +213,8 @@ paths:
                 $ref: '#/components/examples/minsteinntekt-verneplikt'
               fiskBruktInntekt:
                 $ref: '#/components/examples/minsteinntekt-fiskBruktInntekt'
+              lærling:
+                $ref: '#/components/examples/minsteinntekt-laerling'
       responses:
         '200':
           description: Ok
@@ -338,6 +340,10 @@ components:
           type: integer
           nullable: true
           description: 'Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum her'
+        laerling:
+          type: boolean
+          nullable: true
+          description: Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger
     DagpengegrunnlagReberegningInnParametere:
       allOf:
         - $ref: '#/components/schemas/DagpengegrunnlagInnParametere'
@@ -416,6 +422,10 @@ components:
           type: integer
           nullable: true
           description: 'Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum her'
+        laerling:
+          type: boolean
+          nullable: true
+          description: Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger
     GrunnlagOgSatsSubsumsjon:
       type: object
       required:
@@ -604,6 +614,10 @@ components:
           description: Om bruker oppfyller særvilkårene for fangst og fisk.
         bruktInntektsPeriode:
           $ref: '#/components/schemas/InntektsPeriode'
+        laerling:
+          type: boolean
+          nullable: true
+          description: Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6
     MinsteinntektOgPeriodeSubsumsjon:
       type: object
       required:
@@ -677,6 +691,10 @@ components:
           type: boolean
           default: false
           description: Om bruker oppfyller særvilkårene for fangst og fisk.
+        laerling:
+          type: boolean
+          nullable: true
+          description: Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6
         bruktInntektsPeriode:
           $ref: '#/components/schemas/InntektsPeriode'
     Sats:
@@ -798,6 +816,13 @@ components:
         bruktInntektsPeriode:
           foersteMaaned: 2019-01
           sisteMaaned: 2018-01
+    minsteinntekt-laerling:
+      summary: Vurdering som hensyntar særvilkår lærling
+      value:
+        aktorId: 01019955667
+        vedtakId: 1234
+        beregningsdato: '2019-01-11'
+        laerling: true
     minsteinntekt-resultat:
       summary: Eksempelresultat
       value:
@@ -852,7 +877,7 @@ components:
           foersteMaaned: 2019-01
           sisteMaaned: 2018-01
     minsteinntekt-verneplikt:
-      summary: Vurdering som hensyntar særvilkår
+      summary: Vurdering som hensyntar særvilkår verneplikt
       value:
         aktorId: 01019955667
         vedtakId: 1234

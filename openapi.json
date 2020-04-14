@@ -351,6 +351,9 @@
                 },
                 "fiskBruktInntekt": {
                   "$ref": "#/components/examples/minsteinntekt-fiskBruktInntekt"
+                },
+                "lærling": {
+                  "$ref": "#/components/examples/minsteinntekt-laerling"
                 }
               }
             }
@@ -542,6 +545,11 @@
             "type": "integer",
             "nullable": true,
             "description": "Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum her"
+          },
+          "laerling": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger"
           }
         }
       },
@@ -646,6 +654,11 @@
             "type": "integer",
             "nullable": true,
             "description": "Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum her"
+          },
+          "laerling": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger"
           }
         }
       },
@@ -898,6 +911,11 @@
           },
           "bruktInntektsPeriode": {
             "$ref": "#/components/schemas/InntektsPeriode"
+          },
+          "laerling": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6"
           }
         }
       },
@@ -993,6 +1011,11 @@
             "type": "boolean",
             "default": false,
             "description": "Om bruker oppfyller særvilkårene for fangst og fisk."
+          },
+          "laerling": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6"
           },
           "bruktInntektsPeriode": {
             "$ref": "#/components/schemas/InntektsPeriode"
@@ -1158,6 +1181,15 @@
           }
         }
       },
+      "minsteinntekt-laerling": {
+        "summary": "Vurdering som hensyntar særvilkår lærling",
+        "value": {
+          "aktorId": "01019955667",
+          "vedtakId": 1234,
+          "beregningsdato": "2019-01-11",
+          "laerling": true
+        }
+      },
       "minsteinntekt-resultat": {
         "summary": "Eksempelresultat",
         "value": {
@@ -1230,7 +1262,7 @@
         }
       },
       "minsteinntekt-verneplikt": {
-        "summary": "Vurdering som hensyntar særvilkår",
+        "summary": "Vurdering som hensyntar særvilkår verneplikt",
         "value": {
           "aktorId": "01019955667",
           "vedtakId": 1234,
