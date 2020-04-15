@@ -51,8 +51,8 @@ fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequ
         lærling = parametere.laerling,
         bruktInntektsPeriode = parametere.bruktInntektsPeriode?.let {
             InntektsPeriode(
-                førsteMåned = parametere.bruktInntektsPeriode.foersteMaaned,
-                sisteMåned = parametere.bruktInntektsPeriode.sisteMaaned
+                førsteMåned = it.foersteMaaned,
+                sisteMåned = it.sisteMaaned
             )
         }
     )

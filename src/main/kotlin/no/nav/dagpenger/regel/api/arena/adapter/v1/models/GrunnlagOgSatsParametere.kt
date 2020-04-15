@@ -8,7 +8,7 @@ data class GrunnlagOgSatsParametere(
     val beregningsdato: LocalDate,
     val harAvtjentVerneplikt: Boolean = false,
     val oppfyllerKravTilFangstOgFisk: Boolean = false,
+    val laerling: Boolean = false,
     val antallBarn: Int = 0,
-    val grunnlag: Int? = null,
-    val laerling: Boolean? = null
+    val grunnlag: Int? = null
 )
