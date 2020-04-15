@@ -43,15 +43,17 @@ fun validateParameters(parameters: MinsteinntektOgPeriodeParametere) {
 
 fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequest {
     return BehovRequest(
-            parametere.aktorId,
-            parametere.vedtakId,
-            parametere.beregningsdato,
-            harAvtjentVerneplikt = parametere.harAvtjentVerneplikt,
-            oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,
-            bruktInntektsPeriode = parametere.bruktInntektsPeriode?.let {
-                InntektsPeriode(
-                        førsteMåned = parametere.bruktInntektsPeriode.foersteMaaned,
-                        sisteMåned = parametere.bruktInntektsPeriode.sisteMaaned)
-            }
+        aktorId = parametere.aktorId,
+        vedtakId = parametere.vedtakId,
+        beregningsdato = parametere.beregningsdato,
+        harAvtjentVerneplikt = parametere.harAvtjentVerneplikt,
+        oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,
+        lærling = parametere.laerling,
+        bruktInntektsPeriode = parametere.bruktInntektsPeriode?.let {
+            InntektsPeriode(
+                førsteMåned = it.foersteMaaned,
+                sisteMåned = it.sisteMaaned
+            )
+        }
     )
 }

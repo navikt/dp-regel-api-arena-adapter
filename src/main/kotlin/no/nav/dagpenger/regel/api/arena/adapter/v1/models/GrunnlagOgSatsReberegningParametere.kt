@@ -10,8 +10,9 @@ data class GrunnlagOgSatsReberegningParametere(
     val inntektsId: String,
     val harAvtjentVerneplikt: Boolean = false,
     val oppfyllerKravTilFangstOgFisk: Boolean = false,
+    val laerling: Boolean = false,
     val antallBarn: Int = 0,
-    var grunnlag: Int? = null
+    val grunnlag: Int? = null
 )
 
 class IllegalInntektIdException(override val cause: Throwable?) : RuntimeException(cause)

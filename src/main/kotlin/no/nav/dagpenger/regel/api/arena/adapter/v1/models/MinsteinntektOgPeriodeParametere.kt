@@ -7,6 +7,7 @@ data class MinsteinntektOgPeriodeParametere(
     val vedtakId: Int,
     val beregningsdato: LocalDate,
     val harAvtjentVerneplikt: Boolean? = false,
+    val laerling: Boolean = false,
     val oppfyllerKravTilFangstOgFisk: Boolean? = false,
     val bruktInntektsPeriode: InntektsPeriode? = null
 )

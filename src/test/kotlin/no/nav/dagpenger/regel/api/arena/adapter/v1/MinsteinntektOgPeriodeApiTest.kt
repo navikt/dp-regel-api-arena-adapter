@@ -49,7 +49,8 @@ class MinsteinntektOgPeriodeApiTest {
             beregningsdato = LocalDate.of(2019, 5, 13),
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = false,
-            bruktInntektsPeriode = InntektsPeriode(YearMonth.of(2019, 4), YearMonth.of(2019, 7))
+            bruktInntektsPeriode = InntektsPeriode(YearMonth.of(2019, 4), YearMonth.of(2019, 7)),
+            laerling = false
         )
 
         val expectedBehovRequest = BehovRequest(
@@ -61,7 +62,8 @@ class MinsteinntektOgPeriodeApiTest {
             bruktInntektsPeriode = no.nav.dagpenger.regel.api.internal.models.InntektsPeriode(
                 YearMonth.of(2019, 4),
                 YearMonth.of(2019, 7)
-            )
+            ),
+            lærling = false
         )
 
         val result = behovFromParametere(parametere)

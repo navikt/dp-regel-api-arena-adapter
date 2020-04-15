@@ -43,7 +43,8 @@ data class BehovRequest(
     val bruktInntektsPeriode: InntektsPeriode? = null,
     val manueltGrunnlag: Int? = null,
     val antallBarn: Int? = null,
-    val inntektsId: String? = null
+    val inntektsId: String? = null,
+    val lærling: Boolean? = null
 )
 
 class RegelApiBehovHttpClientException(override val message: String) : RuntimeException(message)
