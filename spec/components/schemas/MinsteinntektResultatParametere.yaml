@@ -35,7 +35,7 @@ properties:
     description: Om bruker oppfyller særvilkårene for fangst og fisk.
   laerling:
     type: boolean
-    nullable: true
+    default: false
     description: >-
       Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for
       lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6
