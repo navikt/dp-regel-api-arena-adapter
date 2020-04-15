@@ -549,7 +549,6 @@
           "laerling": {
             "type": "boolean",
             "default": false,
-            "nullable": true,
             "description": "Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger"
           }
         }
@@ -659,7 +658,6 @@
           "laerling": {
             "type": "boolean",
             "default": false,
-            "nullable": true,
             "description": "Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger"
           }
         }
@@ -916,7 +914,7 @@
           },
           "laerling": {
             "type": "boolean",
-            "nullable": true,
+            "default": false,
             "description": "Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6"
           }
         }
@@ -1016,7 +1014,7 @@
           },
           "laerling": {
             "type": "boolean",
-            "nullable": true,
+            "default": false,
             "description": "Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6"
           },
           "bruktInntektsPeriode": {

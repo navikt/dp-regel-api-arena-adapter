@@ -343,7 +343,6 @@ components:
         laerling:
           type: boolean
           default: false
-          nullable: true
           description: Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger
     DagpengegrunnlagReberegningInnParametere:
       allOf:
@@ -426,7 +425,6 @@ components:
         laerling:
           type: boolean
           default: false
-          nullable: true
           description: Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger
     GrunnlagOgSatsSubsumsjon:
       type: object
@@ -618,7 +616,7 @@ components:
           $ref: '#/components/schemas/InntektsPeriode'
         laerling:
           type: boolean
-          nullable: true
+          default: false
           description: Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6
     MinsteinntektOgPeriodeSubsumsjon:
       type: object
@@ -695,7 +693,7 @@ components:
           description: Om bruker oppfyller særvilkårene for fangst og fisk.
         laerling:
           type: boolean
-          nullable: true
+          default: false
           description: Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6
         bruktInntektsPeriode:
           $ref: '#/components/schemas/InntektsPeriode'
