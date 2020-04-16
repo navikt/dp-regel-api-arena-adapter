@@ -1,11 +1,11 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
+import kotlin.test.assertEquals
 import no.nav.dagpenger.regel.api.arena.adapter.v1.FeilBeregningsregelException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagBeregningsregel
 import no.nav.dagpenger.regel.api.internal.findBeregningsregel
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import kotlin.test.assertEquals
 
 class FindBeregningsregelTest {
 

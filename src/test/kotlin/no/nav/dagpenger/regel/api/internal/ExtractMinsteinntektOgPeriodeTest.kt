@@ -1,5 +1,10 @@
 package no.nav.dagpenger.regel.api.internal
 
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.YearMonth
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeRegelfaktum
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeResultat
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
@@ -13,11 +18,6 @@ import no.nav.dagpenger.regel.api.internal.models.PeriodeResultat
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.YearMonth
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 class ExtractMinsteinntektOgPeriodeTest {
 

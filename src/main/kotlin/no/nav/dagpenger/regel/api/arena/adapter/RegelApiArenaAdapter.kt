@@ -29,6 +29,9 @@ import io.micrometer.core.instrument.Clock
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.prometheus.client.CollectorRegistry
+import java.net.URI
+import java.net.URL
+import java.util.concurrent.TimeUnit
 import mu.KotlinLogging
 import no.nav.dagpenger.regel.api.Configuration
 import no.nav.dagpenger.regel.api.arena.adapter.v1.GrunnlagOgSatsApi
@@ -46,9 +49,6 @@ import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
 import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 import no.nav.dagpenger.regel.api.setupUnleash
 import org.slf4j.event.Level
-import java.net.URI
-import java.net.URL
-import java.util.concurrent.TimeUnit
 
 private val LOGGER = KotlinLogging.logger {}
 

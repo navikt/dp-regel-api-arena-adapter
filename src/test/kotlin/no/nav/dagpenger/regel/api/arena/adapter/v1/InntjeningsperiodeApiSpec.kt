@@ -8,6 +8,7 @@ import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.mockk.every
 import io.mockk.mockk
+import kotlin.test.assertEquals
 import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
@@ -17,7 +18,6 @@ import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClien
 import no.nav.dagpenger.regel.api.internal.models.InntjeningsperiodeParametre
 import no.nav.dagpenger.regel.api.internal.models.InntjeningsperiodeResultat
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 
 class InntjeningsperiodeApiSpec {
 

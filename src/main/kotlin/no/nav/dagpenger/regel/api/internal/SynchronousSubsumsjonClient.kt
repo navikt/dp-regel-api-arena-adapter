@@ -1,9 +1,9 @@
 package no.nav.dagpenger.regel.api.internal
 
+import java.time.LocalDateTime
 import no.finn.unleash.Unleash
 import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
-import java.time.LocalDateTime
 
 class SynchronousSubsumsjonClient(
     private val behovHttpClient: RegelApiBehovHttpClient,

@@ -79,6 +79,7 @@ object Kafka {
     const val streams = "org.apache.kafka:kafka-streams:$version"
     const val streamTestUtils = "org.apache.kafka:kafka-streams-test-utils:$version"
     fun library(name: String) = "org.apache.kafka:kafka-$name:$version"
+
     object Confluent {
         const val version = "5.0.3"
         const val avroStreamSerdes = "io.confluent:kafka-streams-avro-serde:$version"
@@ -101,10 +102,10 @@ object Konfig {
 object Kotlin {
     const val version = "1.3.60"
     const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:$version"
-    
+
     object Coroutines {
-      const val version = "1.3.2"
-      fun module(name: String) =  "org.jetbrains.kotlinx:kotlinx-coroutines-$name:$version"
+        const val version = "1.3.2"
+        fun module(name: String) = "org.jetbrains.kotlinx:kotlinx-coroutines-$name:$version"
     }
 
     object Logging {
@@ -136,6 +137,7 @@ object Log4j2 {
     const val slf4j = "org.apache.logging.log4j:log4j-slf4j-impl:$version"
 
     fun library(name: String) = "org.apache.logging.log4j:log4j-$name:$version"
+
     object Logstash {
         private const val version = "0.19"
         const val logstashLayout = "com.vlkan.log4j2:log4j2-logstash-layout-fatjar:$version"
@@ -172,6 +174,7 @@ object Prometheus {
     const val hotspot = "io.prometheus:simpleclient_hotspot:$version"
     const val log4j2 = "io.prometheus:simpleclient_log4j2:$version"
     fun library(name: String) = "io.prometheus:simpleclient_$name:$version"
+
     object Nare {
         const val version = "0b41ab4"
         const val prometheus = "no.nav:nare-prometheus:$version"

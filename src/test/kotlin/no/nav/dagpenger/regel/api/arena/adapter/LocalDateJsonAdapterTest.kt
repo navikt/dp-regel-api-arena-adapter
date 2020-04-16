@@ -1,8 +1,8 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
+import java.time.LocalDate
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
 
 internal class LocalDateJsonAdapterTest {
 

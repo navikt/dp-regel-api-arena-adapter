@@ -1,8 +1,8 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
+import java.net.URI
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
-import java.net.URI
 
 internal class URIJsonAdapterTest {
 
