@@ -60,7 +60,7 @@ fun behovFromParametere(parametere: GrunnlagOgSatsParametere): BehovRequest {
         oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,
         manueltGrunnlag = parametere.grunnlag,
         antallBarn = parametere.antallBarn,
-        lærling = parametere.laerling
+        lærling = parametere.oppfyllerKravTilLaerling
     )
 }
 
@@ -74,6 +74,6 @@ fun behovFromParametere(parametere: GrunnlagOgSatsReberegningParametere): BehovR
         manueltGrunnlag = parametere.grunnlag,
         antallBarn = parametere.antallBarn,
         inntektsId = parametere.inntektsId,
-        lærling = parametere.laerling
+        lærling = parametere.oppfyllerKravTilLaerling
     )
 }

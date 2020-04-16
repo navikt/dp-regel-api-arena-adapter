@@ -37,7 +37,7 @@ properties:
     description: >-
       Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum
       her
-  laerling:
+  oppfyllerKravTilLaerling:
     type: boolean
     default: false
     description: >-

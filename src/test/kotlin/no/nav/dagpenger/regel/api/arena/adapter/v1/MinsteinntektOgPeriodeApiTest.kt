@@ -50,7 +50,7 @@ class MinsteinntektOgPeriodeApiTest {
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = false,
             bruktInntektsPeriode = InntektsPeriode(YearMonth.of(2019, 4), YearMonth.of(2019, 7)),
-            laerling = false
+            oppfyllerKravTilLaerling = false
         )
 
         val expectedBehovRequest = BehovRequest(

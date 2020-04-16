@@ -55,7 +55,7 @@ class GrunnlagOgSatsApiTest {
             oppfyllerKravTilFangstOgFisk = false,
             grunnlag = 3000,
             antallBarn = 3,
-            laerling = false
+            oppfyllerKravTilLaerling = false
         )
 
         val expectedBehovRequest = BehovRequest(
@@ -105,7 +105,7 @@ class GrunnlagOgSatsApiTest {
                       "beregningsdato": "2019-02-27",
                       "harAvtjentVerneplikt": false,
                       "oppfyllerKravTilFangstOgFisk": false,
-                      "laerling": true
+                      "oppfyllerKravTilLaerling": true
                     }
                     """.trimIndent()
                 )

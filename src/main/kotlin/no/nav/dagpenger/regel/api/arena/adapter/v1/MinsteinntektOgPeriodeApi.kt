@@ -48,7 +48,7 @@ fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequ
         beregningsdato = parametere.beregningsdato,
         harAvtjentVerneplikt = parametere.harAvtjentVerneplikt,
         oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,
-        lærling = parametere.laerling,
+        lærling = parametere.oppfyllerKravTilLaerling,
         bruktInntektsPeriode = parametere.bruktInntektsPeriode?.let {
             InntektsPeriode(
                 førsteMåned = it.foersteMaaned,

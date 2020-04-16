@@ -33,7 +33,7 @@ properties:
     type: boolean
     default: false
     description: Om bruker oppfyller særvilkårene for fangst og fisk.
-  laerling:
+  oppfyllerKravTilLaerling:
     type: boolean
     default: false
     description: >-
