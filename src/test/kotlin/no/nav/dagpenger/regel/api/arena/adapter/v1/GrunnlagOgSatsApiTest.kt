@@ -475,6 +475,39 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
+    fun ` Should give API errors as HTTP problems rfc7807 for minsteinntekt on invalid combination of verneplikt and lærling`() {
+
+        withTestApplication({
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider()
+            )
+        }) {
+            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+                setBody(
+                    """
+                    {
+                      "aktorId": "1234",
+                      "vedtakId": 5678,
+                      "beregningsdato": "2019-02-27",
+                      "harAvtjentVerneplikt": true,
+                      "oppfyllerKravTilFangstOgFisk": false,
+                      "oppfyllerKravTilLaerling": true
+                    }
+                """.trimIndent()
+                )
+            }.apply {
+                assertEquals(HttpStatusCode.BadRequest, response.status())
+                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
+                assertEquals("Ugyldig kombinasjon av parametere: harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig", problem?.title)
+                assertEquals("urn:dp:error:parameter", problem?.type.toString())
+                assertEquals(400, problem?.status)
+            }
+        }
+    }
+
+    @Test
     fun ` Should give 401 - Not authorized if token is missing `() {
         withTestApplication({
             mockedRegelApiAdapter(
