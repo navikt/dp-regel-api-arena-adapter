@@ -21,7 +21,7 @@ fun Route.MinsteinntektOgPeriodeApi(
         post {
             val parametere = call.receive<MinsteinntektOgPeriodeParametere>()
 
-            validateParameters(parametere)
+            parametere.validate()
 
             val behovRequest = behovFromParametere(parametere)
 
@@ -33,12 +33,15 @@ fun Route.MinsteinntektOgPeriodeApi(
     }
 }
 
-fun validateParameters(parameters: MinsteinntektOgPeriodeParametere) {
-    parameters.bruktInntektsPeriode?.let {
+fun MinsteinntektOgPeriodeParametere.validate() {
+    this.bruktInntektsPeriode?.let {
         if (it.foersteMaaned.isAfter(it.sisteMaaned)) throw InvalidInnteksperiodeException(
                 "Feil bruktInntektsPeriode: foersteMaaned=${it.foersteMaaned} er etter sisteMaaned=${it.sisteMaaned}"
         )
     }
+    if (this.oppfyllerKravTilLaerling && this.harAvtjentVerneplikt == true) throw UgyldigParameterkombinasjonException(
+        "harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig"
+    )
 }
 
 fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequest {

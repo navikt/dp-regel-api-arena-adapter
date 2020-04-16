@@ -40,6 +40,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.InvalidInnteksperiodeExceptio
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektOgPeriodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
+import no.nav.dagpenger.regel.api.arena.adapter.v1.UgyldigParameterkombinasjonException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.IllegalInntektIdException
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiBehovHttpClient
@@ -194,6 +195,16 @@ fun Application.regelApiAdapter(
                 type = URI.create("urn:dp:error:regelberegning:grunnlag:negativ"),
                 title = "Grunnlag er negativt",
                 detail = cause.message,
+                status = status.value
+            )
+            call.respond(status, problem)
+        }
+        exception<UgyldigParameterkombinasjonException> { cause ->
+            LOGGER.warn(cause.message)
+            val status = HttpStatusCode.BadRequest
+            val problem = Problem(
+                type = URI.create("urn:dp:error:parameter"),
+                title = "Ugyldig kombinasjon av parametere: ${cause.message}",
                 status = status.value
             )
             call.respond(status, problem)

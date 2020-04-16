@@ -23,6 +23,8 @@ fun Route.GrunnlagOgSatsApi(
         post {
             val parametere = call.receive<GrunnlagOgSatsParametere>()
 
+            parametere.validate()
+
             val behovRequest = behovFromParametere(parametere)
 
             val grunnlagOgSatsSubsumsjon =
@@ -51,6 +53,9 @@ fun Route.GrunnlagOgSatsApi(
     }
 }
 
+fun GrunnlagOgSatsParametere.validate() {
+    if (this.oppfyllerKravTilLaerling && this.harAvtjentVerneplikt) throw UgyldigParameterkombinasjonException("harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig")
+}
 fun behovFromParametere(parametere: GrunnlagOgSatsParametere): BehovRequest {
     return BehovRequest(
         aktorId = parametere.aktorId,
