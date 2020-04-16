@@ -340,7 +340,7 @@ components:
           type: integer
           nullable: true
           description: 'Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum her'
-        laerling:
+        oppfyllerKravTilLaerling:
           type: boolean
           default: false
           description: Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger
@@ -422,7 +422,7 @@ components:
           type: integer
           nullable: true
           description: 'Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum her'
-        laerling:
+        oppfyllerKravTilLaerling:
           type: boolean
           default: false
           description: Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger
@@ -614,7 +614,7 @@ components:
           description: Om bruker oppfyller særvilkårene for fangst og fisk.
         bruktInntektsPeriode:
           $ref: '#/components/schemas/InntektsPeriode'
-        laerling:
+        oppfyllerKravTilLaerling:
           type: boolean
           default: false
           description: Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6
@@ -691,7 +691,7 @@ components:
           type: boolean
           default: false
           description: Om bruker oppfyller særvilkårene for fangst og fisk.
-        laerling:
+        oppfyllerKravTilLaerling:
           type: boolean
           default: false
           description: Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6
@@ -822,7 +822,7 @@ components:
         aktorId: 01019955667
         vedtakId: 1234
         beregningsdato: '2019-01-11'
-        laerling: true
+        oppfyllerKravTilLaerling: true
     minsteinntekt-resultat:
       summary: Eksempelresultat
       value:
