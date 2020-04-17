@@ -11,6 +11,7 @@ data class Faktum(
     val inntektManueltRedigert: Boolean? = null,
     val harAvtjentVerneplikt: Boolean? = null,
     val oppfyllerKravTilFangstOgFisk: Boolean? = null,
+    val oppfyllerKravTilLaerling: Boolean? = null,
     val antallBarn: Int? = null,
     val manueltGrunnlag: Int? = null,
     val bruktInntektsPeriode: InntektsPeriode? = null
