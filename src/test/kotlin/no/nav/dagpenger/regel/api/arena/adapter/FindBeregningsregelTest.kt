@@ -80,9 +80,9 @@ class FindBeregningsregelTest {
 
     @Test
     fun `skal finne beregningsregel for grunnlag ved lærling forskrift`() {
-        findBeregningsregel("LærlingArbeidsinntektSiste1", false) shouldBe GrunnlagBeregningsregel.LAERLING
-        findBeregningsregel("LærlingArbeidsinntektSiste3", false) shouldBe GrunnlagBeregningsregel.LAERLING
-        findBeregningsregel("LærlingFangstOgFiskSiste1", false) shouldBe GrunnlagBeregningsregel.LAERLING
-        findBeregningsregel("LærlingFangstOgFiskSiste3", false) shouldBe GrunnlagBeregningsregel.LAERLING
+        findBeregningsregel("LærlingArbeidsinntekt1x12", false) shouldBe GrunnlagBeregningsregel.LAERLING_12_MAANED
+        findBeregningsregel("LærlingArbeidsinntekt3x4", false) shouldBe GrunnlagBeregningsregel.LAERLING_4_MAANED
+        findBeregningsregel("LærlingFangstOgFisk1x12", false) shouldBe GrunnlagBeregningsregel.LAERLING_12_MAANED
+        findBeregningsregel("LærlingFangstOgFisk3x4", false) shouldBe GrunnlagBeregningsregel.LAERLING_4_MAANED
     }
 }

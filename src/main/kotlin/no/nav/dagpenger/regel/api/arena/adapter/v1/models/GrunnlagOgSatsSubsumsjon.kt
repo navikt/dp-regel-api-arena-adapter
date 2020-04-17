@@ -42,7 +42,8 @@ enum class GrunnlagBeregningsregel {
     MANUELL_UNDER_6G,
     MANUELL_OVER_6G,
     VERNEPLIKT,
-    LAERLING
+    LAERLING_12_MAANED,
+    LAERLING_4_MAANED
 }
 
 data class Grunnlag(
