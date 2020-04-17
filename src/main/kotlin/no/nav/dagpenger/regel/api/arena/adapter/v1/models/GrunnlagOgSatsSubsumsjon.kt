@@ -51,7 +51,8 @@ data class Grunnlag(
 )
 enum class SatsBeregningsregel {
     ORDINAER,
-    KORONA
+    KORONA,
+    KORONA_LAERLING
 }
 
 data class Sats(

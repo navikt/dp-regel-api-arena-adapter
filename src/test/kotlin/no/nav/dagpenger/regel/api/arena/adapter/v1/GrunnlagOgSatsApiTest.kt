@@ -475,7 +475,7 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
-    fun ` Should give API errors as HTTP problems rfc7807 for minsteinntekt on invalid combination of verneplikt and lærling`() {
+    fun ` Should give API errors as HTTP problems rfc7807 for grunnlag on invalid combination of verneplikt and lærling`() {
 
         withTestApplication({
             mockedRegelApiAdapter(
