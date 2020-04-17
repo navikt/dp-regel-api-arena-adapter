@@ -41,7 +41,8 @@ enum class GrunnlagBeregningsregel {
     ORDINAER_TREAAR,
     MANUELL_UNDER_6G,
     MANUELL_OVER_6G,
-    VERNEPLIKT
+    VERNEPLIKT,
+    LAERLING
 }
 
 data class Grunnlag(

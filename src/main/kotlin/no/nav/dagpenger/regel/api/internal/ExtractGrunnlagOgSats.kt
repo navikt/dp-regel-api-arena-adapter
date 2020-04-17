@@ -102,8 +102,10 @@ fun findBeregningsregel(beregningsregel: String, harAvkortet: Boolean): Grunnlag
         beregningsregel == "FangstOgFiskSiste36" && harAvkortet -> GrunnlagBeregningsregel.ORDINAER_OVER_6G_3SISTE_2019
         beregningsregel == "FangstOgFiskSiste36" -> GrunnlagBeregningsregel.ORDINAER_TREAAR
         beregningsregel == "Verneplikt" -> GrunnlagBeregningsregel.VERNEPLIKT
-        beregningsregel == "Manuell under 6G" -> GrunnlagBeregningsregel.MANUELL_UNDER_6G
-        beregningsregel == "Manuell over 6G" -> GrunnlagBeregningsregel.MANUELL_OVER_6G
+        beregningsregel == "LærlingFangstOgFiskSiste1" -> GrunnlagBeregningsregel.LAERLING
+        beregningsregel == "LærlingFangstOgFiskSiste3" -> GrunnlagBeregningsregel.LAERLING
+        beregningsregel == "LærlingArbeidsinntektSiste1" -> GrunnlagBeregningsregel.LAERLING
+        beregningsregel == "LærlingArbeidsinntektSiste3" -> GrunnlagBeregningsregel.LAERLING
         else -> throw FeilBeregningsregelException("Ukjent beregningsregel: '$beregningsregel'")
     }
 }

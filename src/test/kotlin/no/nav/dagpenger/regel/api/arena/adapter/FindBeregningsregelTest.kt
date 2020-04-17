@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
+import io.kotlintest.shouldBe
 import kotlin.test.assertEquals
 import no.nav.dagpenger.regel.api.arena.adapter.v1.FeilBeregningsregelException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagBeregningsregel
@@ -45,20 +46,6 @@ class FindBeregningsregelTest {
     }
 
     @Test
-    fun `Skal returnere beregningsregel MANUELL_UNDER_6G når den er satt til Manuell under 6G`() {
-        val regel = findBeregningsregel("Manuell under 6G", false)
-
-        assertEquals(GrunnlagBeregningsregel.MANUELL_UNDER_6G, regel)
-    }
-
-    @Test
-    fun `Skal returnere beregningsregel MANUELL_OVER_6G når den er satt til Manuell over 6G`() {
-        val regel = findBeregningsregel("Manuell over 6G", true)
-
-        assertEquals(GrunnlagBeregningsregel.MANUELL_OVER_6G, regel)
-    }
-
-    @Test
     fun `Skal gi feil dersom det er en ukjent regel benyttet`() {
         assertThrows<FeilBeregningsregelException> { findBeregningsregel("Ukjent", false) }
     }
@@ -89,5 +76,13 @@ class FindBeregningsregelTest {
         val regel = findBeregningsregel("FangstOgFiskSiste36", false)
 
         assertEquals(GrunnlagBeregningsregel.ORDINAER_TREAAR, regel)
+    }
+
+    @Test
+    fun `skal finne beregningsregel for grunnlag ved lærling forskrift`() {
+        findBeregningsregel("LærlingArbeidsinntektSiste1", false) shouldBe GrunnlagBeregningsregel.LAERLING
+        findBeregningsregel("LærlingArbeidsinntektSiste3", false) shouldBe GrunnlagBeregningsregel.LAERLING
+        findBeregningsregel("LærlingFangstOgFiskSiste1", false) shouldBe GrunnlagBeregningsregel.LAERLING
+        findBeregningsregel("LærlingFangstOgFiskSiste3", false) shouldBe GrunnlagBeregningsregel.LAERLING
     }
 }
