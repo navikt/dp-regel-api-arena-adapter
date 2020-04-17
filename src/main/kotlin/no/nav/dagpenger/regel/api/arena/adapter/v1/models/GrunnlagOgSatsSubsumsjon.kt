@@ -23,6 +23,7 @@ data class GrunnlagOgSatsRegelFaktum(
     val inntektsId: String? = null,
     val harAvtjentVerneplikt: Boolean? = null,
     val oppfyllerKravTilFangstOgFisk: Boolean? = null,
+    val oppfyllerKravTilLaerling: Boolean? = null,
     val antallBarn: Int,
     val grunnlag: Int?
 )

@@ -40,6 +40,7 @@ fun extractMinsteinntektOgPeriode(
             inntektsId = faktum.inntektsId ?: throw MissingSubsumsjonDataException("Missing faktum inntektId"),
             harAvtjentVerneplikt = faktum.harAvtjentVerneplikt,
             oppfyllerKravTilFangstOgFisk = faktum.oppfyllerKravTilFangstOgFisk,
+            oppfyllerKravTilLaerling = faktum.oppfyllerKravTilLaerling,
             bruktInntektsPeriode = faktum.bruktInntektsPeriode?.let {
                 InntektsPeriode(
                     foersteMaaned = faktum.bruktInntektsPeriode.førsteMåned,

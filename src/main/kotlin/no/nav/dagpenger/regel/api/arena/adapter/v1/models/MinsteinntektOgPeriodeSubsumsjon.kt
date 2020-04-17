@@ -22,6 +22,7 @@ data class MinsteinntektOgPeriodeRegelfaktum(
     val inntektsId: String,
     val harAvtjentVerneplikt: Boolean? = false,
     val oppfyllerKravTilFangstOgFisk: Boolean? = false,
+    val oppfyllerKravTilLaerling: Boolean? = null,
     val bruktInntektsPeriode: InntektsPeriode? = null
 )
 
