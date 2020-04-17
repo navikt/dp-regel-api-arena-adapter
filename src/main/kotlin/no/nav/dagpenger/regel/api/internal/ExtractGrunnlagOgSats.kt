@@ -44,7 +44,7 @@ fun extractGrunnlagOgSats(
             inntektsId = faktum.inntektsId,
             harAvtjentVerneplikt = faktum.harAvtjentVerneplikt,
             oppfyllerKravTilFangstOgFisk = faktum.oppfyllerKravTilFangstOgFisk,
-            oppfyllerKravTilLaerling = faktum.oppfyllerKravTilLaerling,
+            oppfyllerKravTilLaerling = faktum.lærling,
             antallBarn = faktum.antallBarn ?: throw MissingSubsumsjonDataException("Missing faktum antallBarn"),
             grunnlag = faktum.manueltGrunnlag
         ),
