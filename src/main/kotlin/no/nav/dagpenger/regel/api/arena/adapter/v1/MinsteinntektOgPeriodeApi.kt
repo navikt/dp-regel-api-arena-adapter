@@ -8,6 +8,7 @@ import io.ktor.routing.Route
 import io.ktor.routing.post
 import io.ktor.routing.route
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeParametere
+import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
 import no.nav.dagpenger.regel.api.internal.BehovRequest
 import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 import no.nav.dagpenger.regel.api.internal.extractMinsteinntektOgPeriode
@@ -25,7 +26,7 @@ fun Route.MinsteinntektOgPeriodeApi(
 
             val behovRequest = behovFromParametere(parametere)
 
-            val minsteinntektOgPeriodeSubsumsjon =
+            val minsteinntektOgPeriodeSubsumsjon: MinsteinntektOgPeriodeSubsumsjon =
                 synchronousSubsumsjonClient.getSubsumsjonSynchronously(behovRequest, ::extractMinsteinntektOgPeriode)
 
             call.respond(HttpStatusCode.OK, minsteinntektOgPeriodeSubsumsjon)
