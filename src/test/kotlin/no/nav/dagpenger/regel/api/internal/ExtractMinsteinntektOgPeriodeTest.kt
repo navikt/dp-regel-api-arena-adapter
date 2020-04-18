@@ -82,6 +82,7 @@ class ExtractMinsteinntektOgPeriodeTest {
             inntektsId = "inntekt123",
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = true,
+            oppfyllerKravTilLaerling = false,
             bruktInntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                 foersteMaaned = YearMonth.of(2018, 5),
                 sisteMaaned = YearMonth.of(2019, 1)
@@ -139,6 +140,7 @@ class ExtractMinsteinntektOgPeriodeTest {
             inntektManueltRedigert = true,
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = true,
+            lærling = false,
             bruktInntektsPeriode = InntektsPeriode(
                 YearMonth.of(2018, 5),
                 YearMonth.of(2019, 1)
