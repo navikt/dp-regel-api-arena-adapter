@@ -10,7 +10,6 @@ import io.prometheus.client.CollectorRegistry
 import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlinx.coroutines.runBlocking
-import no.finn.unleash.FakeUnleash
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
 import no.nav.dagpenger.regel.api.internal.models.Faktum
@@ -41,8 +40,7 @@ class SynchronousSubsumsjonClientTest {
         val synchronousSubsumsjonClient = SynchronousSubsumsjonClient(
             behovHttpClient,
             statusHttpClient,
-            subsumsjonHttpClient,
-            FakeUnleash()
+            subsumsjonHttpClient
         )
 
         val behovRequest = BehovRequest(
@@ -51,7 +49,7 @@ class SynchronousSubsumsjonClientTest {
             beregningsdato = LocalDate.of(2019, 4, 14)
         )
 
-        val testFunction = { subsumsjon: Subsumsjon, _: LocalDateTime, _: LocalDateTime, _: Boolean -> subsumsjon.behovId }
+        val testFunction = { subsumsjon: Subsumsjon, _: LocalDateTime, _: LocalDateTime -> subsumsjon.behovId }
 
         val behovId = runBlocking { synchronousSubsumsjonClient.getSubsumsjonSynchronously(behovRequest, testFunction) }
 
@@ -79,8 +77,7 @@ class SynchronousSubsumsjonClientTest {
         val synchronousSubsumsjonClient = SynchronousSubsumsjonClient(
             behovHttpClient,
             statusHttpClient,
-            subsumsjonHttpClient,
-            FakeUnleash()
+            subsumsjonHttpClient
         )
 
         val behovRequest = BehovRequest(
@@ -89,7 +86,7 @@ class SynchronousSubsumsjonClientTest {
             beregningsdato = LocalDate.of(2019, 4, 14)
         )
 
-        val testFunction = { subsumsjon: Subsumsjon, _: LocalDateTime, _: LocalDateTime, _: Boolean -> subsumsjon.behovId }
+        val testFunction = { subsumsjon: Subsumsjon, _: LocalDateTime, _: LocalDateTime -> subsumsjon.behovId }
 
         val behovId = runBlocking { synchronousSubsumsjonClient.getSubsumsjonSynchronously(behovRequest, testFunction) }
 
@@ -121,9 +118,8 @@ class SynchronousSubsumsjonClientTest {
                 SynchronousSubsumsjonClient(
                     behovHttpClient,
                     statusHttpClient,
-                    apply,
-                    FakeUnleash()
-                ).getSubsumsjonSynchronously(mockk()) { subsumsjon, _, _, _: Boolean -> subsumsjon }
+                    apply
+                ).getSubsumsjonSynchronously(mockk()) { subsumsjon, _, _ -> subsumsjon }
             }
         }.apply {
             this.problem shouldBe problem

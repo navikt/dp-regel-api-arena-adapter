@@ -80,7 +80,7 @@ class MinsteinntektOgPeriodeApiTest {
             runBlocking {
                 synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                     any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime, Boolean) -> MinsteinntektOgPeriodeSubsumsjon>()
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
                 )
             }
         } returns minsteinntektOgPeriodeSubsumsjon()
@@ -126,7 +126,7 @@ class MinsteinntektOgPeriodeApiTest {
             runBlocking {
                 synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                     any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime, Boolean) -> MinsteinntektOgPeriodeSubsumsjon>()
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
                 )
             }
         } returns minsteinntektOgPeriodeSubsumsjon().copy(resultat = MinsteinntektOgPeriodeResultat(true, 104, null))
@@ -172,7 +172,7 @@ class MinsteinntektOgPeriodeApiTest {
             runBlocking {
                 synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                     any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime, Boolean) -> MinsteinntektOgPeriodeSubsumsjon>()
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
                 )
             }
         } throws RuntimeException()
@@ -217,7 +217,7 @@ class MinsteinntektOgPeriodeApiTest {
                 runBlocking {
                     this@apply.getSubsumsjonSynchronously(
                         any(),
-                        any<(Subsumsjon, LocalDateTime, LocalDateTime, Boolean) -> MinsteinntektOgPeriodeSubsumsjon>()
+                        any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
                     )
                 }
             } throws SubsumsjonProblem(problem)
@@ -262,7 +262,7 @@ class MinsteinntektOgPeriodeApiTest {
             runBlocking {
                 synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                     any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime, Boolean) -> MinsteinntektOgPeriodeSubsumsjon>()
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
                 )
             }
         } throws RegelApiTimeoutException("timeout")

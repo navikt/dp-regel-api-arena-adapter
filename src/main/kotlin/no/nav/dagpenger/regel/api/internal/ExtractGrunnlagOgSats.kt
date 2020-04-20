@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.api.internal
 
+import java.time.LocalDateTime
 import no.nav.dagpenger.regel.api.arena.adapter.v1.FeilBeregningsregelException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MissingSubsumsjonDataException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
@@ -14,13 +15,10 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Sats
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 
-import java.time.LocalDateTime
-
 fun extractGrunnlagOgSats(
     subsumsjon: Subsumsjon,
     opprettet: LocalDateTime,
-    utfort: LocalDateTime,
-    koronaToggle: Boolean
+    utfort: LocalDateTime
 ): GrunnlagOgSatsSubsumsjon {
 
     val faktum = subsumsjon.faktum
@@ -57,26 +55,14 @@ fun extractGrunnlagOgSats(
             grunnlag = Grunnlag(
                 avkortet = grunnlagResultat.avkortet.toInt(),
                 uavkortet = grunnlagResultat.uavkortet.toInt(),
-                beregningsregel = when (koronaToggle) {
-                    true -> findBeregningsregel(
-                        grunnlagResultat.beregningsregel,
-                        grunnlagResultat.harAvkortet
-                    )
-                    else -> null
-                }
+                beregningsregel = findBeregningsregel(grunnlagResultat.beregningsregel, grunnlagResultat.harAvkortet)
             ),
             sats = Sats(
                 dagsats = satsResultat.dagsats,
                 ukesats = satsResultat.ukesats,
-                beregningsregel = when (koronaToggle) {
-                    true -> satsResultat.beregningsregel
-                    else -> null
-                }
+                beregningsregel = satsResultat.beregningsregel
             ),
-            beregningsRegel = when (koronaToggle) {
-                false -> findBeregningsregel(grunnlagResultat.beregningsregel, grunnlagResultat.harAvkortet)
-                else -> null
-            },
+            beregningsRegel = findBeregningsregel(grunnlagResultat.beregningsregel, grunnlagResultat.harAvkortet),
             benyttet90ProsentRegel = satsResultat.benyttet90ProsentRegel
         ),
         inntekt = grunnlagResultat.grunnlagInntektsPerioder?.map {
@@ -119,4 +105,3 @@ fun findBeregningsregel(beregningsregel: String, harAvkortet: Boolean): Grunnlag
         else -> throw FeilBeregningsregelException("Ukjent beregningsregel: '$beregningsregel'")
     }
 }
-

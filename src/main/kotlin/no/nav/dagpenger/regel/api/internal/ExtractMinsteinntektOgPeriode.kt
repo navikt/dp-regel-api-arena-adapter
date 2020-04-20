@@ -13,8 +13,7 @@ import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 fun extractMinsteinntektOgPeriode(
     subsumsjon: Subsumsjon,
     opprettet: LocalDateTime,
-    utfort: LocalDateTime,
-    koronaToggle: Boolean
+    utfort: LocalDateTime
 ): MinsteinntektOgPeriodeSubsumsjon {
 
     val faktum = subsumsjon.faktum
@@ -51,7 +50,7 @@ fun extractMinsteinntektOgPeriode(
         resultat = MinsteinntektOgPeriodeResultat(
             oppfyllerKravTilMinsteArbeidsinntekt = minsteinntektResultat.oppfyllerMinsteinntekt,
             periodeAntallUker = periodeResultat?.periodeAntallUker,
-            minsteinntektRegel = if (koronaToggle) MinsteinntektRegel.valueOf(minsteinntektResultat.beregningsregel.name) else null
+            minsteinntektRegel = MinsteinntektRegel.valueOf(minsteinntektResultat.beregningsregel.name)
         ),
         inntekt = minsteinntektResultat.minsteinntektInntektsPerioder.map {
             Inntekt(

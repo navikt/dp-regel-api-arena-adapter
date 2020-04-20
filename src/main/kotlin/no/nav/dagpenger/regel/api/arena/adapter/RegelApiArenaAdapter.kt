@@ -49,7 +49,6 @@ import no.nav.dagpenger.regel.api.internal.RegelApiStatusHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiSubsumsjonHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
 import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
-import no.nav.dagpenger.regel.api.setupUnleash
 import org.slf4j.event.Level
 
 private val LOGGER = KotlinLogging.logger {}
@@ -69,9 +68,8 @@ fun main() {
     val statusHttpClient = RegelApiStatusHttpClient(config.application.dpRegelApiUrl, config.auth.regelApiKey)
     val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(config.application.dpRegelApiUrl, config.auth.regelApiKey)
 
-    val unleash = setupUnleash(config.application.unleashUrl)
     val synchronousSubsumsjonClient =
-        SynchronousSubsumsjonClient(behovHttpClient, statusHttpClient, subsumsjonHttpClient, unleash)
+        SynchronousSubsumsjonClient(behovHttpClient, statusHttpClient, subsumsjonHttpClient)
 
     val app = embeddedServer(Netty, port = config.application.httpPort) {
         regelApiAdapter(
