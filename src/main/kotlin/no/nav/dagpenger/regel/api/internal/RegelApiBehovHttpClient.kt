@@ -2,7 +2,6 @@ package no.nav.dagpenger.regel.api.internal
 
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.moshi.responseObject
-import com.github.kittinunf.result.Result
 import java.time.LocalDate
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.internal.models.BehovStatusResponse
@@ -25,12 +24,15 @@ class RegelApiBehovHttpClient(private val regelApiUrl: String, private val regel
             ) {
                 responseObject<BehovStatusResponse>()
             }
-        return when (result) {
-            is Result.Failure -> throw RegelApiBehovHttpClientException(
-                "Failed to run behov. Response message ${response.responseMessage}. Error message: ${result.error.message}")
-            is Result.Success ->
-                response.headers["Location"].first()
-        }
+
+        return result.fold(
+            { response.headers["Location"].first() },
+            {
+                throw RegelApiBehovHttpClientException(
+                    "Failed to run behov. Response message ${response.responseMessage}. Error message: ${it.message}"
+                )
+            }
+        )
     }
 }
 

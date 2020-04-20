@@ -252,6 +252,49 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
+    fun `Grunnlag and Sats beregning should give problem when grunnlag result is 0`() {
+        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+
+        every {
+            runBlocking {
+                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                    any(),
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime, Boolean) -> GrunnlagOgSatsSubsumsjon>()
+                )
+            }
+        } throws NullGrunnlagException("Negativt grunnlag")
+
+        withTestApplication({
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider(),
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+            )
+        }) {
+            handleRequest(HttpMethod.Post, "$dagpengegrunnlagPath-reberegning") {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+                setBody(
+                    """
+                    {
+                      "aktorId": "1234",
+                      "vedtakId": 5678,
+                      "inntektsId" : "${ULID().nextULID()}",
+                      "beregningsdato": "2019-02-27",
+                      "lærling": true,
+                      "oppfyllerKravTilFangstOgFisk": false
+                    }
+                    """.trimIndent()
+                )
+            }.apply {
+                assertEquals(HttpStatusCode.InternalServerError, response.status())
+                moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!).apply {
+                    this?.type shouldBe URI("urn:dp:error:regelberegning:grunnlag:0")
+                }
+            }
+        }
+    }
+
+    @Test
     fun `Grunnlag and Sats re-beregning API should give 400 on illegal inntektsId`() {
 
         withTestApplication({

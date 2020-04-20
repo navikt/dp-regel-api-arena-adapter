@@ -39,6 +39,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.InntjeningsperiodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InvalidInnteksperiodeException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektOgPeriodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
+import no.nav.dagpenger.regel.api.arena.adapter.v1.NullGrunnlagException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
 import no.nav.dagpenger.regel.api.arena.adapter.v1.UgyldigParameterkombinasjonException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.IllegalInntektIdException
@@ -194,6 +195,18 @@ fun Application.regelApiAdapter(
             val problem = Problem(
                 type = URI.create("urn:dp:error:regelberegning:grunnlag:negativ"),
                 title = "Grunnlag er negativt",
+                detail = cause.message,
+                status = status.value
+            )
+            call.respond(status, problem)
+        }
+
+        exception<NullGrunnlagException> { cause ->
+            LOGGER.warn(cause) { "0 grunnlag" }
+            val status = HttpStatusCode.InternalServerError
+            val problem = Problem(
+                type = URI.create("urn:dp:error:regelberegning:grunnlag:0"),
+                title = "Grunnlag er 0",
                 detail = cause.message,
                 status = status.value
             )

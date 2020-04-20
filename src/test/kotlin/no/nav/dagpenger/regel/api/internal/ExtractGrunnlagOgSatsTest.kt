@@ -7,6 +7,7 @@ import java.time.YearMonth
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
+import no.nav.dagpenger.regel.api.arena.adapter.v1.NullGrunnlagException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Grunnlag
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagBeregningsregel
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsRegelFaktum
@@ -49,7 +50,7 @@ class ExtractGrunnlagOgSatsTest {
     }
 
     @Test
-    fun `Converting Subsumsjon with negative grunnlag to GrunnlagOgSatsSubsumsjon  should throw exception`() {
+    fun `Kaster feil hvis uavkortet grunnlag er negativ `() {
         val subsumsjonMedNegativtGrunnlag = subsumsjon.copy(
             grunnlagResultat = subsumsjon.grunnlagResultat?.copy(
                 avkortet = BigDecimal(-1),
@@ -58,6 +59,25 @@ class ExtractGrunnlagOgSatsTest {
         )
 
         assertFailsWith<NegativtGrunnlagException> {
+            extractGrunnlagOgSats(
+                subsumsjonMedNegativtGrunnlag,
+                LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+                LocalDateTime.of(2019, 4, 25, 1, 1, 1),
+                koronaToggle = false
+            )
+        }
+    }
+
+    @Test
+    fun `Kaster feil hvis uavkortet grunnlag er 0 `() {
+        val subsumsjonMedNegativtGrunnlag = subsumsjon.copy(
+            grunnlagResultat = subsumsjon.grunnlagResultat?.copy(
+                avkortet = BigDecimal(0),
+                uavkortet = BigDecimal(0)
+            )
+        )
+
+        assertFailsWith<NullGrunnlagException> {
             extractGrunnlagOgSats(
                 subsumsjonMedNegativtGrunnlag,
                 LocalDateTime.of(2019, 4, 25, 1, 1, 1),
