@@ -7,4 +7,5 @@ class MissingSubsumsjonDataException(message: String) : RuntimeException(message
 class SubsumsjonProblem(val problem: Problem) : RuntimeException("Subsumsjon har problem: ${problem.title}")
 class InvalidInnteksperiodeException(override val message: String) : RuntimeException(message)
 class NegativtGrunnlagException(message: String) : RuntimeException(message)
+class NullGrunnlagException(message: String) : RuntimeException(message)
 class UgyldigParameterkombinasjonException(message: String) : RuntimeException(message)

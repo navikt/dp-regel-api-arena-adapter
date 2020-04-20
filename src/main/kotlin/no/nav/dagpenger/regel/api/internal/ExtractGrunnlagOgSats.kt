@@ -1,9 +1,9 @@
 package no.nav.dagpenger.regel.api.internal
 
-import java.time.LocalDateTime
 import no.nav.dagpenger.regel.api.arena.adapter.v1.FeilBeregningsregelException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MissingSubsumsjonDataException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
+import no.nav.dagpenger.regel.api.arena.adapter.v1.NullGrunnlagException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Grunnlag
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagBeregningsregel
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsRegelFaktum
@@ -12,8 +12,9 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsSubsumsj
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Sats
-import no.nav.dagpenger.regel.api.internal.models.GrunnlagResultat
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
+
+import java.time.LocalDateTime
 
 fun extractGrunnlagOgSats(
     subsumsjon: Subsumsjon,
@@ -28,6 +29,10 @@ fun extractGrunnlagOgSats(
 
     if (grunnlagResultat.erNegativt()) {
         throw NegativtGrunnlagException("Negativt grunnlag")
+    }
+
+    if (grunnlagResultat.erNull()) {
+        throw NullGrunnlagException("Grunnlaget er 0")
     }
 
     val satsResultat = subsumsjon.satsResultat ?: throw MissingSubsumsjonDataException("Missing satsResultat")
@@ -115,4 +120,3 @@ fun findBeregningsregel(beregningsregel: String, harAvkortet: Boolean): Grunnlag
     }
 }
 
-fun GrunnlagResultat.erNegativt() = this.uavkortet.toInt() < 0

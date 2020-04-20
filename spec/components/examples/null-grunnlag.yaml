@@ -1,0 +1,5 @@
+summary: Grunnlag er 0
+value:
+  type: 'urn:dp:error:regelberegning:grunnlag:0'
+  title: Grunnlag er 0
+  status: 500
