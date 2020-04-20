@@ -30,7 +30,7 @@ fun extractGrunnlagOgSats(
         throw NegativtGrunnlagException("Negativt grunnlag")
     }
 
-    if (grunnlagResultat.erNull()) {
+    if (grunnlagResultat.erNull() && faktum.lærling == true) { // @todo : Burde sjekken være for alle parameterene, ikke bare for lærling
         throw NullGrunnlagException("Grunnlaget er 0")
     }
 
