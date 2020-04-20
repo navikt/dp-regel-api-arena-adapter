@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.api.internal
 
+import java.time.LocalDateTime
 import no.nav.dagpenger.regel.api.arena.adapter.v1.FeilBeregningsregelException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MissingSubsumsjonDataException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
@@ -13,8 +14,6 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Sats
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
-
-import java.time.LocalDateTime
 
 fun extractGrunnlagOgSats(
     subsumsjon: Subsumsjon,
@@ -119,4 +118,3 @@ fun findBeregningsregel(beregningsregel: String, harAvkortet: Boolean): Grunnlag
         else -> throw FeilBeregningsregelException("Ukjent beregningsregel: '$beregningsregel'")
     }
 }
-
