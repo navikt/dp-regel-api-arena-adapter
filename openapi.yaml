@@ -79,6 +79,10 @@ paths:
               examples:
                 inntektFeil:
                   $ref: '#/components/examples/hent-inntekt-feilet'
+                negativtDagpengeGrunnlag:
+                  $ref: '#/components/examples/negativt-grunnlag'
+                nullDagpengeGrunnlag:
+                  $ref: '#/components/examples/null-grunnlag'
   /dagpengegrunnlag:
     post:
       tags:
@@ -142,6 +146,8 @@ paths:
                   $ref: '#/components/examples/hent-inntekt-feilet'
                 negativtDagpengeGrunnlag:
                   $ref: '#/components/examples/negativt-grunnlag'
+                nullDagpengeGrunnlag:
+                  $ref: '#/components/examples/null-grunnlag'
   /inntjeningsperiode:
     post:
       tags:
@@ -892,6 +898,12 @@ components:
       value:
         type: 'urn:dp:error:regelberegning:grunnlag:negativ'
         title: Grunnlag er negativt
+        status: 500
+    null-grunnlag:
+      summary: Grunnlag er 0
+      value:
+        type: 'urn:dp:error:regelberegning:grunnlag:0'
+        title: Grunnlag er 0
         status: 500
   securitySchemes:
     stsOIDC:
