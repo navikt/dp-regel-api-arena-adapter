@@ -103,8 +103,14 @@ fun findBeregningsregel(beregningsregel: String, harAvkortet: Boolean): Grunnlag
         beregningsregel == "FangstOgFiskSiste36" && harAvkortet -> GrunnlagBeregningsregel.ORDINAER_OVER_6G_3SISTE_2019
         beregningsregel == "FangstOgFiskSiste36" -> GrunnlagBeregningsregel.ORDINAER_TREAAR
         beregningsregel == "Verneplikt" -> GrunnlagBeregningsregel.VERNEPLIKT
-        beregningsregel == "Manuell under 6G" -> GrunnlagBeregningsregel.MANUELL_UNDER_6G
-        beregningsregel == "Manuell over 6G" -> GrunnlagBeregningsregel.MANUELL_OVER_6G
+        beregningsregel == "LærlingFangstOgFisk1x12" && harAvkortet -> GrunnlagBeregningsregel.LAERLING_12_MAANED_AVKORTET
+        beregningsregel == "LærlingFangstOgFisk3x4" && harAvkortet -> GrunnlagBeregningsregel.LAERLING_4_MAANED_AVKORTET
+        beregningsregel == "LærlingArbeidsinntekt1x12" && harAvkortet -> GrunnlagBeregningsregel.LAERLING_12_MAANED_AVKORTET
+        beregningsregel == "LærlingArbeidsinntekt3x4" && harAvkortet -> GrunnlagBeregningsregel.LAERLING_4_MAANED_AVKORTET
+        beregningsregel == "LærlingFangstOgFisk1x12" -> GrunnlagBeregningsregel.LAERLING_12_MAANED
+        beregningsregel == "LærlingFangstOgFisk3x4" -> GrunnlagBeregningsregel.LAERLING_4_MAANED
+        beregningsregel == "LærlingArbeidsinntekt1x12" -> GrunnlagBeregningsregel.LAERLING_12_MAANED
+        beregningsregel == "LærlingArbeidsinntekt3x4" -> GrunnlagBeregningsregel.LAERLING_4_MAANED
         else -> throw FeilBeregningsregelException("Ukjent beregningsregel: '$beregningsregel'")
     }
 }
