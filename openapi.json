@@ -589,13 +589,17 @@
           "beregningsregel": {
             "type": "string",
             "example": "ORDINAER_ETTAAR",
-            "description": "Beskriver hvilken regel som er lagt til grunn. ORDINAER_OVER_6G_SISTE_2019 og ORDINAER_OVER_6G_3SISTE_2019 betyr at grunnlag er beregnet av henholdsvis siste 12 eller 36 måneders inntekt. MANUELL_OVER_6G og MANUELL_UNDER_6G betyr henholdsvis om manuelt grunnlag ble kuttet ned fordi det oversteg 6G eller ikke. VERNEPLIKT betyr at grunnlag ble satt utifra regler for verneplikt.",
+            "description": "Beskriver hvilken regel som er lagt til grunn. ORDINAER_OVER_6G_SISTE_2019 og ORDINAER_OVER_6G_3SISTE_2019 betyr at grunnlag er beregnet av henholdsvis siste 12 eller 36 måneders inntekt. MANUELL_OVER_6G og MANUELL_UNDER_6G betyr henholdsvis om manuelt grunnlag ble kuttet ned fordi det oversteg 6G eller ikke. VERNEPLIKT betyr at grunnlag ble satt utifra regler for verneplikt. LAERLING_12_MAANED betyr grunnlag for lærling siste avsluttende kalender måned gange 12, LAERLING_12_MAANED_AVKORTET er samme men avkortet grunnlag. LAERLING_4_MAANED betyr siste 3 avsluttende kalendermåneder gange 4, LAERLING_4_MAANED_AVKORTET er samme men avkortet grunnlag.",
             "enum": [
               "ORDINAER_OVER_6G_SISTE_2019",
               "ORDINAER_OVER_6G_3SISTE_2019",
               "MANUELL_UNDER_6G",
               "MANUELL_OVER_6G",
-              "VERNEPLIKT"
+              "VERNEPLIKT",
+              "LAERLING_12_MAANED",
+              "LAERLING_12_MAANED_AVKORTET",
+              "LAERLING_4_MAANED",
+              "LAERLING_4_MAANED_AVKORTET"
             ]
           },
           "benyttet90ProsentRegel": {
