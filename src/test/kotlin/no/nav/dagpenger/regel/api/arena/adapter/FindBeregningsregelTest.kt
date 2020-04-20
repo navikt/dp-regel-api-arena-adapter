@@ -1,6 +1,8 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
 import io.kotlintest.shouldBe
+import io.kotlintest.specs.FreeSpec
+import io.kotlintest.tables.row
 import kotlin.test.assertEquals
 import no.nav.dagpenger.regel.api.arena.adapter.v1.FeilBeregningsregelException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagBeregningsregel
@@ -77,12 +79,27 @@ class FindBeregningsregelTest {
 
         assertEquals(GrunnlagBeregningsregel.ORDINAER_TREAAR, regel)
     }
-
-    @Test
-    fun `skal finne beregningsregel for grunnlag ved lærling forskrift`() {
-        findBeregningsregel("LærlingArbeidsinntekt1x12", false) shouldBe GrunnlagBeregningsregel.LAERLING_12_MAANED
-        findBeregningsregel("LærlingArbeidsinntekt3x4", false) shouldBe GrunnlagBeregningsregel.LAERLING_4_MAANED
-        findBeregningsregel("LærlingFangstOgFisk1x12", false) shouldBe GrunnlagBeregningsregel.LAERLING_12_MAANED
-        findBeregningsregel("LærlingFangstOgFisk3x4", false) shouldBe GrunnlagBeregningsregel.LAERLING_4_MAANED
-    }
 }
+
+class FindBeregningsregelLærlingTest : FreeSpec({
+    "skal finne beregningsregel for grunnlag ved lærling forskrift" - {
+        listOf(
+            row("LærlingArbeidsinntekt1x12", false, GrunnlagBeregningsregel.LAERLING_12_MAANED),
+            row("LærlingArbeidsinntekt1x12", true, GrunnlagBeregningsregel.LAERLING_12_MAANED_AVKORTET),
+
+            row("LærlingFangstOgFisk1x12", true, GrunnlagBeregningsregel.LAERLING_12_MAANED_AVKORTET),
+            row("LærlingFangstOgFisk1x12", false, GrunnlagBeregningsregel.LAERLING_12_MAANED),
+
+            row("LærlingArbeidsinntekt3x4", false, GrunnlagBeregningsregel.LAERLING_4_MAANED),
+            row("LærlingArbeidsinntekt3x4", true, GrunnlagBeregningsregel.LAERLING_4_MAANED_AVKORTET),
+
+            row("LærlingFangstOgFisk3x4", true, GrunnlagBeregningsregel.LAERLING_4_MAANED_AVKORTET),
+            row("LærlingFangstOgFisk3x4", false, GrunnlagBeregningsregel.LAERLING_4_MAANED)
+
+        ).map { (regel: String, avkortet: Boolean, grunnlagsRegel: GrunnlagBeregningsregel) ->
+            regel {
+                findBeregningsregel(regel, avkortet) shouldBe grunnlagsRegel
+            }
+        }
+    }
+})
