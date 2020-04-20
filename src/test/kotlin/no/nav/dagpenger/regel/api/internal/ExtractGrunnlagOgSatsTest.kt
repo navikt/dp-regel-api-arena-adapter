@@ -69,8 +69,9 @@ class ExtractGrunnlagOgSatsTest {
     }
 
     @Test
-    fun `Kaster feil hvis uavkortet grunnlag er 0 `() {
+    fun `Kaster feil hvis uavkortet grunnlag er 0 og lærling parameteret er satt `() {
         val subsumsjonMedNegativtGrunnlag = subsumsjon.copy(
+            faktum = subsumsjon.faktum.copy(lærling = true),
             grunnlagResultat = subsumsjon.grunnlagResultat?.copy(
                 avkortet = BigDecimal(0),
                 uavkortet = BigDecimal(0)
