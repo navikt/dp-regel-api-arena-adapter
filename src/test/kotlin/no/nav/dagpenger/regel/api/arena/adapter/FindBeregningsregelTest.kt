@@ -1,8 +1,8 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.FreeSpec
-import io.kotlintest.tables.row
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.data.row
+import io.kotest.matchers.shouldBe
 import kotlin.test.assertEquals
 import no.nav.dagpenger.regel.api.arena.adapter.v1.FeilBeregningsregelException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagBeregningsregel
@@ -97,7 +97,7 @@ class FindBeregningsregelLærlingTest : FreeSpec({
             row("LærlingFangstOgFisk3x4", false, GrunnlagBeregningsregel.LAERLING_4_MAANED)
 
         ).map { (regel: String, avkortet: Boolean, grunnlagsRegel: GrunnlagBeregningsregel) ->
-            regel {
+            "$regel-$grunnlagsRegel" {
                 findBeregningsregel(regel, avkortet) shouldBe grunnlagsRegel
             }
         }

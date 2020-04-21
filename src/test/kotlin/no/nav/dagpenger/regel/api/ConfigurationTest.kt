@@ -1,6 +1,6 @@
 package no.nav.dagpenger.regel.api
 
-import io.kotlintest.shouldBe
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
 internal class ConfigurationTest {
