@@ -26,23 +26,10 @@ class ExtractMinsteinntektOgPeriodeTest {
         val result = extractMinsteinntektOgPeriode(
             subsumsjonWithBothResults,
             LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            koronaToggle = true
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1)
         )
 
         assertNotNull(result.resultat.minsteinntektRegel)
-    }
-
-    @Test
-    fun `Set minsteinntektregel to null when toggle is false`() {
-        val result = extractMinsteinntektOgPeriode(
-            subsumsjonWithBothResults,
-            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            koronaToggle = false
-        )
-
-        assertNull(result.resultat.minsteinntektRegel)
     }
 
     @Test
@@ -50,8 +37,7 @@ class ExtractMinsteinntektOgPeriodeTest {
         val result = extractMinsteinntektOgPeriode(
             subsumsjonWithBothResults,
             LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            koronaToggle = true
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1)
         )
 
         assertEquals(minsteinntektOgPeriodeSubsumsjon, result)
@@ -62,8 +48,7 @@ class ExtractMinsteinntektOgPeriodeTest {
         val result = extractMinsteinntektOgPeriode(
             subsumsjonWithOppfyllerMinsteinntektFalse,
             LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            koronaToggle = false
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1)
         )
 
         assertEquals(false, result.resultat.oppfyllerKravTilMinsteArbeidsinntekt)

@@ -30,8 +30,7 @@ class ExtractGrunnlagOgSatsTest {
         val result = extractGrunnlagOgSats(
             subsumsjon,
             LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            koronaToggle = false
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1)
         )
 
         assertEquals(grunnlagOgSatsSubsumsjon, result)
@@ -42,8 +41,7 @@ class ExtractGrunnlagOgSatsTest {
         val result = extractGrunnlagOgSats(
             subsumsjonWithSatsBeregningsregel,
             LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            koronaToggle = true
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1)
         )
 
         assertEquals(grunnlagOgSatsSubsumsjonWithSatsBeregningsregel, result)
@@ -62,8 +60,7 @@ class ExtractGrunnlagOgSatsTest {
             extractGrunnlagOgSats(
                 subsumsjonMedNegativtGrunnlag,
                 LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-                LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-                koronaToggle = false
+                LocalDateTime.of(2019, 4, 25, 1, 1, 1)
             )
         }
     }
@@ -82,8 +79,7 @@ class ExtractGrunnlagOgSatsTest {
             extractGrunnlagOgSats(
                 subsumsjonMedNegativtGrunnlag,
                 LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-                LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-                koronaToggle = false
+                LocalDateTime.of(2019, 4, 25, 1, 1, 1)
             )
         }
     }
@@ -106,7 +102,8 @@ class ExtractGrunnlagOgSatsTest {
         resultat = GrunnlagOgSatsResultat(
             grunnlag = Grunnlag(
                 avkortet = 12345,
-                uavkortet = 12345
+                uavkortet = 12345,
+                beregningsregel = GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019
             ),
             sats = Sats(400, 2000),
             beregningsRegel = GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019,
@@ -167,6 +164,7 @@ class ExtractGrunnlagOgSatsTest {
                 beregningsregel = GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019
             ),
             sats = Sats(400, 2000, beregningsregel = SatsBeregningsregel.ORDINAER),
+            beregningsRegel = GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019,
             benyttet90ProsentRegel = true
         ),
         inntekt = setOf(

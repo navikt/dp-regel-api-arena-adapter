@@ -18,8 +18,7 @@ import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 fun extractGrunnlagOgSats(
     subsumsjon: Subsumsjon,
     opprettet: LocalDateTime,
-    utfort: LocalDateTime,
-    koronaToggle: Boolean
+    utfort: LocalDateTime
 ): GrunnlagOgSatsSubsumsjon {
 
     val faktum = subsumsjon.faktum
@@ -56,26 +55,14 @@ fun extractGrunnlagOgSats(
             grunnlag = Grunnlag(
                 avkortet = grunnlagResultat.avkortet.toInt(),
                 uavkortet = grunnlagResultat.uavkortet.toInt(),
-                beregningsregel = when (koronaToggle) {
-                    true -> findBeregningsregel(
-                        grunnlagResultat.beregningsregel,
-                        grunnlagResultat.harAvkortet
-                    )
-                    else -> null
-                }
+                beregningsregel = findBeregningsregel(grunnlagResultat.beregningsregel, grunnlagResultat.harAvkortet)
             ),
             sats = Sats(
                 dagsats = satsResultat.dagsats,
                 ukesats = satsResultat.ukesats,
-                beregningsregel = when (koronaToggle) {
-                    true -> satsResultat.beregningsregel
-                    else -> null
-                }
+                beregningsregel = satsResultat.beregningsregel
             ),
-            beregningsRegel = when (koronaToggle) {
-                false -> findBeregningsregel(grunnlagResultat.beregningsregel, grunnlagResultat.harAvkortet)
-                else -> null
-            },
+            beregningsRegel = findBeregningsregel(grunnlagResultat.beregningsregel, grunnlagResultat.harAvkortet),
             benyttet90ProsentRegel = satsResultat.benyttet90ProsentRegel
         ),
         inntekt = grunnlagResultat.grunnlagInntektsPerioder?.map {
