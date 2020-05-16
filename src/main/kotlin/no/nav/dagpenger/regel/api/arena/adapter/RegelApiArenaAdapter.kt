@@ -83,7 +83,7 @@ fun main() {
 
     app.start(wait = false)
     Runtime.getRuntime().addShutdownHook(Thread {
-        app.stop(5, 60, TimeUnit.SECONDS)
+        app.stop(5000, 60000)
     })
 }
 

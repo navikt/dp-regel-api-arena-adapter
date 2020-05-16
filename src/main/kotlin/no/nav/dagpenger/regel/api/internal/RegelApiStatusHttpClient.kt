@@ -1,12 +1,12 @@
 package no.nav.dagpenger.regel.api.internal
 
 import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.fuel.moshi.responseObject
 import java.time.Duration
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.time.delay
 import kotlinx.coroutines.withTimeout
 import no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterException
+import no.nav.dagpenger.regel.api.arena.adapter.responseObject
 import no.nav.dagpenger.regel.api.internal.models.BehovStatus
 import no.nav.dagpenger.regel.api.internal.models.BehovStatusResponse
 

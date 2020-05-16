@@ -1,9 +1,9 @@
 package no.nav.dagpenger.regel.api.internal
 
 import com.github.kittinunf.fuel.httpPost
-import com.github.kittinunf.fuel.moshi.responseObject
 import java.time.LocalDate
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
+import no.nav.dagpenger.regel.api.arena.adapter.responseObject
 import no.nav.dagpenger.regel.api.internal.models.BehovStatusResponse
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 
