@@ -81,14 +81,14 @@ pipeline {
 
             sh label: 'Deploy with kubectl', script: """
               kubectl config use-context dev-${env.ZONE}
-              kubectl apply -f ./nais/nais-dev-deploy.yaml --wait
-              kubectl rollout status -w deployment/${APPLICATION_NAME}
+              kubectl apply -n default -f ./nais/nais-dev-deploy.yaml --wait
+              kubectl rollout status -w deployment/${APPLICATION_NAME} -n default
             """
             archiveArtifacts artifacts: 'nais/nais-dev-deploy.yaml', fingerprint: true
 
             sh label: 'Deploy to t5 with kubectl', script: """
               kubectl config use-context dev-${env.ZONE}
-              kubectl apply -f ./nais/nais-dev-t5-deploy.yaml --wait
+              kubectl apply -n t5 -f ./nais/nais-dev-t5-deploy.yaml --wait
               kubectl rollout status -w deployment/${APPLICATION_NAME} -n t5
             """
             archiveArtifacts artifacts: 'nais/nais-dev-t5-deploy.yaml', fingerprint: true
@@ -96,7 +96,7 @@ pipeline {
 
             sh label: 'Deploy to q2 with kubectl', script: """
               kubectl config use-context dev-${env.ZONE}
-              kubectl apply -f ./nais/nais-dev-q2-deploy.yaml --wait
+              kubectl apply -n q2 -f ./nais/nais-dev-q2-deploy.yaml --wait
               sleep 5
               kubectl rollout status -w deployment/${APPLICATION_NAME} -n q2
             """
@@ -184,8 +184,8 @@ pipeline {
       steps {
         sh label: 'Deploy with kubectl', script: """
           kubectl config use-context prod-${env.ZONE}
-          kubectl apply  -f ./nais/nais-prod-deploy.yaml --wait
-          kubectl rollout status -w deployment/${APPLICATION_NAME}
+          kubectl apply  -n default -f ./nais/nais-prod-deploy.yaml --wait
+          kubectl rollout status -w deployment/${APPLICATION_NAME} -n default
         """
 
         archiveArtifacts artifacts: 'nais/nais-prod-deploy.yaml', fingerprint: true
