@@ -47,7 +47,7 @@ dependencies {
         exclude(group = "junit")
     }
     implementation(Ktor.micrometerMetrics)
-    implementation(Dagpenger.Biblioteker.ktorUtils)
+    implementation(Dagpenger.Biblioteker.Ktor.Server.apiKeyAuth)
     implementation(Micrometer.prometheusRegistry)
 
     implementation(Moshi.moshi)
