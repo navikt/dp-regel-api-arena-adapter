@@ -7,7 +7,7 @@ import mu.KotlinLogging
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 
-val sikkerlogg = KotlinLogging.logger("tjenestekall")
+val sikkerlogg = KotlinLogging.logger("tjenestekall.subsumsjon")
 
 class RegelApiSubsumsjonHttpClient(private val regelApiUrl: String, private val regelApiKey: String) {
     fun getSubsumsjon(subsumsjonLocation: String): Subsumsjon {
@@ -27,7 +27,7 @@ class RegelApiSubsumsjonHttpClient(private val regelApiUrl: String, private val 
                 "Failed to fetch subsumsjon. Response message: ${response.responseMessage}. Error message: ${result.error.message}"
             )
             is Result.Success -> {
-                sikkerlogg.info { "Fikk svar på subsumsjon: ##" } // ${result.get()}" }
+                sikkerlogg.info { "Fikk svar på subsumsjon: ${result.get()}" }
                 result.get()
             }
         }
