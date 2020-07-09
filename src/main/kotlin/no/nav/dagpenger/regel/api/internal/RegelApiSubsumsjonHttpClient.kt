@@ -27,7 +27,7 @@ class RegelApiSubsumsjonHttpClient(private val regelApiUrl: String, private val 
                 "Failed to fetch subsumsjon. Response message: ${response.responseMessage}. Error message: ${result.error.message}"
             )
             is Result.Success -> {
-                //sikkerlogg.info { "Fikk svar på subsumsjon: ${result.get()}" }
+                // sikkerlogg.info { "Fikk svar på subsumsjon: ${result.get()}" }
                 result.get()
             }
         }
