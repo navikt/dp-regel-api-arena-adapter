@@ -7,8 +7,6 @@ import io.kotest.matchers.shouldNotBe
 import io.mockk.every
 import io.mockk.mockk
 import io.prometheus.client.CollectorRegistry
-import java.time.LocalDate
-import java.time.LocalDateTime
 import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
@@ -16,6 +14,8 @@ import no.nav.dagpenger.regel.api.internal.models.Faktum
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 class SynchronousSubsumsjonClientTest {
 

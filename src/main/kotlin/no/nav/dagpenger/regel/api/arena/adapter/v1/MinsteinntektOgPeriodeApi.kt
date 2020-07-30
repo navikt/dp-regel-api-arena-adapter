@@ -37,7 +37,7 @@ fun Route.MinsteinntektOgPeriodeApi(
 fun MinsteinntektOgPeriodeParametere.validate() {
     this.bruktInntektsPeriode?.let {
         if (it.foersteMaaned.isAfter(it.sisteMaaned)) throw InvalidInnteksperiodeException(
-                "Feil bruktInntektsPeriode: foersteMaaned=${it.foersteMaaned} er etter sisteMaaned=${it.sisteMaaned}"
+            "Feil bruktInntektsPeriode: foersteMaaned=${it.foersteMaaned} er etter sisteMaaned=${it.sisteMaaned}"
         )
     }
     if (this.oppfyllerKravTilLaerling && this.harAvtjentVerneplikt == true) throw UgyldigParameterkombinasjonException(

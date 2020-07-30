@@ -9,10 +9,6 @@ import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.mockk.every
 import io.mockk.mockk
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.YearMonth
-import kotlin.test.assertEquals
 import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
@@ -33,6 +29,10 @@ import org.skyscreamer.jsonassert.Customization
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import org.skyscreamer.jsonassert.comparator.CustomComparator
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.YearMonth
+import kotlin.test.assertEquals
 
 class MinsteinntektOgPeriodeApiTest {
 
@@ -109,9 +109,11 @@ class MinsteinntektOgPeriodeApiTest {
                 assertEquals(HttpStatusCode.OK, response.status())
                 JSONAssert.assertEquals(
                     expectedJson, response.content,
-                    CustomComparator(JSONCompareMode.STRICT,
+                    CustomComparator(
+                        JSONCompareMode.STRICT,
                         Customization("opprettet") { _, _ -> true },
-                        Customization("utfort") { _, _ -> true })
+                        Customization("utfort") { _, _ -> true }
+                    )
                 )
             }
         }
@@ -155,9 +157,11 @@ class MinsteinntektOgPeriodeApiTest {
                 assertEquals(HttpStatusCode.OK, response.status())
                 JSONAssert.assertEquals(
                     expectedJsonUtenMinsteinntektRegel, response.content,
-                    CustomComparator(JSONCompareMode.STRICT,
+                    CustomComparator(
+                        JSONCompareMode.STRICT,
                         Customization("opprettet") { _, _ -> true },
-                        Customization("utfort") { _, _ -> true })
+                        Customization("utfort") { _, _ -> true }
+                    )
                 )
             }
         }
@@ -196,7 +200,7 @@ class MinsteinntektOgPeriodeApiTest {
                       "oppfyllerKravTilFangstOgFisk": false
                     }
 
-                """.trimIndent()
+                    """.trimIndent()
                 )
             }.apply {
                 assertEquals(HttpStatusCode.InternalServerError, response.status())
@@ -242,7 +246,7 @@ class MinsteinntektOgPeriodeApiTest {
                       "oppfyllerKravTilFangstOgFisk": false
                     }
 
-                """.trimIndent()
+                    """.trimIndent()
                 )
             }.apply {
                 assertEquals(HttpStatusCode.BadGateway, response.status())
@@ -286,7 +290,7 @@ class MinsteinntektOgPeriodeApiTest {
                       "oppfyllerKravTilFangstOgFisk": false
                     }
 
-                """.trimIndent()
+                    """.trimIndent()
                 )
             }.apply {
                 assertEquals(HttpStatusCode.GatewayTimeout, response.status())
@@ -319,7 +323,7 @@ class MinsteinntektOgPeriodeApiTest {
                       "oppfyllerKravTilFangstOgFisk": false,
                       "oppfyllerKravTilLaerling": true
                     }
-                """.trimIndent()
+                    """.trimIndent()
                 )
             }.apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())

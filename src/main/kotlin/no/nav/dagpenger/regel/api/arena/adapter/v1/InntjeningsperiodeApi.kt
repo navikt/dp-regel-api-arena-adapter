@@ -32,7 +32,8 @@ fun Route.InntjeningsperiodeApi(inntektApiberegningsdatoHttpClient: InntektApiIn
                     resultatInternal.parametere.vedtakId,
                     resultatInternal.parametere.beregningsdato,
                     resultatInternal.parametere.inntektsId
-                ))
+                )
+            )
 
             call.respond(HttpStatusCode.OK, resultat)
         }

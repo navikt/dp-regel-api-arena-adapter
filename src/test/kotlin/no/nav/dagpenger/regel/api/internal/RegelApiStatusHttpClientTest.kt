@@ -5,7 +5,6 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import com.github.tomakehurst.wiremock.matching.EqualToPattern
 import com.github.tomakehurst.wiremock.stubbing.Scenario
-import java.time.Duration
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -13,6 +12,7 @@ import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.Duration
 
 internal class RegelApiStatusHttpClientTest {
 
@@ -98,9 +98,10 @@ internal class RegelApiStatusHttpClientTest {
         assertEquals("54321", response)
     }
 
-    val responseBody = """
+    val responseBody =
+        """
                 {
                         "status" : "PENDING"
                 }
-            """.trimIndent()
+        """.trimIndent()
 }

@@ -27,7 +27,7 @@ private val localProperties = ConfigurationMap(
         "auth.regelapi.secret" to "secret",
         "auth.regelapi.key" to "secret1",
         "unleash.url" to "https://localhost"
-        )
+    )
 )
 private val devProperties = ConfigurationMap(
     mapOf(
@@ -39,7 +39,7 @@ private val devProperties = ConfigurationMap(
         "jwks.issuer" to "https://security-token-service.nais.preprod.local",
         "optional.jwt" to "false",
         "unleash.url" to "https://unleash.nais.preprod.local/api/"
-        )
+    )
 )
 private val prodProperties = ConfigurationMap(
     mapOf(
@@ -51,7 +51,7 @@ private val prodProperties = ConfigurationMap(
         "jwks.issuer" to "https://security-token-service.nais.adeo.no",
         "optional.jwt" to "false",
         "unleash.url" to "https://unleash.nais.adeo.no/api/"
-        )
+    )
 )
 
 data class Configuration(

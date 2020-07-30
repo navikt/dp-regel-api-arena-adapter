@@ -10,11 +10,6 @@ import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
 import io.mockk.every
 import io.mockk.mockk
-import java.net.URI
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.YearMonth
-import kotlin.test.assertEquals
 import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
@@ -37,6 +32,11 @@ import org.skyscreamer.jsonassert.Customization
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import org.skyscreamer.jsonassert.comparator.CustomComparator
+import java.net.URI
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.YearMonth
+import kotlin.test.assertEquals
 
 class GrunnlagOgSatsApiTest {
 
@@ -113,9 +113,11 @@ class GrunnlagOgSatsApiTest {
                 assertEquals(HttpStatusCode.OK, response.status())
                 JSONAssert.assertEquals(
                     expectedJson, response.content,
-                    CustomComparator(JSONCompareMode.STRICT,
+                    CustomComparator(
+                        JSONCompareMode.STRICT,
                         Customization("opprettet") { _, _ -> true },
-                        Customization("utfort") { _, _ -> true })
+                        Customization("utfort") { _, _ -> true }
+                    )
                 )
             }
         }
@@ -159,9 +161,11 @@ class GrunnlagOgSatsApiTest {
                 assertEquals(HttpStatusCode.OK, response.status())
                 JSONAssert.assertEquals(
                     expectedJsonWithBeregningsregel, response.content,
-                    CustomComparator(JSONCompareMode.STRICT,
+                    CustomComparator(
+                        JSONCompareMode.STRICT,
                         Customization("opprettet") { _, _ -> true },
-                        Customization("utfort") { _, _ -> true })
+                        Customization("utfort") { _, _ -> true }
+                    )
                 )
             }
         }
@@ -360,7 +364,7 @@ class GrunnlagOgSatsApiTest {
                       "oppfyllerKravTilFangstOgFisk": false
                     }
 
-                """.trimIndent()
+                    """.trimIndent()
                 )
             }.apply {
                 assertEquals(HttpStatusCode.InternalServerError, response.status())
@@ -406,7 +410,7 @@ class GrunnlagOgSatsApiTest {
                       "oppfyllerKravTilFangstOgFisk": false
                     }
 
-                """.trimIndent()
+                    """.trimIndent()
                 )
             }.apply {
                 assertEquals(HttpStatusCode.BadGateway, response.status())
@@ -450,7 +454,7 @@ class GrunnlagOgSatsApiTest {
                       "oppfyllerKravTilFangstOgFisk": false
                     }
 
-                """.trimIndent()
+                    """.trimIndent()
                 )
             }.apply {
                 assertEquals(HttpStatusCode.GatewayTimeout, response.status())
@@ -538,7 +542,7 @@ class GrunnlagOgSatsApiTest {
                       "oppfyllerKravTilFangstOgFisk": false,
                       "oppfyllerKravTilLaerling": true
                     }
-                """.trimIndent()
+                    """.trimIndent()
                 )
             }.apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
@@ -608,17 +612,17 @@ class GrunnlagOgSatsApiTest {
                 benyttet90ProsentRegel = false
             ),
             inntekt =
-            setOf(
-                no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
-                    inntekt = 4999423,
-                    inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                        foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1)
-                    ),
-                    inneholderNaeringsinntekter = false,
-                    periode = 1
-                )
-            ),
+                setOf(
+                    no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
+                        inntekt = 4999423,
+                        inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                            foersteMaaned = YearMonth.of(2018, 1),
+                            sisteMaaned = YearMonth.of(2019, 1)
+                        ),
+                        inneholderNaeringsinntekter = false,
+                        periode = 1
+                    )
+                ),
             inntektManueltRedigert = true,
             inntektAvvik = true
         )
@@ -650,17 +654,17 @@ class GrunnlagOgSatsApiTest {
                 benyttet90ProsentRegel = false
             ),
             inntekt =
-            setOf(
-                no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
-                    inntekt = 4999423,
-                    inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                        foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1)
-                    ),
-                    inneholderNaeringsinntekter = false,
-                    periode = 1
-                )
-            ),
+                setOf(
+                    no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
+                        inntekt = 4999423,
+                        inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                            foersteMaaned = YearMonth.of(2018, 1),
+                            sisteMaaned = YearMonth.of(2019, 1)
+                        ),
+                        inneholderNaeringsinntekter = false,
+                        periode = 1
+                    )
+                ),
             inntektManueltRedigert = true,
             inntektAvvik = true
         )
