@@ -1,11 +1,11 @@
 package no.nav.dagpenger.regel.api.internal
 
 import com.github.kittinunf.fuel.httpPost
-import java.time.LocalDate
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.arena.adapter.responseObject
 import no.nav.dagpenger.regel.api.internal.models.BehovStatusResponse
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
+import java.time.LocalDate
 
 class RegelApiBehovHttpClient(private val regelApiUrl: String, private val regelApiKey: String) {
     private val jsonAdapter = moshiInstance.adapter(BehovRequest::class.java)

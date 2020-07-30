@@ -25,7 +25,7 @@ class InntektApiInntjeningsperiodeHttpClient(private val inntektApiUrl: String) 
             }
         return when (result) {
             is Result.Failure -> throw InntektApiInntjeningsperiodeHttpClientException(
-                    "Failed to return is-samme-inntjeningsperiode. Response message ${response.responseMessage}. Error message: ${result.error.message}"
+                "Failed to return is-samme-inntjeningsperiode. Response message ${response.responseMessage}. Error message: ${result.error.message}"
             )
             is Result.Success -> result.get()
         }

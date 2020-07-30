@@ -5,12 +5,12 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import com.github.tomakehurst.wiremock.matching.EqualToJsonPattern
 import com.github.tomakehurst.wiremock.matching.EqualToPattern
-import java.time.LocalDate
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 
 class RegelApiBehovHttpClientTest {
 
@@ -42,13 +42,18 @@ class RegelApiBehovHttpClientTest {
         WireMock.stubFor(
             WireMock.post(WireMock.urlEqualTo("//behov"))
                 .withHeader("X-API-KEY", equalToPattern)
-                .withRequestBody(EqualToJsonPattern("""
+                .withRequestBody(
+                    EqualToJsonPattern(
+                        """
                     {
                         "aktorId": "001",
                         "vedtakId": 123456,
                         "beregningsdato": "2019-04-14"
                     }
-                """.trimIndent(), true, true))
+                        """.trimIndent(),
+                        true, true
+                    )
+                )
                 .willReturn(
                     WireMock.aResponse()
                         .withBody(responseBody)
@@ -68,9 +73,10 @@ class RegelApiBehovHttpClientTest {
         Assertions.assertEquals("/behov/status/123", response)
     }
 
-    private val responseBody = """
+    private val responseBody =
+        """
                 {
                         "status" : "PENDING"
                 }
-            """.trimIndent()
+        """.trimIndent()
 }

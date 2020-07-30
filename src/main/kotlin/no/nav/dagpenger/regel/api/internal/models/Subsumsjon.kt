@@ -1,8 +1,8 @@
 package no.nav.dagpenger.regel.api.internal.models
 
-import java.math.BigDecimal
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.SatsBeregningsregel
+import java.math.BigDecimal
 
 data class Subsumsjon(
     val behovId: String,

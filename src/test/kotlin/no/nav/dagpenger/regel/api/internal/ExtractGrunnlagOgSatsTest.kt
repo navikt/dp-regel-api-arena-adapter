@@ -1,11 +1,5 @@
 package no.nav.dagpenger.regel.api.internal
 
-import java.math.BigDecimal
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.YearMonth
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.NullGrunnlagException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Grunnlag
@@ -22,6 +16,12 @@ import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.internal.models.SatsResultat
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 import org.junit.jupiter.api.Test
+import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.YearMonth
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class ExtractGrunnlagOgSatsTest {
 

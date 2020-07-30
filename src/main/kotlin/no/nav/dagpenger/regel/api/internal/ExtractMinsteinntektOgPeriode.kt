@@ -1,6 +1,5 @@
 package no.nav.dagpenger.regel.api.internal
 
-import java.time.LocalDateTime
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MissingSubsumsjonDataException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode
@@ -9,6 +8,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektRegel
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
+import java.time.LocalDateTime
 
 fun extractMinsteinntektOgPeriode(
     subsumsjon: Subsumsjon,
