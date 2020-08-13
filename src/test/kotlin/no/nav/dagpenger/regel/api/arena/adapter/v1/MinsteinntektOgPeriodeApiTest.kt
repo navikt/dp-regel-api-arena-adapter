@@ -7,9 +7,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import no.nav.dagpenger.regel.api.arena.adapter.mockedRegelApiAdapter
@@ -76,13 +75,12 @@ class MinsteinntektOgPeriodeApiTest {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
-        every {
-            runBlocking {
-                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                    any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
-                )
-            }
+        coEvery {
+
+            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                any(),
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
+            )
         } returns minsteinntektOgPeriodeSubsumsjon()
 
         withTestApplication({
@@ -124,13 +122,12 @@ class MinsteinntektOgPeriodeApiTest {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
-        every {
-            runBlocking {
-                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                    any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
-                )
-            }
+        coEvery {
+
+            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                any(),
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
+            )
         } returns minsteinntektOgPeriodeSubsumsjon().copy(resultat = MinsteinntektOgPeriodeResultat(true, 104, null))
 
         withTestApplication({
@@ -172,13 +169,11 @@ class MinsteinntektOgPeriodeApiTest {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
-        every {
-            runBlocking {
-                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                    any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
-                )
-            }
+        coEvery {
+            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                any(),
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
+            )
         } throws RuntimeException()
 
         withTestApplication({
@@ -217,13 +212,11 @@ class MinsteinntektOgPeriodeApiTest {
 
         val problem = Problem(title = "problem")
         val synchronousSubsumsjonClient = mockk<SynchronousSubsumsjonClient>().apply {
-            every {
-                runBlocking {
-                    this@apply.getSubsumsjonSynchronously(
-                        any(),
-                        any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
-                    )
-                }
+            coEvery {
+                this@apply.getSubsumsjonSynchronously(
+                    any(),
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
+                )
             } throws SubsumsjonProblem(problem)
         }
 
@@ -262,13 +255,11 @@ class MinsteinntektOgPeriodeApiTest {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
-        every {
-            runBlocking {
-                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                    any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
-                )
-            }
+        coEvery {
+            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                any(),
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
+            )
         } throws RegelApiTimeoutException("timeout")
 
         withTestApplication({

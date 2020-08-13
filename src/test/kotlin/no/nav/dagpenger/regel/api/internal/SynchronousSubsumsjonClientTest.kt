@@ -4,6 +4,7 @@ import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.doubles.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.prometheus.client.CollectorRegistry
@@ -29,8 +30,8 @@ class SynchronousSubsumsjonClientTest {
             behovHttpClient.run(behovRequest = any())
         } returns "behov/status/123"
 
-        every {
-            runBlocking { statusHttpClient.pollStatus("behov/status/123") }
+        coEvery {
+            statusHttpClient.pollStatus("behov/status/123")
         } returns "subsumsjon/0987"
 
         every {
@@ -66,8 +67,8 @@ class SynchronousSubsumsjonClientTest {
             behovHttpClient.run(behovRequest = any())
         } returns "behov/status/123"
 
-        every {
-            runBlocking { statusHttpClient.pollStatus("behov/status/123") }
+        coEvery {
+            statusHttpClient.pollStatus("behov/status/123")
         } returns "subsumsjon/0987"
 
         every {
@@ -110,7 +111,7 @@ class SynchronousSubsumsjonClientTest {
             every { this@apply.run(any()) } returns "string"
         }
         val statusHttpClient = mockk<RegelApiStatusHttpClient>(relaxed = true).apply {
-            every { runBlocking { this@apply.pollStatus(any()) } } returns "string"
+            coEvery { this@apply.pollStatus(any()) } returns "string"
         }
 
         shouldThrow<SubsumsjonProblem> {

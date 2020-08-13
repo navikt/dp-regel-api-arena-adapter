@@ -6,9 +6,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import no.nav.dagpenger.regel.api.arena.adapter.mockedRegelApiAdapter
@@ -31,10 +30,8 @@ class InntjeningsperiodeApiSpec {
 
         val inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient = mockk()
 
-        every {
-            runBlocking {
-                inntektApiBeregningsdatoHttpClient.getInntjeningsperiode(any())
-            }
+        coEvery {
+            inntektApiBeregningsdatoHttpClient.getInntjeningsperiode(any())
         } returns InntjeningsperiodeResultat(
             true,
             InntjeningsperiodeParametre(

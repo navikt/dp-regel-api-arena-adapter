@@ -8,7 +8,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.regel.api.JwtStub
@@ -79,13 +79,11 @@ class GrunnlagOgSatsApiTest {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
-        every {
-            runBlocking {
-                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                    any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
-                )
-            }
+        coEvery {
+            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                any(),
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+            )
         } returns grunnlagOgSatsSubsumsjon()
 
         withTestApplication({
@@ -128,7 +126,7 @@ class GrunnlagOgSatsApiTest {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
-        every {
+        coEvery {
             runBlocking {
                 synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                     any(),
@@ -176,13 +174,11 @@ class GrunnlagOgSatsApiTest {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
-        every {
-            runBlocking {
-                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                    any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
-                )
-            }
+        coEvery {
+            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                any(),
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+            )
         } returns grunnlagOgSatsSubsumsjon()
 
         withTestApplication({
@@ -216,13 +212,11 @@ class GrunnlagOgSatsApiTest {
     fun `Grunnlag and Sats beregning should give problem when grunnlag result is negative`() {
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
-        every {
-            runBlocking {
-                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                    any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
-                )
-            }
+        coEvery {
+            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                any(),
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+            )
         } throws NegativtGrunnlagException("Negativt grunnlag")
 
         withTestApplication({
@@ -259,13 +253,11 @@ class GrunnlagOgSatsApiTest {
     fun `Grunnlag and Sats beregning should give problem when grunnlag result is 0`() {
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
-        every {
-            runBlocking {
-                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                    any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
-                )
-            }
+        coEvery {
+            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                any(),
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+            )
         } throws NullGrunnlagException("Negativt grunnlag")
 
         withTestApplication({
@@ -336,13 +328,11 @@ class GrunnlagOgSatsApiTest {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
-        every {
-            runBlocking {
-                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                    any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
-                )
-            }
+        coEvery {
+            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                any(),
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+            )
         } throws RuntimeException()
 
         withTestApplication({
@@ -381,13 +371,11 @@ class GrunnlagOgSatsApiTest {
 
         val problem = Problem(title = "subsumsjon problem")
         val synchronousSubsumsjonClient = mockk<SynchronousSubsumsjonClient>().apply {
-            every {
-                runBlocking {
-                    this@apply.getSubsumsjonSynchronously(
-                        any(),
-                        any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
-                    )
-                }
+            coEvery {
+                this@apply.getSubsumsjonSynchronously(
+                    any(),
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                )
             } throws SubsumsjonProblem(problem)
         }
 
@@ -426,13 +414,11 @@ class GrunnlagOgSatsApiTest {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
-        every {
-            runBlocking {
-                synchronousSubsumsjonClient.getSubsumsjonSynchronously(
-                    any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
-                )
-            }
+        coEvery {
+            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                any(),
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+            )
         } throws RegelApiTimeoutException("timeout")
 
         withTestApplication({
