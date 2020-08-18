@@ -9,7 +9,7 @@ spec:
     - name:  DP_REGEL_API_URL
       value: "http://dp-regel-api.default"
     - name:  DP_INNTEKT_API_URL
-      value: "http://dp-inntekt-api.default"
+      value: "http://dp-inntekt-api.teamdagpenger"
     - name:  JWKS_ISSUER
       value: "https://security-token-service-t4.nais.preprod.local"
     - name:  JWKS_URL
