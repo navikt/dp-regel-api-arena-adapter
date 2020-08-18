@@ -29,7 +29,7 @@ spec:
     - "https://dp-regel-api-arena-adapter-t5.nais.preprod.local"
   env:
     - name:  DP_REGEL_API_URL
-      value: "http://dp-regel-api.teamdagpenger"
+      value: "http://dp-regel-api"
     - name:  DP_INNTEKT_API_URL
       value: "http://dp-inntekt-api.teamdagpenger"
     - name:  JWKS_ISSUER

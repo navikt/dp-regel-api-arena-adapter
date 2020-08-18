@@ -33,7 +33,7 @@ private val devProperties = ConfigurationMap(
     mapOf(
         "application.profile" to "DEV",
         "application.httpPort" to "8093",
-        "dp.regel.api.url" to "http://dp-regel-api.teamdagpenger",
+        "dp.regel.api.url" to "http://dp-regel-api",
         "dp.inntekt.api.url" to "http://dp-inntekt-api.teamdagpenger",
         "jwks.url" to "http://security-token-service.default/rest/v1/sts/jwks",
         "jwks.issuer" to "https://security-token-service.nais.preprod.local",
@@ -45,7 +45,7 @@ private val prodProperties = ConfigurationMap(
     mapOf(
         "application.profile" to "PROD",
         "application.httpPort" to "8093",
-        "dp.regel.api.url" to "http://dp-regel-api.teamdagpenger",
+        "dp.regel.api.url" to "http://dp-regel-api",
         "dp.inntekt.api.url" to "http://dp-inntekt-api.teamdagpenger",
         "jwks.url" to "http://security-token-service/rest/v1/sts/jwks",
         "jwks.issuer" to "https://security-token-service.nais.adeo.no",

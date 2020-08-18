@@ -33,7 +33,7 @@ internal class ConfigurationTest {
                 this.application.jwksIssuer shouldBe "https://security-token-service.nais.adeo.no"
                 this.application.jwksUrl shouldBe "http://security-token-service/rest/v1/sts/jwks"
                 this.application.dpInntektApiUrl shouldBe "http://dp-inntekt-api.teamdagpenger"
-                this.application.dpRegelApiUrl shouldBe "http://dp-regel-api.teamdagpenger"
+                this.application.dpRegelApiUrl shouldBe "http://dp-regel-api"
             }
         }
     }
