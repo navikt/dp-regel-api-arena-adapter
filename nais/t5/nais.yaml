@@ -1,16 +1,43 @@
-apiVersion: "nais.io/v1alpha1"
-kind: "Application"
+apiVersion: nais.io/v1alpha1
+kind: Application
 metadata:
-  name: dp-regel-api-arena-adapter
+  name: {{app}}
+  namespace:
+  labels:
+    team: {{team}}
 spec:
+  image: {{ image }}
+  port: 8093
+  liveness:
+    path: /isAlive
+  readiness:
+    path: /isReady
+  prometheus:
+    enabled: true
+    path: /metrics
+  replicas:
+    min: 2
+    max: 3
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
   ingresses:
     - "https://dp-regel-api-arena-adapter-t5.nais.preprod.local"
   env:
     - name:  DP_REGEL_API_URL
-      value: "http://dp-regel-api.default"
+      value: "http://dp-regel-api.teamdagpenger"
     - name:  DP_INNTEKT_API_URL
       value: "http://dp-inntekt-api.teamdagpenger"
     - name:  JWKS_ISSUER
       value: "https://security-token-service-t4.nais.preprod.local"
     - name:  JWKS_URL
       value: "https://security-token-service-t4.nais.preprod.local/rest/v1/sts/jwks"
+  secureLogs:
+    enabled: true
+  vault:
+    enabled: true
+
