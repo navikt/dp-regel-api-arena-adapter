@@ -21,10 +21,10 @@ spec:
   resources:
     limits:
       cpu: 1000m
-      memory: 512Mi
+      memory: 1024Mi
     requests:
       cpu: 200m
-      memory: 1024Mi
+      memory: 512Mi
   ingresses:
     - "https://dp-regel-api-arena-adapter.nais.adeo.no"
   secureLogs:
