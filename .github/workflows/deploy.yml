@@ -26,7 +26,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Build with Gradle
-        run: ./gradlew build --info
+        run: ./gradlew build
 
       - name: Build and Publish Docker image
         if: github.ref == 'refs/heads/master'
