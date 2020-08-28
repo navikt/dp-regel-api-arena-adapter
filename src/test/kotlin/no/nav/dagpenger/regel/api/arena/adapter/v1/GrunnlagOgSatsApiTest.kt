@@ -110,7 +110,8 @@ class GrunnlagOgSatsApiTest {
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
                 JSONAssert.assertEquals(
-                    expectedJson, response.content,
+                    expectedJson,
+                    response.content,
                     CustomComparator(
                         JSONCompareMode.STRICT,
                         Customization("opprettet") { _, _ -> true },
@@ -158,7 +159,8 @@ class GrunnlagOgSatsApiTest {
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
                 JSONAssert.assertEquals(
-                    expectedJsonWithBeregningsregel, response.content,
+                    expectedJsonWithBeregningsregel,
+                    response.content,
                     CustomComparator(
                         JSONCompareMode.STRICT,
                         Customization("opprettet") { _, _ -> true },

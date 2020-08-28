@@ -51,7 +51,8 @@ class RegelApiBehovHttpClientTest {
                         "beregningsdato": "2019-04-14"
                     }
                         """.trimIndent(),
-                        true, true
+                        true,
+                        true
                     )
                 )
                 .willReturn(

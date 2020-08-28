@@ -106,7 +106,8 @@ class MinsteinntektOgPeriodeApiTest {
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
                 JSONAssert.assertEquals(
-                    expectedJson, response.content,
+                    expectedJson,
+                    response.content,
                     CustomComparator(
                         JSONCompareMode.STRICT,
                         Customization("opprettet") { _, _ -> true },
@@ -153,7 +154,8 @@ class MinsteinntektOgPeriodeApiTest {
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
                 JSONAssert.assertEquals(
-                    expectedJsonUtenMinsteinntektRegel, response.content,
+                    expectedJsonUtenMinsteinntektRegel,
+                    response.content,
                     CustomComparator(
                         JSONCompareMode.STRICT,
                         Customization("opprettet") { _, _ -> true },

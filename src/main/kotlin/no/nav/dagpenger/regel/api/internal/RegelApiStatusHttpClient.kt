@@ -39,7 +39,8 @@ class RegelApiStatusHttpClient(
                     )
                 } else {
                     throw RegelApiStatusHttpClientException(
-                        response.responseMessage, exception
+                        response.responseMessage,
+                        exception
                     )
                 }
             }
