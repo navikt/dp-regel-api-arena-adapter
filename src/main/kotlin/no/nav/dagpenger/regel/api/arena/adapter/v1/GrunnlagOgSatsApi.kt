@@ -15,7 +15,7 @@ import no.nav.dagpenger.regel.api.internal.BehovRequest
 import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 import no.nav.dagpenger.regel.api.internal.extractGrunnlagOgSats
 
-fun Route.GrunnlagOgSatsApi(
+internal fun Route.GrunnlagOgSatsApi(
     synchronousSubsumsjonClient: SynchronousSubsumsjonClient
 ) {
 

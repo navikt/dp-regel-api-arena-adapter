@@ -62,7 +62,7 @@ class RegelApiBehovHttpClientTest {
                 )
         )
 
-        val client = RegelApiBehovHttpClient(server.url(""), equalToPattern.value)
+        val client = RegelApiBehovHttpClient(FuelHttpClient(server.url(""), equalToPattern.value))
 
         val behovRequest = BehovRequest(
             "001",

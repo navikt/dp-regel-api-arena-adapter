@@ -40,8 +40,10 @@ internal class RegelApiStatusHttpClientTest {
     @Test
     fun `Should honor timeout `() {
         val client = RegelApiStatusHttpClient(
-            regelApiUrl = server.url("/"),
-            regelApiKey = "regelApiKey",
+            FuelHttpClient(
+                baseUrl = server.url("/"),
+                apiKey = "regelApiKey",
+            ),
             timeout = Duration.ZERO
         )
         assertThrows(
@@ -91,8 +93,7 @@ internal class RegelApiStatusHttpClientTest {
                 )
         )
 
-        val client =
-            RegelApiStatusHttpClient(regelApiUrl = server.url(""), regelApiKey = pattern.value)
+        val client = RegelApiStatusHttpClient(FuelHttpClient(baseUrl = server.url(""), apiKey = pattern.value))
 
         val response = runBlocking { client.pollStatus("/behov/status/123") }
         assertEquals("54321", response)

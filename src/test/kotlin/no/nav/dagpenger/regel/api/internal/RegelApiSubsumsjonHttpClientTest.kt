@@ -49,7 +49,7 @@ class RegelApiSubsumsjonHttpClientTest {
                 )
         )
 
-        val client = RegelApiSubsumsjonHttpClient(server.url(""), equalToPattern.value)
+        val client = RegelApiSubsumsjonHttpClient(FuelHttpClient(server.url(""), equalToPattern.value))
 
         val subsumsjon = client.getSubsumsjon("/subsumsjon/112233")
 

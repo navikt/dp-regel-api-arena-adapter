@@ -40,6 +40,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.NullGrunnlagException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
 import no.nav.dagpenger.regel.api.arena.adapter.v1.UgyldigParameterkombinasjonException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.IllegalInntektIdException
+import no.nav.dagpenger.regel.api.internal.FuelHttpClient
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiBehovHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiStatusHttpClient
@@ -62,11 +63,13 @@ fun main() {
         .rateLimited(10, 1, TimeUnit.MINUTES)
         .build()
 
-    val inntektApiBeregningsdatoHttpClient = InntektApiInntjeningsperiodeHttpClient(config.application.dpInntektApiUrl)
+    val inntektApiBeregningsdatoHttpClient = InntektApiInntjeningsperiodeHttpClient(FuelHttpClient(config.application.dpInntektApiUrl))
 
-    val behovHttpClient = RegelApiBehovHttpClient(config.application.dpRegelApiUrl, config.auth.regelApiKey)
-    val statusHttpClient = RegelApiStatusHttpClient(config.application.dpRegelApiUrl, config.auth.regelApiKey)
-    val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(config.application.dpRegelApiUrl, config.auth.regelApiKey)
+    val regelApiHttpClient = FuelHttpClient(config.application.dpRegelApiUrl, config.auth.regelApiKey)
+
+    val behovHttpClient = RegelApiBehovHttpClient(regelApiHttpClient)
+    val statusHttpClient = RegelApiStatusHttpClient(regelApiHttpClient)
+    val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(regelApiHttpClient)
 
     val synchronousSubsumsjonClient =
         SynchronousSubsumsjonClient(behovHttpClient, statusHttpClient, subsumsjonHttpClient)
@@ -89,7 +92,7 @@ fun main() {
     )
 }
 
-fun Application.regelApiAdapter(
+internal fun Application.regelApiAdapter(
     jwtIssuer: String,
     jwkProvider: JwkProvider,
     inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient,
@@ -249,4 +252,7 @@ fun Application.regelApiAdapter(
     }
 }
 
-class RegelApiArenaAdapterException(override val message: String) : RuntimeException(message)
+class RegelApiArenaAdapterException(
+    override
+    val message: String
+) : RuntimeException(message)

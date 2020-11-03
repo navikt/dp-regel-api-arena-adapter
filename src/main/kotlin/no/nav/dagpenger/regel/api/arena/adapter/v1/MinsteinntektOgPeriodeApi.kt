@@ -14,7 +14,7 @@ import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 import no.nav.dagpenger.regel.api.internal.extractMinsteinntektOgPeriode
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 
-fun Route.MinsteinntektOgPeriodeApi(
+internal fun Route.MinsteinntektOgPeriodeApi(
     synchronousSubsumsjonClient: SynchronousSubsumsjonClient
 ) {
 

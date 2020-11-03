@@ -6,7 +6,7 @@ import io.mockk.mockk
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
 import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 
-fun Application.mockedRegelApiAdapter(
+internal fun Application.mockedRegelApiAdapter(
     jwtIssuer: String = "test issuer",
     jwkProvider: JwkProvider = mockk(),
     inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient = mockk(),

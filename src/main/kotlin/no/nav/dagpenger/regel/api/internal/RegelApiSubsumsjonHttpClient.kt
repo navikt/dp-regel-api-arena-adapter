@@ -1,26 +1,15 @@
 package no.nav.dagpenger.regel.api.internal
 
-import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.fuel.moshi.moshiDeserializerOf
 import com.github.kittinunf.result.Result
 import mu.KotlinLogging
-import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 
 val sikkerlogg = KotlinLogging.logger("tjenestekall.subsumsjon")
 
-class RegelApiSubsumsjonHttpClient(private val regelApiUrl: String, private val regelApiKey: String) {
+internal class RegelApiSubsumsjonHttpClient(private val client: FuelHttpClient) {
     fun getSubsumsjon(subsumsjonLocation: String): Subsumsjon {
-        val url = "$regelApiUrl$subsumsjonLocation"
 
-        val jsonAdapter = moshiInstance.adapter(Subsumsjon::class.java)
-
-        val (_, response, result) =
-            with(
-                url
-                    .httpGet()
-                    .apiKey(regelApiKey)
-            ) { responseObject(moshiDeserializerOf(jsonAdapter)) }
+        val (_, response, result) = client.get<Subsumsjon>(subsumsjonLocation)
 
         return when (result) {
             is Result.Failure -> throw RegelApiSubsumsjonHttpClientException(

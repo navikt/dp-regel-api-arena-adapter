@@ -4,7 +4,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 import java.time.LocalDateTime
 
-class SynchronousSubsumsjonClient(
+internal class SynchronousSubsumsjonClient(
     private val behovHttpClient: RegelApiBehovHttpClient,
     private val statusHttpClient: RegelApiStatusHttpClient,
     private val subsumsjonHttpClient: RegelApiSubsumsjonHttpClient

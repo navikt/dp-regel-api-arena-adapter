@@ -1,18 +1,15 @@
 package no.nav.dagpenger.regel.api.internal
 
-import com.github.kittinunf.fuel.httpGet
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.time.delay
 import kotlinx.coroutines.withTimeout
 import no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterException
-import no.nav.dagpenger.regel.api.arena.adapter.responseObject
 import no.nav.dagpenger.regel.api.internal.models.BehovStatus
 import no.nav.dagpenger.regel.api.internal.models.BehovStatusResponse
 import java.time.Duration
 
-class RegelApiStatusHttpClient(
-    private val regelApiUrl: String,
-    private val regelApiKey: String,
+internal class RegelApiStatusHttpClient(
+    private val client: FuelHttpClient,
     private val timeout: Duration = Duration.ofSeconds(20)
 ) {
     private val delayDuration = Duration.ofMillis(100)
@@ -21,13 +18,9 @@ class RegelApiStatusHttpClient(
 
         val timer = clientLatencyStats.labels("poll").startTimer()
         try {
-            val (_, response, result) =
-                with(
-                    statusUrl
-                        .httpGet()
-                        .apiKey(regelApiKey)
-                        .allowRedirects(false)
-                ) { responseObject<BehovStatusResponse>() }
+            val (_, response, result) = client.get<BehovStatusResponse>(statusUrl) { request ->
+                request.allowRedirects(false)
+            }
 
             return try {
                 BehovStatusPollResult(result.get().status, null)
@@ -50,10 +43,9 @@ class RegelApiStatusHttpClient(
     }
 
     suspend fun pollStatus(statusUrl: String): String {
-        val url = "$regelApiUrl$statusUrl"
         try {
             return withTimeout(timeout.toMillis()) {
-                return@withTimeout pollWithDelay(url)
+                return@withTimeout pollWithDelay(statusUrl)
             }
         } catch (e: Exception) {
             when (e) {

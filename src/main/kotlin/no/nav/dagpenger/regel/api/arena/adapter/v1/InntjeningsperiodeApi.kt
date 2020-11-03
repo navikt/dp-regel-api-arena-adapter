@@ -11,7 +11,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntjeningsperiodePara
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntjeningsperiodeResultat
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
 
-fun Route.InntjeningsperiodeApi(inntektApiberegningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient) {
+internal fun Route.InntjeningsperiodeApi(inntektApiberegningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient) {
 
     route("/inntjeningsperiode") {
         post {

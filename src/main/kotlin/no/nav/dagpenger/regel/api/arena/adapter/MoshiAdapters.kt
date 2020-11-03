@@ -72,9 +72,7 @@ class BigDecimalJsonAdapter {
 }
 
 internal fun <T : Any> moshiDeserializerOf(clazz: Class<T>) = object : ResponseDeserializable<T> {
-    override fun deserialize(content: String): T? = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
+    override fun deserialize(content: String): T? = moshiInstance
         .adapter(clazz)
         .fromJson(content)
 }

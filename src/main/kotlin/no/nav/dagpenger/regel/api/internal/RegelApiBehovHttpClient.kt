@@ -1,35 +1,27 @@
 package no.nav.dagpenger.regel.api.internal
 
-import com.github.kittinunf.fuel.httpPost
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
-import no.nav.dagpenger.regel.api.arena.adapter.responseObject
 import no.nav.dagpenger.regel.api.internal.models.BehovStatusResponse
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 import java.time.LocalDate
 
-class RegelApiBehovHttpClient(private val regelApiUrl: String, private val regelApiKey: String) {
+internal class RegelApiBehovHttpClient(private val httpClient: FuelHttpClient) {
     private val jsonAdapter = moshiInstance.adapter(BehovRequest::class.java)
 
     fun run(behovRequest: BehovRequest): String {
-        val behovUrl = "$regelApiUrl/behov"
 
         val json = jsonAdapter.toJson(behovRequest)
 
-        val (_, response, result) =
-            with(
-                behovUrl.httpPost()
-                    .apiKey(regelApiKey)
-                    .header(mapOf("Content-Type" to "application/json"))
-                    .body(json)
-            ) {
-                responseObject<BehovStatusResponse>()
-            }
+        val (_, response, result) = httpClient.post<BehovStatusResponse>("/behov") {
+            it.header("Content-Type" to "application/json")
+            it.body(json)
+        }
 
         return result.fold(
             { response.headers["Location"].first() },
             {
                 throw RegelApiBehovHttpClientException(
-                    "Failed to run behov. Response message ${response.responseMessage}. Error message: ${it.message}"
+                    "Failed to run behov. Response message ${response.responseMessage}. Error message: ${it.message}. "
                 )
             }
         )
