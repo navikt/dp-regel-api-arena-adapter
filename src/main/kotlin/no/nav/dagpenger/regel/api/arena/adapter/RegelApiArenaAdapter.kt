@@ -34,6 +34,7 @@ import no.nav.dagpenger.regel.api.Configuration
 import no.nav.dagpenger.regel.api.arena.adapter.v1.GrunnlagOgSatsApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InntjeningsperiodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InvalidInnteksperiodeException
+import no.nav.dagpenger.regel.api.arena.adapter.v1.KreverReberegningApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektOgPeriodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.NullGrunnlagException
@@ -43,6 +44,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.IllegalInntektIdExcept
 import no.nav.dagpenger.regel.api.internal.FuelHttpClient
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiBehovHttpClient
+import no.nav.dagpenger.regel.api.internal.RegelApiReberegningHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiStatusHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiSubsumsjonHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
@@ -70,6 +72,7 @@ fun main() {
     val behovHttpClient = RegelApiBehovHttpClient(regelApiHttpClient)
     val statusHttpClient = RegelApiStatusHttpClient(regelApiHttpClient)
     val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(regelApiHttpClient)
+    val reberegningHttpClient = RegelApiReberegningHttpClient(regelApiHttpClient)
 
     val synchronousSubsumsjonClient =
         SynchronousSubsumsjonClient(behovHttpClient, statusHttpClient, subsumsjonHttpClient)
@@ -80,6 +83,7 @@ fun main() {
             jwkProvider,
             inntektApiBeregningsdatoHttpClient,
             synchronousSubsumsjonClient,
+            reberegningHttpClient,
             config.application.optionalJwt
         )
     }
@@ -97,7 +101,8 @@ internal fun Application.regelApiAdapter(
     jwkProvider: JwkProvider,
     inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient,
     synchronousSubsumsjonClient: SynchronousSubsumsjonClient,
-    optionalJwt: Boolean = false
+    kreverRebergningClient: RegelApiReberegningHttpClient,
+    optionalJwt: Boolean = false,
 ) {
 
     install(DefaultHeaders)
@@ -244,6 +249,7 @@ internal fun Application.regelApiAdapter(
                 GrunnlagOgSatsApi(synchronousSubsumsjonClient)
                 MinsteinntektOgPeriodeApi(synchronousSubsumsjonClient)
                 InntjeningsperiodeApi(inntektApiBeregningsdatoHttpClient)
+                KreverReberegningApi(kreverRebergningClient)
             }
         }
 
