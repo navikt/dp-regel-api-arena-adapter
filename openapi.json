@@ -34,6 +34,10 @@
     {
       "name": "Inntjeningsperiode",
       "description": "Operasjon for å vurdere om inntektene fremdeles er gyldige for gitt beregningsdatoen."
+    },
+    {
+      "name": "Revurdering",
+      "description": "Operasjon for å avgjøre om minsteinntekt må revurderes"
     }
   ],
   "security": [
@@ -443,6 +447,91 @@
                   "inntektFeil": {
                     "$ref": "#/components/examples/hent-inntekt-feilet"
                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/revurdering": {
+      "post": {
+        "tags": [
+          "Revurdering"
+        ],
+        "summary": "Sjekk om minsteinntekt må revurderes",
+        "requestBody": {
+          "description": "Hvilke parametere som skal brukes for sjekken",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RevurderingParametre"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RevurderingResultat"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid input - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "400": {
+                    "$ref": "#/components/examples/400"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Uautorisert - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "401": {
+                    "$ref": "#/components/examples/401"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Ikke tilgang - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
+                },
+                "examples": {
+                  "403": {
+                    "$ref": "#/components/examples/403"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "System error - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HttpProblem"
                 }
               }
             }
@@ -1035,6 +1124,47 @@
           }
         }
       },
+      "RevurderingParametre": {
+        "type": "object",
+        "required": [
+          "subsumsjonIder",
+          "beregningsdato"
+        ],
+        "properties": {
+          "subsumsjonIder": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Liste av subsumsjonIder for sjekk om revurdering",
+            "example": [
+              "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+              "01ARZ3NDEKTSV4RRFFQ69G5FAW"
+            ]
+          },
+          "beregningsdato": {
+            "type": "string",
+            "description": "Dato sjekken skal utføres på bakgrunn av.",
+            "example": "2019-01-11"
+          }
+        }
+      },
+      "RevurderingResultat": {
+        "type": "object",
+        "required": [
+          "revurdering"
+        ],
+        "properties": {
+          "reberegning": {
+            "type": "boolean",
+            "description": "Indikerer om subsumsjonene må revurderes etter ny beregningsdato.",
+            "example": true
+          },
+          "parametere": {
+            "$ref": "#/components/schemas/RevurderingParametre"
+          }
+        }
+      },
       "Sats": {
         "type": "object",
         "required": [
@@ -1297,6 +1427,20 @@
           "type": "urn:dp:error:regelberegning:grunnlag:0",
           "title": "Grunnlag er 0",
           "status": 500
+        }
+      },
+      "revurdering-minsteinntekt-error": {
+        "summary": "Feil ved sjekk om minsteinntekt må revurderes",
+        "value": {
+          "type": "urn:dp:error:revurdering:minsteinntekt",
+          "title": "Feil ved sjekk om minsteinntekt må revurderes",
+          "status": 500
+        }
+      },
+      "revurdering-minsteinntekt": {
+        "summary": "Minsteinntekt må revurders",
+        "value": {
+          "nyVurdering": true
         }
       }
     },
