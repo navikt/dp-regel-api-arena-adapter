@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import kotlin.test.assertTrue
 
-class RegelApiReberegningHttpClientTest {
+class RegelApiNyVurderingHttpClientTest {
     companion object {
         val server: WireMockServer = WireMockServer(WireMockConfiguration.options().dynamicPort())
 
@@ -34,20 +34,20 @@ class RegelApiReberegningHttpClientTest {
     }
 
     @Test
-    fun `Should get krever-reberegning-resultat`() {
+    fun `Should get minsteinntekt vurdering`() {
 
         val equalToPattern = EqualToPattern("regelApiKey")
         WireMock.stubFor(
-            WireMock.post(WireMock.urlEqualTo("//lovverk/krever-reberegning"))
+            WireMock.post(WireMock.urlEqualTo("//lovverk/vurdering/minsteinntekt"))
                 .withHeader("X-API-KEY", equalToPattern)
                 .willReturn(
                     WireMock.aResponse()
-                        .withBody("""{"reberegning": true}""")
+                        .withBody("""{"nyVurdering": true}""")
                 )
         )
 
-        val client = RegelApiReberegningHttpClient(FuelHttpClient(server.url(""), equalToPattern.value))
-        val response = client.kreverReberegning(listOf("123"), LocalDate.of(2020, 1, 13))
+        val client = RegelApiNyVurderingHttpClient(FuelHttpClient(server.url(""), equalToPattern.value))
+        val response = client.kreverNyVurdering(listOf("123"), LocalDate.of(2020, 1, 13))
         assertTrue(response)
     }
 }

@@ -13,35 +13,35 @@ import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import no.nav.dagpenger.regel.api.arena.adapter.mockedRegelApiAdapter
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
-import no.nav.dagpenger.regel.api.internal.RegelApiReberegningHttpClient
-import no.nav.dagpenger.regel.api.internal.RegelApiReberegningSjekkException
+import no.nav.dagpenger.regel.api.internal.RegelApiMinsteinntektNyVurderingException
+import no.nav.dagpenger.regel.api.internal.RegelApiNyVurderingHttpClient
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
-class KreverReberegningApiTest {
+class KreverRevurderingApiTest {
 
     private val jwkStub = JwtStub()
     private val token = jwkStub.createTokenFor("systembrukeren")
 
-    private val kreverReberegningPath = "/v1/lovverk/krever-reberegning"
+    private val kreverReberegningPath = "/v1/lovverk/vurdering/minsteinntekt"
     private val subsumsjonIder = listOf(ULID().nextULID(), ULID().nextULID())
     private val ukjentSubsumsjonId = ULID().nextULID()
 
     private val beregningsdato = LocalDate.of(2020, 1, 13)
 
-    private val reberegningMockClient = mockk<RegelApiReberegningHttpClient>().also {
-        every { it.kreverReberegning(subsumsjonIder = subsumsjonIder, beregningsdato) } returns true
-        every { it.kreverReberegning(subsumsjonIder = listOf(ukjentSubsumsjonId), beregningsdato) } throws RegelApiReberegningSjekkException("Test exception")
+    private val reberegningMockClient = mockk<RegelApiNyVurderingHttpClient>().also {
+        every { it.kreverNyVurdering(subsumsjonIder = subsumsjonIder, beregningsdato) } returns true
+        every { it.kreverNyVurdering(subsumsjonIder = listOf(ukjentSubsumsjonId), beregningsdato) } throws RegelApiMinsteinntektNyVurderingException("Test exception")
     }
 
     @Test
-    fun `KreverReberergning API specification test - Should match json field names and formats`() {
+    fun `Vurdering av minsteinntekt API specification test - Should match json field names and formats`() {
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                reberegningHttpClient = reberegningMockClient
+                nyVurderingHttpClient = reberegningMockClient
             )
         }) {
             handleRequest(HttpMethod.Post, kreverReberegningPath) {
@@ -63,12 +63,12 @@ class KreverReberegningApiTest {
     }
 
     @Test
-    fun `Feil ved sjekk av krav om reberegning `() {
+    fun `Feil ved sjekk av krav om revurdeing av minsteinntekt `() {
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                reberegningHttpClient = reberegningMockClient
+                nyVurderingHttpClient = reberegningMockClient
             )
         }) {
             handleRequest(HttpMethod.Post, kreverReberegningPath) {
@@ -85,8 +85,8 @@ class KreverReberegningApiTest {
             }.apply {
                 assertEquals(HttpStatusCode.InternalServerError, response.status())
                 val problem = moshiInstance.adapter(Problem::class.java).fromJson(response.content!!)
-                assertEquals("Feil ved sjekk om minsteinntekt må reberegnes", problem?.title)
-                assertEquals("urn:dp:error:reberegning:minsteinntekt", problem?.type.toString())
+                assertEquals("Feil ved sjekk om minsteinntekt må revurderes", problem?.title)
+                assertEquals("urn:dp:error:revurdering:minsteinntekt", problem?.type.toString())
                 assertEquals(500, problem?.status)
             }
         }

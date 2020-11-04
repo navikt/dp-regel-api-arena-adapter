@@ -34,18 +34,18 @@ import no.nav.dagpenger.regel.api.Configuration
 import no.nav.dagpenger.regel.api.arena.adapter.v1.GrunnlagOgSatsApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InntjeningsperiodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InvalidInnteksperiodeException
-import no.nav.dagpenger.regel.api.arena.adapter.v1.KreverReberegningApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektOgPeriodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.NullGrunnlagException
+import no.nav.dagpenger.regel.api.arena.adapter.v1.NyVurderingApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
 import no.nav.dagpenger.regel.api.arena.adapter.v1.UgyldigParameterkombinasjonException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.IllegalInntektIdException
 import no.nav.dagpenger.regel.api.internal.FuelHttpClient
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiBehovHttpClient
-import no.nav.dagpenger.regel.api.internal.RegelApiReberegningHttpClient
-import no.nav.dagpenger.regel.api.internal.RegelApiReberegningSjekkException
+import no.nav.dagpenger.regel.api.internal.RegelApiMinsteinntektNyVurderingException
+import no.nav.dagpenger.regel.api.internal.RegelApiNyVurderingHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiStatusHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiSubsumsjonHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
@@ -73,7 +73,7 @@ fun main() {
     val behovHttpClient = RegelApiBehovHttpClient(regelApiHttpClient)
     val statusHttpClient = RegelApiStatusHttpClient(regelApiHttpClient)
     val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(regelApiHttpClient)
-    val reberegningHttpClient = RegelApiReberegningHttpClient(regelApiHttpClient)
+    val regelApiNyVurderingHttpClient = RegelApiNyVurderingHttpClient(regelApiHttpClient)
 
     val synchronousSubsumsjonClient =
         SynchronousSubsumsjonClient(behovHttpClient, statusHttpClient, subsumsjonHttpClient)
@@ -84,7 +84,7 @@ fun main() {
             jwkProvider,
             inntektApiBeregningsdatoHttpClient,
             synchronousSubsumsjonClient,
-            reberegningHttpClient,
+            regelApiNyVurderingHttpClient,
             config.application.optionalJwt
         )
     }
@@ -102,7 +102,7 @@ internal fun Application.regelApiAdapter(
     jwkProvider: JwkProvider,
     inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient,
     synchronousSubsumsjonClient: SynchronousSubsumsjonClient,
-    kreverRebergningClient: RegelApiReberegningHttpClient,
+    kreverRebergningClient: RegelApiNyVurderingHttpClient,
     optionalJwt: Boolean = false,
 ) {
 
@@ -198,12 +198,12 @@ internal fun Application.regelApiAdapter(
                 LOGGER.error("Problem ved beregning av subsumsjon", cause)
             }
         }
-        exception<RegelApiReberegningSjekkException> { cause ->
-            LOGGER.error("Kan ikke fastslå om minsteinntekt må reberegnes", cause)
+        exception<RegelApiMinsteinntektNyVurderingException> { cause ->
+            LOGGER.error("Kan ikke fastslå om minsteinntekt må revurderes", cause)
             val status = HttpStatusCode.InternalServerError
             val problem = Problem(
-                type = URI.create("urn:dp:error:reberegning:minsteinntekt"),
-                title = "Feil ved sjekk om minsteinntekt må reberegnes",
+                type = URI.create("urn:dp:error:revurdering:minsteinntekt"),
+                title = "Feil ved sjekk om minsteinntekt må revurderes",
                 detail = cause.message,
                 status = status.value
             )
@@ -261,7 +261,7 @@ internal fun Application.regelApiAdapter(
                 GrunnlagOgSatsApi(synchronousSubsumsjonClient)
                 MinsteinntektOgPeriodeApi(synchronousSubsumsjonClient)
                 InntjeningsperiodeApi(inntektApiBeregningsdatoHttpClient)
-                KreverReberegningApi(kreverRebergningClient)
+                NyVurderingApi(kreverRebergningClient)
             }
         }
 

@@ -7,15 +7,15 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.post
 import io.ktor.routing.route
-import no.nav.dagpenger.regel.api.internal.RegelApiReberegningHttpClient
+import no.nav.dagpenger.regel.api.internal.RegelApiNyVurderingHttpClient
 import java.time.LocalDate
 
-internal fun Route.KreverReberegningApi(reberegningHttpClient: RegelApiReberegningHttpClient) {
+internal fun Route.NyVurderingApi(nyVurderingHttpClient: RegelApiNyVurderingHttpClient) {
     route("/lovverk") {
-        post("/krever-reberegning") {
+        post("/vurdering/minsteinntekt") {
             val parametere = call.receive<KreverReberegningParametere>()
 
-            val resultat = reberegningHttpClient.kreverReberegning(parametere.subsumsjonIder, parametere.beregningsdato)
+            val resultat = nyVurderingHttpClient.kreverNyVurdering(parametere.subsumsjonIder, parametere.beregningsdato)
             call.respond(HttpStatusCode.OK, """{"reberegning": $resultat}""")
         }
     }
