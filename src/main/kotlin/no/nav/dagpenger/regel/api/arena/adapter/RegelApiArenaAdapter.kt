@@ -45,6 +45,7 @@ import no.nav.dagpenger.regel.api.internal.FuelHttpClient
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiBehovHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiReberegningHttpClient
+import no.nav.dagpenger.regel.api.internal.RegelApiReberegningSjekkException
 import no.nav.dagpenger.regel.api.internal.RegelApiStatusHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiSubsumsjonHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
@@ -196,6 +197,17 @@ internal fun Application.regelApiAdapter(
             call.respond(HttpStatusCode.BadGateway, cause.problem).also {
                 LOGGER.error("Problem ved beregning av subsumsjon", cause)
             }
+        }
+        exception<RegelApiReberegningSjekkException> { cause ->
+            LOGGER.error("Kan ikke fastslå om minsteinntekt må reberegnes", cause)
+            val status = HttpStatusCode.InternalServerError
+            val problem = Problem(
+                type = URI.create("urn:dp:error:reberegning:minsteinntekt"),
+                title = "Feil ved sjekk om minsteinntekt må reberegnes",
+                detail = cause.message,
+                status = status.value
+            )
+            call.respond(status, problem)
         }
         exception<NegativtGrunnlagException> { cause ->
             LOGGER.error("Negativt grunnlag", cause)

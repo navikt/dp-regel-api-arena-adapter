@@ -18,7 +18,7 @@ internal class RegelApiReberegningHttpClient(private val httpClient: FuelHttpCli
         return result.fold(
             { result.get().reberegning },
             {
-                throw RegelApiReberegningHttpClientException(
+                throw RegelApiReberegningSjekkException(
                     "Failed to check reberegning Response message ${response.responseMessage}. Error message: ${it.message}. "
                 )
             }
@@ -29,4 +29,4 @@ internal class RegelApiReberegningHttpClient(private val httpClient: FuelHttpCli
     private data class KreverReberegningParametre(val beregningsdato: LocalDate, val subsumsjonIder: List<String>)
 }
 
-class RegelApiReberegningHttpClientException(override val message: String) : RuntimeException()
+internal class RegelApiReberegningSjekkException(override val message: String) : RuntimeException()
