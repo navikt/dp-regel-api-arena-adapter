@@ -43,3 +43,4 @@ Validates the spec.
 
 #### `npm run gh-pages`
 Deploys docs to GitHub Pages. You don't need to run it manually if you have Travis CI configured.
+Check [gh pages](https://navikt.github.io/dp-regel-api-arena-adapter/). 
