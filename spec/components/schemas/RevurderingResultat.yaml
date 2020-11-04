@@ -1,0 +1,11 @@
+type: object
+required:
+  - revurdering
+properties:
+  reberegning:
+    type: boolean
+    description: >-
+      Indikerer om subsumsjonene må revurderes etter ny beregningsdato.
+    example: true
+  parametere:
+    $ref: '#/components/schemas/RevurderingParametre'

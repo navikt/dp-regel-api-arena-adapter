@@ -22,7 +22,10 @@ tags:
     description: >-
       Operasjon for å vurdere om inntektene fremdeles er gyldige for gitt
       beregningsdatoen.
+  - name: Revurdering
+    description: >-
+      Operasjon for å avgjøre om minsteinntekt må revurderes
 security:
-  - stsTokenAuth: []
+  - stsTokenAuth: [ ]
   - stsOIDC:
       - openid

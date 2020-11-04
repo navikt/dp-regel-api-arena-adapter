@@ -1,0 +1,5 @@
+summary: Feil ved sjekk om minsteinntekt må revurderes
+value:
+ type: 'urn:dp:error:revurdering:minsteinntekt'
+ title: Feil ved sjekk om minsteinntekt må revurderes
+ status: 500

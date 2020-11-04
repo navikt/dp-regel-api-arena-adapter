@@ -1,0 +1,16 @@
+type: object
+required:
+  - subsumsjonIder
+  - beregningsdato
+properties:
+  subsumsjonIder:
+    type: array
+    items:
+      type: string
+    description: Liste av subsumsjonIder for sjekk om revurdering
+    example: [ "01ARZ3NDEKTSV4RRFFQ69G5FAV", "01ARZ3NDEKTSV4RRFFQ69G5FAW" ]
+  beregningsdato:
+    type: string
+    description: >-
+      Dato sjekken skal utføres på bakgrunn av.
+    example: '2019-01-11'
