@@ -11,7 +11,8 @@ data class Subsumsjon(
     val minsteinntektResultat: MinsteinntektResultat?,
     val periodeResultat: PeriodeResultat?,
     val satsResultat: SatsResultat?,
-    val problem: Problem?
+    val problem: Problem?,
+    val requestId: String? = null,
 )
 
 data class GrunnlagResultat(
@@ -23,9 +24,7 @@ data class GrunnlagResultat(
     val harAvkortet: Boolean,
     val beregningsregel: String,
     val grunnlagInntektsPerioder: List<Inntekt>?
-
 ) {
-
     companion object {
         private val zero = BigDecimal(0)
     }

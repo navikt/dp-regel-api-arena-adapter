@@ -7,9 +7,12 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.post
 import io.ktor.routing.route
+import mu.KotlinLogging
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntjeningsperiodeParametre
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntjeningsperiodeResultat
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
+
+private val sikkerlogg = KotlinLogging.logger("tjenestekall.grunnlagOgSatsApi")
 
 internal fun Route.InntjeningsperiodeApi(inntektApiberegningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient) {
 

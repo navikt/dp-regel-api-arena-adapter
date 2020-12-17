@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.api.internal
 
+import de.huxhorn.sulky.ulid.ULID
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.internal.models.BehovStatusResponse
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
@@ -28,6 +29,8 @@ internal class RegelApiBehovHttpClient(private val httpClient: FuelHttpClient) {
     }
 }
 
+private val ulid = ULID()
+
 data class BehovRequest(
     val aktorId: String,
     val vedtakId: Int,
@@ -38,7 +41,9 @@ data class BehovRequest(
     val manueltGrunnlag: Int? = null,
     val antallBarn: Int? = null,
     val inntektsId: String? = null,
-    val lærling: Boolean? = null
-)
+    val lærling: Boolean? = null,
+) {
+    val requestId: String = ulid.nextULID()
+}
 
 class RegelApiBehovHttpClientException(override val message: String) : RuntimeException(message)

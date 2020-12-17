@@ -88,7 +88,6 @@ dependencies {
     testImplementation(Mockk.mockk)
 
     testRuntimeOnly(Junit5.engine)
-    testRuntimeOnly(Junit5.vintageEngine)
 }
 
 spotless {

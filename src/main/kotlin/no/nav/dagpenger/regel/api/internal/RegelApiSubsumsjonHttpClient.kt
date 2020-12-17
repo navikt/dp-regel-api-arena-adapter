@@ -2,9 +2,10 @@ package no.nav.dagpenger.regel.api.internal
 
 import com.github.kittinunf.result.Result
 import mu.KotlinLogging
+import mu.withLoggingContext
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 
-val sikkerlogg = KotlinLogging.logger("tjenestekall.subsumsjon")
+private val sikkerlogg = KotlinLogging.logger("tjenestekall.subsumsjon")
 
 internal class RegelApiSubsumsjonHttpClient(private val client: FuelHttpClient) {
     fun getSubsumsjon(subsumsjonLocation: String): Subsumsjon {
@@ -16,8 +17,17 @@ internal class RegelApiSubsumsjonHttpClient(private val client: FuelHttpClient) 
                 "Failed to fetch subsumsjon. Response message: ${response.responseMessage}. Error message: ${result.error.message}"
             )
             is Result.Success -> {
-                sikkerlogg.info { "Fikk svar på subsumsjon: ${result.get()}" }
-                result.get()
+                result.get().also {
+                    withLoggingContext(
+                        "requestId" to it.requestId.toString(),
+                        "behovId" to it.behovId,
+                        "aktorId" to it.faktum.aktorId,
+                        "vedtakId" to it.faktum.vedtakId.toString(),
+                        "inntektsId" to it.faktum.inntektsId.toString(),
+                    ) {
+                        sikkerlogg.info { "Fikk svar på subsumsjon: $it" }
+                    }
+                }
             }
         }
     }

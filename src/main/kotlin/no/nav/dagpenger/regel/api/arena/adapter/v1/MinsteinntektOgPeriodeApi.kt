@@ -7,12 +7,16 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.post
 import io.ktor.routing.route
+import mu.KotlinLogging
+import mu.withLoggingContext
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
 import no.nav.dagpenger.regel.api.internal.BehovRequest
 import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 import no.nav.dagpenger.regel.api.internal.extractMinsteinntektOgPeriode
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
+
+private val sikkerlogg = KotlinLogging.logger("tjenestekall.minsteinntektOgPeriodeApi")
 
 internal fun Route.MinsteinntektOgPeriodeApi(
     synchronousSubsumsjonClient: SynchronousSubsumsjonClient
@@ -59,5 +63,9 @@ fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequ
                 sisteMåned = it.sisteMaaned
             )
         }
-    )
+    ).also {
+        withLoggingContext("requestId" to it.requestId) {
+            sikkerlogg.info { "Lager behov for ${parametere::class.java.simpleName}" }
+        }
+    }
 }
