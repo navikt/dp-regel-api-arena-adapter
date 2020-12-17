@@ -73,7 +73,7 @@ fun behovFromParametere(parametere: GrunnlagOgSatsParametere): BehovRequest {
         lærling = parametere.oppfyllerKravTilLaerling
     ).also {
         withLoggingContext("requestId" to it.requestId) {
-            sikkerlogg.info { "Lager behov for ${parametere::class.java.simpleName}" }
+            sikkerlogg.info { "Lager behov for $parametere" }
         }
     }
 }
@@ -91,7 +91,7 @@ fun behovFromParametere(parametere: GrunnlagOgSatsReberegningParametere): BehovR
         lærling = parametere.oppfyllerKravTilLaerling
     ).also {
         withLoggingContext("requestId" to it.requestId) {
-            sikkerlogg.info { "Lager behov for ${parametere::class.java.simpleName}" }
+            sikkerlogg.info { "Lager behov for $parametere" }
         }
     }
 }

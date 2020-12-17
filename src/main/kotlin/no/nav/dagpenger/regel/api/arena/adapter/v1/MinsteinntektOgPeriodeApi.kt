@@ -65,7 +65,7 @@ fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequ
         }
     ).also {
         withLoggingContext("requestId" to it.requestId) {
-            sikkerlogg.info { "Lager behov for ${parametere::class.java.simpleName}" }
+            sikkerlogg.info { "Lager behov for $parametere" }
         }
     }
 }
