@@ -7,6 +7,8 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.post
 import io.ktor.routing.route
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import mu.withLoggingContext
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeParametere
@@ -24,16 +26,21 @@ internal fun Route.MinsteinntektOgPeriodeApi(
 
     route("/minsteinntekt") {
         post {
-            val parametere = call.receive<MinsteinntektOgPeriodeParametere>()
+            withContext(Dispatchers.IO) {
+                val parametere = call.receive<MinsteinntektOgPeriodeParametere>()
 
-            parametere.validate()
+                parametere.validate()
 
-            val behovRequest = behovFromParametere(parametere)
+                val behovRequest = behovFromParametere(parametere)
 
-            val minsteinntektOgPeriodeSubsumsjon: MinsteinntektOgPeriodeSubsumsjon =
-                synchronousSubsumsjonClient.getSubsumsjonSynchronously(behovRequest, ::extractMinsteinntektOgPeriode)
+                val minsteinntektOgPeriodeSubsumsjon: MinsteinntektOgPeriodeSubsumsjon =
+                    synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                        behovRequest,
+                        ::extractMinsteinntektOgPeriode
+                    )
 
-            call.respond(HttpStatusCode.OK, minsteinntektOgPeriodeSubsumsjon)
+                call.respond(HttpStatusCode.OK, minsteinntektOgPeriodeSubsumsjon)
+            }
         }
     }
 }

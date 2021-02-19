@@ -7,6 +7,8 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.post
 import io.ktor.routing.route
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntjeningsperiodeParametre
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntjeningsperiodeResultat
@@ -18,27 +20,29 @@ internal fun Route.InntjeningsperiodeApi(inntektApiberegningsdatoHttpClient: Inn
 
     route("/inntjeningsperiode") {
         post {
-            val parametere = call.receive<InntjeningsperiodeParametre>()
+            withContext(Dispatchers.IO) {
+                val parametere = call.receive<InntjeningsperiodeParametre>()
 
-            val parametereInternal = no.nav.dagpenger.regel.api.internal.models.InntjeningsperiodeParametre(
-                parametere.aktorId,
-                parametere.vedtakId,
-                parametere.beregningsdato,
-                parametere.inntektsId
-            )
-            val resultatInternal = inntektApiberegningsdatoHttpClient.getInntjeningsperiode(parametereInternal)
-
-            val resultat = InntjeningsperiodeResultat(
-                resultatInternal.sammeInntjeningsPeriode,
-                InntjeningsperiodeParametre(
-                    resultatInternal.parametere.aktorId,
-                    resultatInternal.parametere.vedtakId,
-                    resultatInternal.parametere.beregningsdato,
-                    resultatInternal.parametere.inntektsId
+                val parametereInternal = no.nav.dagpenger.regel.api.internal.models.InntjeningsperiodeParametre(
+                    parametere.aktorId,
+                    parametere.vedtakId,
+                    parametere.beregningsdato,
+                    parametere.inntektsId
                 )
-            )
+                val resultatInternal = inntektApiberegningsdatoHttpClient.getInntjeningsperiode(parametereInternal)
 
-            call.respond(HttpStatusCode.OK, resultat)
+                val resultat = InntjeningsperiodeResultat(
+                    resultatInternal.sammeInntjeningsPeriode,
+                    InntjeningsperiodeParametre(
+                        resultatInternal.parametere.aktorId,
+                        resultatInternal.parametere.vedtakId,
+                        resultatInternal.parametere.beregningsdato,
+                        resultatInternal.parametere.inntektsId
+                    )
+                )
+
+                call.respond(HttpStatusCode.OK, resultat)
+            }
         }
     }
 }

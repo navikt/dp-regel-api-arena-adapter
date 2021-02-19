@@ -8,6 +8,8 @@ import io.ktor.response.respond
 import io.ktor.routing.Route
 import io.ktor.routing.post
 import io.ktor.routing.route
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import mu.KotlinLogging
 import mu.withLoggingContext
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsParametere
@@ -25,34 +27,38 @@ internal fun Route.GrunnlagOgSatsApi(
 
     route("/dagpengegrunnlag") {
         post {
-            val parametere = call.receive<GrunnlagOgSatsParametere>()
+            withContext(Dispatchers.IO) {
+                val parametere = call.receive<GrunnlagOgSatsParametere>()
 
-            parametere.validate()
+                parametere.validate()
 
-            val behovRequest = behovFromParametere(parametere)
+                val behovRequest = behovFromParametere(parametere)
 
-            val grunnlagOgSatsSubsumsjon =
-                synchronousSubsumsjonClient.getSubsumsjonSynchronously(behovRequest, ::extractGrunnlagOgSats)
+                val grunnlagOgSatsSubsumsjon =
+                    synchronousSubsumsjonClient.getSubsumsjonSynchronously(behovRequest, ::extractGrunnlagOgSats)
 
-            call.respond(HttpStatusCode.OK, grunnlagOgSatsSubsumsjon)
+                call.respond(HttpStatusCode.OK, grunnlagOgSatsSubsumsjon)
+            }
         }
     }
 
     route("/dagpengegrunnlag-reberegning") {
         post {
-            val parametere = call.receive<GrunnlagOgSatsReberegningParametere>()
-            try {
-                ULID.parseULID(parametere.inntektsId)
-            } catch (e: IllegalArgumentException) {
-                throw IllegalInntektIdException(e)
+            withContext(Dispatchers.IO) {
+                val parametere = call.receive<GrunnlagOgSatsReberegningParametere>()
+                try {
+                    ULID.parseULID(parametere.inntektsId)
+                } catch (e: IllegalArgumentException) {
+                    throw IllegalInntektIdException(e)
+                }
+
+                val behovRequest = behovFromParametere(parametere)
+
+                val grunnlagOgSatsSubsumsjon =
+                    synchronousSubsumsjonClient.getSubsumsjonSynchronously(behovRequest, ::extractGrunnlagOgSats)
+
+                call.respond(HttpStatusCode.OK, grunnlagOgSatsSubsumsjon)
             }
-
-            val behovRequest = behovFromParametere(parametere)
-
-            val grunnlagOgSatsSubsumsjon =
-                synchronousSubsumsjonClient.getSubsumsjonSynchronously(behovRequest, ::extractGrunnlagOgSats)
-
-            call.respond(HttpStatusCode.OK, grunnlagOgSatsSubsumsjon)
         }
     }
 }
