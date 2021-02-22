@@ -55,7 +55,8 @@ class GrunnlagOgSatsApiTest {
             oppfyllerKravTilFangstOgFisk = false,
             grunnlag = 3000,
             antallBarn = 3,
-            oppfyllerKravTilLaerling = false
+            oppfyllerKravTilLaerling = false,
+            virkningstidspunkt = LocalDate.of(2020, 6, 14)
         )
 
         val expectedBehovRequest = BehovRequest(
@@ -569,6 +570,45 @@ class GrunnlagOgSatsApiTest {
                 assertEquals("Uautorisert", problem?.title)
                 assertEquals("urn:dp:error:uautorisert", problem?.type.toString())
                 assertEquals(401, problem?.status)
+            }
+        }
+    }
+
+    @Test
+    fun `med virkningstidspunkt og beregningsdato`() {
+        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+
+        coEvery {
+            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                any(),
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+            )
+        } returns grunnlagOgSatsSubsumsjon()
+
+        withTestApplication({
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider(),
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+            )
+        }) {
+            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+                setBody(
+                    """
+                         {
+                      "aktorId": "1234",
+                      "vedtakId": 5678,
+                      "beregningsdato": "2019-02-27",
+                      "harAvtjentVerneplikt": false,
+                      "oppfyllerKravTilFangstOgFisk": false,
+                      "virkningstidspunkt": "2020-03-28"
+                    }
+
+                    """.trimIndent()
+                )
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
             }
         }
     }
