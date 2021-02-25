@@ -16,7 +16,7 @@ properties:
   beregningsdato:
     type: string
     description: >-
-      Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt
+      Dato beregning skal utføres på bakgrunn av. Regelverk og inntekt på aktuelt tidspunkt
       skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
     example: '2019-01-11'
   harAvtjentVerneplikt:
@@ -43,3 +43,7 @@ properties:
     description: >-
       Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen –
       unntak fra folketrygdloven § 4-12 for lærlinger
+  regelverksdato:
+    type: string
+    description: Dato for hvilket regelverk som skal brukes i utregning. Defaulter til samme dato som beregningsdato
+    example: '2019-01-11'

@@ -56,7 +56,7 @@ class GrunnlagOgSatsApiTest {
             grunnlag = 3000,
             antallBarn = 3,
             oppfyllerKravTilLaerling = false,
-            virkningstidspunkt = LocalDate.of(2020, 6, 14)
+            regelverksdato = LocalDate.of(2020, 6, 14)
         )
 
         val expectedBehovRequest = BehovRequest(
@@ -575,7 +575,7 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
-    fun `med virkningstidspunkt og beregningsdato`() {
+    fun `med regelverk- og beregningsdato`() {
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         coEvery {
@@ -602,7 +602,7 @@ class GrunnlagOgSatsApiTest {
                       "beregningsdato": "2019-02-27",
                       "harAvtjentVerneplikt": false,
                       "oppfyllerKravTilFangstOgFisk": false,
-                      "virkningstidspunkt": "2020-03-28"
+                      "regelverksdato": "2020-03-28"
                     }
 
                     """.trimIndent()

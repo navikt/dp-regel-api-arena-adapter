@@ -35,3 +35,7 @@ properties:
     description: >-
       Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for
       lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6
+  regelverksdato:
+    type: string
+    description: Dato for hvilket regelverk som skal brukes i utregning. Defaulter til samme dato som beregningsdato
+    example: '2019-01-11'

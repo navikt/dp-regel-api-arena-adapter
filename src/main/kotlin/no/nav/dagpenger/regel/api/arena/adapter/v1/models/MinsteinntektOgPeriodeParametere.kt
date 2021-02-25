@@ -10,5 +10,5 @@ data class MinsteinntektOgPeriodeParametere(
     val oppfyllerKravTilLaerling: Boolean = false,
     val oppfyllerKravTilFangstOgFisk: Boolean? = false,
     val bruktInntektsPeriode: InntektsPeriode? = null,
-    val virkningstidspunkt: LocalDate = beregningsdato
+    val regelverksdato: LocalDate = beregningsdato
 )

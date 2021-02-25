@@ -50,7 +50,7 @@ class MinsteinntektOgPeriodeApiTest {
             oppfyllerKravTilFangstOgFisk = false,
             bruktInntektsPeriode = InntektsPeriode(YearMonth.of(2019, 4), YearMonth.of(2019, 7)),
             oppfyllerKravTilLaerling = false,
-            virkningstidspunkt = LocalDate.of(2020, 6, 14)
+            regelverksdato = LocalDate.of(2020, 6, 14)
         )
 
         val expectedBehovRequest = BehovRequest(
@@ -416,7 +416,7 @@ class MinsteinntektOgPeriodeApiTest {
     }
 
     @Test
-    fun `med virkningstidspunkt og beregningsdato`() {
+    fun `med regelverks- og beregningsdato`() {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
@@ -445,7 +445,7 @@ class MinsteinntektOgPeriodeApiTest {
                       "beregningsdato": "2019-02-27",
                       "harAvtjentVerneplikt": false,
                       "oppfyllerKravTilFangstOgFisk": false,
-                      "virkningstidspunkt": "2020-03-28"
+                      "regelverksdato": "2020-03-28"
                     }
                     """.trimIndent()
                 )
