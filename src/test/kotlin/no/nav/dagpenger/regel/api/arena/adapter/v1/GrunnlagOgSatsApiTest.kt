@@ -46,7 +46,7 @@ class GrunnlagOgSatsApiTest {
     private val token = jwkStub.createTokenFor("systembrukeren")
 
     @Test
-    fun ` Map parameters to RehovRequest`() {
+    fun ` Map parameters to BehovRequest`() {
         val parametere = GrunnlagOgSatsParametere(
             aktorId = "12345",
             vedtakId = 123,
@@ -55,9 +55,9 @@ class GrunnlagOgSatsApiTest {
             oppfyllerKravTilFangstOgFisk = false,
             grunnlag = 3000,
             antallBarn = 3,
-            oppfyllerKravTilLaerling = false,
-            regelverksdato = LocalDate.of(2020, 6, 14)
+            oppfyllerKravTilLaerling = false
         )
+        val parametreMedRegelverksdato = parametere.copy(regelverksdato = LocalDate.of(2020, 6, 14))
 
         val expectedBehovRequest = BehovRequest(
             aktorId = "12345",
@@ -67,12 +67,13 @@ class GrunnlagOgSatsApiTest {
             oppfyllerKravTilFangstOgFisk = false,
             manueltGrunnlag = 3000,
             antallBarn = 3,
-            lærling = false
+            lærling = false,
+            regelverksdato = LocalDate.of(2019, 5, 13)
         )
+        val expectedBehovRequestMedRegelverksdato = expectedBehovRequest.copy(regelverksdato = LocalDate.of(2020, 6, 14))
 
-        val result = behovFromParametere(parametere)
-
-        assertEquals(expectedBehovRequest, result)
+        assertEquals(expectedBehovRequest, behovFromParametere(parametere))
+        assertEquals(expectedBehovRequestMedRegelverksdato, behovFromParametere(parametreMedRegelverksdato))
     }
 
     @Test

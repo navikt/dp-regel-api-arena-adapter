@@ -76,7 +76,8 @@ fun behovFromParametere(parametere: GrunnlagOgSatsParametere): BehovRequest {
         oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,
         manueltGrunnlag = parametere.grunnlag,
         antallBarn = parametere.antallBarn,
-        lærling = parametere.oppfyllerKravTilLaerling
+        lærling = parametere.oppfyllerKravTilLaerling,
+        regelverksdato = parametere.regelverksdato
     ).also {
         withLoggingContext("requestId" to it.requestId) {
             sikkerlogg.info { "Lager behov for $parametere" }
