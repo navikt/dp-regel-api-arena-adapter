@@ -31,3 +31,9 @@ spec:
     enabled: true
   vault:
     enabled: true
+  azure:
+    application:
+      enabled: true
+  # required for on-premises only
+  webproxy: true
+

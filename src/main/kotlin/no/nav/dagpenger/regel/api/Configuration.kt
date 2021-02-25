@@ -33,9 +33,9 @@ private val devProperties = ConfigurationMap(
     mapOf(
         "application.profile" to "DEV",
         "application.httpPort" to "8093",
-        "dp.regel.api.url" to "http://dp-regel-api",
-        "dp.inntekt.api.url" to "http://dp-inntekt-api.teamdagpenger",
-        "jwks.url" to "http://security-token-service.default/rest/v1/sts/jwks",
+        "dp.regel.api.url" to "http://dp-regel-api.teamdagpenger.svc.nais.local",
+        "dp.inntekt.api.url" to "http://dp-inntekt-api.teamdagpenger.svc.nais.local",
+        "jwks.url" to "http://security-token-service.default.svc.nais.local/rest/v1/sts/jwks",
         "jwks.issuer" to "https://security-token-service.nais.preprod.local",
         "optional.jwt" to "false",
         "unleash.url" to "https://unleash.nais.preprod.local/api/"
@@ -45,9 +45,9 @@ private val prodProperties = ConfigurationMap(
     mapOf(
         "application.profile" to "PROD",
         "application.httpPort" to "8093",
-        "dp.regel.api.url" to "http://dp-regel-api",
-        "dp.inntekt.api.url" to "http://dp-inntekt-api.teamdagpenger",
-        "jwks.url" to "http://security-token-service.default/rest/v1/sts/jwks",
+        "dp.regel.api.url" to "http://dp-regel-api.teamdagpenger.svc.nais.local",
+        "dp.inntekt.api.url" to "http://dp-inntekt-api.teamdagpenger.svc.nais.local",
+        "jwks.url" to "http://security-token-service.default.svc.nais.local/rest/v1/sts/jwks",
         "jwks.issuer" to "https://security-token-service.nais.adeo.no",
         "optional.jwt" to "false",
         "unleash.url" to "https://unleash.nais.adeo.no/api/"
