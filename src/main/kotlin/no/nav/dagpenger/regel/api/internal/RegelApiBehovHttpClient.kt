@@ -42,6 +42,7 @@ data class BehovRequest(
     val antallBarn: Int? = null,
     val inntektsId: String? = null,
     val lærling: Boolean? = null,
+    val regelverksdato: LocalDate = beregningsdato
 ) {
     val requestId: String = ulid.nextULID()
 }
