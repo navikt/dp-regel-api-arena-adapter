@@ -16,6 +16,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsParamete
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsReberegningParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.IllegalInntektIdException
 import no.nav.dagpenger.regel.api.internal.BehovRequest
+import no.nav.dagpenger.regel.api.internal.RegelKontekst
 import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 import no.nav.dagpenger.regel.api.internal.extractGrunnlagOgSats
 
@@ -71,6 +72,7 @@ fun behovFromParametere(parametere: GrunnlagOgSatsParametere): BehovRequest {
     return BehovRequest(
         aktorId = parametere.aktorId,
         vedtakId = parametere.vedtakId,
+        regelkontekst = RegelKontekst(id = parametere.vedtakId.toString()),
         beregningsdato = parametere.beregningsdato,
         harAvtjentVerneplikt = parametere.harAvtjentVerneplikt,
         oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,
@@ -89,6 +91,7 @@ fun behovFromParametere(parametere: GrunnlagOgSatsReberegningParametere): BehovR
     return BehovRequest(
         aktorId = parametere.aktorId,
         vedtakId = parametere.vedtakId,
+        regelkontekst = RegelKontekst(id = parametere.vedtakId.toString()),
         beregningsdato = parametere.beregningsdato,
         harAvtjentVerneplikt = parametere.harAvtjentVerneplikt,
         oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,

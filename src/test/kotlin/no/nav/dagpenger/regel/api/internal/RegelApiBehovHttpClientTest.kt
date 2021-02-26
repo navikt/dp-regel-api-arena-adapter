@@ -67,6 +67,7 @@ class RegelApiBehovHttpClientTest {
         val behovRequest = BehovRequest(
             "001",
             123456,
+            regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
             LocalDate.of(2019, 4, 14)
         )
 

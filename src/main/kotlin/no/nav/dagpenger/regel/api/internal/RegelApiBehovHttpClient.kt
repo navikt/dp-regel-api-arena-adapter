@@ -34,6 +34,7 @@ private val ulid = ULID()
 data class BehovRequest(
     val aktorId: String,
     val vedtakId: Int,
+    val regelkontekst: RegelKontekst,
     val beregningsdato: LocalDate,
     val harAvtjentVerneplikt: Boolean? = null,
     val oppfyllerKravTilFangstOgFisk: Boolean? = null,
@@ -46,5 +47,7 @@ data class BehovRequest(
 ) {
     val requestId: String = ulid.nextULID()
 }
+
+data class RegelKontekst(val id: String, val type: String = "vedtak")
 
 class RegelApiBehovHttpClientException(override val message: String) : RuntimeException(message)
