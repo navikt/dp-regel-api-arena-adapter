@@ -41,7 +41,7 @@ class MinsteinntektOgPeriodeApiTest {
     private val token = jwkStub.createTokenFor("systembrukeren")
 
     @Test
-    fun ` Map parameters to RehovRequest`() {
+    fun `Skal mappe parametre til BehovRequest`() {
         val parametere = MinsteinntektOgPeriodeParametere(
             aktorId = "12345",
             vedtakId = 123,
@@ -50,10 +50,10 @@ class MinsteinntektOgPeriodeApiTest {
             oppfyllerKravTilFangstOgFisk = false,
             bruktInntektsPeriode = InntektsPeriode(YearMonth.of(2019, 4), YearMonth.of(2019, 7)),
             oppfyllerKravTilLaerling = false,
-            regelverksdato = LocalDate.of(2020, 6, 14)
         )
+        val parametereMedRegelverksdato = parametere.copy(regelverksdato = LocalDate.of(2020, 6, 14))
 
-        val expectedBehovRequest = BehovRequest(
+        val standardBehovRequest = BehovRequest(
             aktorId = "12345",
             vedtakId = 123,
             beregningsdato = LocalDate.of(2019, 5, 13),
@@ -65,14 +65,14 @@ class MinsteinntektOgPeriodeApiTest {
             ),
             lærling = false
         )
+        val behovRequestMedRegelverksdato = standardBehovRequest.copy(regelverksdato = LocalDate.of(2020, 6, 14))
 
-        val result = behovFromParametere(parametere)
-
-        assertEquals(expectedBehovRequest, result)
+        assertEquals(standardBehovRequest, behovFromParametere(parametere))
+        assertEquals(behovRequestMedRegelverksdato, behovFromParametere(parametereMedRegelverksdato))
     }
 
     @Test
-    fun `Minsteinntekt and Periode API specification test - Should match json field names and format`() {
+    fun `Minsteinntekt og Periode API spesifkasjonstest - Skal håndtere json riktig`() {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
@@ -120,7 +120,7 @@ class MinsteinntektOgPeriodeApiTest {
     }
 
     @Test
-    fun `Minsteinntekt and Periode API specification test - Should not include minsteinntektregel when null`() {
+    fun `Minsteinntekt og Periode API spesifkasjonstest - Skal ikke inkludere minsteinntektregels resultat hvis det er null`() {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
@@ -168,7 +168,7 @@ class MinsteinntektOgPeriodeApiTest {
     }
 
     @Test
-    fun ` Should give API errors as HTTP problems rfc7807 for minsteinntekt on uhandled errors`() {
+    fun `Skal svare med HTTP problem rfc7807 for minsteinntekt ved uhåndterte feil`() {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
@@ -211,7 +211,7 @@ class MinsteinntektOgPeriodeApiTest {
     }
 
     @Test
-    fun ` Should give API errors as HTTP problems rfc7807 for Subsumsjon with problem`() {
+    fun `Skal svare med HTTP problem rfc7807 for Subsumsjon med problem`() {
 
         val problem = Problem(title = "problem")
         val synchronousSubsumsjonClient = mockk<SynchronousSubsumsjonClient>().apply {
@@ -254,7 +254,7 @@ class MinsteinntektOgPeriodeApiTest {
     }
 
     @Test
-    fun ` Should give API errors as HTTP problems rfc7807 for minsteinntekt on timout errors`() {
+    fun `Skal svare med HTTP problem rfc7807 for minsteinntekt ved timout errors`() {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
@@ -297,7 +297,7 @@ class MinsteinntektOgPeriodeApiTest {
     }
 
     @Test
-    fun ` Should give API errors as HTTP problems rfc7807 for minsteinntekt on invalid combination of verneplikt and lærling`() {
+    fun `Skal svare med HTTP problem rfc7807 hvis både verneplikt og lærling er true`() {
 
         withTestApplication({
             mockedRegelApiAdapter(
@@ -330,7 +330,7 @@ class MinsteinntektOgPeriodeApiTest {
     }
 
     @Test
-    fun ` Should give API errors as HTTP problems rfc7807 for minsteinntekt on bad json request`() {
+    fun `Skal svare med HTTP problem rfc7807 for dagpengegrunnlag med ugyldig json request`() {
 
         withTestApplication({
             mockedRegelApiAdapter(
@@ -356,7 +356,7 @@ class MinsteinntektOgPeriodeApiTest {
     }
 
     @Test
-    fun ` Should give API errors as HTTP problems rfc7807 for minsteinntekt on unmatched json - missing mandatory fields`() {
+    fun `Skal svare med HTTP problem rfc7807 for json med manglende obligatoriske felt`() {
 
         withTestApplication({
             mockedRegelApiAdapter(
@@ -385,7 +385,7 @@ class MinsteinntektOgPeriodeApiTest {
     }
 
     @Test
-    fun ` Should give 401 - Not authorized if token is missing `() {
+    fun `Skal svare med 401 hvis request mangler bearer token`() {
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider()
@@ -416,7 +416,7 @@ class MinsteinntektOgPeriodeApiTest {
     }
 
     @Test
-    fun `med regelverks- og beregningsdato`() {
+    fun `Skal håndtere request med både regelverk- og beregningsdato`() {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 

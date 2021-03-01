@@ -69,7 +69,8 @@ fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequ
                 førsteMåned = it.foersteMaaned,
                 sisteMåned = it.sisteMaaned
             )
-        }
+        },
+        regelverksdato = parametere.regelverksdato
     ).also {
         withLoggingContext("requestId" to it.requestId) {
             sikkerlogg.info { "Lager behov for $parametere" }

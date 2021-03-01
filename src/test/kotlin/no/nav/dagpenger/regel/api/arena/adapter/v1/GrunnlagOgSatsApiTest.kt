@@ -46,7 +46,7 @@ class GrunnlagOgSatsApiTest {
     private val token = jwkStub.createTokenFor("systembrukeren")
 
     @Test
-    fun ` Map parameters to BehovRequest`() {
+    fun `Mapper parametere til BehovRequest`() {
         val parametere = GrunnlagOgSatsParametere(
             aktorId = "12345",
             vedtakId = 123,
@@ -59,7 +59,7 @@ class GrunnlagOgSatsApiTest {
         )
         val parametreMedRegelverksdato = parametere.copy(regelverksdato = LocalDate.of(2020, 6, 14))
 
-        val expectedBehovRequest = BehovRequest(
+        val standardBehovRequest = BehovRequest(
             aktorId = "12345",
             vedtakId = 123,
             beregningsdato = LocalDate.of(2019, 5, 13),
@@ -70,14 +70,14 @@ class GrunnlagOgSatsApiTest {
             lærling = false,
             regelverksdato = LocalDate.of(2019, 5, 13)
         )
-        val expectedBehovRequestMedRegelverksdato = expectedBehovRequest.copy(regelverksdato = LocalDate.of(2020, 6, 14))
+        val behovRequestMedRegelverksdato = standardBehovRequest.copy(regelverksdato = LocalDate.of(2020, 6, 14))
 
-        assertEquals(expectedBehovRequest, behovFromParametere(parametere))
-        assertEquals(expectedBehovRequestMedRegelverksdato, behovFromParametere(parametreMedRegelverksdato))
+        assertEquals(standardBehovRequest, behovFromParametere(parametere))
+        assertEquals(behovRequestMedRegelverksdato, behovFromParametere(parametreMedRegelverksdato))
     }
 
     @Test
-    fun `Grunnlag and Sats API specification test - Should match json field names and format`() {
+    fun `Grunnlag and Sats API spesifikasjonstest - håndterer json korrekt`() {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
@@ -125,7 +125,7 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
-    fun `Grunnlag and Sats API specification test - Should match json field names and format for v2 with beregningsregel in sats`() {
+    fun `Grunnlag og Sats API spesifikasjonstest - håndterer json body korrekt for v2 med beregningsregel i sats`() {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
@@ -174,7 +174,7 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
-    fun `Grunnlag and Sats re-beregning API specification test - Should match json field names and format`() {
+    fun `Grunnlag og Sats re-beregning API spesifikasjonstest - håndterer json korrekt`() {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
@@ -213,7 +213,7 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
-    fun `Grunnlag and Sats beregning should give problem when grunnlag result is negative`() {
+    fun `Grunnlag og Sats beregning skal svare med http-problem når resultatet er negativt`() {
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         coEvery {
@@ -254,7 +254,7 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
-    fun `Grunnlag and Sats beregning should give problem when grunnlag result is 0`() {
+    fun `Grunnlag og Sats beregning skal svare med http-problem når resultatet er 0`() {
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         coEvery {
@@ -295,7 +295,7 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
-    fun `Grunnlag and Sats re-beregning API should give 400 on illegal inntektsId`() {
+    fun `Grunnlag og Sats re-beregning API skal svare med 400 for ugyldig inntektsId`() {
 
         withTestApplication({
             mockedRegelApiAdapter(
@@ -328,7 +328,7 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
-    fun ` Should give API errors as HTTP problems rfc7807 for dagpengegrunnlag on uhandled errors`() {
+    fun `Skal svare med HTTP problem rfc7807 for uhåndtert feil`() {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
@@ -371,7 +371,7 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
-    fun ` Should give API errors as HTTP problems rfc7807 for dagpengegrunnlag on Subsumsjon Problem`() {
+    fun `Skal svare med HTTP problem rfc7807 for SubsumsjonProblem`() {
 
         val problem = Problem(title = "subsumsjon problem")
         val synchronousSubsumsjonClient = mockk<SynchronousSubsumsjonClient>().apply {
@@ -414,7 +414,7 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
-    fun ` Should give API errors as HTTP problems rfc7807 for dagpengegrunnlag on timout errors`() {
+    fun `Skal svare med HTTP problem rfc7807 for timeout errors`() {
 
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
@@ -457,7 +457,7 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
-    fun ` Should give API errors as HTTP problems rfc7807 for dagpengegrunnlag on bad json request`() {
+    fun `Skal svare med HTTP problem rfc7807 for dagpengegrunnlag med ugyldig json request`() {
 
         withTestApplication({
             mockedRegelApiAdapter(
@@ -483,7 +483,7 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
-    fun ` Should give API errors as HTTP problems rfc7807 for dagpengegrunnlag on unmatched json - missing mandatory fields`() {
+    fun `Skal svare med HTTP problem rfc7807 for json med manglende obligatoriske felt`() {
 
         withTestApplication({
             mockedRegelApiAdapter(
@@ -512,7 +512,7 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
-    fun ` Should give API errors as HTTP problems rfc7807 for grunnlag on invalid combination of verneplikt and lærling`() {
+    fun `Skal svare med HTTP problem rfc7807 hvis både verneplikt og lærling er true`() {
 
         withTestApplication({
             mockedRegelApiAdapter(
@@ -545,7 +545,7 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
-    fun ` Should give 401 - Not authorized if token is missing `() {
+    fun `Skal svare med 401 hvis request mangler bearer token`() {
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider()
@@ -576,7 +576,7 @@ class GrunnlagOgSatsApiTest {
     }
 
     @Test
-    fun `med regelverk- og beregningsdato`() {
+    fun `Skal håndtere request med både regelverk- og beregningsdato`() {
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         coEvery {
