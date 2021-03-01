@@ -21,6 +21,7 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektRegel
 import no.nav.dagpenger.regel.api.internal.BehovRequest
 import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
+import no.nav.dagpenger.regel.api.internal.RegelKontekst
 import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 import org.junit.jupiter.api.Test
@@ -56,6 +57,7 @@ class MinsteinntektOgPeriodeApiTest {
         val standardBehovRequest = BehovRequest(
             aktorId = "12345",
             vedtakId = 123,
+            regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
             beregningsdato = LocalDate.of(2019, 5, 13),
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = false,

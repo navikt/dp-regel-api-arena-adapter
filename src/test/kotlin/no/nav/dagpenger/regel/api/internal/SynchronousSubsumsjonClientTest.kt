@@ -47,6 +47,7 @@ class SynchronousSubsumsjonClientTest {
         val behovRequest = BehovRequest(
             aktorId = "1234",
             vedtakId = 123,
+            regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
             beregningsdato = LocalDate.of(2019, 4, 14)
         )
 
@@ -84,6 +85,7 @@ class SynchronousSubsumsjonClientTest {
         val behovRequest = BehovRequest(
             aktorId = "1234",
             vedtakId = 123,
+            regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
             beregningsdato = LocalDate.of(2019, 4, 14)
         )
 

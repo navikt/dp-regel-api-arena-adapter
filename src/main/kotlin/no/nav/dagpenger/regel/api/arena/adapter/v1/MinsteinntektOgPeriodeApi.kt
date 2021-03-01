@@ -14,6 +14,7 @@ import mu.withLoggingContext
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
 import no.nav.dagpenger.regel.api.internal.BehovRequest
+import no.nav.dagpenger.regel.api.internal.RegelKontekst
 import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 import no.nav.dagpenger.regel.api.internal.extractMinsteinntektOgPeriode
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
@@ -60,6 +61,7 @@ fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequ
     return BehovRequest(
         aktorId = parametere.aktorId,
         vedtakId = parametere.vedtakId,
+        regelkontekst = RegelKontekst(id = parametere.vedtakId.toString()),
         beregningsdato = parametere.beregningsdato,
         harAvtjentVerneplikt = parametere.harAvtjentVerneplikt,
         oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,

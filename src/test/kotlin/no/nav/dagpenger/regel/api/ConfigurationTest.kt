@@ -31,9 +31,9 @@ internal class ConfigurationTest {
             with(Configuration()) {
                 this.application.profile shouldBe Profile.PROD
                 this.application.jwksIssuer shouldBe "https://security-token-service.nais.adeo.no"
-                this.application.jwksUrl shouldBe "http://security-token-service.default/rest/v1/sts/jwks"
-                this.application.dpInntektApiUrl shouldBe "http://dp-inntekt-api.teamdagpenger"
-                this.application.dpRegelApiUrl shouldBe "http://dp-regel-api"
+                this.application.jwksUrl shouldBe "http://security-token-service.default.svc.nais.local/rest/v1/sts/jwks"
+                this.application.dpInntektApiUrl shouldBe "http://dp-inntekt-api.teamdagpenger.svc.nais.local"
+                this.application.dpRegelApiUrl shouldBe "http://dp-regel-api.teamdagpenger.svc.nais.local"
             }
         }
     }
