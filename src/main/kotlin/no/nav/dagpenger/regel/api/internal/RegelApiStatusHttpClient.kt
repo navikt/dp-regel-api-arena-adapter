@@ -32,7 +32,7 @@ internal class RegelApiStatusHttpClient(
                     )
                 } else {
                     throw RegelApiStatusHttpClientException(
-                        response.responseMessage,
+                        response.responseMessage + "Status code: ${response.statusCode}",
                         exception
                     )
                 }

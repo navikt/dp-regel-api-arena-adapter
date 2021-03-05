@@ -20,7 +20,7 @@
         <Logger name="tjenestekall" level="trace" additivity="false">
             <AppenderRef ref="secureLog"/>
         </Logger>
-        <Root level="debug" additivity="false">
+        <Root level="warn" additivity="false">
             <AppenderRef ref="console"/>
         </Root>
     </Loggers>
