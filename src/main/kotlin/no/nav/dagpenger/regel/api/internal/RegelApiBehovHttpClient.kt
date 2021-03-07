@@ -1,8 +1,8 @@
 package no.nav.dagpenger.regel.api.internal
 
+import com.github.kittinunf.fuel.core.Method
 import de.huxhorn.sulky.ulid.ULID
 import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
-import no.nav.dagpenger.regel.api.internal.models.BehovStatusResponse
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 import java.time.LocalDate
 
@@ -13,10 +13,10 @@ internal class RegelApiBehovHttpClient(private val httpClient: FuelHttpClient) {
 
         val json = jsonAdapter.toJson(behovRequest)
 
-        val (_, response, result) = httpClient.post<BehovStatusResponse>("/behov") {
+        val (_, response, result) = httpClient.request(Method.POST, "/behov") {
             it.header("Content-Type" to "application/json")
             it.body(json)
-        }
+        }.response()
 
         return result.fold(
             { response.headers["Location"].first() },
