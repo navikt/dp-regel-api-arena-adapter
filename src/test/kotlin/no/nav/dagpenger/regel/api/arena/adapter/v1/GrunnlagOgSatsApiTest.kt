@@ -645,18 +645,17 @@ class GrunnlagOgSatsApiTest {
                 beregningsRegel = GrunnlagBeregningsregel.ORDINAER_ETTAAR,
                 benyttet90ProsentRegel = false
             ),
-            inntekt =
-                setOf(
-                    no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
-                        inntekt = 4999423,
-                        inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                            foersteMaaned = YearMonth.of(2018, 1),
-                            sisteMaaned = YearMonth.of(2019, 1)
-                        ),
-                        inneholderNaeringsinntekter = false,
-                        periode = 1
-                    )
-                ),
+            inntekt = setOf(
+                no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
+                    inntekt = 4999423,
+                    inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                        foersteMaaned = YearMonth.of(2018, 1),
+                        sisteMaaned = YearMonth.of(2019, 1)
+                    ),
+                    inneholderNaeringsinntekter = false,
+                    periode = 1
+                )
+            ),
             inntektManueltRedigert = true,
             inntektAvvik = true
         )
@@ -688,17 +687,17 @@ class GrunnlagOgSatsApiTest {
                 benyttet90ProsentRegel = false
             ),
             inntekt =
-                setOf(
-                    no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
-                        inntekt = 4999423,
-                        inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                            foersteMaaned = YearMonth.of(2018, 1),
-                            sisteMaaned = YearMonth.of(2019, 1)
-                        ),
-                        inneholderNaeringsinntekter = false,
-                        periode = 1
-                    )
-                ),
+            setOf(
+                no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
+                    inntekt = 4999423,
+                    inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                        foersteMaaned = YearMonth.of(2018, 1),
+                        sisteMaaned = YearMonth.of(2019, 1)
+                    ),
+                    inneholderNaeringsinntekter = false,
+                    periode = 1
+                )
+            ),
             inntektManueltRedigert = true,
             inntektAvvik = true
         )
