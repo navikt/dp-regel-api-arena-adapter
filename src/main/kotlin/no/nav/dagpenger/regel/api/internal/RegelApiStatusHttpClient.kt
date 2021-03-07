@@ -1,12 +1,14 @@
 package no.nav.dagpenger.regel.api.internal
 
+import com.github.kittinunf.fuel.core.Method
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.time.delay
 import kotlinx.coroutines.withTimeout
+import mu.KotlinLogging
 import no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterException
-import no.nav.dagpenger.regel.api.internal.models.BehovStatus
-import no.nav.dagpenger.regel.api.internal.models.BehovStatusResponse
 import java.time.Duration
+
+private val LOGGER = KotlinLogging.logger {}
 
 internal class RegelApiStatusHttpClient(
     private val client: FuelHttpClient,
@@ -18,25 +20,28 @@ internal class RegelApiStatusHttpClient(
 
         val timer = clientLatencyStats.labels("poll").startTimer()
         try {
-            val (_, response, result) = client.get<BehovStatusResponse>(statusUrl) { request ->
-                request.allowRedirects(false)
-            }
+            val (_, response, result) = client.request(Method.GET, statusUrl) {
+                it.allowRedirects(false)
+            }.response()
 
-            return try {
-                BehovStatusPollResult(result.get().status, null)
-            } catch (exception: Exception) {
-                if (response.statusCode == 303) {
-                    return BehovStatusPollResult(
-                        null,
-                        response.headers["Location"].first()
-                    )
-                } else {
+            return result.fold(
+                success = {
+                    when (response.statusCode) {
+                        303 -> BehovStatusPollResult(pending = false, location = response.headers["Location"].first())
+                        else -> {
+                            LOGGER.info("Polling: $response")
+                            BehovStatusPollResult(pending = true, location = null)
+                        }
+                    }
+                },
+                failure = {
+                    LOGGER.error("Failed polling $statusUrl")
                     throw RegelApiStatusHttpClientException(
                         response.responseMessage + "Status code: ${response.statusCode}",
-                        exception
+                        it.exception
                     )
                 }
-            }
+            )
         } finally {
             timer.observeDuration()
         }
@@ -67,10 +72,10 @@ internal class RegelApiStatusHttpClient(
 }
 
 private data class BehovStatusPollResult(
-    val status: BehovStatus?,
+    val pending: Boolean,
     val location: String?
 ) {
-    fun isPending() = status == BehovStatus.PENDING
+    fun isPending() = pending
 }
 
 class RegelApiStatusHttpClientException(
