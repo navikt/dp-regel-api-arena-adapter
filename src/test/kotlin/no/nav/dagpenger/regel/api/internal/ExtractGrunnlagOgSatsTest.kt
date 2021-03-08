@@ -204,7 +204,6 @@ class ExtractGrunnlagOgSatsTest {
         behovId = "behov123",
         faktum = Faktum(
             aktorId = "aktoer123",
-            vedtakId = 1234,
             regelkontekst = RegelKontekst("1234", "vedtak"),
             beregningsdato = LocalDate.of(2019, 5, 14),
             inntektsId = "inntekt123",
@@ -266,7 +265,6 @@ class ExtractGrunnlagOgSatsTest {
         behovId = "behov123",
         faktum = Faktum(
             aktorId = "aktoer123",
-            vedtakId = 1234,
             regelkontekst = RegelKontekst("1234", "vedtak"),
             beregningsdato = LocalDate.of(2019, 5, 14),
             inntektsId = "inntekt123",

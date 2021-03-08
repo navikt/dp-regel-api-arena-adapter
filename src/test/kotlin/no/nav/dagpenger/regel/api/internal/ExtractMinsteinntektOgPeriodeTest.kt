@@ -118,7 +118,6 @@ class ExtractMinsteinntektOgPeriodeTest {
         behovId = "behov123",
         faktum = Faktum(
             aktorId = "aktoer123",
-            vedtakId = 12345,
             regelkontekst = RegelKontekst("12345", "vedtak"),
             beregningsdato = LocalDate.of(2019, 5, 14),
             inntektsId = "inntekt123",
@@ -177,7 +176,6 @@ class ExtractMinsteinntektOgPeriodeTest {
         behovId = "behov123",
         faktum = Faktum(
             aktorId = "aktoer123",
-            vedtakId = 12345,
             regelkontekst = RegelKontekst("12345", "vedtak"),
             beregningsdato = LocalDate.of(2019, 5, 14),
             inntektsId = "inntekt123"

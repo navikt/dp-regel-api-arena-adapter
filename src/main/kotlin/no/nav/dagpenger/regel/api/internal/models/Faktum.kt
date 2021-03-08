@@ -5,7 +5,6 @@ import java.time.LocalDate
 
 data class Faktum(
     val aktorId: String,
-    val vedtakId: Int,
     val regelkontekst: RegelKontekst,
     val beregningsdato: LocalDate,
     val inntektsId: String? = null,

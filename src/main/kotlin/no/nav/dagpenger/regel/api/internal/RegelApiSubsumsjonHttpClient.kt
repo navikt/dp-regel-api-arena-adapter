@@ -22,7 +22,7 @@ internal class RegelApiSubsumsjonHttpClient(private val client: FuelHttpClient) 
                         "requestId" to it.requestId.toString(),
                         "behovId" to it.behovId,
                         "aktorId" to it.faktum.aktorId,
-                        "vedtakId" to it.faktum.vedtakId.toString(),
+                        "vedtakId" to it.faktum.regelkontekst.id,
                         "inntektsId" to it.faktum.inntektsId.toString(),
                     ) {
                         sikkerlogg.info { "Fikk svar på subsumsjon: $it" }
