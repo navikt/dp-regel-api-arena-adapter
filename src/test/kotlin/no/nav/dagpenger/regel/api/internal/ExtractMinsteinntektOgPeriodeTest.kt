@@ -62,7 +62,7 @@ class ExtractMinsteinntektOgPeriodeTest {
         utfort = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
         parametere = MinsteinntektOgPeriodeRegelfaktum(
             aktorId = "aktoer123",
-            vedtakId = 123456,
+            vedtakId = 12345,
             beregningsdato = LocalDate.of(2019, 5, 14),
             inntektsId = "inntekt123",
             harAvtjentVerneplikt = true,
@@ -118,8 +118,8 @@ class ExtractMinsteinntektOgPeriodeTest {
         behovId = "behov123",
         faktum = Faktum(
             aktorId = "aktoer123",
-            vedtakId = 123456,
-            regelkontekst = RegelKontekst("1234", "vedtak"),
+            vedtakId = 12345,
+            regelkontekst = RegelKontekst("12345", "vedtak"),
             beregningsdato = LocalDate.of(2019, 5, 14),
             inntektsId = "inntekt123",
             inntektAvvik = true,
@@ -177,7 +177,7 @@ class ExtractMinsteinntektOgPeriodeTest {
         behovId = "behov123",
         faktum = Faktum(
             aktorId = "aktoer123",
-            vedtakId = 123456,
+            vedtakId = 12345,
             regelkontekst = RegelKontekst("12345", "vedtak"),
             beregningsdato = LocalDate.of(2019, 5, 14),
             inntektsId = "inntekt123"

@@ -34,7 +34,7 @@ fun extractMinsteinntektOgPeriode(
         utfort = utfort,
         parametere = MinsteinntektOgPeriodeRegelfaktum(
             aktorId = faktum.aktorId,
-            vedtakId = faktum.vedtakId,
+            vedtakId = faktum.regelkontekst.id.toInt(),
             beregningsdato = faktum.beregningsdato,
             inntektsId = faktum.inntektsId ?: throw MissingSubsumsjonDataException("Missing faktum inntektId"),
             harAvtjentVerneplikt = faktum.harAvtjentVerneplikt,

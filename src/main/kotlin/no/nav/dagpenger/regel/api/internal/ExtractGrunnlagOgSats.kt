@@ -42,7 +42,7 @@ fun extractGrunnlagOgSats(
         utfort = utfort,
         parametere = GrunnlagOgSatsRegelFaktum(
             aktorId = faktum.aktorId,
-            vedtakId = faktum.vedtakId,
+            vedtakId = faktum.regelkontekst.id.toInt(),
             beregningsdato = faktum.beregningsdato,
             inntektsId = faktum.inntektsId,
             harAvtjentVerneplikt = faktum.harAvtjentVerneplikt,

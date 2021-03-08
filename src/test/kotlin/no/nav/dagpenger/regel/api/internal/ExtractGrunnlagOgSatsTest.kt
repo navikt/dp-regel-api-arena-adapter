@@ -91,7 +91,7 @@ class ExtractGrunnlagOgSatsTest {
         utfort = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
         parametere = GrunnlagOgSatsRegelFaktum(
             aktorId = "aktoer123",
-            vedtakId = 123456,
+            vedtakId = 1234,
             beregningsdato = LocalDate.of(2019, 5, 14),
             inntektsId = "inntekt123",
             harAvtjentVerneplikt = true,
@@ -149,7 +149,7 @@ class ExtractGrunnlagOgSatsTest {
         utfort = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
         parametere = GrunnlagOgSatsRegelFaktum(
             aktorId = "aktoer123",
-            vedtakId = 123456,
+            vedtakId = 1234,
             beregningsdato = LocalDate.of(2019, 5, 14),
             inntektsId = "inntekt123",
             harAvtjentVerneplikt = true,
@@ -204,7 +204,7 @@ class ExtractGrunnlagOgSatsTest {
         behovId = "behov123",
         faktum = Faktum(
             aktorId = "aktoer123",
-            vedtakId = 123456,
+            vedtakId = 1234,
             regelkontekst = RegelKontekst("1234", "vedtak"),
             beregningsdato = LocalDate.of(2019, 5, 14),
             inntektsId = "inntekt123",
@@ -266,7 +266,7 @@ class ExtractGrunnlagOgSatsTest {
         behovId = "behov123",
         faktum = Faktum(
             aktorId = "aktoer123",
-            vedtakId = 123456,
+            vedtakId = 1234,
             regelkontekst = RegelKontekst("1234", "vedtak"),
             beregningsdato = LocalDate.of(2019, 5, 14),
             inntektsId = "inntekt123",
