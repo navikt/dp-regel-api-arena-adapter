@@ -57,5 +57,6 @@ class RegelApiSubsumsjonHttpClientTest {
         assertEquals("01DBFXH3RHDGZAD0A7ZZYNDTKW", subsumsjon.periodeResultat!!.subsumsjonsId)
         assertEquals("01DBFXH3PBT5MSBEB9RN3WQRMS", subsumsjon.grunnlagResultat!!.subsumsjonsId)
         assertEquals("01DBFXH3VP2FKZG331B0S9VE04", subsumsjon.satsResultat!!.subsumsjonsId)
+        assertEquals(RegelKontekst("12345", "vedtak"), subsumsjon.faktum.regelkontekst)
     }
 }

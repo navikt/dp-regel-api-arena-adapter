@@ -135,6 +135,7 @@ class SynchronousSubsumsjonClientTest {
             faktum = Faktum(
                 aktorId = "1234",
                 vedtakId = 123,
+                regelkontekst = RegelKontekst("12345", "vedtak"),
                 beregningsdato = LocalDate.of(2019, 4, 14)
             ),
             minsteinntektResultat = null,

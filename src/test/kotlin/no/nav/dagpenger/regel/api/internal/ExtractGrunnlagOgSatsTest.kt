@@ -203,8 +203,9 @@ class ExtractGrunnlagOgSatsTest {
     private val subsumsjon = Subsumsjon(
         behovId = "behov123",
         faktum = Faktum(
-            "aktoer123",
-            123456,
+            aktorId = "aktoer123",
+            vedtakId = 123456,
+            regelkontekst = RegelKontekst("1234", "vedtak"),
             beregningsdato = LocalDate.of(2019, 5, 14),
             inntektsId = "inntekt123",
             inntektAvvik = true,
@@ -264,8 +265,9 @@ class ExtractGrunnlagOgSatsTest {
     private val subsumsjonWithSatsBeregningsregel = Subsumsjon(
         behovId = "behov123",
         faktum = Faktum(
-            "aktoer123",
-            123456,
+            aktorId = "aktoer123",
+            vedtakId = 123456,
+            regelkontekst = RegelKontekst("1234", "vedtak"),
             beregningsdato = LocalDate.of(2019, 5, 14),
             inntektsId = "inntekt123",
             inntektAvvik = true,
