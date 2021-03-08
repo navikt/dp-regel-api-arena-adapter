@@ -29,7 +29,7 @@ internal class RegelApiStatusHttpClient(
                     when (response.statusCode) {
                         303 -> BehovStatusPollResult(pending = false, location = response.headers["Location"].first())
                         else -> {
-                            LOGGER.info("Polling: $response")
+                            LOGGER.debug("Polling: $response")
                             BehovStatusPollResult(pending = true, location = null)
                         }
                     }
