@@ -8,20 +8,30 @@ import no.nav.dagpenger.regel.api.internal.models.InntjeningsperiodeResultat
 internal class InntektApiInntjeningsperiodeHttpClient(private val client: FuelHttpClient) {
 
     fun getInntjeningsperiode(parametere: InntjeningsperiodeParametre): InntjeningsperiodeResultat {
-        val url = "/v1/is-samme-inntjeningsperiode"
+        val url = "/v1/samme-inntjeningsperiode"
 
-        val (_, response, result) = client.post<InntjeningsperiodeResultat>(url) { request ->
+        val (_, response, result) = client.post<InntjeningsPeriodeRespond>(url) { request ->
             request.header(mapOf("Content-Type" to "application/json"))
-            request.body(moshiInstance.adapter(InntjeningsperiodeParametre::class.java).toJson(parametere))
+            request.body(
+                moshiInstance.adapter(InntjeningsPeriodeRequest::class.java)
+                    .toJson(InntjeningsPeriodeRequest(parametere.beregningsdato, parametere.inntektsId))
+            )
         }
 
         return when (result) {
             is Result.Failure -> throw InntektApiInntjeningsperiodeHttpClientException(
-                "Failed to return is-samme-inntjeningsperiode. Response message ${response.responseMessage}. Error message: ${result.error.message}"
+                "Failed to return samme-inntjeningsperiode. Response message ${response.responseMessage}. Error message: ${result.error.message}"
             )
-            is Result.Success -> result.get()
+            is Result.Success -> result.get().let { InntjeningsperiodeResultat(it.sammeInntjeningsPeriode, parametere) }
         }
     }
+
+    private data class InntjeningsPeriodeRequest(
+        val beregningsdato: String,
+        val inntektsId: String
+    )
+
+    private data class InntjeningsPeriodeRespond(val sammeInntjeningsPeriode: Boolean)
 }
 
 class InntektApiInntjeningsperiodeHttpClientException(
