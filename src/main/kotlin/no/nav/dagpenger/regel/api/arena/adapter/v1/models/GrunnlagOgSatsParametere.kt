@@ -11,5 +11,7 @@ data class GrunnlagOgSatsParametere(
     val oppfyllerKravTilLaerling: Boolean = false,
     val antallBarn: Int = 0,
     val grunnlag: Int? = null,
+    val manueltGrunnlag: Int? = null,
+    val forrigeGrunnlag: Int? = null,
     val regelverksdato: LocalDate = beregningsdato
 )

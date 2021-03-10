@@ -54,7 +54,8 @@ class GrunnlagOgSatsApiTest {
             beregningsdato = LocalDate.of(2019, 5, 13),
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = false,
-            grunnlag = 3000,
+            manueltGrunnlag = 3000,
+            forrigeGrunnlag = 7000,
             antallBarn = 3,
             oppfyllerKravTilLaerling = false
         )
@@ -68,6 +69,7 @@ class GrunnlagOgSatsApiTest {
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = false,
             manueltGrunnlag = 3000,
+            forrigeGrunnlag = 7000,
             antallBarn = 3,
             lærling = false,
             regelverksdato = LocalDate.of(2019, 5, 13)
@@ -76,6 +78,30 @@ class GrunnlagOgSatsApiTest {
 
         assertEquals(standardBehovRequest, behovFromParametere(parametere))
         assertEquals(behovRequestMedRegelverksdato, behovFromParametere(parametreMedRegelverksdato))
+    }
+
+    @Test
+    fun `Deprecated grunnlag mappes til manueltgrunnlag`() {
+        val parametere = GrunnlagOgSatsParametere(
+            aktorId = "12345",
+            vedtakId = 123,
+            beregningsdato = LocalDate.of(2019, 5, 13),
+            grunnlag = 4000
+        )
+
+        val standardBehovRequest = BehovRequest(
+            aktorId = "12345",
+            vedtakId = 123,
+            regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
+            beregningsdato = LocalDate.of(2019, 5, 13),
+            regelverksdato = LocalDate.of(2019, 5, 13),
+            manueltGrunnlag = 4000,
+            harAvtjentVerneplikt = false,
+            oppfyllerKravTilFangstOgFisk = false,
+            lærling = false,
+            antallBarn = 0
+        )
+        assertEquals(standardBehovRequest, behovFromParametere(parametere))
     }
 
     @Test
@@ -615,6 +641,121 @@ class GrunnlagOgSatsApiTest {
                 )
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
+            }
+        }
+    }
+
+    @Test
+    fun `Skal håndtere request med manuelt grunnlag`() {
+        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+
+        coEvery {
+            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                any(),
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+            )
+        } returns grunnlagOgSatsSubsumsjon()
+
+        withTestApplication({
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider(),
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+            )
+        }) {
+            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+                setBody(
+                    """
+                         {
+                      "aktorId": "1234",
+                      "vedtakId": 5678,
+                      "beregningsdato": "2019-02-27",
+                      "harAvtjentVerneplikt": false,
+                      "oppfyllerKravTilFangstOgFisk": false,
+                      "regelverksdato": "2020-03-28",
+                      "manueltGrunnlag": 1000000
+                    }
+
+                    """.trimIndent()
+                )
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+            }
+        }
+    }
+
+    @Test
+    fun `Skal håndtere request med forrige grunnlag`() {
+        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+
+        coEvery {
+            synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                any(),
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+            )
+        } returns grunnlagOgSatsSubsumsjon()
+
+        withTestApplication({
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider(),
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+            )
+        }) {
+            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+                setBody(
+                    """
+                         {
+                      "aktorId": "1234",
+                      "vedtakId": 5678,
+                      "beregningsdato": "2019-02-27",
+                      "harAvtjentVerneplikt": false,
+                      "oppfyllerKravTilFangstOgFisk": false,
+                      "regelverksdato": "2020-03-28",
+                      "forrigeGrunnlag": 600000
+                    }
+
+                    """.trimIndent()
+                )
+            }.apply {
+                assertEquals(HttpStatusCode.OK, response.status())
+            }
+        }
+    }
+
+    @Test
+    fun `Skal svare med HTTP problem rfc7807 hvis både manueltGrunnlag og tidligereGrunnlag er satt`() {
+
+        withTestApplication({
+            mockedRegelApiAdapter(
+                jwkProvider = jwkStub.stubbedJwkProvider()
+            )
+        }) {
+            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
+                addHeader(HttpHeaders.ContentType, "application/json")
+                addHeader(HttpHeaders.Authorization, "Bearer $token")
+                setBody(
+                    """
+                    {
+                      "aktorId": "1234",
+                      "vedtakId": 5678,
+                      "beregningsdato": "2019-02-27",
+                      "manueltGrunnlag": 600000,
+                      "forrigeGrunnlag": 800000
+                    }
+                    """.trimIndent()
+                )
+            }.apply {
+                assertEquals(HttpStatusCode.BadRequest, response.status())
+                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
+                assertEquals(
+                    "Ugyldig kombinasjon av parametere: manueltGrunnlag og forrigeGrunnlag kan ikke settes samtidig",
+                    problem?.title
+                )
+                assertEquals("urn:dp:error:parameter", problem?.type.toString())
+                assertEquals(400, problem?.status)
             }
         }
     }

@@ -66,6 +66,7 @@ internal fun Route.GrunnlagOgSatsApi(
 
 fun GrunnlagOgSatsParametere.validate() {
     if (this.oppfyllerKravTilLaerling && this.harAvtjentVerneplikt) throw UgyldigParameterkombinasjonException("harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig")
+    if (this.manueltGrunnlag != null && this.forrigeGrunnlag != null) throw UgyldigParameterkombinasjonException("manueltGrunnlag og forrigeGrunnlag kan ikke settes samtidig")
 }
 
 fun behovFromParametere(parametere: GrunnlagOgSatsParametere): BehovRequest {
@@ -76,7 +77,8 @@ fun behovFromParametere(parametere: GrunnlagOgSatsParametere): BehovRequest {
         beregningsdato = parametere.beregningsdato,
         harAvtjentVerneplikt = parametere.harAvtjentVerneplikt,
         oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,
-        manueltGrunnlag = parametere.grunnlag,
+        manueltGrunnlag = parametere.manueltGrunnlag ?: parametere.grunnlag,
+        forrigeGrunnlag = parametere.forrigeGrunnlag,
         antallBarn = parametere.antallBarn,
         lærling = parametere.oppfyllerKravTilLaerling,
         regelverksdato = parametere.regelverksdato

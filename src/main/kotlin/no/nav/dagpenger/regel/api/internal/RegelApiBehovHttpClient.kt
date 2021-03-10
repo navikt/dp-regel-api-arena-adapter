@@ -40,6 +40,7 @@ data class BehovRequest(
     val oppfyllerKravTilFangstOgFisk: Boolean? = null,
     val bruktInntektsPeriode: InntektsPeriode? = null,
     val manueltGrunnlag: Int? = null,
+    val forrigeGrunnlag: Int? = null,
     val antallBarn: Int? = null,
     val inntektsId: String? = null,
     val lærling: Boolean? = null,
