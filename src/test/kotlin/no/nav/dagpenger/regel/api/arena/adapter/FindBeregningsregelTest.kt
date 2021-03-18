@@ -79,6 +79,13 @@ class FindBeregningsregelTest {
 
         assertEquals(GrunnlagBeregningsregel.ORDINAER_TREAAR, regel)
     }
+
+    @Test
+    fun `Skal returnere beregningsregel FORRIGE_GRUNNLAG når forrige grunnlag er brukt`() {
+        val regel = findBeregningsregel("ForrigeGrunnlag", false)
+
+        assertEquals(GrunnlagBeregningsregel.FORRIGE_GRUNNLAG, regel)
+    }
 }
 
 class FindBeregningsregelLærlingTest : FreeSpec({

@@ -85,6 +85,7 @@ fun findBeregningsregel(beregningsregel: String, harAvkortet: Boolean): Grunnlag
     return when {
         beregningsregel == "Manuell" && harAvkortet -> GrunnlagBeregningsregel.MANUELL_OVER_6G
         beregningsregel == "Manuell" -> GrunnlagBeregningsregel.MANUELL_UNDER_6G
+        beregningsregel == "ForrigeGrunnlag" -> GrunnlagBeregningsregel.FORRIGE_GRUNNLAG // Brukes ikke av Arena
         beregningsregel == "ArbeidsinntektSiste12" && harAvkortet -> GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019
         beregningsregel == "ArbeidsinntektSiste12" -> GrunnlagBeregningsregel.ORDINAER_ETTAAR
         beregningsregel == "FangstOgFiskSiste12" && harAvkortet -> GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019
