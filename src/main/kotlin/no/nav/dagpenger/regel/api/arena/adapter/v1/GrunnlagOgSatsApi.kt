@@ -97,10 +97,11 @@ fun behovFromParametere(parametere: GrunnlagOgSatsReberegningParametere): BehovR
         beregningsdato = parametere.beregningsdato,
         harAvtjentVerneplikt = parametere.harAvtjentVerneplikt,
         oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,
-        manueltGrunnlag = parametere.grunnlag,
+        manueltGrunnlag = parametere.manueltGrunnlag ?: parametere.grunnlag,
         antallBarn = parametere.antallBarn,
         inntektsId = parametere.inntektsId,
-        lærling = parametere.oppfyllerKravTilLaerling
+        lærling = parametere.oppfyllerKravTilLaerling,
+        regelverksdato = parametere.regelverksdato
     ).also {
         withLoggingContext("requestId" to it.requestId) {
             sikkerlogg.info { "Lager behov for $parametere" }

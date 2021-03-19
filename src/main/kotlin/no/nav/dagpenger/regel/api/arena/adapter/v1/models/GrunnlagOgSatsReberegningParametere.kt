@@ -12,7 +12,9 @@ data class GrunnlagOgSatsReberegningParametere(
     val oppfyllerKravTilFangstOgFisk: Boolean = false,
     val oppfyllerKravTilLaerling: Boolean = false,
     val antallBarn: Int = 0,
-    val grunnlag: Int? = null
+    val grunnlag: Int? = null,
+    val manueltGrunnlag: Int? = null,
+    val regelverksdato: LocalDate = beregningsdato
 )
 
 class IllegalInntektIdException(override val cause: Throwable?) : RuntimeException(cause)
