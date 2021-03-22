@@ -20,6 +20,7 @@ data class GrunnlagOgSatsRegelFaktum(
     val aktorId: String,
     val vedtakId: Int,
     val beregningsdato: LocalDate? = null,
+    val regelverksdato: LocalDate? = null,
     val inntektsId: String? = null,
     val harAvtjentVerneplikt: Boolean? = null,
     val oppfyllerKravTilFangstOgFisk: Boolean? = null,

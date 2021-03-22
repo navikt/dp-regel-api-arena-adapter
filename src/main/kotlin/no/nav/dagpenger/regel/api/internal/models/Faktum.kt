@@ -7,6 +7,7 @@ data class Faktum(
     val aktorId: String,
     val regelkontekst: RegelKontekst,
     val beregningsdato: LocalDate,
+    val regelverksdato: LocalDate? = null,
     val inntektsId: String? = null,
     val inntektAvvik: Boolean? = null,
     val inntektManueltRedigert: Boolean? = null,

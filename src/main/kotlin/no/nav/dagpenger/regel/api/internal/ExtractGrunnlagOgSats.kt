@@ -44,6 +44,7 @@ fun extractGrunnlagOgSats(
             aktorId = faktum.aktorId,
             vedtakId = faktum.regelkontekst.id.toInt(),
             beregningsdato = faktum.beregningsdato,
+            regelverksdato = faktum.regelverksdato,
             inntektsId = faktum.inntektsId,
             harAvtjentVerneplikt = faktum.harAvtjentVerneplikt,
             oppfyllerKravTilFangstOgFisk = faktum.oppfyllerKravTilFangstOgFisk,
