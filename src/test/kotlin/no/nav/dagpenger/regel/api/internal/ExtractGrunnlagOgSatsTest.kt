@@ -109,7 +109,6 @@ class ExtractGrunnlagOgSatsTest {
                 beregningsregel = GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019
             ),
             sats = Sats(400, 2000),
-            beregningsRegel = GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019,
             benyttet90ProsentRegel = true
         ),
         inntekt = setOf(
@@ -169,7 +168,6 @@ class ExtractGrunnlagOgSatsTest {
                 beregningsregel = GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019
             ),
             sats = Sats(400, 2000, beregningsregel = SatsBeregningsregel.ORDINAER),
-            beregningsRegel = GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019,
             benyttet90ProsentRegel = true
         ),
         inntekt = setOf(

@@ -34,7 +34,6 @@ data class GrunnlagOgSatsRegelFaktum(
 data class GrunnlagOgSatsResultat(
     val grunnlag: Grunnlag? = null,
     val sats: Sats,
-    val beregningsRegel: GrunnlagBeregningsregel? = null,
     val benyttet90ProsentRegel: Boolean
 )
 

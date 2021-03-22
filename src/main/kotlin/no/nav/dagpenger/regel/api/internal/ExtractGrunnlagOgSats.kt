@@ -65,7 +65,6 @@ fun extractGrunnlagOgSats(
                 ukesats = satsResultat.ukesats,
                 beregningsregel = satsResultat.beregningsregel
             ),
-            beregningsRegel = findBeregningsregel(grunnlagResultat.beregningsregel, grunnlagResultat.harAvkortet),
             benyttet90ProsentRegel = satsResultat.benyttet90ProsentRegel
         ),
         inntekt = grunnlagResultat.grunnlagInntektsPerioder?.map {
