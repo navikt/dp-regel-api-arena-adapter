@@ -35,8 +35,17 @@ properties:
     type: integer
     nullable: true
     description: >-
-      Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum
-      her
+      [Deprecated: Erstattes av manueltGrunnlag]
+  manueltGrunnlag:
+    type: integer
+    nullable: true
+    description: >-
+      Uavkortet grunnlag satt av saksbehandler
+  forrigeGrunnlag:
+    type: integer
+    nullable: true
+    description: >-
+      Eksisterende grunnlag som er avkortet utenfor systemet
   oppfyllerKravTilLaerling:
     type: boolean
     default: false
