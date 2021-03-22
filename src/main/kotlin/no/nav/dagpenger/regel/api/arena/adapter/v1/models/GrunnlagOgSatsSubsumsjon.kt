@@ -26,7 +26,9 @@ data class GrunnlagOgSatsRegelFaktum(
     val oppfyllerKravTilFangstOgFisk: Boolean? = null,
     val oppfyllerKravTilLaerling: Boolean? = null,
     val antallBarn: Int,
-    val grunnlag: Int?
+    val grunnlag: Int?,
+    val manueltGrunnlag: Int?,
+    val forrigeGrunnlag: Int?
 )
 
 data class GrunnlagOgSatsResultat(

@@ -50,7 +50,9 @@ fun extractGrunnlagOgSats(
             oppfyllerKravTilFangstOgFisk = faktum.oppfyllerKravTilFangstOgFisk,
             oppfyllerKravTilLaerling = faktum.lærling,
             antallBarn = faktum.antallBarn ?: throw MissingSubsumsjonDataException("Missing faktum antallBarn"),
-            grunnlag = faktum.manueltGrunnlag
+            grunnlag = faktum.manueltGrunnlag,
+            manueltGrunnlag = faktum.manueltGrunnlag,
+            forrigeGrunnlag = faktum.forrigeGrunnlag
         ),
         resultat = GrunnlagOgSatsResultat(
             grunnlag = Grunnlag(

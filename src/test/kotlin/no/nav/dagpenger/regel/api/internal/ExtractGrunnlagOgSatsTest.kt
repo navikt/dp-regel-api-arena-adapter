@@ -98,7 +98,9 @@ class ExtractGrunnlagOgSatsTest {
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = true,
             antallBarn = 5,
-            grunnlag = 1000
+            grunnlag = 1000,
+            manueltGrunnlag = 1000,
+            forrigeGrunnlag = 2000
         ),
         resultat = GrunnlagOgSatsResultat(
             grunnlag = Grunnlag(
@@ -156,7 +158,9 @@ class ExtractGrunnlagOgSatsTest {
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = true,
             antallBarn = 5,
-            grunnlag = 1000
+            grunnlag = 1000,
+            manueltGrunnlag = 1000,
+            forrigeGrunnlag = 2000
         ),
         resultat = GrunnlagOgSatsResultat(
             grunnlag = Grunnlag(
@@ -215,6 +219,7 @@ class ExtractGrunnlagOgSatsTest {
             oppfyllerKravTilFangstOgFisk = true,
             antallBarn = 5,
             manueltGrunnlag = 1000,
+            forrigeGrunnlag = 2000,
             bruktInntektsPeriode = InntektsPeriode(
                 YearMonth.of(2018, 5),
                 YearMonth.of(2019, 1)
@@ -276,6 +281,7 @@ class ExtractGrunnlagOgSatsTest {
             oppfyllerKravTilFangstOgFisk = true,
             antallBarn = 5,
             manueltGrunnlag = 1000,
+            forrigeGrunnlag = 2000,
             bruktInntektsPeriode = InntektsPeriode(
                 YearMonth.of(2018, 5),
                 YearMonth.of(2019, 1)
