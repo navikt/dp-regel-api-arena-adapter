@@ -37,6 +37,7 @@ fun extractMinsteinntektOgPeriode(
             vedtakId = faktum.regelkontekst.id.toInt(),
             beregningsdato = faktum.beregningsdato,
             inntektsId = faktum.inntektsId ?: throw MissingSubsumsjonDataException("Missing faktum inntektId"),
+            regelverksdato = faktum.regelverksdato,
             harAvtjentVerneplikt = faktum.harAvtjentVerneplikt,
             oppfyllerKravTilFangstOgFisk = faktum.oppfyllerKravTilFangstOgFisk,
             oppfyllerKravTilLaerling = faktum.lærling,

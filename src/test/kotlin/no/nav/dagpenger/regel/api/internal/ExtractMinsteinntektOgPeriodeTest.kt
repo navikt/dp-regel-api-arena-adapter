@@ -68,6 +68,7 @@ class ExtractMinsteinntektOgPeriodeTest {
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = true,
             oppfyllerKravTilLaerling = false,
+            regelverksdato = LocalDate.of(2020, 1, 7),
             bruktInntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                 foersteMaaned = YearMonth.of(2018, 5),
                 sisteMaaned = YearMonth.of(2019, 1)
@@ -126,6 +127,7 @@ class ExtractMinsteinntektOgPeriodeTest {
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = true,
             lærling = false,
+            regelverksdato = LocalDate.of(2020, 1, 7),
             bruktInntektsPeriode = InntektsPeriode(
                 YearMonth.of(2018, 5),
                 YearMonth.of(2019, 1)
@@ -178,7 +180,9 @@ class ExtractMinsteinntektOgPeriodeTest {
             aktorId = "aktoer123",
             regelkontekst = RegelKontekst("12345", "vedtak"),
             beregningsdato = LocalDate.of(2019, 5, 14),
-            inntektsId = "inntekt123"
+            inntektsId = "inntekt123",
+            regelverksdato = LocalDate.of(2020, 1, 7),
+
         ),
         minsteinntektResultat = MinsteinntektResultat(
             subsumsjonsId = "subAvslag",
