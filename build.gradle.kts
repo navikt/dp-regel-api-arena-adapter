@@ -21,7 +21,7 @@ apply {
 repositories {
     mavenCentral()
     jcenter()
-    maven("http://packages.confluent.io/maven/")
+    maven("https://packages.confluent.io/maven/")
     maven("https://jitpack.io")
 }
 
@@ -75,7 +75,10 @@ dependencies {
     implementation("no.finn.unleash:unleash-client-java:3.2.9")
 
     testImplementation(kotlin("test"))
-    testImplementation(Ktor.ktorTest)
+    testImplementation(Ktor.ktorTest) {
+        // https://youtrack.jetbrains.com/issue/KT-46090
+        exclude("org.jetbrains.kotlin", "kotlin-test-junit")
+    }
     testImplementation(Junit5.api)
     testImplementation(KoTest.assertions)
     testImplementation(KoTest.runner)
@@ -115,14 +118,6 @@ tasks.named("shadowJar") {
     dependsOn("test")
 }
 
-tasks.named("jar") {
-    dependsOn("test")
-}
-
 tasks.named("compileKotlin") {
     dependsOn("spotlessCheck")
-}
-
-tasks.withType<Wrapper> {
-    gradleVersion = "6.0.1"
 }

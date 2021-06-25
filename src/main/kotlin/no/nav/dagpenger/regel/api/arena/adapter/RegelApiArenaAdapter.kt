@@ -104,6 +104,7 @@ internal fun Application.regelApiAdapter(
     synchronousSubsumsjonClient: SynchronousSubsumsjonClient,
     kreverRebergningClient: RegelApiNyVurderingHttpClient,
     optionalJwt: Boolean = false,
+    collectorRegistry: CollectorRegistry = CollectorRegistry.defaultRegistry
 ) {
 
     install(DefaultHeaders)
@@ -131,7 +132,7 @@ internal fun Application.regelApiAdapter(
     }
 
     install(MicrometerMetrics) {
-        registry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT, CollectorRegistry.defaultRegistry, Clock.SYSTEM)
+        registry = PrometheusMeterRegistry(PrometheusConfig.DEFAULT, collectorRegistry, Clock.SYSTEM)
     }
     install(StatusPages) {
         exception<Throwable> { cause ->
