@@ -2,10 +2,7 @@
 <Configuration status="INFO" packages="com.vlkan.log4j2.logstash.layout,io.prometheus.client.log4j2">
     <Appenders>
         <Console name="ConsoleAppender" target="SYSTEM_OUT">
-            <LogstashLayout dateTimeFormatPattern="yyyy-MM-dd'T'HH:mm:ss.SSSZZZ"
-                            eventTemplateUri="classpath:LogstashJsonEventLayoutV1.json"
-                            prettyPrintEnabled="false"
-                            stackTraceEnabled="true"/>
+            <JsonTemplateLayout eventTemplateUri="classpath:LogstashJsonEventLayoutV1.json" stackTraceEnabled="true"/>
         </Console>
         <Prometheus name="metrics"/>
 
@@ -13,10 +10,7 @@
             <Policies>
                 <SizeBasedTriggeringPolicy size="50 MB"/>
             </Policies>
-            <LogstashLayout dateTimeFormatPattern="yyyy-MM-dd'T'HH:mm:ss.SSSZZZ"
-                            eventTemplateUri="classpath:LogstashJsonEventLayoutV1.json"
-                            prettyPrintEnabled="false"
-                            stackTraceEnabled="true"/>
+            <JsonTemplateLayout eventTemplateUri="classpath:LogstashJsonEventLayoutV1.json" stackTraceEnabled="true"/>
         </RollingFile>
     </Appenders>
     <Loggers>
@@ -24,9 +18,6 @@
             <AppenderRef ref="secureLog"/>
         </Logger>
 
-        <Logger name="io.ktor.auth.jwt" level="trace">
-            <AppenderRef ref="ConsoleAppender"/>
-        </Logger>
         <Root level="info">
             <AppenderRef ref="ConsoleAppender"/>
             <AppenderRef ref="metrics"/>
