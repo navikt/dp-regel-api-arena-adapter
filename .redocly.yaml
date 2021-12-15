@@ -1,0 +1,10 @@
+apiDefinitions:
+  core: openapi/openapi.yaml
+lint:
+  extends:
+    - recommended
+referenceDocs:
+  theme:
+    colors:
+      primary:
+        main: '#32329f'

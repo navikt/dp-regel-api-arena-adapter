@@ -2,13 +2,12 @@
   "name": "dagpenger-regel-api-arena-adapter",
   "version": "1.0.0",
   "dependencies": {
-    "swagger-repo": "^2.0.0-rc.15"
+    "@redocly/openapi-cli": "^1.0.0-beta.61"
   },
   "private": true,
   "scripts": {
-    "start": "swagger-repo serve",
-    "build": "swagger-repo build -o web_deploy",
-    "test": "swagger-repo validate",
-    "gh-pages": "swagger-repo gh-pages"
+    "start": "openapi preview-docs",
+    "build": "openapi bundle -o web_deploy",
+    "test": "openapi lint"
   }
 }

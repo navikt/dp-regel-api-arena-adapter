@@ -10,7 +10,7 @@ plugins {
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
     }
 }
 
@@ -20,7 +20,7 @@ apply {
 
 repositories {
     mavenCentral()
-    jcenter()
+    mavenCentral()
     maven("https://packages.confluent.io/maven/")
     maven("https://jitpack.io")
 }

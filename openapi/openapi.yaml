@@ -25,6 +25,9 @@ tags:
   - name: Revurdering
     description: >-
       Operasjon for å avgjøre om minsteinntekt må revurderes
+paths:
+  /minsteinntekt:
+    $ref: './paths/minsteinntekt.yaml'
 security:
   - stsTokenAuth: [ ]
   - stsOIDC:
