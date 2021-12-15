@@ -1,8 +1,0 @@
-allOf:
-  - $ref: '#/components/schemas/Subsumsjon'
-  - type: object
-    properties:
-      parametere:
-        $ref: '#/components/schemas/DagpengegrunnlagParametere'
-      resultat:
-        $ref: '#/components/schemas/DagpengegrunnlagResultat'

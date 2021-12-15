@@ -3,206 +3,31 @@ info:
   title: Dagpenger Regel API - Arena Adapter
   version: '1.0'
 servers:
-  - url: 'https://dagpenger-regel-api-arena-adapter.nais.adeo.no/v1'
+  - url: https://dagpenger-regel-api-arena-adapter.nais.adeo.no/v1
     description: Produksjon (bruker ekte data)
-  - url: 'https://dagpenger-regel-api-arena-adapter.nais.preprod.local/v1'
+  - url: https://dagpenger-regel-api-arena-adapter.nais.preprod.local/v1
     description: Test (bruker test data)
 tags:
   - name: Minsteinntekt
     description: Beregner minsteinntekt og dagpengeperiode etter §4-4 og §4-15
     externalDocs:
       description: Folketrygdloven $4-4
-      url: 'https://lovdata.no/lov/1997-02-28-19/%C2%A74-4'
+      url: https://lovdata.no/lov/1997-02-28-19/%C2%A74-4
   - name: Dagpengegrunnlag
     description: Beregner dagpengegrunnlag etter §4-11
     externalDocs:
       description: Folketrygdloven $4-11
-      url: 'https://lovdata.no/lov/1997-02-28-19/%C2%A74-11'
+      url: https://lovdata.no/lov/1997-02-28-19/%C2%A74-11
   - name: Inntjeningsperiode
-    description: Operasjon for å vurdere om inntektene fremdeles er gyldige for gitt beregningsdatoen.
+    description: >-
+      Operasjon for å vurdere om inntektene fremdeles er gyldige for gitt
+      beregningsdatoen.
   - name: Revurdering
     description: Operasjon for å avgjøre om minsteinntekt må revurderes
-security:
-  - stsTokenAuth: []
-  - stsOIDC:
-      - openid
 paths:
-  /dagpengegrunnlag-reberegning:
-    post:
-      tags:
-        - Dagpengegrunnlag
-      summary: Reberegning av dagpengegrunnlag basert på regulerte G-satser
-      requestBody:
-        description: Hvilke parametere som skal brukes for beregningen
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DagpengegrunnlagReberegningInnParametere'
-      responses:
-        '200':
-          description: En beregning av dagpengegrunnlag og/eller sats
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DagpengegrunnlagBeregning'
-        '400':
-          description: 'Invalid input - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpProblem'
-              examples:
-                '400':
-                  $ref: '#/components/examples/400'
-        '401':
-          description: 'Uautorisert - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpProblem'
-              examples:
-                '401':
-                  $ref: '#/components/examples/401'
-        '403':
-          description: 'Ikke tilgang - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpProblem'
-              examples:
-                '403':
-                  $ref: '#/components/examples/403'
-        '500':
-          description: 'System error - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpProblem'
-              examples:
-                inntektFeil:
-                  $ref: '#/components/examples/hent-inntekt-feilet'
-                negativtDagpengeGrunnlag:
-                  $ref: '#/components/examples/negativt-grunnlag'
-                nullDagpengeGrunnlag:
-                  $ref: '#/components/examples/null-grunnlag'
-  /dagpengegrunnlag:
-    post:
-      tags:
-        - Dagpengegrunnlag
-      summary: Beregn dagpengegrunnlag
-      requestBody:
-        description: Hvilke parametere som skal brukes for beregningen
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DagpengegrunnlagInnParametere'
-            examples:
-              grunnlag:
-                $ref: '#/components/examples/dagpengegrunnlag-grunnlag'
-              verneplikt:
-                $ref: '#/components/examples/dagpengegrunnlag-verneplikt'
-              bareSats:
-                $ref: '#/components/examples/dagpengegrunnlag-bareSats'
-      responses:
-        '200':
-          description: En beregning av dagpengegrunnlag og/eller sats
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/DagpengegrunnlagBeregning'
-        '400':
-          description: 'Invalid input - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpProblem'
-              examples:
-                '400':
-                  $ref: '#/components/examples/400'
-        '401':
-          description: 'Uautorisert - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpProblem'
-              examples:
-                '401':
-                  $ref: '#/components/examples/401'
-        '403':
-          description: 'Ikke tilgang - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpProblem'
-              examples:
-                '403':
-                  $ref: '#/components/examples/403'
-        '500':
-          description: 'System error - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpProblem'
-              examples:
-                inntektFeil:
-                  $ref: '#/components/examples/hent-inntekt-feilet'
-                negativtDagpengeGrunnlag:
-                  $ref: '#/components/examples/negativt-grunnlag'
-                nullDagpengeGrunnlag:
-                  $ref: '#/components/examples/null-grunnlag'
-  /inntjeningsperiode:
-    post:
-      tags:
-        - Inntjeningsperiode
-      summary: Sjekk gyldighet av beregningsdato
-      requestBody:
-        description: Hvilke parametere som skal brukes for beregningen
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/InntjeningsperiodeParametre'
-      responses:
-        '200':
-          description: Ok
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/InntjeningsperiodeResultat'
-        '400':
-          description: 'Invalid input - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpProblem'
-              examples:
-                '400':
-                  $ref: '#/components/examples/400'
-        '401':
-          description: 'Uautorisert - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpProblem'
-              examples:
-                '401':
-                  $ref: '#/components/examples/401'
-        '403':
-          description: 'Ikke tilgang - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpProblem'
-              examples:
-                '403':
-                  $ref: '#/components/examples/403'
-        '500':
-          description: 'System error - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HttpProblem'
   /minsteinntekt:
     post:
+      operationId: minsteinntektBeregning
       tags:
         - Minsteinntekt
       summary: Kjør en beregning av minsteinntekt
@@ -234,7 +59,9 @@ paths:
                 minsteinntekt-resultat:
                   $ref: '#/components/examples/minsteinntekt-resultat'
         '400':
-          description: 'Invalid input - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
+          description: >-
+            Invalid input - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
           content:
             application/json:
               schema:
@@ -245,7 +72,9 @@ paths:
                 datoFeil:
                   $ref: '#/components/examples/dato-feil'
         '401':
-          description: 'Uautorisert - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
+          description: >-
+            Uautorisert - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
           content:
             application/json:
               schema:
@@ -254,7 +83,9 @@ paths:
                 '401':
                   $ref: '#/components/examples/401'
         '403':
-          description: 'Ikke tilgang - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
+          description: >-
+            Ikke tilgang - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
           content:
             application/json:
               schema:
@@ -263,7 +94,9 @@ paths:
                 '403':
                   $ref: '#/components/examples/403'
         '500':
-          description: 'System error - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
+          description: >-
+            System error - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
           content:
             application/json:
               schema:
@@ -271,8 +104,210 @@ paths:
               examples:
                 inntektFeil:
                   $ref: '#/components/examples/hent-inntekt-feilet'
+  /dagpengegrunnlag:
+    post:
+      operationId: dagpengegrunnlag
+      tags:
+        - Dagpengegrunnlag
+      summary: Beregn dagpengegrunnlag
+      requestBody:
+        description: Hvilke parametere som skal brukes for beregningen
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DagpengegrunnlagInnParametere'
+            examples:
+              grunnlag:
+                $ref: '#/components/examples/dagpengegrunnlag-grunnlag'
+              verneplikt:
+                $ref: '#/components/examples/dagpengegrunnlag-verneplikt'
+              bareSats:
+                $ref: '#/components/examples/dagpengegrunnlag-bareSats'
+      responses:
+        '200':
+          description: En beregning av dagpengegrunnlag og/eller sats
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DagpengegrunnlagBeregning'
+        '400':
+          description: >-
+            Invalid input - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpProblem'
+              examples:
+                '400':
+                  $ref: '#/components/examples/400'
+        '401':
+          description: >-
+            Uautorisert - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpProblem'
+              examples:
+                '401':
+                  $ref: '#/components/examples/401'
+        '403':
+          description: >-
+            Ikke tilgang - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpProblem'
+              examples:
+                '403':
+                  $ref: '#/components/examples/403'
+        '500':
+          description: >-
+            System error - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpProblem'
+              examples:
+                inntektFeil:
+                  $ref: '#/components/examples/hent-inntekt-feilet'
+                negativtDagpengeGrunnlag:
+                  $ref: '#/components/examples/negativt-grunnlag'
+                nullDagpengeGrunnlag:
+                  $ref: '#/components/examples/null-grunnlag'
+  /dagpengegrunnlag-reberegning:
+    post:
+      operationId: dagpengegrunnlagReberegning
+      tags:
+        - Dagpengegrunnlag
+      summary: Reberegning av dagpengegrunnlag basert på regulerte G-satser
+      requestBody:
+        description: Hvilke parametere som skal brukes for beregningen
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DagpengegrunnlagReberegningInnParametere'
+      responses:
+        '200':
+          description: En beregning av dagpengegrunnlag og/eller sats
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DagpengegrunnlagBeregning'
+        '400':
+          description: >-
+            Invalid input - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpProblem'
+              examples:
+                '400':
+                  $ref: '#/components/examples/400'
+        '401':
+          description: >-
+            Uautorisert - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpProblem'
+              examples:
+                '401':
+                  $ref: '#/components/examples/401'
+        '403':
+          description: >-
+            Ikke tilgang - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpProblem'
+              examples:
+                '403':
+                  $ref: '#/components/examples/403'
+        '500':
+          description: >-
+            System error - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpProblem'
+              examples:
+                inntektFeil:
+                  $ref: '#/components/examples/hent-inntekt-feilet'
+                negativtDagpengeGrunnlag:
+                  $ref: '#/components/examples/negativt-grunnlag'
+                nullDagpengeGrunnlag:
+                  $ref: '#/components/examples/null-grunnlag'
+  /inntjeningsperiode:
+    post:
+      operationId: inntjeningsperiode
+      tags:
+        - Inntjeningsperiode
+      summary: Sjekk gyldighet av beregningsdato
+      requestBody:
+        description: Hvilke parametere som skal brukes for beregningen
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InntjeningsperiodeParametre'
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InntjeningsperiodeResultat'
+        '400':
+          description: >-
+            Invalid input - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpProblem'
+              examples:
+                '400':
+                  $ref: '#/components/examples/400'
+        '401':
+          description: >-
+            Uautorisert - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpProblem'
+              examples:
+                '401':
+                  $ref: '#/components/examples/401'
+        '403':
+          description: >-
+            Ikke tilgang - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpProblem'
+              examples:
+                '403':
+                  $ref: '#/components/examples/403'
+        '500':
+          description: >-
+            System error - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HttpProblem'
   /revurdering:
     post:
+      operationId: revurdering
       tags:
         - Revurdering
       summary: Sjekk om minsteinntekt må revurderes
@@ -290,7 +325,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/RevurderingResultat'
         '400':
-          description: 'Invalid input - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
+          description: >-
+            Invalid input - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
           content:
             application/json:
               schema:
@@ -299,7 +336,9 @@ paths:
                 '400':
                   $ref: '#/components/examples/400'
         '401':
-          description: 'Uautorisert - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
+          description: >-
+            Uautorisert - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
           content:
             application/json:
               schema:
@@ -308,7 +347,9 @@ paths:
                 '401':
                   $ref: '#/components/examples/401'
         '403':
-          description: 'Ikke tilgang - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
+          description: >-
+            Ikke tilgang - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
           content:
             application/json:
               schema:
@@ -317,42 +358,232 @@ paths:
                 '403':
                   $ref: '#/components/examples/403'
         '500':
-          description: 'System error - feilmelding i henhold til [RFC7807] https://tools.ietf.org/html/rfc7807'
+          description: >-
+            System error - feilmelding i henhold til [RFC7807]
+            https://tools.ietf.org/html/rfc7807
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/HttpProblem'
+security:
+  - stsTokenAuth: []
+  - stsOIDC:
+      - openid
 components:
+  securitySchemes:
+    stsTokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Lag OIDC tokens med STS:
+        * Prod: <https://security-token-service.nais.adeo.no/>
+        * Test: <https://security-token-service.nais.preprod.local/>
+
+        Triks for å lage token i CLI: 
+
+            DP_TOKEN=$(curl -v --user <SystemBRUKER>:<Passord> \
+              https://security-token-service.nais.preprod.local/rest/v1/sts/token/\?grant_type\=client_credentials\&scope\=openid \
+              | jq -r .access_token)
+    stsOIDC:
+      type: openIdConnect
+      openIdConnectUrl: >-
+        https://security-token-service.nais.preprod.local/rest/v1/sts/.well-known/openid-configuration
   schemas:
-    Dagpengegrunnlag:
+    InntektsPeriode:
+      type: object
+      description: Et uttrykk for en periode med inntekt.
+      required:
+        - forsteMaaned
+        - sisteMaaned
+      properties:
+        foersteMaaned:
+          type: string
+          example: 2018-01
+          description: Første måned kronologisk i perioden
+        sisteMaaned:
+          type: string
+          example: 2019-01
+          description: Siste måned kronologisk i perioden
+    MinsteinntektInnParametere:
+      required:
+        - aktorId
+        - vedtakId
+        - beregningsdato
+      type: object
+      properties:
+        aktorId:
+          type: string
+          description: Identifikasjon av bruker
+          example: 1019955667
+        vedtakId:
+          type: integer
+          description: Identifikasjon av dagpengevedtak
+          format: int32
+          example: 1234
+        beregningsdato:
+          type: string
+          description: >-
+            Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt
+            tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal
+            benyttes.
+          example: 2019-01-11
+        harAvtjentVerneplikt:
+          type: boolean
+          default: false
+          description: Om bruker har avtjent verneplikt minst 3 av de siste 12 måneder.
+        oppfyllerKravTilFangstOgFisk:
+          type: boolean
+          default: false
+          description: Om bruker oppfyller særvilkårene for fangst og fisk.
+        bruktInntektsPeriode:
+          $ref: '#/components/schemas/InntektsPeriode'
+        oppfyllerKravTilLaerling:
+          type: boolean
+          default: false
+          description: >-
+            Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for
+            lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6
+        regelverksdato:
+          type: string
+          description: >-
+            Dato for hvilket regelverk som skal brukes i utregning. Defaulter
+            til samme dato som beregningsdato
+          example: 2019-01-11
+    MinsteinntektOgPeriodeSubsumsjon:
       type: object
       required:
-        - avkortet
-        - uavkortet
+        - minsteinntektSubsumsjonsId
+        - opprettet
+        - utfort
       properties:
-        avkortet:
+        minsteinntektSubsumsjonsId:
+          type: string
+          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          description: Unik ID for denne beregningen - ULID https://github.com/ulid/spec
+        periodeSubsumsjonsId:
+          type: string
+          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          description: Unik ID for denne beregningen - ULID https://github.com/ulid/spec
+        opprettet:
+          type: string
+          description: Dato for når kjøringen ble opprettet
+          example: 2018-12-26T14:42:09Z
+        utfort:
+          type: string
+          description: Dato for når kjøringen ble oppdatert
+          example: 2018-12-26T14:43:12Z
+    MinsteinntektResultatParametere:
+      type: object
+      required:
+        - aktorId
+        - vedtakId
+        - beregningsdato
+        - inntektsId
+      properties:
+        aktorId:
+          type: string
+          description: Identifikasjon av bruker
+          example: 1019955667
+        vedtakId:
           type: integer
-          example: 342352
-          description: 'Fiks ferdig utregnet grunnlag, avkortet til 6G'
-        uavkortet:
+          description: Identifikasjon av dagpengevedtak
+          format: int32
+          example: 1234
+        beregningsdato:
+          type: string
+          description: >-
+            Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt
+            tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal
+            benyttes.
+          example: 2019-01-11
+        inntektsId:
+          type: string
+          format: ulid
+          description: Identifiserer hvilke inntekter som lå til grunn for beregningen.
+          example: 01D2FB328P06WD808P22N9CFY5
+        harAvtjentVerneplikt:
+          type: boolean
+          default: false
+          description: Om bruker har avtjent verneplikt minst 3 av de siste 12 måneder.
+        oppfyllerKravTilFangstOgFisk:
+          type: boolean
+          default: false
+          description: Om bruker oppfyller særvilkårene for fangst og fisk.
+        oppfyllerKravTilLaerling:
+          type: boolean
+          default: false
+          description: >-
+            Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for
+            lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6
+        bruktInntektsPeriode:
+          $ref: '#/components/schemas/InntektsPeriode'
+    MinsteinntektResultat:
+      required:
+        - oppfyllerKravTilMinsteArbeidsinntekt
+      type: object
+      properties:
+        oppfyllerKravTilMinsteArbeidsinntekt:
+          type: boolean
+        periodeAntallUker:
           type: integer
-          example: 342352
-          description: Fiks ferdig utregnet grunnlag uten å være avkortet til 6G
-    DagpengegrunnlagBeregning:
+          description: Lengde på stønadsperiode
+          format: int32
+          example: 52
+          enum:
+            - 26
+            - 52
+            - 104
+    Inntekt:
+      type: object
+      required:
+        - inntektsPeriode
+        - inntekt
+        - periode
+        - inneholderNaeringsinntekter
+      properties:
+        inntektsPeriode:
+          $ref: '#/components/schemas/InntektsPeriode'
+        inntekt:
+          type: integer
+          example: 200000
+          description: Inntekt for perioden
+        periode:
+          type: integer
+          description: >-
+            Siste-, nestsiste- eller tredjesiste-periode, der 1 vil si siste
+            periode nærmest beregningsdato, og 3 vil si tredje siste periode
+            lengst tilbake i tid.
+          example: 1
+          enum:
+            - 1
+            - 2
+            - 3
+        inneholderNaeringsinntekter:
+          type: boolean
+          example: false
+          description: >-
+            Angir om inntektene som har inngått i vurderingen inneholder
+            næringsinntekter.
+        andel:
+          type: integer
+          example: 2222
+          description: Andel av inntekt siste-, nestsiste- eller tredjesiste-periode
+    MinsteinntektBeregning:
       allOf:
-        - $ref: '#/components/schemas/GrunnlagOgSatsSubsumsjon'
+        - $ref: '#/components/schemas/MinsteinntektOgPeriodeSubsumsjon'
         - type: object
           required:
             - parametere
             - resultat
+            - inntekt
           properties:
             parametere:
-              $ref: '#/components/schemas/DagpengegrunnlagResultatParametere'
+              $ref: '#/components/schemas/MinsteinntektResultatParametere'
             resultat:
-              $ref: '#/components/schemas/DagpengegrunnlagResultat'
+              $ref: '#/components/schemas/MinsteinntektResultat'
             inntekt:
               type: array
-              description: Hvis manuelt grunnlag er satt så vil tom Inntekt returneres.
               items:
                 $ref: '#/components/schemas/Inntekt'
             inntektManueltRedigert:
@@ -361,8 +592,41 @@ components:
               example: false
             inntektAvvik:
               type: boolean
-              description: Indikerer at inntektet inneholder avvik som ikke er med i beregningen
+              description: >-
+                Indikerer at inntektet inneholder avvik som ikke er med i
+                beregningen
               example: true
+    HttpProblem:
+      type: object
+      required:
+        - type
+        - title
+        - status
+      properties:
+        type:
+          type: string
+          example: about:blank
+          description: >-
+            URI referanse [RFC3986] som identifiserer problemtypen. Standard
+            verdi er "about:blank"
+        title:
+          type: string
+          example: En feil har oppstått ved beregningen
+          description: Tittel, kort oppsummering av problemtypen.
+        status:
+          type: integer
+          example: 500
+          description: HTTP status-kode [RFC7231] generert av tjenesten der feilen oppstod.
+        detail:
+          type: string
+          example: Beregningen feilet - inntektskomponenten svarte ikke
+          description: Menneskelesbar beskrivelse spesifikt til dette problemet
+        instance:
+          type: string
+          example: /inntekt/1234
+          description: >-
+            URI referanse [RFC3986] som identifiserer den spesifikke ressursen
+            der problemet oppstod
     DagpengegrunnlagInnParametere:
       type: object
       required:
@@ -373,7 +637,7 @@ components:
         aktorId:
           type: string
           description: Identifikasjon av bruker
-          example: 01019955667
+          example: 1019955667
         vedtakId:
           type: integer
           description: Identifikasjon av dagpengevedtak
@@ -381,8 +645,11 @@ components:
           example: 1234
         beregningsdato:
           type: string
-          description: Dato beregning skal utføres på bakgrunn av. Regelverk og inntekt på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
-          example: '2019-01-11'
+          description: >-
+            Dato beregning skal utføres på bakgrunn av. Regelverk og inntekt på
+            aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato
+            skal benyttes.
+          example: 2019-01-11
         harAvtjentVerneplikt:
           type: boolean
           default: false
@@ -410,52 +677,38 @@ components:
         oppfyllerKravTilLaerling:
           type: boolean
           default: false
-          description: Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger
+          description: >-
+            Indikerer forskrift § 2-3. Særregler for fastsetting av
+            dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger
         regelverksdato:
           type: string
-          description: Dato for hvilket regelverk som skal brukes i utregning. Defaulter til samme dato som beregningsdato
-          example: '2019-01-11'
-    DagpengegrunnlagReberegningInnParametere:
-      allOf:
-        - $ref: '#/components/schemas/DagpengegrunnlagInnParametere'
+          description: >-
+            Dato for hvilket regelverk som skal brukes i utregning. Defaulter
+            til samme dato som beregningsdato
+          example: 2019-01-11
+    GrunnlagOgSatsSubsumsjon:
       type: object
       required:
-        - inntektsId
+        - satsSubsumsjonsId
+        - opprettet
+        - utfort
       properties:
-        inntektsId:
-          format: ulid
-          description: Identifiserer hvilke inntekter som skal legges til grunn for re-beregning
-          example: 01D2FB328P06WD808P22N9CFY5
-    DagpengegrunnlagResultat:
-      type: object
-      required:
-        - grunnlag
-        - sats
-        - beregningsregel
-        - benyttet90ProsentRegel
-      properties:
-        grunnlag:
-          $ref: '#/components/schemas/Dagpengegrunnlag'
-        sats:
-          $ref: '#/components/schemas/Sats'
-        beregningsregel:
+        grunnlagSubsumsjonsId:
           type: string
-          example: ORDINAER_ETTAAR
-          description: 'Beskriver hvilken regel som er lagt til grunn. ORDINAER_OVER_6G_SISTE_2019 og ORDINAER_OVER_6G_3SISTE_2019 betyr at grunnlag er beregnet av henholdsvis siste 12 eller 36 måneders inntekt. MANUELL_OVER_6G og MANUELL_UNDER_6G betyr henholdsvis om manuelt grunnlag ble kuttet ned fordi det oversteg 6G eller ikke. VERNEPLIKT betyr at grunnlag ble satt utifra regler for verneplikt. LAERLING_12_MAANED betyr grunnlag for lærling siste avsluttende kalender måned gange 12, LAERLING_12_MAANED_AVKORTET er samme men avkortet grunnlag. LAERLING_4_MAANED betyr siste 3 avsluttende kalendermåneder gange 4, LAERLING_4_MAANED_AVKORTET er samme men avkortet grunnlag.'
-          enum:
-            - ORDINAER_OVER_6G_SISTE_2019
-            - ORDINAER_OVER_6G_3SISTE_2019
-            - MANUELL_UNDER_6G
-            - MANUELL_OVER_6G
-            - VERNEPLIKT
-            - LAERLING_12_MAANED
-            - LAERLING_12_MAANED_AVKORTET
-            - LAERLING_4_MAANED
-            - LAERLING_4_MAANED_AVKORTET
-        benyttet90ProsentRegel:
-          type: boolean
-          example: false
-          description: Settes til true dersom det totalt beregnede barnetillegget overstiger 90 % av dagpengegrunnlaget. Barnetillegget er derfor redusert til 90 % av barnetillegget. Dette gjenspeiles i ukessatsene.
+          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          description: Unik ID for denne beregningen - ULID https://github.com/ulid/spec
+        satsSubsumsjonsId:
+          type: string
+          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+          description: Unik ID for denne beregningen - ULID https://github.com/ulid/spec
+        opprettet:
+          type: string
+          description: Dato for når kjøringen ble opprettet
+          example: 2018-12-26T14:42:09Z
+        utfort:
+          type: string
+          description: Dato for når kjøringen ble oppdatert
+          example: 2018-12-26T14:43:12Z
     DagpengegrunnlagResultatParametere:
       type: object
       required:
@@ -466,7 +719,7 @@ components:
         aktorId:
           type: string
           description: Identifikasjon av bruker
-          example: 01019955667
+          example: 1019955667
         vedtakId:
           type: integer
           description: Identifikasjon av dagpengevedtak
@@ -474,8 +727,11 @@ components:
           example: 1234
         beregningsdato:
           type: string
-          description: Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
-          example: '2019-01-11'
+          description: >-
+            Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt
+            tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal
+            benyttes.
+          example: 2019-01-11
         inntektsId:
           type: string
           format: ulid
@@ -496,106 +752,128 @@ components:
         grunnlag:
           type: integer
           nullable: true
-          description: 'Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum her'
+          description: >-
+            Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette
+            sum her
         oppfyllerKravTilLaerling:
           type: boolean
           default: false
-          description: Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger
-    GrunnlagOgSatsSubsumsjon:
+          description: >-
+            Indikerer forskrift § 2-3. Særregler for fastsetting av
+            dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger
+    Dagpengegrunnlag:
       type: object
       required:
-        - satsSubsumsjonsId
-        - opprettet
-        - utfort
+        - avkortet
+        - uavkortet
       properties:
-        grunnlagSubsumsjonsId:
-          type: string
-          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
-          description: 'Unik ID for denne beregningen - ULID https://github.com/ulid/spec'
-        satsSubsumsjonsId:
-          type: string
-          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
-          description: 'Unik ID for denne beregningen - ULID https://github.com/ulid/spec'
-        opprettet:
-          type: string
-          description: Dato for når kjøringen ble opprettet
-          example: '2018-12-26T14:42:09Z'
-        utfort:
-          type: string
-          description: Dato for når kjøringen ble oppdatert
-          example: '2018-12-26T14:43:12Z'
-    HttpProblem:
+        avkortet:
+          type: integer
+          example: 342352
+          description: Fiks ferdig utregnet grunnlag, avkortet til 6G
+        uavkortet:
+          type: integer
+          example: 342352
+          description: Fiks ferdig utregnet grunnlag uten å være avkortet til 6G
+    Sats:
       type: object
       required:
-        - type
-        - title
-        - status
+        - dagsats
+        - ukesats
       properties:
-        type:
-          type: string
-          example: 'about:blank'
-          description: 'URI referanse [RFC3986] som identifiserer problemtypen. Standard verdi er "about:blank"'
-        title:
-          type: string
-          example: En feil har oppstått ved beregningen
-          description: 'Tittel, kort oppsummering av problemtypen.'
-        status:
+        dagsats:
           type: integer
-          example: 500
-          description: 'HTTP status-kode [RFC7231] generert av tjenesten der feilen oppstod.'
-        detail:
-          type: string
-          example: Beregningen feilet - inntektskomponenten svarte ikke
-          description: Menneskelesbar beskrivelse spesifikt til dette problemet
-        instance:
-          type: string
-          example: /inntekt/1234
-          description: 'URI referanse [RFC3986] som identifiserer den spesifikke ressursen der problemet oppstod'
-    Inntekt:
+          example: 213
+          description: Dagsats. Dagsats inneholder ikke barnetillegg
+        ukesats:
+          type: integer
+          example: 1065
+          description: Ukesats. Ukesats inneholder barnetillegg
+    DagpengegrunnlagResultat:
       type: object
       required:
-        - inntektsPeriode
-        - inntekt
-        - periode
-        - inneholderNaeringsinntekter
+        - grunnlag
+        - sats
+        - beregningsregel
+        - benyttet90ProsentRegel
       properties:
-        inntektsPeriode:
-          $ref: '#/components/schemas/InntektsPeriode'
-        inntekt:
-          type: integer
-          example: 200000
-          description: Inntekt for perioden
-        periode:
-          type: integer
-          description: 'Siste-, nestsiste- eller tredjesiste-periode, der 1 vil si siste periode nærmest beregningsdato, og 3 vil si tredje siste periode lengst tilbake i tid.'
-          example: 1
+        grunnlag:
+          $ref: '#/components/schemas/Dagpengegrunnlag'
+        sats:
+          $ref: '#/components/schemas/Sats'
+        beregningsregel:
+          type: string
+          example: ORDINAER_ETTAAR
+          description: >-
+            Beskriver hvilken regel som er lagt til grunn.
+            ORDINAER_OVER_6G_SISTE_2019 og ORDINAER_OVER_6G_3SISTE_2019 betyr at
+            grunnlag er beregnet av henholdsvis siste 12 eller 36 måneders
+            inntekt. MANUELL_OVER_6G og MANUELL_UNDER_6G betyr henholdsvis om
+            manuelt grunnlag ble kuttet ned fordi det oversteg 6G eller ikke.
+            VERNEPLIKT betyr at grunnlag ble satt utifra regler for verneplikt.
+            LAERLING_12_MAANED betyr grunnlag for lærling siste avsluttende
+            kalender måned gange 12, LAERLING_12_MAANED_AVKORTET er samme men
+            avkortet grunnlag. LAERLING_4_MAANED betyr siste 3 avsluttende
+            kalendermåneder gange 4, LAERLING_4_MAANED_AVKORTET er samme men
+            avkortet grunnlag.
           enum:
-            - 1
-            - 2
-            - 3
-        inneholderNaeringsinntekter:
+            - ORDINAER_OVER_6G_SISTE_2019
+            - ORDINAER_OVER_6G_3SISTE_2019
+            - MANUELL_UNDER_6G
+            - MANUELL_OVER_6G
+            - VERNEPLIKT
+            - LAERLING_12_MAANED
+            - LAERLING_12_MAANED_AVKORTET
+            - LAERLING_4_MAANED
+            - LAERLING_4_MAANED_AVKORTET
+        benyttet90ProsentRegel:
           type: boolean
           example: false
-          description: Angir om inntektene som har inngått i vurderingen inneholder næringsinntekter.
-        andel:
-          type: integer
-          example: 2222
-          description: 'Andel av inntekt siste-, nestsiste- eller tredjesiste-periode'
-    InntektsPeriode:
+          description: >-
+            Settes til true dersom det totalt beregnede barnetillegget
+            overstiger 90 % av dagpengegrunnlaget. Barnetillegget er derfor
+            redusert til 90 % av barnetillegget. Dette gjenspeiles i
+            ukessatsene.
+    DagpengegrunnlagBeregning:
+      allOf:
+        - $ref: '#/components/schemas/GrunnlagOgSatsSubsumsjon'
+        - type: object
+          required:
+            - parametere
+            - resultat
+          properties:
+            parametere:
+              $ref: '#/components/schemas/DagpengegrunnlagResultatParametere'
+            resultat:
+              $ref: '#/components/schemas/DagpengegrunnlagResultat'
+            inntekt:
+              type: array
+              description: Hvis manuelt grunnlag er satt så vil tom Inntekt returneres.
+              items:
+                $ref: '#/components/schemas/Inntekt'
+            inntektManueltRedigert:
+              type: boolean
+              description: Indikerer at inntekten er redigert manuelt av saksbehandler
+              example: false
+            inntektAvvik:
+              type: boolean
+              description: >-
+                Indikerer at inntektet inneholder avvik som ikke er med i
+                beregningen
+              example: true
+    DagpengegrunnlagReberegningInnParametere:
+      allOf:
+        - $ref: '#/components/schemas/DagpengegrunnlagInnParametere'
       type: object
-      description: Et uttrykk for en periode med inntekt.
       required:
-        - forsteMaaned
-        - sisteMaaned
+        - inntektsId
       properties:
-        foersteMaaned:
-          type: string
-          example: 2018-01
-          description: Første måned kronologisk i perioden
-        sisteMaaned:
-          type: string
-          example: 2019-01
-          description: Siste måned kronologisk i perioden
+        inntektsId:
+          format: ulid
+          description: >-
+            Identifiserer hvilke inntekter som skal legges til grunn for
+            re-beregning
+          example: 01D2FB328P06WD808P22N9CFY5
     InntjeningsperiodeParametre:
       type: object
       required:
@@ -607,7 +885,7 @@ components:
         aktorId:
           type: string
           description: Identifikasjon av bruker
-          example: 01938420203
+          example: 1938420203
         vedtakId:
           type: integer
           description: Identifikasjon av dagpengevedtak
@@ -615,12 +893,17 @@ components:
           example: 12345678
         beregningsdato:
           type: string
-          description: Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
-          example: '2019-01-11'
+          description: >-
+            Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt
+            tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal
+            benyttes.
+          example: 2019-01-11
         inntektsId:
           type: string
           format: ulid
-          description: Identifiserer hvilke inntekter som lå til grunn for tidligere? beregningen.
+          description: >-
+            Identifiserer hvilke inntekter som lå til grunn for tidligere?
+            beregningen.
           example: 01D2FB328P06WD808P22N9CFY5
     InntjeningsperiodeResultat:
       type: object
@@ -630,152 +913,12 @@ components:
       properties:
         sammeInntjeningsPeriode:
           type: boolean
-          description: Indikerer om inntektene fremdeles er gyldige eller ikke for den nye beregningsdatoen.
+          description: >-
+            Indikerer om inntektene fremdeles er gyldige eller ikke for den nye
+            beregningsdatoen.
           example: true
         parametere:
           $ref: '#/components/schemas/InntjeningsperiodeParametre'
-    MinsteinntektBeregning:
-      allOf:
-        - $ref: '#/components/schemas/MinsteinntektOgPeriodeSubsumsjon'
-        - type: object
-          required:
-            - parametere
-            - resultat
-            - inntekt
-          properties:
-            parametere:
-              $ref: '#/components/schemas/MinsteinntektResultatParametere'
-            resultat:
-              $ref: '#/components/schemas/MinsteinntektResultat'
-            inntekt:
-              type: array
-              items:
-                $ref: '#/components/schemas/Inntekt'
-            inntektManueltRedigert:
-              type: boolean
-              description: Indikerer at inntekten er redigert manuelt av saksbehandler
-              example: false
-            inntektAvvik:
-              type: boolean
-              description: Indikerer at inntektet inneholder avvik som ikke er med i beregningen
-              example: true
-    MinsteinntektInnParametere:
-      required:
-        - aktorId
-        - vedtakId
-        - beregningsdato
-      type: object
-      properties:
-        aktorId:
-          type: string
-          description: Identifikasjon av bruker
-          example: 01019955667
-        vedtakId:
-          type: integer
-          description: Identifikasjon av dagpengevedtak
-          format: int32
-          example: 1234
-        beregningsdato:
-          type: string
-          description: Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
-          example: '2019-01-11'
-        harAvtjentVerneplikt:
-          type: boolean
-          default: false
-          description: Om bruker har avtjent verneplikt minst 3 av de siste 12 måneder.
-        oppfyllerKravTilFangstOgFisk:
-          type: boolean
-          default: false
-          description: Om bruker oppfyller særvilkårene for fangst og fisk.
-        bruktInntektsPeriode:
-          $ref: '#/components/schemas/InntektsPeriode'
-        oppfyllerKravTilLaerling:
-          type: boolean
-          default: false
-          description: Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6
-        regelverksdato:
-          type: string
-          description: Dato for hvilket regelverk som skal brukes i utregning. Defaulter til samme dato som beregningsdato
-          example: '2019-01-11'
-    MinsteinntektOgPeriodeSubsumsjon:
-      type: object
-      required:
-        - minsteinntektSubsumsjonsId
-        - opprettet
-        - utfort
-      properties:
-        minsteinntektSubsumsjonsId:
-          type: string
-          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
-          description: 'Unik ID for denne beregningen - ULID https://github.com/ulid/spec'
-        periodeSubsumsjonsId:
-          type: string
-          example: 01ARZ3NDEKTSV4RRFFQ69G5FAV
-          description: 'Unik ID for denne beregningen - ULID https://github.com/ulid/spec'
-        opprettet:
-          type: string
-          description: Dato for når kjøringen ble opprettet
-          example: '2018-12-26T14:42:09Z'
-        utfort:
-          type: string
-          description: Dato for når kjøringen ble oppdatert
-          example: '2018-12-26T14:43:12Z'
-    MinsteinntektResultat:
-      required:
-        - oppfyllerKravTilMinsteArbeidsinntekt
-      type: object
-      properties:
-        oppfyllerKravTilMinsteArbeidsinntekt:
-          type: boolean
-        periodeAntallUker:
-          type: integer
-          description: Lengde på stønadsperiode
-          format: int32
-          example: 52
-          enum:
-            - 26
-            - 52
-            - 104
-    MinsteinntektResultatParametere:
-      type: object
-      required:
-        - aktorId
-        - vedtakId
-        - beregningsdato
-        - inntektsId
-      properties:
-        aktorId:
-          type: string
-          description: Identifikasjon av bruker
-          example: 01019955667
-        vedtakId:
-          type: integer
-          description: Identifikasjon av dagpengevedtak
-          format: int32
-          example: 1234
-        beregningsdato:
-          type: string
-          description: Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
-          example: '2019-01-11'
-        inntektsId:
-          type: string
-          format: ulid
-          description: Identifiserer hvilke inntekter som lå til grunn for beregningen.
-          example: 01D2FB328P06WD808P22N9CFY5
-        harAvtjentVerneplikt:
-          type: boolean
-          default: false
-          description: Om bruker har avtjent verneplikt minst 3 av de siste 12 måneder.
-        oppfyllerKravTilFangstOgFisk:
-          type: boolean
-          default: false
-          description: Om bruker oppfyller særvilkårene for fangst og fisk.
-        oppfyllerKravTilLaerling:
-          type: boolean
-          default: false
-          description: Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6
-        bruktInntektsPeriode:
-          $ref: '#/components/schemas/InntektsPeriode'
     RevurderingParametre:
       type: object
       required:
@@ -793,7 +936,7 @@ components:
         beregningsdato:
           type: string
           description: Dato sjekken skal utføres på bakgrunn av.
-          example: '2019-01-11'
+          example: 2019-01-11
     RevurderingResultat:
       type: object
       required:
@@ -805,121 +948,59 @@ components:
           example: true
         parametere:
           $ref: '#/components/schemas/RevurderingParametre'
-    Sats:
-      type: object
-      required:
-        - dagsats
-        - ukesats
-      properties:
-        dagsats:
-          type: integer
-          example: 213
-          description: Dagsats. Dagsats inneholder ikke barnetillegg
-        ukesats:
-          type: integer
-          example: 1065
-          description: Ukesats. Ukesats inneholder barnetillegg
   examples:
     '400':
       summary: Valideringsfeil
       value:
-        type: 'urn:dp:error:parameter'
+        type: urn:dp:error:parameter
         status: 400
         title: Kunne ikke tolke request
     '401':
       summary: Kan ikke autorisere kaller
       value:
-        type: 'urn:dp:error:uautorisert'
+        type: urn:dp:error:uautorisert
         title: Uautorisert
         status: 401
     '403':
-      summary: 'Kaller er autorisert, men har ikke tilgang'
+      summary: Kaller er autorisert, men har ikke tilgang
       value:
-        type: 'urn:dp:error:tilgang'
+        type: urn:dp:error:tilgang
         title: Ikke tilgang
         status: 403
-    dagpengegrunnlag-bareSats:
-      summary: Eksempel for å fastsette kun sats
+    minsteinntekt-vanlig:
+      summary: Vanlig vurdering, uten særvilkår eller tidligere brukt inntekt
       value:
-        beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FDV
-        opprettet: '2018-12-26T14:42:09Z'
-        utfort: '2018-12-26T14:43:12Z'
-        parametere:
-          aktorId: 01019955667
-          vedtakId: 1234
-          beregningsdato: '2019-01-11'
-          antallBarn: 0
-          grunnlag: 250250
-        resultat:
-          grunnlag:
-            avkortet: 250250
-            uavkortet: 250250
-          sats:
-            dagsats: 213
-            ukesats: 1065
-    dagpengegrunnlag-grunnlag:
-      summary: Fastsatt både grunnlag og sats uten særvilkår
-      value:
-        beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FAV
-        opprettet: '2018-12-26T14:42:09Z'
-        utfort: '2018-12-26T14:43:12Z'
-        parametere:
-          aktorId: 01019955667
-          vedtakId: 1234
-          beregningsdato: '2019-01-11'
-        resultat:
-          grunnlag:
-            avkortet: 342352
-            uavkortet: 342352
-          sats:
-            dagsats: 213
-            ukesats: 1065
-    dagpengegrunnlag-verneplikt:
-      summary: Eksempel for å fastsette både grunnlag og sats med særvilkår
-      value:
-        beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FBV
-        opprettet: '2018-12-26T14:42:09Z'
-        utfort: '2018-12-26T14:43:12Z'
-        parametere:
-          aktorId: 01019955667
-          vedtakId: 1234
-          beregningsdato: '2019-01-11'
-          harAvtjentVerneplikt: true
-        resultat:
-          grunnlag:
-            avkortet: 342352
-            uavkortet: 342352
-          sats:
-            dagsats: 213
-            ukesats: 1065
-    dato-feil:
-      summary: Datovalideringsfeil
-      value:
-        type: 'urn:dp:error:parameter'
-        status: 400
-        title: 'Feil bruktInntektsPeriode: foersteMaaned=2018-12 er etter sisteMaaned=2019-01'
-    hent-inntekt-feilet:
-      summary: Datovalideringsfeil
-      value:
-        type: 'urn:dp:error:inntektskomponenten'
-        title: Klarte ikke å hente inntekt for beregningen
-        status: 500
-        detail: Innhenting av inntekt mot inntektskomponenten feilet.
-    minsteinntekt-bruktInntekt:
-      summary: Vurdering som hensyntar tidligere brukt inntekt
-      value:
-        aktorId: 01019955667
+        aktorId: 1019955667
         vedtakId: 1234
-        beregningsdato: '2019-01-11'
+        beregningsdato: 2019-01-11
+        harAvtjentVerneplikt: false
+        oppfyllerKravTilFangstOgFisk: false
+        harArbeidsperiodeEosSiste12Maaneder: false
         bruktInntektsPeriode:
           foersteMaaned: 2019-01
           sisteMaaned: 2018-01
+    minsteinntekt-bruktInntekt:
+      summary: Vurdering som hensyntar tidligere brukt inntekt
+      value:
+        aktorId: 1019955667
+        vedtakId: 1234
+        beregningsdato: 2019-01-11
+        bruktInntektsPeriode:
+          foersteMaaned: 2019-01
+          sisteMaaned: 2018-01
+    minsteinntekt-verneplikt:
+      summary: Vurdering som hensyntar særvilkår verneplikt
+      value:
+        aktorId: 1019955667
+        vedtakId: 1234
+        beregningsdato: 2019-01-11
+        harAvtjentVerneplikt: true
     minsteinntekt-fiskBruktInntekt:
       summary: Vurdering som hensyntar særvilkår og tidligere brukt inntekt
       value:
-        aktorId: 01019955667
+        aktorId: 1019955667
         vedtakId: 1234
-        beregningsdato: '2019-01-11'
+        beregningsdato: 2019-01-11
         oppfyllerKravTilFangstOgFisk: true
         bruktInntektsPeriode:
           foersteMaaned: 2019-01
@@ -927,20 +1008,20 @@ components:
     minsteinntekt-laerling:
       summary: Vurdering som hensyntar særvilkår lærling
       value:
-        aktorId: 01019955667
+        aktorId: 1019955667
         vedtakId: 1234
-        beregningsdato: '2019-01-11'
+        beregningsdato: 2019-01-11
         oppfyllerKravTilLaerling: true
     minsteinntekt-resultat:
       summary: Eksempelresultat
       value:
         beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FAV
-        opprettet: '2018-12-26T14:42:09Z'
-        utfort: '2018-12-26T14:43:12Z'
+        opprettet: 2018-12-26T14:42:09Z
+        utfort: 2018-12-26T14:43:12Z
         parametre:
-          aktorId: 01019955667
+          aktorId: 1019955667
           vedtakId: 1234
-          beregningsdato: '2019-07-01'
+          beregningsdato: 2019-07-01
           inntektsId: 01D2FB328P06WD808P22N9CFY5
           harAvtjentVerneplikt: false
           oppfyllerKravTilFangstOgFisk: false
@@ -972,62 +1053,84 @@ components:
             inntektsPeriode:
               foersteMaaned: 2017-06
               sisteMaaned: 2016-06
-    minsteinntekt-vanlig:
-      summary: 'Vanlig vurdering, uten særvilkår eller tidligere brukt inntekt'
+    dato-feil:
+      summary: Datovalideringsfeil
       value:
-        aktorId: 01019955667
-        vedtakId: 1234
-        beregningsdato: '2019-01-11'
-        harAvtjentVerneplikt: false
-        oppfyllerKravTilFangstOgFisk: false
-        harArbeidsperiodeEosSiste12Maaneder: false
-        bruktInntektsPeriode:
-          foersteMaaned: 2019-01
-          sisteMaaned: 2018-01
-    minsteinntekt-verneplikt:
-      summary: Vurdering som hensyntar særvilkår verneplikt
+        type: urn:dp:error:parameter
+        status: 400
+        title: >-
+          Feil bruktInntektsPeriode: foersteMaaned=2018-12 er etter
+          sisteMaaned=2019-01
+    hent-inntekt-feilet:
+      summary: Datovalideringsfeil
       value:
-        aktorId: 01019955667
-        vedtakId: 1234
-        beregningsdato: '2019-01-11'
-        harAvtjentVerneplikt: true
+        type: urn:dp:error:inntektskomponenten
+        title: Klarte ikke å hente inntekt for beregningen
+        status: 500
+        detail: Innhenting av inntekt mot inntektskomponenten feilet.
+    dagpengegrunnlag-grunnlag:
+      summary: Fastsatt både grunnlag og sats uten særvilkår
+      value:
+        beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FAV
+        opprettet: 2018-12-26T14:42:09Z
+        utfort: 2018-12-26T14:43:12Z
+        parametere:
+          aktorId: 1019955667
+          vedtakId: 1234
+          beregningsdato: 2019-01-11
+        resultat:
+          grunnlag:
+            avkortet: 342352
+            uavkortet: 342352
+          sats:
+            dagsats: 213
+            ukesats: 1065
+    dagpengegrunnlag-verneplikt:
+      summary: Eksempel for å fastsette både grunnlag og sats med særvilkår
+      value:
+        beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FBV
+        opprettet: 2018-12-26T14:42:09Z
+        utfort: 2018-12-26T14:43:12Z
+        parametere:
+          aktorId: 1019955667
+          vedtakId: 1234
+          beregningsdato: 2019-01-11
+          harAvtjentVerneplikt: true
+        resultat:
+          grunnlag:
+            avkortet: 342352
+            uavkortet: 342352
+          sats:
+            dagsats: 213
+            ukesats: 1065
+    dagpengegrunnlag-bareSats:
+      summary: Eksempel for å fastsette kun sats
+      value:
+        beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FDV
+        opprettet: 2018-12-26T14:42:09Z
+        utfort: 2018-12-26T14:43:12Z
+        parametere:
+          aktorId: 1019955667
+          vedtakId: 1234
+          beregningsdato: 2019-01-11
+          antallBarn: 0
+          grunnlag: 250250
+        resultat:
+          grunnlag:
+            avkortet: 250250
+            uavkortet: 250250
+          sats:
+            dagsats: 213
+            ukesats: 1065
     negativt-grunnlag:
       summary: Negativt grunnlag
       value:
-        type: 'urn:dp:error:regelberegning:grunnlag:negativ'
+        type: urn:dp:error:regelberegning:grunnlag:negativ
         title: Grunnlag er negativt
         status: 500
     null-grunnlag:
       summary: Grunnlag er 0
       value:
-        type: 'urn:dp:error:regelberegning:grunnlag:0'
+        type: urn:dp:error:regelberegning:grunnlag:0
         title: Grunnlag er 0
         status: 500
-    revurdering-minsteinntekt-error:
-      summary: Feil ved sjekk om minsteinntekt må revurderes
-      value:
-        type: 'urn:dp:error:revurdering:minsteinntekt'
-        title: Feil ved sjekk om minsteinntekt må revurderes
-        status: 500
-    revurdering-minsteinntekt:
-      summary: Minsteinntekt må revurders
-      value:
-        nyVurdering: true
-  securitySchemes:
-    stsOIDC:
-      type: openIdConnect
-      openIdConnectUrl: 'https://security-token-service.nais.preprod.local/rest/v1/sts/.well-known/openid-configuration'
-    stsTokenAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
-      description: |
-        Lag OIDC tokens med STS:
-        * Prod: <https://security-token-service.nais.adeo.no/>
-        * Test: <https://security-token-service.nais.preprod.local/>
-
-        Triks for å lage token i CLI: 
-
-            DP_TOKEN=$(curl -v --user <SystemBRUKER>:<Passord> \
-              https://security-token-service.nais.preprod.local/rest/v1/sts/token/\?grant_type\=client_credentials\&scope\=openid \
-              | jq -r .access_token)
