@@ -1,4 +1,5 @@
 post:
+  operationId: "dagpengegrunnlagReberegning"
   tags:
     - Dagpengegrunnlag
   summary: Reberegning av dagpengegrunnlag basert på regulerte G-satser
