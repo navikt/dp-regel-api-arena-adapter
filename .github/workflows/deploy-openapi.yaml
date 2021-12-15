@@ -6,6 +6,7 @@ on:
       - 'openapi/**'
       - 'package.json'
       - 'package-lock.json'
+      - '.github/workflows/deploy-openapi.yaml'
 
 
 jobs:
