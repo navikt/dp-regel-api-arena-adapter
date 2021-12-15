@@ -9,7 +9,7 @@
   "scripts": {
     "start": "openapi preview-docs",
     "build": "openapi bundle -o web/openapi.yaml",
-    "bundle": "redoc-cli bundle --options.theme.colors.primary.main='#32329f' -t web/template.html web/openapi.yaml -o web/index.html",
+    "bundle": "openapi bundle -o web/openapi.yaml && redoc-cli bundle --options.theme.colors.primary.main='#32329f' -t web/template.html web/openapi.yaml -o web/index.html",
     "help": "redoc-cli bundle --help",
     "test": "openapi lint"
   }
