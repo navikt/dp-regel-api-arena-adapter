@@ -621,7 +621,7 @@
           },
           "beregningsdato": {
             "type": "string",
-            "description": "Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.",
+            "description": "Dato beregning skal utføres på bakgrunn av. Regelverk og inntekt på aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal benyttes.",
             "example": "2019-01-11"
           },
           "harAvtjentVerneplikt": {
@@ -642,12 +642,27 @@
           "grunnlag": {
             "type": "integer",
             "nullable": true,
-            "description": "Er grunnlaget allerede kjent, kan det manuelt overstyres ved å sette sum her"
+            "description": "[Deprecated: Erstattes av manueltGrunnlag]"
+          },
+          "manueltGrunnlag": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Uavkortet grunnlag satt av saksbehandler"
+          },
+          "forrigeGrunnlag": {
+            "type": "integer",
+            "nullable": true,
+            "description": "Eksisterende grunnlag som er avkortet utenfor systemet"
           },
           "oppfyllerKravTilLaerling": {
             "type": "boolean",
             "default": false,
             "description": "Indikerer forskrift § 2-3. Særregler for fastsetting av dagpengesatsen – unntak fra folketrygdloven § 4-12 for lærlinger"
+          },
+          "regelverksdato": {
+            "type": "string",
+            "description": "Dato for hvilket regelverk som skal brukes i utregning. Defaulter til samme dato som beregningsdato",
+            "example": "2019-01-11"
           }
         }
       },
@@ -1018,6 +1033,11 @@
             "type": "boolean",
             "default": false,
             "description": "Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6"
+          },
+          "regelverksdato": {
+            "type": "string",
+            "description": "Dato for hvilket regelverk som skal brukes i utregning. Defaulter til samme dato som beregningsdato",
+            "example": "2019-01-11"
           }
         }
       },
