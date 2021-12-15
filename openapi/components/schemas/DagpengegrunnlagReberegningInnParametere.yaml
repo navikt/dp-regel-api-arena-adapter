@@ -1,5 +1,5 @@
 allOf:
-  - $ref: '#/components/schemas/DagpengegrunnlagInnParametere'
+  - $ref: "./DagpengegrunnlagInnParametere.yaml"
 type: object
 required:
   - inntektsId

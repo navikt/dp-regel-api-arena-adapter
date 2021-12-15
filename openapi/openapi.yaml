@@ -1,0 +1,65 @@
+openapi: 3.0.0
+info:
+  title: Dagpenger Regel API - Arena Adapter
+  version: "1.0"
+servers:
+  - url: "https://dagpenger-regel-api-arena-adapter.nais.adeo.no/v1"
+    description: Produksjon (bruker ekte data)
+  - url: "https://dagpenger-regel-api-arena-adapter.nais.preprod.local/v1"
+    description: Test (bruker test data)
+tags:
+  - name: Minsteinntekt
+    description: Beregner minsteinntekt og dagpengeperiode etter §4-4 og §4-15
+    externalDocs:
+      description: Folketrygdloven $4-4
+      url: "https://lovdata.no/lov/1997-02-28-19/%C2%A74-4"
+  - name: Dagpengegrunnlag
+    description: Beregner dagpengegrunnlag etter §4-11
+    externalDocs:
+      description: Folketrygdloven $4-11
+      url: "https://lovdata.no/lov/1997-02-28-19/%C2%A74-11"
+  - name: Inntjeningsperiode
+    description: >-
+      Operasjon for å vurdere om inntektene fremdeles er gyldige for gitt
+      beregningsdatoen.
+  - name: Revurdering
+    description: >-
+      Operasjon for å avgjøre om minsteinntekt må revurderes
+paths:
+  /minsteinntekt:
+    $ref: "./paths/minsteinntekt.yaml"
+  /dagpengegrunnlag:
+    $ref: "./paths/dagpengegrunnlag.yaml"
+  /dagpengegrunnlag-reberegning:
+    $ref: "./paths/dagpengegrunnlag-reberegning.yaml"
+  /inntjeningsperiode:
+    $ref: "./paths/inntjeningsperiode.yaml"
+  /revurdering:
+    $ref: "./paths/revurdering.yaml"
+
+security:
+  - stsTokenAuth: []
+  - stsOIDC:
+      - openid
+
+components:
+  securitySchemes:
+    stsTokenAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Lag OIDC tokens med STS:
+        * Prod: <https://security-token-service.nais.adeo.no/>
+        * Test: <https://security-token-service.nais.preprod.local/>
+
+        Triks for å lage token i CLI: 
+
+            DP_TOKEN=$(curl -v --user <SystemBRUKER>:<Passord> \
+              https://security-token-service.nais.preprod.local/rest/v1/sts/token/\?grant_type\=client_credentials\&scope\=openid \
+              | jq -r .access_token)
+
+    stsOIDC:
+      type: openIdConnect
+      openIdConnectUrl: >-
+        https://security-token-service.nais.preprod.local/rest/v1/sts/.well-known/openid-configuration

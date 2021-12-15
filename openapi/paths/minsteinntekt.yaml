@@ -1,4 +1,5 @@
 post:
+  operationId: "minsteinntektBeregning"
   tags:
     - Minsteinntekt
   summary: Kjør en beregning av minsteinntekt
@@ -7,71 +8,71 @@ post:
     content:
       application/json:
         schema:
-          $ref: '#/components/schemas/MinsteinntektInnParametere'
+          $ref: "../components/schemas/MinsteinntektInnParametere.yaml"
         examples:
           vanlig:
-            $ref: '#/components/examples/minsteinntekt-vanlig'
+            $ref: "../components/examples/minsteinntekt-vanlig.yaml"
           bruktInntekt:
-            $ref: '#/components/examples/minsteinntekt-bruktInntekt'
+            $ref: "../components/examples/minsteinntekt-bruktInntekt.yaml"
           verneplikt:
-            $ref: '#/components/examples/minsteinntekt-verneplikt'
+            $ref: "../components/examples/minsteinntekt-verneplikt.yaml"
           fiskBruktInntekt:
-            $ref: '#/components/examples/minsteinntekt-fiskBruktInntekt'
+            $ref: "../components/examples/minsteinntekt-fiskBruktInntekt.yaml"
           lærling:
-            $ref: '#/components/examples/minsteinntekt-laerling'
+            $ref: "../components/examples/minsteinntekt-laerling.yaml"
   responses:
-    '200':
+    "200":
       description: Ok
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/MinsteinntektBeregning'
+            $ref: "../components/schemas/MinsteinntektBeregning.yaml"
           examples:
             minsteinntekt-resultat:
-              $ref: '#/components/examples/minsteinntekt-resultat'
-    '400':
+              $ref: "../components/examples/minsteinntekt-resultat.yaml"
+    "400":
       description: >-
         Invalid input - feilmelding i henhold til [RFC7807]
         https://tools.ietf.org/html/rfc7807
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/HttpProblem'
+            $ref: "../components/schemas/HttpProblem.yaml"
           examples:
-            '400':
-              $ref: '#/components/examples/400'
+            "400":
+              $ref: "../components/examples/400.yaml"
             datoFeil:
-              $ref: '#/components/examples/dato-feil'
-    '401':
+              $ref: "../components/examples/dato-feil.yaml"
+    "401":
       description: >-
         Uautorisert - feilmelding i henhold til [RFC7807]
         https://tools.ietf.org/html/rfc7807
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/HttpProblem'
+            $ref: "../components/schemas/HttpProblem.yaml"
           examples:
-            '401':
-              $ref: '#/components/examples/401'
-    '403':
+            "401":
+              $ref: "../components/examples/401.yaml"
+    "403":
       description: >-
         Ikke tilgang - feilmelding i henhold til [RFC7807]
         https://tools.ietf.org/html/rfc7807
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/HttpProblem'
+            $ref: "../components/schemas/HttpProblem.yaml"
           examples:
-            '403':
-              $ref: '#/components/examples/403'
-    '500':
+            "403":
+              $ref: "../components/examples/403.yaml"
+    "500":
       description: >-
         System error - feilmelding i henhold til [RFC7807]
         https://tools.ietf.org/html/rfc7807
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/HttpProblem'
+            $ref: "../components/schemas/HttpProblem.yaml"
           examples:
             inntektFeil:
-              $ref: '#/components/examples/hent-inntekt-feilet'
+              $ref: "../components/examples/hent-inntekt-feilet.yaml"

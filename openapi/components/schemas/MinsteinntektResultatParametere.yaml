@@ -19,7 +19,7 @@ properties:
     description: >-
       Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt tidspunkt
       skal benyttes. Inntekter i henhold til gitt dato skal benyttes.
-    example: '2019-01-11'
+    example: "2019-01-11"
   inntektsId:
     type: string
     format: ulid
@@ -40,4 +40,4 @@ properties:
       Indikerer forskrift § 2-6. Midlertidig inntekssikringsordning for
       lærlinger – unntak fra folketrygdloven § 4-4 til § 4-6
   bruktInntektsPeriode:
-    $ref: '#/components/schemas/InntektsPeriode'
+    $ref: "./InntektsPeriode.yaml"

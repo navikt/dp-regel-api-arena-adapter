@@ -6,9 +6,9 @@ required:
   - benyttet90ProsentRegel
 properties:
   grunnlag:
-    $ref: '#/components/schemas/Dagpengegrunnlag'
+    $ref: "./Dagpengegrunnlag.yaml"
   sats:
-    $ref: '#/components/schemas/Sats'
+    $ref: "./Sats.yaml"
   beregningsregel:
     type: string
     example: ORDINAER_ETTAAR

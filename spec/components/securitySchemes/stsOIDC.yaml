@@ -1,3 +1,0 @@
-type: openIdConnect
-openIdConnectUrl: >-
-  https://security-token-service.nais.preprod.local/rest/v1/sts/.well-known/openid-configuration
