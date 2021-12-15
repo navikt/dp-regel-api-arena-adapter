@@ -6,14 +6,14 @@ required:
   - inneholderNaeringsinntekter
 properties:
   inntektsPeriode:
-    $ref: '#/components/schemas/InntektsPeriode'
+    $ref: "./InntektsPeriode.yaml"
   inntekt:
     type: integer
     example: 200000
     description: Inntekt for perioden
   periode:
     type: integer
-    description: 'Siste-, nestsiste- eller tredjesiste-periode, der 1 vil si siste periode nærmest beregningsdato, og 3 vil si tredje siste periode lengst tilbake i tid.'
+    description: "Siste-, nestsiste- eller tredjesiste-periode, der 1 vil si siste periode nærmest beregningsdato, og 3 vil si tredje siste periode lengst tilbake i tid."
     example: 1
     enum:
       - 1
@@ -28,4 +28,4 @@ properties:
   andel:
     type: integer
     example: 2222
-    description: 'Andel av inntekt siste-, nestsiste- eller tredjesiste-periode'
+    description: "Andel av inntekt siste-, nestsiste- eller tredjesiste-periode"

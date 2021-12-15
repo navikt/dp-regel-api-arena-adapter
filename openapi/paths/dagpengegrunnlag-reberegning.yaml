@@ -7,59 +7,59 @@ post:
     content:
       application/json:
         schema:
-          $ref: '#/components/schemas/DagpengegrunnlagReberegningInnParametere'
+          $ref: "../components/schemas/DagpengegrunnlagReberegningInnParametere.yaml"
   responses:
-    '200':
+    "200":
       description: En beregning av dagpengegrunnlag og/eller sats
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/DagpengegrunnlagBeregning'
-    '400':
+            $ref: "../components/schemas/DagpengegrunnlagBeregning.yaml"
+    "400":
       description: >-
         Invalid input - feilmelding i henhold til [RFC7807]
         https://tools.ietf.org/html/rfc7807
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/HttpProblem'
+            $ref: "../components/schemas/HttpProblem.yaml"
           examples:
-            '400':
-              $ref: '#/components/examples/400'
-    '401':
+            "400":
+              $ref: "../components/examples/400.yaml"
+    "401":
       description: >-
         Uautorisert - feilmelding i henhold til [RFC7807]
         https://tools.ietf.org/html/rfc7807
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/HttpProblem'
+            $ref: "../components/schemas/HttpProblem.yaml"
           examples:
-            '401':
-              $ref: '#/components/examples/401'
-    '403':
+            "401":
+              $ref: "../components/examples/401.yaml"
+    "403":
       description: >-
         Ikke tilgang - feilmelding i henhold til [RFC7807]
         https://tools.ietf.org/html/rfc7807
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/HttpProblem'
+            $ref: "../components/schemas/HttpProblem.yaml"
           examples:
-            '403':
-              $ref: '#/components/examples/403'
-    '500':
+            "403":
+              $ref: "../components/examples/403.yaml"
+    "500":
       description: >-
         System error - feilmelding i henhold til [RFC7807]
         https://tools.ietf.org/html/rfc7807
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/HttpProblem'
+            $ref: "../components/schemas/HttpProblem.yaml"
           examples:
             inntektFeil:
-              $ref: '#/components/examples/hent-inntekt-feilet'
+              $ref: "../components/examples/hent-inntekt-feilet.yaml"
             negativtDagpengeGrunnlag:
-              $ref: '#/components/examples/negativt-grunnlag'
+              $ref: "../components/examples/negativt-grunnlag.yaml"
             nullDagpengeGrunnlag:
-              $ref: '#/components/examples/null-grunnlag'
+              $ref: "../components/examples/null-grunnlag.yaml"

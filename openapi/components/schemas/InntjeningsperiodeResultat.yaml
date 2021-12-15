@@ -10,4 +10,4 @@ properties:
       beregningsdatoen.
     example: true
   parametere:
-    $ref: '#/components/schemas/InntjeningsperiodeParametre'
+    $ref: "./InntjeningsperiodeParametre.yaml"

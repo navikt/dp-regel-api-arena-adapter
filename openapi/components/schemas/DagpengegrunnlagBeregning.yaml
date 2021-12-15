@@ -1,19 +1,19 @@
 allOf:
-  - $ref: '#/components/schemas/GrunnlagOgSatsSubsumsjon'
+  - $ref: "./GrunnlagOgSatsSubsumsjon.yaml"
   - type: object
     required:
       - parametere
       - resultat
     properties:
       parametere:
-        $ref: '#/components/schemas/DagpengegrunnlagResultatParametere'
+        $ref: "./DagpengegrunnlagResultatParametere.yaml"
       resultat:
-        $ref: '#/components/schemas/DagpengegrunnlagResultat'
+        $ref: "./DagpengegrunnlagResultat.yaml"
       inntekt:
         type: array
         description: Hvis manuelt grunnlag er satt så vil tom Inntekt returneres.
         items:
-          $ref: '#/components/schemas/Inntekt'
+          $ref: "./Inntekt.yaml"
       inntektManueltRedigert:
         type: boolean
         description: Indikerer at inntekten er redigert manuelt av saksbehandler

@@ -8,4 +8,4 @@ properties:
       Indikerer om subsumsjonene må revurderes etter ny beregningsdato.
     example: true
   parametere:
-    $ref: '#/components/schemas/RevurderingParametre'
+    $ref: "./RevurderingParametre.yaml"
