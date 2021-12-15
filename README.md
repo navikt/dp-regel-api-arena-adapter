@@ -32,15 +32,13 @@ bruk token i request mot APIet:
 
 ### Usage
 
-#### `npm start`
+#### `npm run start`
 Starts the development server.
 
-#### `npm run build`
-Bundles the spec and prepares web_deploy folder with static assets.
+Change files in openapi folder
 
-#### `npm test`
-Validates the spec.
+#### `npm run test`
+To test rules openapi 
 
-#### `npm run gh-pages`
-Deploys docs to GitHub Pages. You don't need to run it manually if you have Travis CI configured.
-Check [gh pages](https://navikt.github.io/dp-regel-api-arena-adapter/). 
+#### `git commit and git push `
+To deploy new version of https://navikt.github.io/dp-regel-api-arena-adapter/
