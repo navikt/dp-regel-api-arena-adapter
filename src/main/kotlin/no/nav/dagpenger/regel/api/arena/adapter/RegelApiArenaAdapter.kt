@@ -110,6 +110,7 @@ internal fun Application.regelApiAdapter(
     install(DefaultHeaders)
     install(CallLogging) {
         level = Level.INFO
+        disableDefaultColors()
 
         filter { call ->
             !call.request.path().startsWith("/isAlive") &&
