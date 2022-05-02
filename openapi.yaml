@@ -427,7 +427,7 @@ components:
             Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt
             tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal
             benyttes.
-          example: 2019-01-11
+          example: '2019-01-11'
         harAvtjentVerneplikt:
           type: boolean
           default: false
@@ -449,7 +449,7 @@ components:
           description: >-
             Dato for hvilket regelverk som skal brukes i utregning. Defaulter
             til samme dato som beregningsdato
-          example: 2019-01-11
+          example: '2019-01-11'
     MinsteinntektOgPeriodeSubsumsjon:
       type: object
       required:
@@ -468,11 +468,11 @@ components:
         opprettet:
           type: string
           description: Dato for når kjøringen ble opprettet
-          example: 2018-12-26T14:42:09Z
+          example: '2018-12-26T14:42:09Z'
         utfort:
           type: string
           description: Dato for når kjøringen ble oppdatert
-          example: 2018-12-26T14:43:12Z
+          example: '2018-12-26T14:43:12Z'
     MinsteinntektResultatParametere:
       type: object
       required:
@@ -496,7 +496,7 @@ components:
             Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt
             tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal
             benyttes.
-          example: 2019-01-11
+          example: '2019-01-11'
         inntektsId:
           type: string
           format: ulid
@@ -649,7 +649,7 @@ components:
             Dato beregning skal utføres på bakgrunn av. Regelverk og inntekt på
             aktuelt tidspunkt skal benyttes. Inntekter i henhold til gitt dato
             skal benyttes.
-          example: 2019-01-11
+          example: '2019-01-11'
         harAvtjentVerneplikt:
           type: boolean
           default: false
@@ -685,7 +685,7 @@ components:
           description: >-
             Dato for hvilket regelverk som skal brukes i utregning. Defaulter
             til samme dato som beregningsdato
-          example: 2019-01-11
+          example: '2019-01-11'
     GrunnlagOgSatsSubsumsjon:
       type: object
       required:
@@ -704,11 +704,11 @@ components:
         opprettet:
           type: string
           description: Dato for når kjøringen ble opprettet
-          example: 2018-12-26T14:42:09Z
+          example: '2018-12-26T14:42:09Z'
         utfort:
           type: string
           description: Dato for når kjøringen ble oppdatert
-          example: 2018-12-26T14:43:12Z
+          example: '2018-12-26T14:43:12Z'
     DagpengegrunnlagResultatParametere:
       type: object
       required:
@@ -731,7 +731,7 @@ components:
             Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt
             tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal
             benyttes.
-          example: 2019-01-11
+          example: '2019-01-11'
         inntektsId:
           type: string
           format: ulid
@@ -897,7 +897,7 @@ components:
             Dato beregning skal utføres på bakgrunn av. Regelverk på aktuelt
             tidspunkt skal benyttes. Inntekter i henhold til gitt dato skal
             benyttes.
-          example: 2019-01-11
+          example: '2019-01-11'
         inntektsId:
           type: string
           format: ulid
@@ -936,7 +936,7 @@ components:
         beregningsdato:
           type: string
           description: Dato sjekken skal utføres på bakgrunn av.
-          example: 2019-01-11
+          example: '2019-01-11'
     RevurderingResultat:
       type: object
       required:
@@ -972,7 +972,7 @@ components:
       value:
         aktorId: 1019955667
         vedtakId: 1234
-        beregningsdato: 2019-01-11
+        beregningsdato: '2019-01-11'
         harAvtjentVerneplikt: false
         oppfyllerKravTilFangstOgFisk: false
         harArbeidsperiodeEosSiste12Maaneder: false
@@ -984,7 +984,7 @@ components:
       value:
         aktorId: 1019955667
         vedtakId: 1234
-        beregningsdato: 2019-01-11
+        beregningsdato: '2019-01-11'
         bruktInntektsPeriode:
           foersteMaaned: 2019-01
           sisteMaaned: 2018-01
@@ -993,14 +993,14 @@ components:
       value:
         aktorId: 1019955667
         vedtakId: 1234
-        beregningsdato: 2019-01-11
+        beregningsdato: '2019-01-11'
         harAvtjentVerneplikt: true
     minsteinntekt-fiskBruktInntekt:
       summary: Vurdering som hensyntar særvilkår og tidligere brukt inntekt
       value:
         aktorId: 1019955667
         vedtakId: 1234
-        beregningsdato: 2019-01-11
+        beregningsdato: '2019-01-11'
         oppfyllerKravTilFangstOgFisk: true
         bruktInntektsPeriode:
           foersteMaaned: 2019-01
@@ -1010,18 +1010,18 @@ components:
       value:
         aktorId: 1019955667
         vedtakId: 1234
-        beregningsdato: 2019-01-11
+        beregningsdato: '2019-01-11'
         oppfyllerKravTilLaerling: true
     minsteinntekt-resultat:
       summary: Eksempelresultat
       value:
         beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FAV
-        opprettet: 2018-12-26T14:42:09Z
-        utfort: 2018-12-26T14:43:12Z
+        opprettet: '2018-12-26T14:42:09Z'
+        utfort: '2018-12-26T14:43:12Z'
         parametre:
           aktorId: 1019955667
           vedtakId: 1234
-          beregningsdato: 2019-07-01
+          beregningsdato: '2019-07-01'
           inntektsId: 01D2FB328P06WD808P22N9CFY5
           harAvtjentVerneplikt: false
           oppfyllerKravTilFangstOgFisk: false
@@ -1072,12 +1072,12 @@ components:
       summary: Fastsatt både grunnlag og sats uten særvilkår
       value:
         beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FAV
-        opprettet: 2018-12-26T14:42:09Z
-        utfort: 2018-12-26T14:43:12Z
+        opprettet: '2018-12-26T14:42:09Z'
+        utfort: '2018-12-26T14:43:12Z'
         parametere:
           aktorId: 1019955667
           vedtakId: 1234
-          beregningsdato: 2019-01-11
+          beregningsdato: '2019-01-11'
         resultat:
           grunnlag:
             avkortet: 342352
@@ -1089,12 +1089,12 @@ components:
       summary: Eksempel for å fastsette både grunnlag og sats med særvilkår
       value:
         beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FBV
-        opprettet: 2018-12-26T14:42:09Z
-        utfort: 2018-12-26T14:43:12Z
+        opprettet: '2018-12-26T14:42:09Z'
+        utfort: '2018-12-26T14:43:12Z'
         parametere:
           aktorId: 1019955667
           vedtakId: 1234
-          beregningsdato: 2019-01-11
+          beregningsdato: '2019-01-11'
           harAvtjentVerneplikt: true
         resultat:
           grunnlag:
@@ -1107,12 +1107,12 @@ components:
       summary: Eksempel for å fastsette kun sats
       value:
         beregningsId: 01ARZ3NDEKTSV4RRFFQ69G5FDV
-        opprettet: 2018-12-26T14:42:09Z
-        utfort: 2018-12-26T14:43:12Z
+        opprettet: '2018-12-26T14:42:09Z'
+        utfort: '2018-12-26T14:43:12Z'
         parametere:
           aktorId: 1019955667
           vedtakId: 1234
-          beregningsdato: 2019-01-11
+          beregningsdato: '2019-01-11'
           antallBarn: 0
           grunnlag: 250250
         resultat:
