@@ -27,7 +27,6 @@ spec:
       memory: 256Mi
   ingresses:
     - "https://dp-regel-api-arena-adapter.nais.preprod.local"
-    - "https://dp-regel-api-arena-adapter-t5.nais.preprod.local"
   secureLogs:
     enabled: true
   vault:
