@@ -73,7 +73,7 @@ jobs:
           VARS: nais/vars.yaml
           PRINT_PAYLOAD: true
 
-  deploy-t5:
+  deploy-t5-instans:
     name: Deploy to t5
     needs: [build]
     if: github.ref == 'refs/heads/master'
@@ -90,7 +90,6 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-fss
           RESOURCE: nais/t5/nais.yaml
-          VARS: nais/vars.yaml
           PRINT_PAYLOAD: true
 
   acceptance-tests:
