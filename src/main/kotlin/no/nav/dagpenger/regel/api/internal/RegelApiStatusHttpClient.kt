@@ -17,7 +17,6 @@ internal class RegelApiStatusHttpClient(
     private val delayDuration = Duration.ofMillis(100)
 
     private fun pollInternal(statusUrl: String): BehovStatusPollResult {
-
         val timer = clientLatencyStats.labels("poll").startTimer()
         try {
             val (_, response, result) = client.request(Method.GET, statusUrl) {
@@ -53,8 +52,12 @@ internal class RegelApiStatusHttpClient(
                 return@withTimeout pollWithDelay(statusUrl)
             }
         } catch (e: Exception) {
+            val behovId = statusUrl.substringAfterLast("/")
             when (e) {
-                is TimeoutCancellationException -> throw RegelApiTimeoutException("Polled behov status for more than ${timeout.toMillis()} milliseconds")
+                is TimeoutCancellationException -> throw RegelApiTimeoutException(
+                    "Polled behov status (behovId=$behovId) for more than ${timeout.toMillis()} milliseconds"
+                )
+
                 else -> throw RegelApiStatusHttpClientException("Failed", e)
             }
         }

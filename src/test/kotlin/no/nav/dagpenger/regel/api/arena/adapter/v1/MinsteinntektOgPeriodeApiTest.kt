@@ -35,9 +35,7 @@ import java.time.YearMonth
 import kotlin.test.assertEquals
 
 class MinsteinntektOgPeriodeApiTest {
-
     private val minsteinntektPath = "/v1/minsteinntekt"
-
     private val jwkStub = JwtStub()
     private val token = jwkStub.createTokenFor("systembrukeren")
 
@@ -50,10 +48,9 @@ class MinsteinntektOgPeriodeApiTest {
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = false,
             bruktInntektsPeriode = InntektsPeriode(YearMonth.of(2019, 4), YearMonth.of(2019, 7)),
-            oppfyllerKravTilLaerling = false,
+            oppfyllerKravTilLaerling = false
         )
         val parametereMedRegelverksdato = parametere.copy(regelverksdato = LocalDate.of(2020, 6, 14))
-
         val standardBehovRequest = BehovRequest(
             aktorId = "12345",
             vedtakId = 123,
@@ -75,11 +72,9 @@ class MinsteinntektOgPeriodeApiTest {
 
     @Test
     fun `Minsteinntekt og Periode API spesifkasjonstest - Skal håndtere json riktig`() {
-
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         coEvery {
-
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
                 any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
@@ -123,11 +118,9 @@ class MinsteinntektOgPeriodeApiTest {
 
     @Test
     fun `Minsteinntekt og Periode API spesifkasjonstest - Skal ikke inkludere minsteinntektregels resultat hvis det er null`() {
-
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         coEvery {
-
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
                 any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
@@ -171,7 +164,6 @@ class MinsteinntektOgPeriodeApiTest {
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for minsteinntekt ved uhåndterte feil`() {
-
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         coEvery {
@@ -214,7 +206,6 @@ class MinsteinntektOgPeriodeApiTest {
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for Subsumsjon med problem`() {
-
         val problem = Problem(title = "problem")
         val synchronousSubsumsjonClient = mockk<SynchronousSubsumsjonClient>().apply {
             coEvery {
@@ -257,7 +248,6 @@ class MinsteinntektOgPeriodeApiTest {
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for minsteinntekt ved timout errors`() {
-
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         coEvery {
@@ -300,7 +290,6 @@ class MinsteinntektOgPeriodeApiTest {
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 hvis både verneplikt og lærling er true`() {
-
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider()
@@ -324,7 +313,10 @@ class MinsteinntektOgPeriodeApiTest {
             }.apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
                 val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals("Ugyldig kombinasjon av parametere: harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig", problem?.title)
+                assertEquals(
+                    "Ugyldig kombinasjon av parametere: harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig",
+                    problem?.title
+                )
                 assertEquals("urn:dp:error:parameter", problem?.type.toString())
                 assertEquals(400, problem?.status)
             }
@@ -333,7 +325,6 @@ class MinsteinntektOgPeriodeApiTest {
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for dagpengegrunnlag med ugyldig json request`() {
-
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider()
@@ -359,7 +350,6 @@ class MinsteinntektOgPeriodeApiTest {
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for json med manglende obligatoriske felt`() {
-
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider()
@@ -419,11 +409,9 @@ class MinsteinntektOgPeriodeApiTest {
 
     @Test
     fun `Skal håndtere request med både regelverk- og beregningsdato`() {
-
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         coEvery {
-
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
                 any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
@@ -499,7 +487,6 @@ class MinsteinntektOgPeriodeApiTest {
 
     private val expectedJson =
         """{"minsteinntektSubsumsjonsId":"12345","periodeSubsumsjonsId":"1234","opprettet":"2000-08-11T15:30:11","utfort":"2000-08-11T15:30:11","parametere":{"aktorId":"1234","vedtakId":123,"beregningsdato":"2019-02-10","inntektsId":"13445","harAvtjentVerneplikt":false,"oppfyllerKravTilFangstOgFisk":false,"oppfyllerKravTilLaerling":false,"bruktInntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"}},"resultat":{"oppfyllerKravTilMinsteArbeidsinntekt":true,"periodeAntallUker":104, "minsteinntektRegel": "ORDINAER"},"inntekt":[{"inntekt":4999423,"periode":1,"inntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"},"inneholderNaeringsinntekter":false,"andel":111}],"inntektManueltRedigert":true,"inntektAvvik":true}"""
-
     private val expectedJsonUtenMinsteinntektRegel =
         """{"minsteinntektSubsumsjonsId":"12345","periodeSubsumsjonsId":"1234","opprettet":"2000-08-11T15:30:11","utfort":"2000-08-11T15:30:11","parametere":{"aktorId":"1234","vedtakId":123,"beregningsdato":"2019-02-10","inntektsId":"13445","harAvtjentVerneplikt":false,"oppfyllerKravTilFangstOgFisk":false,"oppfyllerKravTilLaerling":false,"bruktInntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"}},"resultat":{"oppfyllerKravTilMinsteArbeidsinntekt":true,"periodeAntallUker":104},"inntekt":[{"inntekt":4999423,"periode":1,"inntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"},"inneholderNaeringsinntekter":false,"andel":111}],"inntektManueltRedigert":true,"inntektAvvik":true}"""
 }

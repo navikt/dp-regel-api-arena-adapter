@@ -42,9 +42,7 @@ import java.time.YearMonth
 import kotlin.test.assertEquals
 
 class GrunnlagOgSatsApiTest {
-
     private val dagpengegrunnlagPath = "/v1/dagpengegrunnlag"
-
     private val jwkStub = JwtStub()
     private val token = jwkStub.createTokenFor("systembrukeren")
 
@@ -62,7 +60,6 @@ class GrunnlagOgSatsApiTest {
             oppfyllerKravTilLaerling = false
         )
         val parametreMedRegelverksdato = parametere.copy(regelverksdato = LocalDate.of(2020, 6, 14))
-
         val standardBehovRequest = BehovRequest(
             aktorId = "12345",
             vedtakId = 123,
@@ -90,7 +87,6 @@ class GrunnlagOgSatsApiTest {
             beregningsdato = LocalDate.of(2019, 5, 13),
             grunnlag = 4000
         )
-
         val standardBehovRequest = BehovRequest(
             aktorId = "12345",
             vedtakId = 123,
@@ -108,7 +104,6 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Grunnlag and Sats API spesifikasjonstest - håndterer json korrekt`() {
-
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         coEvery {
@@ -156,7 +151,6 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Grunnlag og Sats API spesifikasjonstest - håndterer json body korrekt for v2 med beregningsregel i sats`() {
-
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         coEvery {
@@ -205,7 +199,6 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Grunnlag og Sats re-beregning API spesifikasjonstest - håndterer json korrekt`() {
-
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         coEvery {
@@ -326,7 +319,6 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Grunnlag og Sats re-beregning API skal svare med 400 for ugyldig inntektsId`() {
-
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
@@ -359,7 +351,6 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for uhåndtert feil`() {
-
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         coEvery {
@@ -402,7 +393,6 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for SubsumsjonProblem`() {
-
         val problem = Problem(title = "subsumsjon problem")
         val synchronousSubsumsjonClient = mockk<SynchronousSubsumsjonClient>().apply {
             coEvery {
@@ -445,7 +435,6 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for timeout errors`() {
-
         val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
 
         coEvery {
@@ -488,7 +477,6 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for dagpengegrunnlag med ugyldig json request`() {
-
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider()
@@ -514,7 +502,6 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for json med manglende obligatoriske felt`() {
-
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider()
@@ -543,7 +530,6 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 hvis både verneplikt og lærling er true`() {
-
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider()
@@ -729,7 +715,6 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 hvis både manueltGrunnlag og tidligereGrunnlag er satt`() {
-
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider()
