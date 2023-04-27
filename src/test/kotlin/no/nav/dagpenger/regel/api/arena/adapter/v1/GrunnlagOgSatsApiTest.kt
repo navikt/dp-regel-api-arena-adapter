@@ -519,7 +519,7 @@ class GrunnlagOgSatsApiTest {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
                 val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
                 assertEquals(
-                    "Parameteret er ikke gyldig, mangler obligatorisk felt: 'Required value 'vedtakId' missing at \$'",
+                    "Parameteret er ikke gyldig json",
                     problem?.title
                 )
                 assertEquals("urn:dp:error:parameter", problem?.type.toString())

@@ -1,7 +1,7 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
 import com.auth0.jwk.JwkProvider
-import io.ktor.application.Application
+import io.ktor.server.application.Application
 import io.mockk.mockk
 import io.prometheus.client.CollectorRegistry
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
@@ -13,7 +13,7 @@ internal fun Application.mockedRegelApiAdapter(
     jwkProvider: JwkProvider = mockk(),
     inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient = mockk(),
     nyVurderingHttpClient: RegelApiNyVurderingHttpClient = mockk(),
-    synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+    synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk(),
 ) {
     return regelApiAdapter(
         jwtIssuer = jwtIssuer,
@@ -21,6 +21,6 @@ internal fun Application.mockedRegelApiAdapter(
         inntektApiBeregningsdatoHttpClient = inntektApiBeregningsdatoHttpClient,
         kreverRebergningClient = nyVurderingHttpClient,
         synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-        collectorRegistry = CollectorRegistry(true)
+        collectorRegistry = CollectorRegistry(true),
     )
 }

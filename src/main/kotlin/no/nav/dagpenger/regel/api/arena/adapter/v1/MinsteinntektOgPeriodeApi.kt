@@ -1,12 +1,12 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1
 
-import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
-import io.ktor.request.receive
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.post
-import io.ktor.routing.route
+import io.ktor.server.application.call
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.post
+import io.ktor.server.routing.route
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
@@ -22,9 +22,8 @@ import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 private val sikkerlogg = KotlinLogging.logger("tjenestekall.minsteinntektOgPeriodeApi")
 
 internal fun Route.MinsteinntektOgPeriodeApi(
-    synchronousSubsumsjonClient: SynchronousSubsumsjonClient
+    synchronousSubsumsjonClient: SynchronousSubsumsjonClient,
 ) {
-
     route("/minsteinntekt") {
         post {
             withContext(Dispatchers.IO) {
@@ -37,7 +36,7 @@ internal fun Route.MinsteinntektOgPeriodeApi(
                 val minsteinntektOgPeriodeSubsumsjon: MinsteinntektOgPeriodeSubsumsjon =
                     synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                         behovRequest,
-                        ::extractMinsteinntektOgPeriode
+                        ::extractMinsteinntektOgPeriode,
                     )
 
                 call.respond(HttpStatusCode.OK, minsteinntektOgPeriodeSubsumsjon)
@@ -48,13 +47,17 @@ internal fun Route.MinsteinntektOgPeriodeApi(
 
 fun MinsteinntektOgPeriodeParametere.validate() {
     this.bruktInntektsPeriode?.let {
-        if (it.foersteMaaned.isAfter(it.sisteMaaned)) throw InvalidInnteksperiodeException(
-            "Feil bruktInntektsPeriode: foersteMaaned=${it.foersteMaaned} er etter sisteMaaned=${it.sisteMaaned}"
+        if (it.foersteMaaned.isAfter(it.sisteMaaned)) {
+            throw InvalidInnteksperiodeException(
+                "Feil bruktInntektsPeriode: foersteMaaned=${it.foersteMaaned} er etter sisteMaaned=${it.sisteMaaned}",
+            )
+        }
+    }
+    if (this.oppfyllerKravTilLaerling && this.harAvtjentVerneplikt == true) {
+        throw UgyldigParameterkombinasjonException(
+            "harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig",
         )
     }
-    if (this.oppfyllerKravTilLaerling && this.harAvtjentVerneplikt == true) throw UgyldigParameterkombinasjonException(
-        "harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig"
-    )
 }
 
 fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequest {
@@ -69,10 +72,10 @@ fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequ
         bruktInntektsPeriode = parametere.bruktInntektsPeriode?.let {
             InntektsPeriode(
                 førsteMåned = it.foersteMaaned,
-                sisteMåned = it.sisteMaaned
+                sisteMåned = it.sisteMaaned,
             )
         },
-        regelverksdato = parametere.regelverksdato
+        regelverksdato = parametere.regelverksdato,
     ).also {
         withLoggingContext("requestId" to it.requestId) {
             sikkerlogg.info { "Lager behov for $parametere" }

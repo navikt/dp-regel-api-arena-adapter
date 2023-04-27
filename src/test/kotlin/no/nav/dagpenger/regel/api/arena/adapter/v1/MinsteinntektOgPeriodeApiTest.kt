@@ -48,7 +48,7 @@ class MinsteinntektOgPeriodeApiTest {
             harAvtjentVerneplikt = true,
             oppfyllerKravTilFangstOgFisk = false,
             bruktInntektsPeriode = InntektsPeriode(YearMonth.of(2019, 4), YearMonth.of(2019, 7)),
-            oppfyllerKravTilLaerling = false
+            oppfyllerKravTilLaerling = false,
         )
         val parametereMedRegelverksdato = parametere.copy(regelverksdato = LocalDate.of(2020, 6, 14))
         val standardBehovRequest = BehovRequest(
@@ -60,9 +60,9 @@ class MinsteinntektOgPeriodeApiTest {
             oppfyllerKravTilFangstOgFisk = false,
             bruktInntektsPeriode = no.nav.dagpenger.regel.api.internal.models.InntektsPeriode(
                 YearMonth.of(2019, 4),
-                YearMonth.of(2019, 7)
+                YearMonth.of(2019, 7),
             ),
-            lærling = false
+            lærling = false,
         )
         val behovRequestMedRegelverksdato = standardBehovRequest.copy(regelverksdato = LocalDate.of(2020, 6, 14))
 
@@ -77,14 +77,14 @@ class MinsteinntektOgPeriodeApiTest {
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>(),
             )
         } returns minsteinntektOgPeriodeSubsumsjon()
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, minsteinntektPath) {
@@ -99,7 +99,7 @@ class MinsteinntektOgPeriodeApiTest {
                       "harAvtjentVerneplikt": false,
                       "oppfyllerKravTilFangstOgFisk": false
                     }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -109,8 +109,8 @@ class MinsteinntektOgPeriodeApiTest {
                     CustomComparator(
                         JSONCompareMode.STRICT,
                         Customization("opprettet") { _, _ -> true },
-                        Customization("utfort") { _, _ -> true }
-                    )
+                        Customization("utfort") { _, _ -> true },
+                    ),
                 )
             }
         }
@@ -123,14 +123,14 @@ class MinsteinntektOgPeriodeApiTest {
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>(),
             )
         } returns minsteinntektOgPeriodeSubsumsjon().copy(resultat = MinsteinntektOgPeriodeResultat(true, 104, null))
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, minsteinntektPath) {
@@ -145,7 +145,7 @@ class MinsteinntektOgPeriodeApiTest {
                       "harAvtjentVerneplikt": false,
                       "oppfyllerKravTilFangstOgFisk": false
                     }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -155,8 +155,8 @@ class MinsteinntektOgPeriodeApiTest {
                     CustomComparator(
                         JSONCompareMode.STRICT,
                         Customization("opprettet") { _, _ -> true },
-                        Customization("utfort") { _, _ -> true }
-                    )
+                        Customization("utfort") { _, _ -> true },
+                    ),
                 )
             }
         }
@@ -169,14 +169,14 @@ class MinsteinntektOgPeriodeApiTest {
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>(),
             )
         } throws RuntimeException()
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, minsteinntektPath) {
@@ -192,7 +192,7 @@ class MinsteinntektOgPeriodeApiTest {
                       "oppfyllerKravTilFangstOgFisk": false
                     }
 
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.InternalServerError, response.status())
@@ -211,7 +211,7 @@ class MinsteinntektOgPeriodeApiTest {
             coEvery {
                 this@apply.getSubsumsjonSynchronously(
                     any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>(),
                 )
             } throws SubsumsjonProblem(problem)
         }
@@ -219,7 +219,7 @@ class MinsteinntektOgPeriodeApiTest {
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, minsteinntektPath) {
@@ -235,7 +235,7 @@ class MinsteinntektOgPeriodeApiTest {
                       "oppfyllerKravTilFangstOgFisk": false
                     }
 
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.BadGateway, response.status())
@@ -253,14 +253,14 @@ class MinsteinntektOgPeriodeApiTest {
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>(),
             )
         } throws RegelApiTimeoutException("timeout")
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, minsteinntektPath) {
@@ -276,7 +276,7 @@ class MinsteinntektOgPeriodeApiTest {
                       "oppfyllerKravTilFangstOgFisk": false
                     }
 
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.GatewayTimeout, response.status())
@@ -292,7 +292,7 @@ class MinsteinntektOgPeriodeApiTest {
     fun `Skal svare med HTTP problem rfc7807 hvis både verneplikt og lærling er true`() {
         withTestApplication({
             mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider()
+                jwkProvider = jwkStub.stubbedJwkProvider(),
             )
         }) {
             handleRequest(HttpMethod.Post, minsteinntektPath) {
@@ -308,14 +308,14 @@ class MinsteinntektOgPeriodeApiTest {
                       "oppfyllerKravTilFangstOgFisk": false,
                       "oppfyllerKravTilLaerling": true
                     }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
                 val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
                 assertEquals(
                     "Ugyldig kombinasjon av parametere: harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig",
-                    problem?.title
+                    problem?.title,
                 )
                 assertEquals("urn:dp:error:parameter", problem?.type.toString())
                 assertEquals(400, problem?.status)
@@ -327,7 +327,7 @@ class MinsteinntektOgPeriodeApiTest {
     fun `Skal svare med HTTP problem rfc7807 for dagpengegrunnlag med ugyldig json request`() {
         withTestApplication({
             mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider()
+                jwkProvider = jwkStub.stubbedJwkProvider(),
             )
         }) {
             handleRequest(HttpMethod.Post, minsteinntektPath) {
@@ -336,7 +336,7 @@ class MinsteinntektOgPeriodeApiTest {
                 setBody(
                     """
                         { "badjson" : "error}
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
@@ -352,7 +352,7 @@ class MinsteinntektOgPeriodeApiTest {
     fun `Skal svare med HTTP problem rfc7807 for json med manglende obligatoriske felt`() {
         withTestApplication({
             mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider()
+                jwkProvider = jwkStub.stubbedJwkProvider(),
             )
         }) {
             handleRequest(HttpMethod.Post, minsteinntektPath) {
@@ -361,14 +361,14 @@ class MinsteinntektOgPeriodeApiTest {
                 setBody(
                     """
                         {  "aktorId": "1234" }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
                 val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
                 assertEquals(
-                    "Parameteret er ikke gyldig, mangler obligatorisk felt: 'Required value 'vedtakId' missing at \$'",
-                    problem?.title
+                    "Parameteret er ikke gyldig json",
+                    problem?.title,
                 )
                 assertEquals("urn:dp:error:parameter", problem?.type.toString())
                 assertEquals(400, problem?.status)
@@ -380,7 +380,7 @@ class MinsteinntektOgPeriodeApiTest {
     fun `Skal svare med 401 hvis request mangler bearer token`() {
         withTestApplication({
             mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider()
+                jwkProvider = jwkStub.stubbedJwkProvider(),
             )
         }) {
             handleRequest(HttpMethod.Post, minsteinntektPath) {
@@ -395,7 +395,7 @@ class MinsteinntektOgPeriodeApiTest {
                       "oppfyllerKravTilFangstOgFisk": false
                     }
 
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.Unauthorized, response.status())
@@ -414,14 +414,14 @@ class MinsteinntektOgPeriodeApiTest {
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>()
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>(),
             )
         } returns minsteinntektOgPeriodeSubsumsjon()
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, minsteinntektPath) {
@@ -437,7 +437,7 @@ class MinsteinntektOgPeriodeApiTest {
                       "oppfyllerKravTilFangstOgFisk": false,
                       "regelverksdato": "2020-03-28"
                     }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -460,28 +460,28 @@ class MinsteinntektOgPeriodeApiTest {
                 oppfyllerKravTilFangstOgFisk = false,
                 bruktInntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                     foersteMaaned = YearMonth.of(2018, 1),
-                    sisteMaaned = YearMonth.of(2019, 1)
-                )
+                    sisteMaaned = YearMonth.of(2019, 1),
+                ),
             ),
             resultat = MinsteinntektOgPeriodeResultat(
                 oppfyllerKravTilMinsteArbeidsinntekt = true,
                 periodeAntallUker = 104,
-                minsteinntektRegel = MinsteinntektRegel.ORDINAER
+                minsteinntektRegel = MinsteinntektRegel.ORDINAER,
             ),
             inntekt = setOf(
                 no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
                     inntekt = 4999423,
                     inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                         foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1)
+                        sisteMaaned = YearMonth.of(2019, 1),
                     ),
                     andel = 111,
                     inneholderNaeringsinntekter = false,
-                    periode = 1
-                )
+                    periode = 1,
+                ),
             ),
             inntektManueltRedigert = true,
-            inntektAvvik = true
+            inntektAvvik = true,
         )
     }
 

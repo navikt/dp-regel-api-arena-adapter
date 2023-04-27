@@ -1,13 +1,13 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1
 
 import de.huxhorn.sulky.ulid.ULID
-import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
-import io.ktor.request.receive
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.post
-import io.ktor.routing.route
+import io.ktor.server.application.call
+import io.ktor.server.request.receive
+import io.ktor.server.response.respond
+import io.ktor.server.routing.Route
+import io.ktor.server.routing.post
+import io.ktor.server.routing.route
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import mu.KotlinLogging
@@ -23,9 +23,8 @@ import no.nav.dagpenger.regel.api.internal.extractGrunnlagOgSats
 private val sikkerlogg = KotlinLogging.logger("tjenestekall.grunnlagOgSatsApi")
 
 internal fun Route.GrunnlagOgSatsApi(
-    synchronousSubsumsjonClient: SynchronousSubsumsjonClient
+    synchronousSubsumsjonClient: SynchronousSubsumsjonClient,
 ) {
-
     route("/dagpengegrunnlag") {
         post {
             withContext(Dispatchers.IO) {
@@ -81,7 +80,7 @@ fun behovFromParametere(parametere: GrunnlagOgSatsParametere): BehovRequest {
         forrigeGrunnlag = parametere.forrigeGrunnlag,
         antallBarn = parametere.antallBarn,
         lærling = parametere.oppfyllerKravTilLaerling,
-        regelverksdato = parametere.regelverksdato
+        regelverksdato = parametere.regelverksdato,
     ).also {
         withLoggingContext("requestId" to it.requestId) {
             sikkerlogg.info { "Lager behov for $parametere" }
@@ -101,7 +100,7 @@ fun behovFromParametere(parametere: GrunnlagOgSatsReberegningParametere): BehovR
         antallBarn = parametere.antallBarn,
         inntektsId = parametere.inntektsId,
         lærling = parametere.oppfyllerKravTilLaerling,
-        regelverksdato = parametere.regelverksdato
+        regelverksdato = parametere.regelverksdato,
     ).also {
         withLoggingContext("requestId" to it.requestId) {
             sikkerlogg.info { "Lager behov for $parametere" }

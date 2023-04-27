@@ -27,7 +27,7 @@ repositories {
 
 application {
     applicationName = "dp-regel-api-arena-adapter"
-    mainClassName = "no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterKt"
+    mainClass.set("no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterKt")
 }
 
 java {
@@ -40,20 +40,26 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions.
 dependencies {
     implementation(kotlin("stdlib"))
 
-    implementation(Ktor.server)
-    implementation(Ktor.serverNetty)
-    implementation(Ktor.auth)
-    implementation(Ktor.authJwt) {
-        exclude(group = "junit")
-    }
-    implementation(Ktor.micrometerMetrics)
+    implementation(Ktor2.Server.library("netty"))
+    implementation(Ktor2.Server.library("auth"))
+    implementation(Ktor2.Server.library("auth-jwt"))
+    implementation(Ktor2.Server.library("default-headers"))
+    implementation(Ktor2.Server.library("call-logging"))
+    implementation(Ktor2.Server.library("content-negotiation"))
+    implementation("io.ktor:ktor-serialization-jackson:${Ktor2.version}")
+    implementation(Ktor2.Server.library("status-pages"))
+    implementation(Ktor2.Server.library("metrics-micrometer"))
+
+    implementation(Jackson.core)
+    implementation(Jackson.kotlin)
+    implementation(Jackson.jsr310)
+
     implementation(Dagpenger.Biblioteker.Ktor.Server.apiKeyAuth)
     implementation(Micrometer.prometheusRegistry)
 
     implementation(Moshi.moshi)
     implementation(Moshi.moshiAdapters)
     implementation(Moshi.moshiKotlin)
-    implementation(Moshi.moshiKtor)
 
     implementation(Fuel.fuel)
     implementation(Fuel.fuelMoshi)
@@ -62,6 +68,7 @@ dependencies {
     implementation(Log4j2.api)
     implementation(Log4j2.core)
     implementation(Log4j2.slf4j)
+    implementation("org.slf4j:slf4j-api:2.0.7")
     implementation(Log4j2.library("layout-template-json"))
     implementation(Kotlin.Logging.kotlinLogging)
 
@@ -72,13 +79,10 @@ dependencies {
     implementation(Ulid.ulid)
 
     // unleash
-    implementation("no.finn.unleash:unleash-client-java:3.2.9")
+    implementation("io.getunleash:unleash-client-java:8.0.0")
 
     testImplementation(kotlin("test"))
-    testImplementation(Ktor.ktorTest) {
-        // https://youtrack.jetbrains.com/issue/KT-46090
-        exclude("org.jetbrains.kotlin", "kotlin-test-junit")
-    }
+    testImplementation(Ktor2.Server.library("test-host"))
     testImplementation(Junit5.api)
     testImplementation(KoTest.assertions)
     testImplementation(KoTest.runner)
