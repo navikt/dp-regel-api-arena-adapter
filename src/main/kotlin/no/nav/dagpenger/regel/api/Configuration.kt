@@ -9,7 +9,7 @@ import com.natpryce.konfig.intType
 import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
 import mu.KotlinLogging
-import no.nav.dagpenger.ktor.auth.ApiKeyVerifier
+import no.nav.dagpenger.regel.api.arena.adapter.ApiKeyVerifier
 
 private val LOGGER = KotlinLogging.logger {}
 

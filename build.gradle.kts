@@ -20,7 +20,6 @@ apply {
 
 repositories {
     mavenCentral()
-    mavenCentral()
     maven("https://packages.confluent.io/maven/")
     maven("https://jitpack.io")
 }
@@ -54,7 +53,7 @@ dependencies {
     implementation(Jackson.kotlin)
     implementation(Jackson.jsr310)
 
-    implementation(Dagpenger.Biblioteker.Ktor.Server.apiKeyAuth)
+    implementation("commons-codec:commons-codec:1.15")
     implementation(Micrometer.prometheusRegistry)
 
     implementation(Moshi.moshi)

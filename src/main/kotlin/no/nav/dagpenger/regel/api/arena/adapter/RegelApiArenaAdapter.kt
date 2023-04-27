@@ -89,12 +89,7 @@ fun main() {
         )
     }
 
-    app.start(wait = false)
-    Runtime.getRuntime().addShutdownHook(
-        Thread {
-            app.stop(5000, 60000)
-        },
-    )
+    app.start(wait = true)
 }
 
 internal fun Application.regelApiAdapter(
