@@ -1,7 +1,7 @@
 package no.nav.dagpenger.regel.api
 
-import no.finn.unleash.DefaultUnleash
-import no.finn.unleash.util.UnleashConfig
+import io.getunleash.DefaultUnleash
+import io.getunleash.util.UnleashConfig
 
 fun setupUnleash(unleashApiUrl: String): DefaultUnleash {
     val appName = "dp-regel-api-arena-adapter"
