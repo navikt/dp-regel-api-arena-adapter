@@ -40,6 +40,8 @@ data class GrunnlagOgSatsResultat(
 enum class GrunnlagBeregningsregel {
     ORDINAER_OVER_6G_SISTE_2019,
     ORDINAER_OVER_6G_3SISTE_2019,
+    ORDINAER_OVER_6G_SISTE_2021,
+    ORDINAER_OVER_6G_3SISTE_2021,
     ORDINAER_ETTAAR,
     ORDINAER_TREAAR,
     MANUELL_UNDER_6G,
@@ -57,6 +59,7 @@ data class Grunnlag(
     val uavkortet: Int? = null,
     val beregningsregel: GrunnlagBeregningsregel? = null
 )
+
 enum class SatsBeregningsregel {
     ORDINAER,
     KORONA,

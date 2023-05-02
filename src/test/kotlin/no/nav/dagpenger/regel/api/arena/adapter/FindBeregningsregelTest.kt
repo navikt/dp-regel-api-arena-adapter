@@ -20,10 +20,23 @@ class FindBeregningsregelTest {
     }
 
     @Test
+    fun `Skal returnere beregningsregel ORDINAER_OVER_6G_SISTE_2021 når den er satt til ArbeidsinntektSiste12(2021) og harAvkortet`() {
+        val regel = findBeregningsregel("ArbeidsinntektSiste12(2021)", true)
+
+        assertEquals(GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2021, regel)
+    }
+
+    @Test
     fun `Skal returnere beregningsregel ORDINAER_OVER_6G_SISTE_2019 når den er satt til FangstOgFiskSiste12 og harAvkortet`() {
         val regel = findBeregningsregel("FangstOgFiskSiste12", true)
 
         assertEquals(GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019, regel)
+    }
+    @Test
+    fun `Skal returnere beregningsregel ORDINAER_OVER_6G_SISTE_2021 når den er satt til FangstOgFiskSiste12(2021) og harAvkortet`() {
+        val regel = findBeregningsregel("FangstOgFiskSiste12(2021)", true)
+
+        assertEquals(GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2021, regel)
     }
 
     @Test
@@ -32,12 +45,24 @@ class FindBeregningsregelTest {
 
         assertEquals(GrunnlagBeregningsregel.ORDINAER_OVER_6G_3SISTE_2019, regel)
     }
+    @Test
+    fun `Skal returnere beregningsregel ORDINAER_OVER_6G_3SISTE_2021 når den er satt til ArbeidsinntektSiste36(2021) og harAvkortet`() {
+        val regel = findBeregningsregel("ArbeidsinntektSiste36(2021)", true)
+
+        assertEquals(GrunnlagBeregningsregel.ORDINAER_OVER_6G_3SISTE_2021, regel)
+    }
 
     @Test
     fun `Skal returnere beregningsregel ORDINAER_OVER_6G_3SISTE_2019 når den er satt til FangstOgFiskSiste36 og harAvkortet`() {
         val regel = findBeregningsregel("FangstOgFiskSiste36", true)
 
         assertEquals(GrunnlagBeregningsregel.ORDINAER_OVER_6G_3SISTE_2019, regel)
+    }
+    @Test
+    fun `Skal returnere beregningsregel ORDINAER_OVER_6G_3SISTE_2021 når den er satt til FangstOgFiskSiste36(2021) og harAvkortet`() {
+        val regel = findBeregningsregel("FangstOgFiskSiste36(2021)", true)
+
+        assertEquals(GrunnlagBeregningsregel.ORDINAER_OVER_6G_3SISTE_2021, regel)
     }
 
     @Test
@@ -60,8 +85,21 @@ class FindBeregningsregelTest {
     }
 
     @Test
+    fun `Skal returnere beregningsregel ORDINAER_ETTAAR når den er satt til ArbeidsinntektSiste12(2021) og ikke harAvkortet`() {
+        val regel = findBeregningsregel("ArbeidsinntektSiste12(2021)", false)
+
+        assertEquals(GrunnlagBeregningsregel.ORDINAER_ETTAAR, regel)
+    }
+
+    @Test
     fun `Skal returnere beregningsregel ORDINAER_ETTAAR når den er satt til FangstOgFiskSiste12 og ikke harAvkortet`() {
         val regel = findBeregningsregel("FangstOgFiskSiste12", false)
+
+        assertEquals(GrunnlagBeregningsregel.ORDINAER_ETTAAR, regel)
+    }
+    @Test
+    fun `Skal returnere beregningsregel ORDINAER_ETTAAR når den er satt til FangstOgFiskSiste12(2021) og ikke harAvkortet`() {
+        val regel = findBeregningsregel("FangstOgFiskSiste12(2021)", false)
 
         assertEquals(GrunnlagBeregningsregel.ORDINAER_ETTAAR, regel)
     }
@@ -74,8 +112,22 @@ class FindBeregningsregelTest {
     }
 
     @Test
+    fun `Skal returnere beregningsregel ORDINAER_TREAAR når den er satt til ArbeidsinntektSiste36(2021) og ikke harAvkortet`() {
+        val regel = findBeregningsregel("ArbeidsinntektSiste36(2021)", false)
+
+        assertEquals(GrunnlagBeregningsregel.ORDINAER_TREAAR, regel)
+    }
+
+    @Test
     fun `Skal returnere beregningsregel ORDINAER_TREAAR når den er satt til FangstOgFiskSiste36 og ikke harAvkortet`() {
         val regel = findBeregningsregel("FangstOgFiskSiste36", false)
+
+        assertEquals(GrunnlagBeregningsregel.ORDINAER_TREAAR, regel)
+    }
+
+    @Test
+    fun `Skal returnere beregningsregel ORDINAER_TREAAR når den er satt til FangstOgFiskSiste36(2021) og ikke harAvkortet`() {
+        val regel = findBeregningsregel("FangstOgFiskSiste36(2021)", false)
 
         assertEquals(GrunnlagBeregningsregel.ORDINAER_TREAAR, regel)
     }
