@@ -92,10 +92,18 @@ fun findBeregningsregel(beregningsregel: String, harAvkortet: Boolean): Grunnlag
         beregningsregel == "ArbeidsinntektSiste12" -> GrunnlagBeregningsregel.ORDINAER_ETTAAR
         beregningsregel == "FangstOgFiskSiste12" && harAvkortet -> GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019
         beregningsregel == "FangstOgFiskSiste12" -> GrunnlagBeregningsregel.ORDINAER_ETTAAR
+        beregningsregel == "ArbeidsinntektSiste12(2021)" && harAvkortet -> GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2021
+        beregningsregel == "ArbeidsinntektSiste12(2021)" -> GrunnlagBeregningsregel.ORDINAER_ETTAAR
+        beregningsregel == "FangstOgFiskSiste12(2021)" && harAvkortet -> GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2021
+        beregningsregel == "FangstOgFiskSiste12(2021)" -> GrunnlagBeregningsregel.ORDINAER_ETTAAR
         beregningsregel == "ArbeidsinntektSiste36" && harAvkortet -> GrunnlagBeregningsregel.ORDINAER_OVER_6G_3SISTE_2019
         beregningsregel == "ArbeidsinntektSiste36" -> GrunnlagBeregningsregel.ORDINAER_TREAAR
         beregningsregel == "FangstOgFiskSiste36" && harAvkortet -> GrunnlagBeregningsregel.ORDINAER_OVER_6G_3SISTE_2019
         beregningsregel == "FangstOgFiskSiste36" -> GrunnlagBeregningsregel.ORDINAER_TREAAR
+        beregningsregel == "ArbeidsinntektSiste36(2021)" && harAvkortet -> GrunnlagBeregningsregel.ORDINAER_OVER_6G_3SISTE_2021
+        beregningsregel == "ArbeidsinntektSiste36(2021)" -> GrunnlagBeregningsregel.ORDINAER_TREAAR
+        beregningsregel == "FangstOgFiskSiste36(2021)" && harAvkortet -> GrunnlagBeregningsregel.ORDINAER_OVER_6G_3SISTE_2021
+        beregningsregel == "FangstOgFiskSiste36(2021)" -> GrunnlagBeregningsregel.ORDINAER_TREAAR
         beregningsregel == "Verneplikt" -> GrunnlagBeregningsregel.VERNEPLIKT
         beregningsregel == "LærlingFangstOgFisk1x12" && harAvkortet -> GrunnlagBeregningsregel.LAERLING_12_MAANED_AVKORTET
         beregningsregel == "LærlingFangstOgFisk3x4" && harAvkortet -> GrunnlagBeregningsregel.LAERLING_4_MAANED_AVKORTET
