@@ -20,11 +20,10 @@ spec:
     max: 3
   resources:
     limits:
-      cpu: 500m
-      memory: 512Mi
+      memory: 1024Mi
     requests:
-      cpu: 200m
-      memory: 256Mi
+      cpu: 400m
+      memory: 512Mi
   ingresses:
     - "https://dp-regel-api-arena-adapter.nais.preprod.local"
   secureLogs:
