@@ -37,7 +37,6 @@ class RegelApiBehovHttpClientTest {
 
     @Test
     fun ` Should get url to behov status `() {
-
         val equalToPattern = EqualToPattern("regelApiKey")
         WireMock.stubFor(
             WireMock.post(WireMock.urlEqualTo("//behov"))
@@ -52,14 +51,14 @@ class RegelApiBehovHttpClientTest {
                     }
                         """.trimIndent(),
                         true,
-                        true
-                    )
+                        true,
+                    ),
                 )
                 .willReturn(
                     WireMock.aResponse()
                         .withBody(responseBody)
-                        .withHeader("Location", "/behov/status/123")
-                )
+                        .withHeader("Location", "/behov/status/123"),
+                ),
         )
 
         val client = RegelApiBehovHttpClient(FuelHttpClient(server.url(""), equalToPattern.value))
@@ -68,7 +67,7 @@ class RegelApiBehovHttpClientTest {
             "001",
             123456,
             regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
-            LocalDate.of(2019, 4, 14)
+            LocalDate.of(2019, 4, 14),
         )
 
         val response = client.run(behovRequest)

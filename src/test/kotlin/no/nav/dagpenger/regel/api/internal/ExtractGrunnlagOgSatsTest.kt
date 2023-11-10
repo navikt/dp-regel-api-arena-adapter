@@ -30,7 +30,7 @@ class ExtractGrunnlagOgSatsTest {
         val result = extractGrunnlagOgSats(
             subsumsjon,
             LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            LocalDateTime.of(2019, 4, 25, 1, 1, 1)
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
         )
 
         assertEquals(grunnlagOgSatsSubsumsjon, result)
@@ -41,7 +41,7 @@ class ExtractGrunnlagOgSatsTest {
         val result = extractGrunnlagOgSats(
             subsumsjonWithSatsBeregningsregel,
             LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            LocalDateTime.of(2019, 4, 25, 1, 1, 1)
+            LocalDateTime.of(2019, 4, 25, 1, 1, 1),
         )
 
         assertEquals(grunnlagOgSatsSubsumsjonWithSatsBeregningsregel, result)
@@ -52,15 +52,15 @@ class ExtractGrunnlagOgSatsTest {
         val subsumsjonMedNegativtGrunnlag = subsumsjon.copy(
             grunnlagResultat = subsumsjon.grunnlagResultat?.copy(
                 avkortet = BigDecimal(-1),
-                uavkortet = BigDecimal(-1)
-            )
+                uavkortet = BigDecimal(-1),
+            ),
         )
 
         assertFailsWith<NegativtGrunnlagException> {
             extractGrunnlagOgSats(
                 subsumsjonMedNegativtGrunnlag,
                 LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-                LocalDateTime.of(2019, 4, 25, 1, 1, 1)
+                LocalDateTime.of(2019, 4, 25, 1, 1, 1),
             )
         }
     }
@@ -71,15 +71,15 @@ class ExtractGrunnlagOgSatsTest {
             faktum = subsumsjon.faktum.copy(lærling = true),
             grunnlagResultat = subsumsjon.grunnlagResultat?.copy(
                 avkortet = BigDecimal(0),
-                uavkortet = BigDecimal(0)
-            )
+                uavkortet = BigDecimal(0),
+            ),
         )
 
         assertFailsWith<NullGrunnlagException> {
             extractGrunnlagOgSats(
                 subsumsjonMedNegativtGrunnlag,
                 LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-                LocalDateTime.of(2019, 4, 25, 1, 1, 1)
+                LocalDateTime.of(2019, 4, 25, 1, 1, 1),
             )
         }
     }
@@ -100,48 +100,48 @@ class ExtractGrunnlagOgSatsTest {
             antallBarn = 5,
             grunnlag = 1000,
             manueltGrunnlag = 1000,
-            forrigeGrunnlag = 2000
+            forrigeGrunnlag = 2000,
         ),
         resultat = GrunnlagOgSatsResultat(
             grunnlag = Grunnlag(
                 avkortet = 12345,
                 uavkortet = 12345,
-                beregningsregel = GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019
+                beregningsregel = GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019,
             ),
             sats = Sats(400, 2000),
-            benyttet90ProsentRegel = true
+            benyttet90ProsentRegel = true,
         ),
         inntekt = setOf(
             no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
                 inntekt = 600000,
                 inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                     foersteMaaned = YearMonth.of(2018, 5),
-                    sisteMaaned = YearMonth.of(2019, 5)
+                    sisteMaaned = YearMonth.of(2019, 5),
                 ),
                 inneholderNaeringsinntekter = true,
-                periode = 1
+                periode = 1,
             ),
             no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
                 inntekt = 500000,
                 inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                     foersteMaaned = YearMonth.of(2017, 5),
-                    sisteMaaned = YearMonth.of(2018, 5)
+                    sisteMaaned = YearMonth.of(2018, 5),
                 ),
                 inneholderNaeringsinntekter = false,
-                periode = 2
+                periode = 2,
             ),
             no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
                 inntekt = 400000,
                 inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                     foersteMaaned = YearMonth.of(2016, 5),
-                    sisteMaaned = YearMonth.of(2017, 5)
+                    sisteMaaned = YearMonth.of(2017, 5),
                 ),
                 inneholderNaeringsinntekter = true,
-                periode = 3
-            )
+                periode = 3,
+            ),
         ),
         inntektManueltRedigert = true,
-        inntektAvvik = true
+        inntektAvvik = true,
     )
 
     private val grunnlagOgSatsSubsumsjonWithSatsBeregningsregel = GrunnlagOgSatsSubsumsjon(
@@ -159,48 +159,48 @@ class ExtractGrunnlagOgSatsTest {
             antallBarn = 5,
             grunnlag = 1000,
             manueltGrunnlag = 1000,
-            forrigeGrunnlag = 2000
+            forrigeGrunnlag = 2000,
         ),
         resultat = GrunnlagOgSatsResultat(
             grunnlag = Grunnlag(
                 avkortet = 12345,
                 uavkortet = 12345,
-                beregningsregel = GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019
+                beregningsregel = GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019,
             ),
             sats = Sats(400, 2000, beregningsregel = SatsBeregningsregel.ORDINAER),
-            benyttet90ProsentRegel = true
+            benyttet90ProsentRegel = true,
         ),
         inntekt = setOf(
             no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
                 inntekt = 600000,
                 inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                     foersteMaaned = YearMonth.of(2018, 5),
-                    sisteMaaned = YearMonth.of(2019, 5)
+                    sisteMaaned = YearMonth.of(2019, 5),
                 ),
                 inneholderNaeringsinntekter = true,
-                periode = 1
+                periode = 1,
             ),
             no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
                 inntekt = 500000,
                 inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                     foersteMaaned = YearMonth.of(2017, 5),
-                    sisteMaaned = YearMonth.of(2018, 5)
+                    sisteMaaned = YearMonth.of(2018, 5),
                 ),
                 inneholderNaeringsinntekter = false,
-                periode = 2
+                periode = 2,
             ),
             no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
                 inntekt = 400000,
                 inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                     foersteMaaned = YearMonth.of(2016, 5),
-                    sisteMaaned = YearMonth.of(2017, 5)
+                    sisteMaaned = YearMonth.of(2017, 5),
                 ),
                 inneholderNaeringsinntekter = true,
-                periode = 3
-            )
+                periode = 3,
+            ),
         ),
         inntektManueltRedigert = true,
-        inntektAvvik = true
+        inntektAvvik = true,
     )
 
     private val subsumsjon = Subsumsjon(
@@ -220,8 +220,8 @@ class ExtractGrunnlagOgSatsTest {
             forrigeGrunnlag = 2000,
             bruktInntektsPeriode = InntektsPeriode(
                 YearMonth.of(2018, 5),
-                YearMonth.of(2019, 1)
-            )
+                YearMonth.of(2019, 1),
+            ),
         ),
         grunnlagResultat = GrunnlagResultat(
             subsumsjonsId = "sub123456",
@@ -236,22 +236,22 @@ class ExtractGrunnlagOgSatsTest {
                     inntekt = 600000.toBigDecimal(),
                     periode = 1,
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2018, 5), YearMonth.of(2019, 5)),
-                    inneholderFangstOgFisk = true
+                    inneholderFangstOgFisk = true,
                 ),
                 Inntekt(
                     inntekt = 500000.toBigDecimal(),
                     periode = 2,
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2017, 5), YearMonth.of(2018, 5)),
-                    inneholderFangstOgFisk = false
+                    inneholderFangstOgFisk = false,
                 ),
                 Inntekt(
                     inntekt = 400000.toBigDecimal(),
                     periode = 3,
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2016, 5), YearMonth.of(2017, 5)),
-                    inneholderFangstOgFisk = true
-                )
+                    inneholderFangstOgFisk = true,
+                ),
 
-            )
+            ),
         ),
         satsResultat = SatsResultat(
             subsumsjonsId = "sub654321",
@@ -259,11 +259,11 @@ class ExtractGrunnlagOgSatsTest {
             regelIdentifikator = "satsregel",
             dagsats = 400,
             ukesats = 2000,
-            benyttet90ProsentRegel = true
+            benyttet90ProsentRegel = true,
         ),
         minsteinntektResultat = null,
         periodeResultat = null,
-        problem = null
+        problem = null,
     )
 
     private val subsumsjonWithSatsBeregningsregel = Subsumsjon(
@@ -282,8 +282,8 @@ class ExtractGrunnlagOgSatsTest {
             forrigeGrunnlag = 2000,
             bruktInntektsPeriode = InntektsPeriode(
                 YearMonth.of(2018, 5),
-                YearMonth.of(2019, 1)
-            )
+                YearMonth.of(2019, 1),
+            ),
         ),
         grunnlagResultat = GrunnlagResultat(
             subsumsjonsId = "sub123456",
@@ -298,22 +298,22 @@ class ExtractGrunnlagOgSatsTest {
                     inntekt = 600000.toBigDecimal(),
                     periode = 1,
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2018, 5), YearMonth.of(2019, 5)),
-                    inneholderFangstOgFisk = true
+                    inneholderFangstOgFisk = true,
                 ),
                 Inntekt(
                     inntekt = 500000.toBigDecimal(),
                     periode = 2,
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2017, 5), YearMonth.of(2018, 5)),
-                    inneholderFangstOgFisk = false
+                    inneholderFangstOgFisk = false,
                 ),
                 Inntekt(
                     inntekt = 400000.toBigDecimal(),
                     periode = 3,
                     inntektsPeriode = InntektsPeriode(YearMonth.of(2016, 5), YearMonth.of(2017, 5)),
-                    inneholderFangstOgFisk = true
-                )
+                    inneholderFangstOgFisk = true,
+                ),
 
-            )
+            ),
         ),
         satsResultat = SatsResultat(
             subsumsjonsId = "sub654321",
@@ -322,10 +322,10 @@ class ExtractGrunnlagOgSatsTest {
             dagsats = 400,
             ukesats = 2000,
             benyttet90ProsentRegel = true,
-            beregningsregel = SatsBeregningsregel.ORDINAER
+            beregningsregel = SatsBeregningsregel.ORDINAER,
         ),
         minsteinntektResultat = null,
         periodeResultat = null,
-        problem = null
+        problem = null,
     )
 }

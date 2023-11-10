@@ -12,7 +12,7 @@ data class GrunnlagOgSatsSubsumsjon(
     val resultat: GrunnlagOgSatsResultat,
     val inntekt: Set<Inntekt>? = null,
     val inntektManueltRedigert: Boolean? = null,
-    val inntektAvvik: Boolean? = null
+    val inntektAvvik: Boolean? = null,
 
 )
 
@@ -28,13 +28,13 @@ data class GrunnlagOgSatsRegelFaktum(
     val antallBarn: Int,
     val grunnlag: Int?,
     val manueltGrunnlag: Int?,
-    val forrigeGrunnlag: Int?
+    val forrigeGrunnlag: Int?,
 )
 
 data class GrunnlagOgSatsResultat(
     val grunnlag: Grunnlag? = null,
     val sats: Sats,
-    val benyttet90ProsentRegel: Boolean
+    val benyttet90ProsentRegel: Boolean,
 )
 
 enum class GrunnlagBeregningsregel {
@@ -51,23 +51,23 @@ enum class GrunnlagBeregningsregel {
     LAERLING_12_MAANED,
     LAERLING_12_MAANED_AVKORTET,
     LAERLING_4_MAANED,
-    LAERLING_4_MAANED_AVKORTET
+    LAERLING_4_MAANED_AVKORTET,
 }
 
 data class Grunnlag(
     val avkortet: Int,
     val uavkortet: Int? = null,
-    val beregningsregel: GrunnlagBeregningsregel? = null
+    val beregningsregel: GrunnlagBeregningsregel? = null,
 )
 
 enum class SatsBeregningsregel {
     ORDINAER,
     KORONA,
-    KORONA_LAERLING
+    KORONA_LAERLING,
 }
 
 data class Sats(
     val dagsats: Int,
     val ukesats: Int,
-    val beregningsregel: SatsBeregningsregel? = null
+    val beregningsregel: SatsBeregningsregel? = null,
 )

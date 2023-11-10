@@ -19,9 +19,9 @@ internal class RegelApiNyVurderingHttpClient(private val httpClient: FuelHttpCli
             { result.get().nyVurdering },
             {
                 throw RegelApiMinsteinntektNyVurderingException(
-                    "Failed to check reberegning Response message ${response.responseMessage}. Error message: ${it.message}. "
+                    "Failed to check reberegning Response message ${response.responseMessage}. Error message: ${it.message}. ",
                 )
-            }
+            },
         )
     }
 

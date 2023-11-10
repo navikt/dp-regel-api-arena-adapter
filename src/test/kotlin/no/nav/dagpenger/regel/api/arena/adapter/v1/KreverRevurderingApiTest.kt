@@ -37,11 +37,10 @@ class KreverRevurderingApiTest {
 
     @Test
     fun `Vurdering av minsteinntekt API specification test - Should match json field names and formats`() {
-
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                nyVurderingHttpClient = reberegningMockClient
+                nyVurderingHttpClient = reberegningMockClient,
             )
         }) {
             handleRequest(HttpMethod.Post, kreverReberegningPath) {
@@ -53,7 +52,7 @@ class KreverRevurderingApiTest {
                       "subsumsjonIder": [${subsumsjonIder.joinToString(prefix = "\"", separator = "\", \"", postfix = "\"")}],
                       "beregningsdato": "$beregningsdato"
                     }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -64,11 +63,10 @@ class KreverRevurderingApiTest {
 
     @Test
     fun `Feil ved sjekk av krav om revurdeing av minsteinntekt `() {
-
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                nyVurderingHttpClient = reberegningMockClient
+                nyVurderingHttpClient = reberegningMockClient,
             )
         }) {
             handleRequest(HttpMethod.Post, kreverReberegningPath) {
@@ -80,7 +78,7 @@ class KreverRevurderingApiTest {
                       "subsumsjonIder": ["$ukjentSubsumsjonId"],
                       "beregningsdato": "$beregningsdato"
                     }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.InternalServerError, response.status())

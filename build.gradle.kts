@@ -1,27 +1,14 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
-
 plugins {
+    id("common")
     application
-    kotlin("jvm") version Kotlin.version
-    id(Spotless.spotless) version Spotless.version
-    id(Shadow.shadow) version Shadow.version
-}
-
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-}
-
-apply {
-    plugin(Spotless.spotless)
+    id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 repositories {
     mavenCentral()
     maven("https://packages.confluent.io/maven/")
     maven("https://jitpack.io")
+    maven("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
 }
 
 application {
@@ -29,102 +16,88 @@ application {
     mainClass.set("no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterKt")
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+val jar by tasks.getting(Jar::class) {
+    manifest {
+        attributes["Multi-Release"] = "true" // https://github.com/johnrengelman/shadow/issues/449
+    }
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> { kotlinOptions.jvmTarget = "1.8" }
-
+val moshiVersion = "1.15.0"
+val fuelVersion = "2.2.1"
+val log4j2Versjon = "2.20.0"
+val prometheusVersion = "0.16.0"
+val kafkaVersion = "3.3.1"
+val ktorVersion = "2.3.0"
 dependencies {
     implementation(kotlin("stdlib"))
 
-    implementation(Ktor2.Server.library("netty"))
-    implementation(Ktor2.Server.library("auth"))
-    implementation(Ktor2.Server.library("auth-jwt"))
-    implementation(Ktor2.Server.library("default-headers"))
-    implementation(Ktor2.Server.library("call-logging"))
-    implementation(Ktor2.Server.library("content-negotiation"))
-    implementation("io.ktor:ktor-serialization-jackson:${Ktor2.version}")
-    implementation(Ktor2.Server.library("status-pages"))
-    implementation(Ktor2.Server.library("metrics-micrometer"))
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
 
-    implementation(Jackson.core)
-    implementation(Jackson.kotlin)
-    implementation(Jackson.jsr310)
+    implementation(libs.ktor.server.auth)
+    implementation(libs.ktor.server.auth.jwt)
+    implementation("io.ktor:ktor-server-default-headers:$ktorVersion")
+    implementation("io.ktor:ktor-server-call-logging:$ktorVersion")
+    implementation(libs.ktor.server.content.negotiation)
+    implementation(libs.ktor.serialization.jackson)
+    implementation(libs.ktor.server.status.pages)
+    implementation(libs.ktor.server.metrics.micrometer)
+
+    implementation(libs.jackson.core)
+    implementation(libs.jackson.kotlin)
+    implementation(libs.jackson.datatype.jsr310)
 
     implementation("commons-codec:commons-codec:1.15")
-    implementation(Micrometer.prometheusRegistry)
+    implementation(libs.micrometer.registry.prometheus)
 
-    implementation(Moshi.moshi)
-    implementation(Moshi.moshiAdapters)
-    implementation(Moshi.moshiKotlin)
+    implementation("com.squareup.moshi:moshi:$moshiVersion")
+    implementation("com.squareup.moshi:moshi-adapters:$moshiVersion")
+    implementation("com.squareup.moshi:moshi-kotlin:$moshiVersion")
 
-    implementation(Fuel.fuel)
-    implementation(Fuel.fuelMoshi)
-    implementation(Konfig.konfig)
+    implementation("com.github.kittinunf.fuel:fuel:$fuelVersion")
+    implementation("com.github.kittinunf.fuel:fuel-moshi:$fuelVersion")
 
-    implementation(Log4j2.api)
-    implementation(Log4j2.core)
-    implementation(Log4j2.slf4j)
+    implementation(libs.konfig)
+
+    implementation("org.apache.logging.log4j:log4j-api:$log4j2Versjon")
+    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:$log4j2Versjon")
+    implementation("org.apache.logging.log4j:log4j-layout-template-json:$log4j2Versjon")
+    implementation("org.apache.logging.log4j:log4j-core:$log4j2Versjon")
+    implementation("org.apache.logging.log4j:log4j-layout-template-json:$log4j2Versjon")
+
     implementation("org.slf4j:slf4j-api:2.0.7")
-    implementation(Log4j2.library("layout-template-json"))
-    implementation(Kotlin.Logging.kotlinLogging)
 
-    implementation(Prometheus.common)
-    implementation(Prometheus.hotspot)
-    implementation(Prometheus.log4j2)
+    implementation(libs.kotlin.logging)
 
-    implementation(Ulid.ulid)
+    implementation("io.prometheus:simpleclient_common:$prometheusVersion")
+    implementation("io.prometheus:simpleclient_hotspot:$prometheusVersion")
+    implementation("io.prometheus:simpleclient_log4j2:$prometheusVersion")
+
+    implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
 
     // unleash
     implementation("io.getunleash:unleash-client-java:8.0.0")
 
     testImplementation(kotlin("test"))
-    testImplementation(Ktor2.Server.library("test-host"))
-    testImplementation(Junit5.api)
-    testImplementation(KoTest.assertions)
-    testImplementation(KoTest.runner)
-    testImplementation(TestContainers.postgresql)
-    testImplementation(TestContainers.kafka)
-    testImplementation(Kafka.streamTestUtils)
-    testImplementation(Wiremock.standalone)
-    testImplementation(JsonAssert.jsonassert)
+    testImplementation(libs.ktor.server.test.host)
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${libs.versions.junit.get()}")
 
-    testImplementation(Mockk.mockk)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:${libs.versions.kotest.get()}")
 
-    testRuntimeOnly(Junit5.engine)
-}
+    testImplementation(libs.testcontainer.postgresql)
+    testImplementation("org.testcontainers:kafka:${libs.versions.testcontainer.get()}")
 
-spotless {
-    kotlin {
-        ktlint(Ktlint.version)
-    }
-    kotlinGradle {
-        target("*.gradle.kts", "buildSrc/**/*.kt*")
-        ktlint(Ktlint.version)
-    }
-}
+    testImplementation("org.apache.kafka:kafka-clients:$kafkaVersion")
+    testImplementation("org.apache.kafka:kafka-streams-test-utils:$kafkaVersion")
+    testImplementation("com.github.tomakehurst:wiremock-standalone:2.27.2")
+    testImplementation("org.skyscreamer:jsonassert:1.5.0")
 
-tasks.withType<Test> {
-    useJUnitPlatform()
-    testLogging {
-        showExceptions = true
-        showStackTraces = true
-        exceptionFormat = TestExceptionFormat.FULL
-        events = setOf(TestLogEvent.STANDARD_OUT, TestLogEvent.PASSED, TestLogEvent.SKIPPED, TestLogEvent.FAILED)
-        showStandardStreams = false
-    }
-}
+    testImplementation(libs.mockk)
 
-tasks.named("shadowJar") {
-    dependsOn("test")
-}
-
-tasks.named("compileKotlin") {
-    dependsOn("spotlessCheck")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:${libs.versions.junit.get()}")
 }
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
+    mergeServiceFiles()
     transform(com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer::class.java)
 }

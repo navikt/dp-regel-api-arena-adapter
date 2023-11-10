@@ -17,5 +17,5 @@ data class Faktum(
     val antallBarn: Int? = null,
     val manueltGrunnlag: Int? = null,
     val forrigeGrunnlag: Int? = null,
-    val bruktInntektsPeriode: InntektsPeriode? = null
+    val bruktInntektsPeriode: InntektsPeriode? = null,
 )

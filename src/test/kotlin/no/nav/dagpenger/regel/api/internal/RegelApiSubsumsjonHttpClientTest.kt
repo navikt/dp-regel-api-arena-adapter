@@ -35,7 +35,6 @@ class RegelApiSubsumsjonHttpClientTest {
 
     @Test
     fun `Should get subsumsjon`() {
-
         val responseBodyJson = RegelApiSubsumsjonHttpClientTest::class.java
             .getResource("/test-data/example-subsumsjon-payload.json").readText()
 
@@ -45,8 +44,8 @@ class RegelApiSubsumsjonHttpClientTest {
                 .withHeader("X-API-KEY", equalToPattern)
                 .willReturn(
                     WireMock.aResponse()
-                        .withBody(responseBodyJson)
-                )
+                        .withBody(responseBodyJson),
+                ),
         )
 
         val client = RegelApiSubsumsjonHttpClient(FuelHttpClient(server.url(""), equalToPattern.value))

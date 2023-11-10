@@ -27,7 +27,6 @@ class InntjeningsperiodeApiSpec {
 
     @Test
     fun `Inntjeningsperiode API specification test - Should match json field names and formats`() {
-
         val inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient = mockk()
 
         coEvery {
@@ -38,14 +37,14 @@ class InntjeningsperiodeApiSpec {
                 "1234",
                 5678,
                 "2019-02-27",
-                "12345"
-            )
+                "12345",
+            ),
         )
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                inntektApiBeregningsdatoHttpClient = inntektApiBeregningsdatoHttpClient
+                inntektApiBeregningsdatoHttpClient = inntektApiBeregningsdatoHttpClient,
             )
         }) {
             handleRequest(HttpMethod.Post, inntjeningsperiodePath) {
@@ -59,7 +58,7 @@ class InntjeningsperiodeApiSpec {
                       "beregningsdato": "2019-02-27",
                       "inntektsId": "12345"
                     }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -72,7 +71,7 @@ class InntjeningsperiodeApiSpec {
     fun ` Should give 401 - Not authorized if token is missing `() {
         withTestApplication({
             mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider()
+                jwkProvider = jwkStub.stubbedJwkProvider(),
             )
         }) {
             handleRequest(HttpMethod.Post, inntjeningsperiodePath) {
@@ -86,7 +85,7 @@ class InntjeningsperiodeApiSpec {
                       "inntektsId": "12345"
                     }
 
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.Unauthorized, response.status())

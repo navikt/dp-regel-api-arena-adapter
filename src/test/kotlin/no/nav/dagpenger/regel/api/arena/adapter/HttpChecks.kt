@@ -18,6 +18,7 @@ class NaisChecksTest {
             }
         }
     }
+
     @Test
     fun `The application has ready endpoint `() {
         withTestApplication({ mockedRegelApiAdapter() }) {

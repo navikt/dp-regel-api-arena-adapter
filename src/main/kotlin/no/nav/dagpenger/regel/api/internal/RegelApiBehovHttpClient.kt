@@ -10,7 +10,6 @@ internal class RegelApiBehovHttpClient(private val httpClient: FuelHttpClient) {
     private val jsonAdapter = moshiInstance.adapter(BehovRequest::class.java)
 
     fun run(behovRequest: BehovRequest): String {
-
         val json = jsonAdapter.toJson(behovRequest)
 
         val (_, response, result) = httpClient.request(Method.POST, "/behov") {
@@ -22,9 +21,9 @@ internal class RegelApiBehovHttpClient(private val httpClient: FuelHttpClient) {
             { response.headers["Location"].first() },
             {
                 throw RegelApiBehovHttpClientException(
-                    "Failed to run behov. Response message ${response.responseMessage}. Error message: ${it.message}. "
+                    "Failed to run behov. Response message ${response.responseMessage}. Error message: ${it.message}. ",
                 )
-            }
+            },
         )
     }
 }
@@ -44,7 +43,7 @@ data class BehovRequest(
     val antallBarn: Int? = null,
     val inntektsId: String? = null,
     val lærling: Boolean? = null,
-    val regelverksdato: LocalDate = beregningsdato
+    val regelverksdato: LocalDate = beregningsdato,
 ) {
     val requestId: String = ulid.nextULID()
 }

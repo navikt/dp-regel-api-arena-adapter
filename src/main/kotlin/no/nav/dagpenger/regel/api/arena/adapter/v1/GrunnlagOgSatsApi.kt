@@ -22,7 +22,7 @@ import no.nav.dagpenger.regel.api.internal.extractGrunnlagOgSats
 
 private val sikkerlogg = KotlinLogging.logger("tjenestekall.grunnlagOgSatsApi")
 
-internal fun Route.GrunnlagOgSatsApi(
+internal fun Route.grunnlagOgSatsApi(
     synchronousSubsumsjonClient: SynchronousSubsumsjonClient,
 ) {
     route("/dagpengegrunnlag") {

@@ -23,7 +23,7 @@ data class GrunnlagResultat(
     val uavkortet: BigDecimal,
     val harAvkortet: Boolean,
     val beregningsregel: String,
-    val grunnlagInntektsPerioder: List<Inntekt>?
+    val grunnlagInntektsPerioder: List<Inntekt>?,
 ) {
     companion object {
         private val zero = BigDecimal(0)
@@ -39,14 +39,14 @@ data class MinsteinntektResultat(
     val oppfyllerMinsteinntekt: Boolean,
     val regelIdentifikator: String,
     val minsteinntektInntektsPerioder: List<Inntekt>,
-    val beregningsregel: Beregningsregel
+    val beregningsregel: Beregningsregel,
 )
 
 data class PeriodeResultat(
     val subsumsjonsId: String,
     val sporingsId: String,
     val regelIdentifikator: String,
-    val periodeAntallUker: Int
+    val periodeAntallUker: Int,
 )
 
 data class SatsResultat(
@@ -56,9 +56,11 @@ data class SatsResultat(
     val dagsats: Int,
     val ukesats: Int,
     val benyttet90ProsentRegel: Boolean,
-    val beregningsregel: SatsBeregningsregel? = null
+    val beregningsregel: SatsBeregningsregel? = null,
 )
 
 enum class Beregningsregel {
-    ORDINAER, KORONA, KORONA_LAERLING
+    ORDINAER,
+    KORONA,
+    KORONA_LAERLING,
 }

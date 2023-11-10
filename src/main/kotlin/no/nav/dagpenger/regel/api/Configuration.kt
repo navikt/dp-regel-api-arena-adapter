@@ -26,8 +26,8 @@ private val localProperties = ConfigurationMap(
         "optional.jwt" to "true",
         "auth.regelapi.secret" to "secret",
         "auth.regelapi.key" to "secret1",
-        "unleash.url" to "https://localhost"
-    )
+        "unleash.url" to "https://localhost",
+    ),
 )
 private val devProperties = ConfigurationMap(
     mapOf(
@@ -38,8 +38,8 @@ private val devProperties = ConfigurationMap(
         "jwks.url" to "http://security-token-service.default.svc.nais.local/rest/v1/sts/jwks",
         "jwks.issuer" to "https://security-token-service.nais.preprod.local",
         "optional.jwt" to "false",
-        "unleash.url" to "https://unleash.nais.preprod.local/api/"
-    )
+        "unleash.url" to "https://unleash.nais.preprod.local/api/",
+    ),
 )
 private val prodProperties = ConfigurationMap(
     mapOf(
@@ -50,18 +50,18 @@ private val prodProperties = ConfigurationMap(
         "jwks.url" to "http://security-token-service.default.svc.nais.local/rest/v1/sts/jwks",
         "jwks.issuer" to "https://security-token-service.nais.adeo.no",
         "optional.jwt" to "false",
-        "unleash.url" to "https://unleash.nais.adeo.no/api/"
-    )
+        "unleash.url" to "https://unleash.nais.adeo.no/api/",
+    ),
 )
 
 data class Configuration(
     val application: Application = Application(),
-    val auth: Auth = Auth()
+    val auth: Auth = Auth(),
 ) {
 
     class Auth(
         regelApiSecret: String = config()[Key("auth.regelapi.secret", stringType)],
-        regelApiKeyPlain: String = config()[Key("auth.regelapi.key", stringType)]
+        regelApiKeyPlain: String = config()[Key("auth.regelapi.key", stringType)],
     ) {
         val regelApiKey = ApiKeyVerifier(regelApiSecret).generate(regelApiKeyPlain)
     }
@@ -76,7 +76,7 @@ data class Configuration(
         val jwksUrl: String = config()[Key("jwks.url", stringType)],
         val jwksIssuer: String = config()[Key("jwks.issuer", stringType)],
         val optionalJwt: Boolean = config()[Key("optional.jwt", booleanType)],
-        val unleashUrl: String = config()[Key("unleash.url", stringType)]
+        val unleashUrl: String = config()[Key("unleash.url", stringType)],
 
     ) {
         init {
@@ -86,7 +86,9 @@ data class Configuration(
 }
 
 enum class Profile {
-    LOCAL, DEV, PROD
+    LOCAL,
+    DEV,
+    PROD,
 }
 
 private fun config() = when (System.getenv("NAIS_CLUSTER_NAME") ?: System.getProperty("NAIS_CLUSTER_NAME")) {

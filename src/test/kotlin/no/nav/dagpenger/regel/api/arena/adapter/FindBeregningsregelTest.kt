@@ -32,6 +32,7 @@ class FindBeregningsregelTest {
 
         assertEquals(GrunnlagBeregningsregel.ORDINAER_OVER_6G_SISTE_2019, regel)
     }
+
     @Test
     fun `Skal returnere beregningsregel ORDINAER_OVER_6G_SISTE_2021 når den er satt til FangstOgFiskSiste12(2021) og harAvkortet`() {
         val regel = findBeregningsregel("FangstOgFiskSiste12(2021)", true)
@@ -45,6 +46,7 @@ class FindBeregningsregelTest {
 
         assertEquals(GrunnlagBeregningsregel.ORDINAER_OVER_6G_3SISTE_2019, regel)
     }
+
     @Test
     fun `Skal returnere beregningsregel ORDINAER_OVER_6G_3SISTE_2021 når den er satt til ArbeidsinntektSiste36(2021) og harAvkortet`() {
         val regel = findBeregningsregel("ArbeidsinntektSiste36(2021)", true)
@@ -58,6 +60,7 @@ class FindBeregningsregelTest {
 
         assertEquals(GrunnlagBeregningsregel.ORDINAER_OVER_6G_3SISTE_2019, regel)
     }
+
     @Test
     fun `Skal returnere beregningsregel ORDINAER_OVER_6G_3SISTE_2021 når den er satt til FangstOgFiskSiste36(2021) og harAvkortet`() {
         val regel = findBeregningsregel("FangstOgFiskSiste36(2021)", true)
@@ -97,6 +100,7 @@ class FindBeregningsregelTest {
 
         assertEquals(GrunnlagBeregningsregel.ORDINAER_ETTAAR, regel)
     }
+
     @Test
     fun `Skal returnere beregningsregel ORDINAER_ETTAAR når den er satt til FangstOgFiskSiste12(2021) og ikke harAvkortet`() {
         val regel = findBeregningsregel("FangstOgFiskSiste12(2021)", false)
@@ -153,7 +157,7 @@ class FindBeregningsregelLærlingTest : FreeSpec({
             row("LærlingArbeidsinntekt3x4", true, GrunnlagBeregningsregel.LAERLING_4_MAANED_AVKORTET),
 
             row("LærlingFangstOgFisk3x4", true, GrunnlagBeregningsregel.LAERLING_4_MAANED_AVKORTET),
-            row("LærlingFangstOgFisk3x4", false, GrunnlagBeregningsregel.LAERLING_4_MAANED)
+            row("LærlingFangstOgFisk3x4", false, GrunnlagBeregningsregel.LAERLING_4_MAANED),
 
         ).map { (regel: String, avkortet: Boolean, grunnlagsRegel: GrunnlagBeregningsregel) ->
             "$regel-$grunnlagsRegel" {

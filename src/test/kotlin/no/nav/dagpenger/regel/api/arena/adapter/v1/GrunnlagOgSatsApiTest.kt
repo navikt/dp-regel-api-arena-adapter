@@ -57,7 +57,7 @@ class GrunnlagOgSatsApiTest {
             manueltGrunnlag = 3000,
             forrigeGrunnlag = 7000,
             antallBarn = 3,
-            oppfyllerKravTilLaerling = false
+            oppfyllerKravTilLaerling = false,
         )
         val parametreMedRegelverksdato = parametere.copy(regelverksdato = LocalDate.of(2020, 6, 14))
         val standardBehovRequest = BehovRequest(
@@ -71,7 +71,7 @@ class GrunnlagOgSatsApiTest {
             forrigeGrunnlag = 7000,
             antallBarn = 3,
             lærling = false,
-            regelverksdato = LocalDate.of(2019, 5, 13)
+            regelverksdato = LocalDate.of(2019, 5, 13),
         )
         val behovRequestMedRegelverksdato = standardBehovRequest.copy(regelverksdato = LocalDate.of(2020, 6, 14))
 
@@ -85,7 +85,7 @@ class GrunnlagOgSatsApiTest {
             aktorId = "12345",
             vedtakId = 123,
             beregningsdato = LocalDate.of(2019, 5, 13),
-            grunnlag = 4000
+            grunnlag = 4000,
         )
         val standardBehovRequest = BehovRequest(
             aktorId = "12345",
@@ -97,7 +97,7 @@ class GrunnlagOgSatsApiTest {
             harAvtjentVerneplikt = false,
             oppfyllerKravTilFangstOgFisk = false,
             lærling = false,
-            antallBarn = 0
+            antallBarn = 0,
         )
         assertEquals(standardBehovRequest, behovFromParametere(parametere))
     }
@@ -109,14 +109,14 @@ class GrunnlagOgSatsApiTest {
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>(),
             )
         } returns grunnlagOgSatsSubsumsjon()
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
@@ -132,7 +132,7 @@ class GrunnlagOgSatsApiTest {
                       "oppfyllerKravTilFangstOgFisk": false,
                       "oppfyllerKravTilLaerling": true
                     }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -142,8 +142,8 @@ class GrunnlagOgSatsApiTest {
                     CustomComparator(
                         JSONCompareMode.STRICT,
                         Customization("opprettet") { _, _ -> true },
-                        Customization("utfort") { _, _ -> true }
-                    )
+                        Customization("utfort") { _, _ -> true },
+                    ),
                 )
             }
         }
@@ -157,7 +157,7 @@ class GrunnlagOgSatsApiTest {
             runBlocking {
                 synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                     any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>(),
                 )
             }
         } returns grunnlagOgSatsSubsumsjonWithSatsBeregningsregel()
@@ -165,7 +165,7 @@ class GrunnlagOgSatsApiTest {
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
@@ -180,7 +180,7 @@ class GrunnlagOgSatsApiTest {
                       "harAvtjentVerneplikt": false,
                       "oppfyllerKravTilFangstOgFisk": false
                     }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -190,8 +190,8 @@ class GrunnlagOgSatsApiTest {
                     CustomComparator(
                         JSONCompareMode.STRICT,
                         Customization("opprettet") { _, _ -> true },
-                        Customization("utfort") { _, _ -> true }
-                    )
+                        Customization("utfort") { _, _ -> true },
+                    ),
                 )
             }
         }
@@ -204,14 +204,14 @@ class GrunnlagOgSatsApiTest {
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>(),
             )
         } returns grunnlagOgSatsSubsumsjon()
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, "$dagpengegrunnlagPath-reberegning") {
@@ -227,7 +227,7 @@ class GrunnlagOgSatsApiTest {
                       "harAvtjentVerneplikt": false,
                       "oppfyllerKravTilFangstOgFisk": false
                     }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -242,14 +242,14 @@ class GrunnlagOgSatsApiTest {
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>(),
             )
         } throws NegativtGrunnlagException("Negativt grunnlag")
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, "$dagpengegrunnlagPath-reberegning") {
@@ -265,7 +265,7 @@ class GrunnlagOgSatsApiTest {
                       "harAvtjentVerneplikt": false,
                       "oppfyllerKravTilFangstOgFisk": false
                     }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.InternalServerError, response.status())
@@ -283,14 +283,14 @@ class GrunnlagOgSatsApiTest {
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>(),
             )
         } throws NullGrunnlagException("Negativt grunnlag")
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, "$dagpengegrunnlagPath-reberegning") {
@@ -306,7 +306,7 @@ class GrunnlagOgSatsApiTest {
                       "lærling": true,
                       "oppfyllerKravTilFangstOgFisk": false
                     }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.InternalServerError, response.status())
@@ -322,7 +322,7 @@ class GrunnlagOgSatsApiTest {
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = mockk()
+                synchronousSubsumsjonClient = mockk(),
             )
         }) {
             handleRequest(HttpMethod.Post, "$dagpengegrunnlagPath-reberegning") {
@@ -338,7 +338,7 @@ class GrunnlagOgSatsApiTest {
                       "harAvtjentVerneplikt": false,
                       "oppfyllerKravTilFangstOgFisk": false
                     }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
@@ -356,14 +356,14 @@ class GrunnlagOgSatsApiTest {
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>(),
             )
         } throws RuntimeException()
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
@@ -379,7 +379,7 @@ class GrunnlagOgSatsApiTest {
                       "oppfyllerKravTilFangstOgFisk": false
                     }
 
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.InternalServerError, response.status())
@@ -398,7 +398,7 @@ class GrunnlagOgSatsApiTest {
             coEvery {
                 this@apply.getSubsumsjonSynchronously(
                     any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>(),
                 )
             } throws SubsumsjonProblem(problem)
         }
@@ -406,7 +406,7 @@ class GrunnlagOgSatsApiTest {
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
@@ -422,7 +422,7 @@ class GrunnlagOgSatsApiTest {
                       "oppfyllerKravTilFangstOgFisk": false
                     }
 
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.BadGateway, response.status())
@@ -440,14 +440,14 @@ class GrunnlagOgSatsApiTest {
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>(),
             )
         } throws RegelApiTimeoutException("timeout")
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
@@ -463,7 +463,7 @@ class GrunnlagOgSatsApiTest {
                       "oppfyllerKravTilFangstOgFisk": false
                     }
 
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.GatewayTimeout, response.status())
@@ -479,7 +479,7 @@ class GrunnlagOgSatsApiTest {
     fun `Skal svare med HTTP problem rfc7807 for dagpengegrunnlag med ugyldig json request`() {
         withTestApplication({
             mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider()
+                jwkProvider = jwkStub.stubbedJwkProvider(),
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
@@ -488,7 +488,7 @@ class GrunnlagOgSatsApiTest {
                 setBody(
                     """
                         { "badjson" : "error}
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
@@ -504,7 +504,7 @@ class GrunnlagOgSatsApiTest {
     fun `Skal svare med HTTP problem rfc7807 for json med manglende obligatoriske felt`() {
         withTestApplication({
             mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider()
+                jwkProvider = jwkStub.stubbedJwkProvider(),
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
@@ -513,14 +513,14 @@ class GrunnlagOgSatsApiTest {
                 setBody(
                     """
                         {  "aktorId": "1234" }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
                 val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
                 assertEquals(
                     "Parameteret er ikke gyldig json",
-                    problem?.title
+                    problem?.title,
                 )
                 assertEquals("urn:dp:error:parameter", problem?.type.toString())
                 assertEquals(400, problem?.status)
@@ -532,7 +532,7 @@ class GrunnlagOgSatsApiTest {
     fun `Skal svare med HTTP problem rfc7807 hvis både verneplikt og lærling er true`() {
         withTestApplication({
             mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider()
+                jwkProvider = jwkStub.stubbedJwkProvider(),
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
@@ -548,14 +548,14 @@ class GrunnlagOgSatsApiTest {
                       "oppfyllerKravTilFangstOgFisk": false,
                       "oppfyllerKravTilLaerling": true
                     }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
                 val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
                 assertEquals(
                     "Ugyldig kombinasjon av parametere: harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig",
-                    problem?.title
+                    problem?.title,
                 )
                 assertEquals("urn:dp:error:parameter", problem?.type.toString())
                 assertEquals(400, problem?.status)
@@ -567,7 +567,7 @@ class GrunnlagOgSatsApiTest {
     fun `Skal svare med 401 hvis request mangler bearer token`() {
         withTestApplication({
             mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider()
+                jwkProvider = jwkStub.stubbedJwkProvider(),
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
@@ -582,7 +582,7 @@ class GrunnlagOgSatsApiTest {
                       "oppfyllerKravTilFangstOgFisk": false
                     }
 
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.Unauthorized, response.status())
@@ -601,14 +601,14 @@ class GrunnlagOgSatsApiTest {
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>(),
             )
         } returns grunnlagOgSatsSubsumsjon()
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
@@ -625,7 +625,7 @@ class GrunnlagOgSatsApiTest {
                       "regelverksdato": "2020-03-28"
                     }
 
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -640,14 +640,14 @@ class GrunnlagOgSatsApiTest {
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>(),
             )
         } returns grunnlagOgSatsSubsumsjon()
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
@@ -665,7 +665,7 @@ class GrunnlagOgSatsApiTest {
                       "manueltGrunnlag": 1000000
                     }
 
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -680,14 +680,14 @@ class GrunnlagOgSatsApiTest {
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
                 any(),
-                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>()
+                any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>(),
             )
         } returns grunnlagOgSatsSubsumsjon()
 
         withTestApplication({
             mockedRegelApiAdapter(
                 jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient
+                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
@@ -705,7 +705,7 @@ class GrunnlagOgSatsApiTest {
                       "forrigeGrunnlag": 600000
                     }
 
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
@@ -717,7 +717,7 @@ class GrunnlagOgSatsApiTest {
     fun `Skal svare med HTTP problem rfc7807 hvis både manueltGrunnlag og tidligereGrunnlag er satt`() {
         withTestApplication({
             mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider()
+                jwkProvider = jwkStub.stubbedJwkProvider(),
             )
         }) {
             handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
@@ -732,14 +732,14 @@ class GrunnlagOgSatsApiTest {
                       "manueltGrunnlag": 600000,
                       "forrigeGrunnlag": 800000
                     }
-                    """.trimIndent()
+                    """.trimIndent(),
                 )
             }.apply {
                 assertEquals(HttpStatusCode.BadRequest, response.status())
                 val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
                 assertEquals(
                     "Ugyldig kombinasjon av parametere: manueltGrunnlag og forrigeGrunnlag kan ikke settes samtidig",
-                    problem?.title
+                    problem?.title,
                 )
                 assertEquals("urn:dp:error:parameter", problem?.type.toString())
                 assertEquals(400, problem?.status)
@@ -763,30 +763,30 @@ class GrunnlagOgSatsApiTest {
                 antallBarn = 0,
                 grunnlag = 12345,
                 manueltGrunnlag = 12345,
-                forrigeGrunnlag = null
+                forrigeGrunnlag = null,
             ),
             resultat = GrunnlagOgSatsResultat(
                 grunnlag = Grunnlag(
                     avkortet = 12345,
                     uavkortet = 12345,
-                    beregningsregel = GrunnlagBeregningsregel.ORDINAER_ETTAAR
+                    beregningsregel = GrunnlagBeregningsregel.ORDINAER_ETTAAR,
                 ),
                 sats = Sats(124, 234),
-                benyttet90ProsentRegel = false
+                benyttet90ProsentRegel = false,
             ),
             inntekt = setOf(
                 no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
                     inntekt = 4999423,
                     inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                         foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1)
+                        sisteMaaned = YearMonth.of(2019, 1),
                     ),
                     inneholderNaeringsinntekter = false,
-                    periode = 1
-                )
+                    periode = 1,
+                ),
             ),
             inntektManueltRedigert = true,
-            inntektAvvik = true
+            inntektAvvik = true,
         )
     }
 
@@ -806,16 +806,16 @@ class GrunnlagOgSatsApiTest {
                 antallBarn = 0,
                 grunnlag = 12345,
                 manueltGrunnlag = 12345,
-                forrigeGrunnlag = null
+                forrigeGrunnlag = null,
             ),
             resultat = GrunnlagOgSatsResultat(
                 grunnlag = Grunnlag(
                     avkortet = 12345,
                     uavkortet = 12345,
-                    beregningsregel = GrunnlagBeregningsregel.ORDINAER_ETTAAR
+                    beregningsregel = GrunnlagBeregningsregel.ORDINAER_ETTAAR,
                 ),
                 sats = Sats(124, 234, beregningsregel = SatsBeregningsregel.ORDINAER),
-                benyttet90ProsentRegel = false
+                benyttet90ProsentRegel = false,
             ),
             inntekt =
             setOf(
@@ -823,14 +823,14 @@ class GrunnlagOgSatsApiTest {
                     inntekt = 4999423,
                     inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
                         foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1)
+                        sisteMaaned = YearMonth.of(2019, 1),
                     ),
                     inneholderNaeringsinntekter = false,
-                    periode = 1
-                )
+                    periode = 1,
+                ),
             ),
             inntektManueltRedigert = true,
-            inntektAvvik = true
+            inntektAvvik = true,
         )
     }
 }

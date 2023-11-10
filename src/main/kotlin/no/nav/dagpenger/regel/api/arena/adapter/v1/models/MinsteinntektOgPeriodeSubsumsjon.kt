@@ -12,7 +12,7 @@ data class MinsteinntektOgPeriodeSubsumsjon(
     val resultat: MinsteinntektOgPeriodeResultat,
     val inntekt: Set<Inntekt>,
     val inntektManueltRedigert: Boolean? = null,
-    val inntektAvvik: Boolean? = null
+    val inntektAvvik: Boolean? = null,
 )
 
 data class MinsteinntektOgPeriodeRegelfaktum(
@@ -24,16 +24,16 @@ data class MinsteinntektOgPeriodeRegelfaktum(
     val harAvtjentVerneplikt: Boolean? = false,
     val oppfyllerKravTilFangstOgFisk: Boolean? = false,
     val oppfyllerKravTilLaerling: Boolean? = false,
-    val bruktInntektsPeriode: InntektsPeriode? = null
+    val bruktInntektsPeriode: InntektsPeriode? = null,
 )
 
 data class MinsteinntektOgPeriodeResultat(
     val oppfyllerKravTilMinsteArbeidsinntekt: Boolean,
     val periodeAntallUker: Int? = null,
-    val minsteinntektRegel: MinsteinntektRegel?
+    val minsteinntektRegel: MinsteinntektRegel?,
 )
 
 enum class MinsteinntektRegel {
     ORDINAER,
-    KORONA
+    KORONA,
 }

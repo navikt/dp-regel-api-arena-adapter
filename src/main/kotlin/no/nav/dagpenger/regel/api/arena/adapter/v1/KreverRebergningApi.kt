@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 import no.nav.dagpenger.regel.api.internal.RegelApiNyVurderingHttpClient
 import java.time.LocalDate
 
-internal fun Route.NyVurderingApi(nyVurderingHttpClient: RegelApiNyVurderingHttpClient) {
+internal fun Route.nyVurderingApi(nyVurderingHttpClient: RegelApiNyVurderingHttpClient) {
     route("/lovverk") {
         post("/vurdering/minsteinntekt") {
             withContext(Dispatchers.IO) {

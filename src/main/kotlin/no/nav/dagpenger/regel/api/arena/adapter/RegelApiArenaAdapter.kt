@@ -31,16 +31,16 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import io.prometheus.client.CollectorRegistry
 import mu.KotlinLogging
 import no.nav.dagpenger.regel.api.Configuration
-import no.nav.dagpenger.regel.api.arena.adapter.v1.GrunnlagOgSatsApi
-import no.nav.dagpenger.regel.api.arena.adapter.v1.InntjeningsperiodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InvalidInnteksperiodeException
-import no.nav.dagpenger.regel.api.arena.adapter.v1.MinsteinntektOgPeriodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.NullGrunnlagException
-import no.nav.dagpenger.regel.api.arena.adapter.v1.NyVurderingApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.SubsumsjonProblem
 import no.nav.dagpenger.regel.api.arena.adapter.v1.UgyldigParameterkombinasjonException
+import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlagOgSatsApi
+import no.nav.dagpenger.regel.api.arena.adapter.v1.inntjeningsperiodeApi
+import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntektOgPeriodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.IllegalInntektIdException
+import no.nav.dagpenger.regel.api.arena.adapter.v1.nyVurderingApi
 import no.nav.dagpenger.regel.api.internal.FuelHttpClient
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiBehovHttpClient
@@ -264,10 +264,10 @@ internal fun Application.regelApiAdapter(
     routing {
         authenticate(optional = optionalJwt) {
             route("/v1") {
-                GrunnlagOgSatsApi(synchronousSubsumsjonClient)
-                MinsteinntektOgPeriodeApi(synchronousSubsumsjonClient)
-                InntjeningsperiodeApi(inntektApiBeregningsdatoHttpClient)
-                NyVurderingApi(kreverRebergningClient)
+                grunnlagOgSatsApi(synchronousSubsumsjonClient)
+                minsteinntektOgPeriodeApi(synchronousSubsumsjonClient)
+                inntjeningsperiodeApi(inntektApiBeregningsdatoHttpClient)
+                nyVurderingApi(kreverRebergningClient)
             }
         }
 
@@ -277,6 +277,5 @@ internal fun Application.regelApiAdapter(
 }
 
 class RegelApiArenaAdapterException(
-    override
-    val message: String,
+    override val message: String,
 ) : RuntimeException(message)

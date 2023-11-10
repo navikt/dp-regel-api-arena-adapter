@@ -16,7 +16,7 @@ import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClien
 
 private val sikkerlogg = KotlinLogging.logger("tjenestekall.grunnlagOgSatsApi")
 
-internal fun Route.InntjeningsperiodeApi(inntektApiberegningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient) {
+internal fun Route.inntjeningsperiodeApi(inntektApiberegningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient) {
     route("/inntjeningsperiode") {
         post {
             withContext(Dispatchers.IO) {

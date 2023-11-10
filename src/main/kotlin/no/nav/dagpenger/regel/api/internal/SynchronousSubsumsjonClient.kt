@@ -7,14 +7,13 @@ import java.time.LocalDateTime
 internal class SynchronousSubsumsjonClient(
     private val behovHttpClient: RegelApiBehovHttpClient,
     private val statusHttpClient: RegelApiStatusHttpClient,
-    private val subsumsjonHttpClient: RegelApiSubsumsjonHttpClient
+    private val subsumsjonHttpClient: RegelApiSubsumsjonHttpClient,
 ) {
 
     suspend fun <T> getSubsumsjonSynchronously(
         behovRequest: BehovRequest,
-        extractResult: (subsumsjon: Subsumsjon, opprettet: LocalDateTime, utfort: LocalDateTime) -> T
+        extractResult: (subsumsjon: Subsumsjon, opprettet: LocalDateTime, utfort: LocalDateTime) -> T,
     ): T {
-
         val opprettet = LocalDateTime.now()
         val totalTimer = clientLatencyStats.labels("total").startTimer()
 

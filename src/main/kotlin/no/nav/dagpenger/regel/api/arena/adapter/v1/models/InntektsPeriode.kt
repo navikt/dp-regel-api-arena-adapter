@@ -4,5 +4,5 @@ import java.time.YearMonth
 
 data class InntektsPeriode(
     val foersteMaaned: YearMonth,
-    val sisteMaaned: YearMonth
+    val sisteMaaned: YearMonth,
 )

@@ -18,9 +18,8 @@ import java.time.LocalDateTime
 fun extractGrunnlagOgSats(
     subsumsjon: Subsumsjon,
     opprettet: LocalDateTime,
-    utfort: LocalDateTime
+    utfort: LocalDateTime,
 ): GrunnlagOgSatsSubsumsjon {
-
     val faktum = subsumsjon.faktum
     val grunnlagResultat =
         subsumsjon.grunnlagResultat ?: throw MissingSubsumsjonDataException("Missing grunnlagResultat")
@@ -29,7 +28,8 @@ fun extractGrunnlagOgSats(
         throw NegativtGrunnlagException("Negativt grunnlag")
     }
 
-    if (grunnlagResultat.erNull() && faktum.lærling == true) { // @todo : Burde sjekken være for alle parameterene, ikke bare for lærling
+    // @todo : Burde sjekken være for alle parameterene, ikke bare for lærling
+    if (grunnlagResultat.erNull() && faktum.lærling == true) {
         throw NullGrunnlagException("Grunnlaget er 0")
     }
 
@@ -52,20 +52,20 @@ fun extractGrunnlagOgSats(
             antallBarn = faktum.antallBarn ?: throw MissingSubsumsjonDataException("Missing faktum antallBarn"),
             grunnlag = faktum.manueltGrunnlag,
             manueltGrunnlag = faktum.manueltGrunnlag,
-            forrigeGrunnlag = faktum.forrigeGrunnlag
+            forrigeGrunnlag = faktum.forrigeGrunnlag,
         ),
         resultat = GrunnlagOgSatsResultat(
             grunnlag = Grunnlag(
                 avkortet = grunnlagResultat.avkortet.toInt(),
                 uavkortet = grunnlagResultat.uavkortet.toInt(),
-                beregningsregel = findBeregningsregel(grunnlagResultat.beregningsregel, grunnlagResultat.harAvkortet)
+                beregningsregel = findBeregningsregel(grunnlagResultat.beregningsregel, grunnlagResultat.harAvkortet),
             ),
             sats = Sats(
                 dagsats = satsResultat.dagsats,
                 ukesats = satsResultat.ukesats,
-                beregningsregel = satsResultat.beregningsregel
+                beregningsregel = satsResultat.beregningsregel,
             ),
-            benyttet90ProsentRegel = satsResultat.benyttet90ProsentRegel
+            benyttet90ProsentRegel = satsResultat.benyttet90ProsentRegel,
         ),
         inntekt = grunnlagResultat.grunnlagInntektsPerioder?.map {
             Inntekt(
@@ -73,13 +73,13 @@ fun extractGrunnlagOgSats(
                 periode = it.periode,
                 inntektsPeriode = InntektsPeriode(
                     foersteMaaned = it.inntektsPeriode.førsteMåned,
-                    sisteMaaned = it.inntektsPeriode.sisteMåned
+                    sisteMaaned = it.inntektsPeriode.sisteMåned,
                 ),
-                inneholderNaeringsinntekter = it.inneholderFangstOgFisk
+                inneholderNaeringsinntekter = it.inneholderFangstOgFisk,
             )
         }?.toSet(),
         inntektManueltRedigert = faktum.inntektManueltRedigert,
-        inntektAvvik = faktum.inntektAvvik
+        inntektAvvik = faktum.inntektAvvik,
     )
 }
 

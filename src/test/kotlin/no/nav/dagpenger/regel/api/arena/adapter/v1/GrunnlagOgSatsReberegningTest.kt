@@ -20,7 +20,7 @@ class GrunnlagOgSatsReberegningTest {
             manueltGrunnlag = 3000,
             antallBarn = 3,
             oppfyllerKravTilLaerling = false,
-            inntektsId = "123456123"
+            inntektsId = "123456123",
         )
         val parametreMedRegelverksdato = parametere.copy(regelverksdato = LocalDate.of(2020, 6, 14))
 
@@ -35,7 +35,7 @@ class GrunnlagOgSatsReberegningTest {
             antallBarn = 3,
             lærling = false,
             regelverksdato = LocalDate.of(2019, 5, 13),
-            inntektsId = "123456123"
+            inntektsId = "123456123",
         )
         val behovRequestMedRegelverksdato = standardBehovRequest.copy(regelverksdato = LocalDate.of(2020, 6, 14))
 
@@ -50,7 +50,7 @@ class GrunnlagOgSatsReberegningTest {
             vedtakId = 123,
             beregningsdato = LocalDate.of(2019, 5, 13),
             grunnlag = 4000,
-            inntektsId = "123456123"
+            inntektsId = "123456123",
         )
 
         val standardBehovRequest = BehovRequest(
@@ -64,7 +64,7 @@ class GrunnlagOgSatsReberegningTest {
             oppfyllerKravTilFangstOgFisk = false,
             lærling = false,
             antallBarn = 0,
-            inntektsId = "123456123"
+            inntektsId = "123456123",
         )
         assertEquals(standardBehovRequest, behovFromParametere(parametere))
     }

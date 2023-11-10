@@ -13,9 +13,8 @@ import java.time.LocalDateTime
 fun extractMinsteinntektOgPeriode(
     subsumsjon: Subsumsjon,
     opprettet: LocalDateTime,
-    utfort: LocalDateTime
+    utfort: LocalDateTime,
 ): MinsteinntektOgPeriodeSubsumsjon {
-
     val faktum = subsumsjon.faktum
     val minsteinntektResultat =
         subsumsjon.minsteinntektResultat ?: throw MissingSubsumsjonDataException("Missing minsteinntektResultat")
@@ -44,14 +43,14 @@ fun extractMinsteinntektOgPeriode(
             bruktInntektsPeriode = faktum.bruktInntektsPeriode?.let {
                 InntektsPeriode(
                     foersteMaaned = faktum.bruktInntektsPeriode.førsteMåned,
-                    sisteMaaned = faktum.bruktInntektsPeriode.sisteMåned
+                    sisteMaaned = faktum.bruktInntektsPeriode.sisteMåned,
                 )
-            }
+            },
         ),
         resultat = MinsteinntektOgPeriodeResultat(
             oppfyllerKravTilMinsteArbeidsinntekt = minsteinntektResultat.oppfyllerMinsteinntekt,
             periodeAntallUker = periodeResultat?.periodeAntallUker,
-            minsteinntektRegel = MinsteinntektRegel.valueOf(minsteinntektResultat.beregningsregel.name)
+            minsteinntektRegel = MinsteinntektRegel.valueOf(minsteinntektResultat.beregningsregel.name),
         ),
         inntekt = minsteinntektResultat.minsteinntektInntektsPerioder.map {
             Inntekt(
@@ -59,13 +58,13 @@ fun extractMinsteinntektOgPeriode(
                 periode = it.periode,
                 inntektsPeriode = InntektsPeriode(
                     foersteMaaned = it.inntektsPeriode.førsteMåned,
-                    sisteMaaned = it.inntektsPeriode.sisteMåned
+                    sisteMaaned = it.inntektsPeriode.sisteMåned,
                 ),
                 andel = it.andel?.round()?.toInt(),
-                inneholderNaeringsinntekter = it.inneholderFangstOgFisk
+                inneholderNaeringsinntekter = it.inneholderFangstOgFisk,
             )
         }.toSet(),
         inntektManueltRedigert = faktum.inntektManueltRedigert,
-        inntektAvvik = faktum.inntektAvvik
+        inntektAvvik = faktum.inntektAvvik,
     )
 }

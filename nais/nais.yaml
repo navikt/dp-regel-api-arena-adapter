@@ -1,10 +1,10 @@
 apiVersion: nais.io/v1alpha1
 kind: Application
 metadata:
-  name: {{app}}
-  namespace: {{namespace}}
+  name: dp-regel-api-arena-adapter
+  namespace: teamdagpenger
   labels:
-    team: {{team}}
+    team: teamdagpenger
 spec:
   image: {{ image }}
   port: 8093
@@ -16,17 +16,16 @@ spec:
     enabled: true
     path: /metrics
   replicas:
-    min: 3
-    max: 3
+    min: {{ replicas.min }}
+    max: {{ replicas.max }}
   resources:
     limits:
-      cpu: 1000m
-      memory: 1024Mi
+      memory: {{ resources.limits.memory }}
     requests:
-      cpu: 200m
-      memory: 512Mi
+      cpu: {{ resources.requests.cpu }}
+      memory: {{ resources.requests.memory }}
   ingresses:
-    - "https://dp-regel-api-arena-adapter.nais.adeo.no"
+    - {{ ingress }}
   secureLogs:
     enabled: true
   vault:
@@ -36,3 +35,4 @@ spec:
       enabled: true
   # required for on-premises only
   webproxy: true
+

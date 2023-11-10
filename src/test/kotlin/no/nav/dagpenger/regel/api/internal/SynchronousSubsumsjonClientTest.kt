@@ -41,14 +41,14 @@ class SynchronousSubsumsjonClientTest {
         val synchronousSubsumsjonClient = SynchronousSubsumsjonClient(
             behovHttpClient,
             statusHttpClient,
-            subsumsjonHttpClient
+            subsumsjonHttpClient,
         )
 
         val behovRequest = BehovRequest(
             aktorId = "1234",
             vedtakId = 123,
             regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
-            beregningsdato = LocalDate.of(2019, 4, 14)
+            beregningsdato = LocalDate.of(2019, 4, 14),
         )
 
         val testFunction = { subsumsjon: Subsumsjon, _: LocalDateTime, _: LocalDateTime -> subsumsjon.behovId }
@@ -79,14 +79,14 @@ class SynchronousSubsumsjonClientTest {
         val synchronousSubsumsjonClient = SynchronousSubsumsjonClient(
             behovHttpClient,
             statusHttpClient,
-            subsumsjonHttpClient
+            subsumsjonHttpClient,
         )
 
         val behovRequest = BehovRequest(
             aktorId = "1234",
             vedtakId = 123,
             regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
-            beregningsdato = LocalDate.of(2019, 4, 14)
+            beregningsdato = LocalDate.of(2019, 4, 14),
         )
 
         val testFunction = { subsumsjon: Subsumsjon, _: LocalDateTime, _: LocalDateTime -> subsumsjon.behovId }
@@ -121,7 +121,7 @@ class SynchronousSubsumsjonClientTest {
                 SynchronousSubsumsjonClient(
                     behovHttpClient,
                     statusHttpClient,
-                    apply
+                    apply,
                 ).getSubsumsjonSynchronously(mockk()) { subsumsjon, _, _ -> subsumsjon }
             }
         }.apply {
@@ -135,13 +135,13 @@ class SynchronousSubsumsjonClientTest {
             faktum = Faktum(
                 aktorId = "1234",
                 regelkontekst = RegelKontekst("12345", "vedtak"),
-                beregningsdato = LocalDate.of(2019, 4, 14)
+                beregningsdato = LocalDate.of(2019, 4, 14),
             ),
             minsteinntektResultat = null,
             periodeResultat = null,
             grunnlagResultat = null,
             satsResultat = null,
-            problem = null
+            problem = null,
         )
     }
 }

@@ -15,7 +15,7 @@ internal class ConfigurationTest {
         "srvdp.regel.api.arena.adapter.username",
         "srvdp.regel.api.arena.adapter.password",
         "auth.regelapi.secret",
-        "auth.regelapi.key"
+        "auth.regelapi.key",
     )
 
     @Test

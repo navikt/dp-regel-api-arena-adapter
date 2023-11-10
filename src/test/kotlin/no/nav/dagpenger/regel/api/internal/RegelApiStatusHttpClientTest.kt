@@ -44,10 +44,10 @@ internal class RegelApiStatusHttpClientTest {
                 baseUrl = server.url("/"),
                 apiKey = "regelApiKey",
             ),
-            timeout = Duration.ZERO
+            timeout = Duration.ZERO,
         )
         assertThrows(
-            RegelApiTimeoutException::class.java
+            RegelApiTimeoutException::class.java,
         ) {
             runBlocking { client.pollStatus("/") }
         }
@@ -64,9 +64,9 @@ internal class RegelApiStatusHttpClientTest {
                 .whenScenarioStateIs(Scenario.STARTED)
                 .willReturn(
                     WireMock.aResponse()
-                        .withBody(responseBody)
+                        .withBody(responseBody),
                 )
-                .willSetStateTo("First pending")
+                .willSetStateTo("First pending"),
         )
 
         WireMock.stubFor(
@@ -76,9 +76,9 @@ internal class RegelApiStatusHttpClientTest {
                 .whenScenarioStateIs("First pending")
                 .willReturn(
                     WireMock.aResponse()
-                        .withBody(responseBody)
+                        .withBody(responseBody),
                 )
-                .willSetStateTo("Second pending")
+                .willSetStateTo("Second pending"),
         )
 
         WireMock.stubFor(
@@ -89,8 +89,8 @@ internal class RegelApiStatusHttpClientTest {
                 .willReturn(
                     WireMock.aResponse()
                         .withStatus(303)
-                        .withHeader("Location", "54321")
-                )
+                        .withHeader("Location", "54321"),
+                ),
         )
 
         val client = RegelApiStatusHttpClient(FuelHttpClient(baseUrl = server.url(""), apiKey = pattern.value))

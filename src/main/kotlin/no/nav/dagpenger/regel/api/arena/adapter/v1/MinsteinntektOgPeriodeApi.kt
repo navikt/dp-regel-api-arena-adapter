@@ -21,7 +21,7 @@ import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 
 private val sikkerlogg = KotlinLogging.logger("tjenestekall.minsteinntektOgPeriodeApi")
 
-internal fun Route.MinsteinntektOgPeriodeApi(
+internal fun Route.minsteinntektOgPeriodeApi(
     synchronousSubsumsjonClient: SynchronousSubsumsjonClient,
 ) {
     route("/minsteinntekt") {

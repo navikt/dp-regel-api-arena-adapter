@@ -14,13 +14,13 @@ internal class InntektApiInntjeningsperiodeHttpClient(private val client: FuelHt
             request.header(mapOf("Content-Type" to "application/json"))
             request.body(
                 moshiInstance.adapter(InntjeningsPeriodeRequest::class.java)
-                    .toJson(InntjeningsPeriodeRequest(parametere.beregningsdato, parametere.inntektsId))
+                    .toJson(InntjeningsPeriodeRequest(parametere.beregningsdato, parametere.inntektsId)),
             )
         }
 
         return when (result) {
             is Result.Failure -> throw InntektApiInntjeningsperiodeHttpClientException(
-                "Failed to return samme-inntjeningsperiode. Response message ${response.responseMessage}. Error message: ${result.error.message}"
+                "Failed to return samme-inntjeningsperiode. Response message ${response.responseMessage}. Error message: ${result.error.message}",
             )
             is Result.Success -> result.get().let { InntjeningsperiodeResultat(it.sammeInntjeningsPeriode, parametere) }
         }
@@ -28,12 +28,12 @@ internal class InntektApiInntjeningsperiodeHttpClient(private val client: FuelHt
 
     private data class InntjeningsPeriodeRequest(
         val beregningsdato: String,
-        val inntektsId: String
+        val inntektsId: String,
     )
 
     private data class InntjeningsPeriodeRespond(val sammeInntjeningsPeriode: Boolean)
 }
 
 class InntektApiInntjeningsperiodeHttpClientException(
-    override val message: String
+    override val message: String,
 ) : RuntimeException(message)

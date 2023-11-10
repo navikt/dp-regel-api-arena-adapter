@@ -12,7 +12,7 @@ private val LOGGER = KotlinLogging.logger {}
 
 internal class RegelApiStatusHttpClient(
     private val client: FuelHttpClient,
-    private val timeout: Duration = Duration.ofSeconds(20)
+    private val timeout: Duration = Duration.ofSeconds(20),
 ) {
     private val delayDuration = Duration.ofMillis(100)
 
@@ -37,9 +37,9 @@ internal class RegelApiStatusHttpClient(
                     LOGGER.error("Failed polling $statusUrl")
                     throw RegelApiStatusHttpClientException(
                         response.responseMessage + "Status code: ${response.statusCode}",
-                        it.exception
+                        it.exception,
                     )
-                }
+                },
             )
         } finally {
             timer.observeDuration()
@@ -55,7 +55,7 @@ internal class RegelApiStatusHttpClient(
             val behovId = statusUrl.substringAfterLast("/")
             when (e) {
                 is TimeoutCancellationException -> throw RegelApiTimeoutException(
-                    "Polled behov status (behovId=$behovId) for more than ${timeout.toMillis()} milliseconds"
+                    "Polled behov status (behovId=$behovId) for more than ${timeout.toMillis()} milliseconds",
                 )
 
                 else -> throw RegelApiStatusHttpClientException("Failed", e)
@@ -76,14 +76,14 @@ internal class RegelApiStatusHttpClient(
 
 private data class BehovStatusPollResult(
     val pending: Boolean,
-    val location: String?
+    val location: String?,
 ) {
     fun isPending() = pending
 }
 
 class RegelApiStatusHttpClientException(
     override val message: String,
-    override val cause: Throwable
+    override val cause: Throwable,
 ) : RuntimeException(message, cause)
 
 class RegelApiTimeoutException(override val message: String) : RuntimeException(message)

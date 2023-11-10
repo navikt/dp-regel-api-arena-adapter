@@ -13,5 +13,5 @@ data class GrunnlagOgSatsParametere(
     val grunnlag: Int? = null,
     val manueltGrunnlag: Int? = null,
     val forrigeGrunnlag: Int? = null,
-    val regelverksdato: LocalDate = beregningsdato
+    val regelverksdato: LocalDate = beregningsdato,
 )
