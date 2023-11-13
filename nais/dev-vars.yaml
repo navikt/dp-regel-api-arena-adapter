@@ -1,7 +1,7 @@
 ingress: https://dp-regel-api-arena-adapter.nais.preprod.local
 
 replicas:
-  min: 2
+  min: 3
   max: 3
 
 resources:
