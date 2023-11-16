@@ -89,7 +89,7 @@ dependencies {
 
     testImplementation("org.apache.kafka:kafka-clients:$kafkaVersion")
     testImplementation("org.apache.kafka:kafka-streams-test-utils:$kafkaVersion")
-    testImplementation("com.github.tomakehurst:wiremock-standalone:2.27.2")
+    testImplementation("com.github.tomakehurst:wiremock-standalone:3.0.1")
     testImplementation("org.skyscreamer:jsonassert:1.5.1")
 
     testImplementation(libs.mockk)
