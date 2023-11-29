@@ -1,12 +1,12 @@
 ingress: https://dp-regel-api-arena-adapter.nais.preprod.local
 
 replicas:
-  min: 3
-  max: 3
+  min: 2
+  max: 2
 
 resources:
   limits:
     memory: 1024Mi
   requests:
-    cpu: 400m
+    cpu: 40m
     memory: 512Mi
