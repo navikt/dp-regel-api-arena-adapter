@@ -23,8 +23,8 @@ val jar by tasks.getting(Jar::class) {
 }
 
 val moshiVersion = "1.15.0"
-val fuelVersion = "2.2.1"
-val log4j2Versjon = "2.21.1"
+val fuelVersion = "2.3.1"
+val log4j2Versjon = "2.22.0"
 val prometheusVersion = "0.16.0"
 val kafkaVersion = "7.5.2-ce"
 val ktorVersion = "2.3.6"
@@ -46,7 +46,7 @@ dependencies {
     implementation(libs.jackson.kotlin)
     implementation(libs.jackson.datatype.jsr310)
 
-    implementation("commons-codec:commons-codec:1.15")
+    implementation("commons-codec:commons-codec:1.16.0")
     implementation(libs.micrometer.registry.prometheus)
 
     implementation("com.squareup.moshi:moshi:$moshiVersion")
@@ -75,7 +75,7 @@ dependencies {
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
 
     // unleash
-    implementation("io.getunleash:unleash-client-java:9.1.0")
+    implementation("io.getunleash:unleash-client-java:9.1.1")
 
     testImplementation(kotlin("test"))
     testImplementation(libs.ktor.server.test.host)
@@ -89,7 +89,7 @@ dependencies {
 
     testImplementation("org.apache.kafka:kafka-clients:$kafkaVersion")
     testImplementation("org.apache.kafka:kafka-streams-test-utils:$kafkaVersion")
-    testImplementation("com.github.tomakehurst:wiremock-standalone:2.27.2")
+    testImplementation("com.github.tomakehurst:wiremock-standalone:3.0.1")
     testImplementation("org.skyscreamer:jsonassert:1.5.1")
 
     testImplementation(libs.mockk)
