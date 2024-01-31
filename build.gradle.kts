@@ -22,7 +22,7 @@ val jar by tasks.getting(Jar::class) {
     }
 }
 
-val moshiVersion = "1.15.0"
+val moshiVersion = "1.15.1"
 val fuelVersion = "2.2.1"
 val log4j2Versjon = "2.22.1"
 val prometheusVersion = "0.16.0"
