@@ -32,7 +32,7 @@ internal class ConfigurationTest {
                 this.application.profile shouldBe Profile.PROD
                 this.application.jwksIssuer shouldBe "https://security-token-service.nais.adeo.no"
                 this.application.jwksUrl shouldBe "http://security-token-service.default.svc.nais.local/rest/v1/sts/jwks"
-                this.application.dpInntektApiUrl shouldBe "http://dp-inntekt-api.teamdagpenger.svc.nais.local"
+                this.application.dpInntektApiUrl shouldBe "https://dp-inntekt-api.intern.nav.no"
                 this.application.dpRegelApiUrl shouldBe "http://dp-regel-api.teamdagpenger.svc.nais.local"
             }
         }
@@ -42,9 +42,12 @@ internal class ConfigurationTest {
         for ((k, v) in props) {
             System.getProperties()[k] = v
         }
-        test()
-        for ((k, _) in props) {
-            System.getProperties().remove(k)
+        try {
+            test()
+        } finally {
+            for ((k, _) in props) {
+                System.getProperties().remove(k)
+            }
         }
     }
 }
