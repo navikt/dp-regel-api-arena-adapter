@@ -22,12 +22,12 @@ val jar by tasks.getting(Jar::class) {
     }
 }
 
-val moshiVersion = "1.15.0"
+val moshiVersion = "1.15.1"
 val fuelVersion = "2.2.1"
-val log4j2Versjon = "2.21.1"
+val log4j2Versjon = "2.22.1"
 val prometheusVersion = "0.16.0"
-val kafkaVersion = "7.5.2-ce"
-val ktorVersion = "2.3.6"
+val kafkaVersion = "7.6.0-ce"
+val ktorVersion = "2.3.8"
 dependencies {
     implementation(kotlin("stdlib"))
 
@@ -46,7 +46,7 @@ dependencies {
     implementation(libs.jackson.kotlin)
     implementation(libs.jackson.datatype.jsr310)
 
-    implementation("commons-codec:commons-codec:1.15")
+    implementation("commons-codec:commons-codec:1.16.1")
     implementation(libs.micrometer.registry.prometheus)
 
     implementation("com.squareup.moshi:moshi:$moshiVersion")
@@ -64,7 +64,7 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-core:$log4j2Versjon")
     implementation("org.apache.logging.log4j:log4j-layout-template-json:$log4j2Versjon")
 
-    implementation("org.slf4j:slf4j-api:2.0.9")
+    implementation("org.slf4j:slf4j-api:2.0.12")
 
     implementation(libs.kotlin.logging)
 
@@ -75,7 +75,7 @@ dependencies {
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
 
     // unleash
-    implementation("io.getunleash:unleash-client-java:9.1.0")
+    implementation("io.getunleash:unleash-client-java:9.2.0")
 
     testImplementation(kotlin("test"))
     testImplementation(libs.ktor.server.test.host)
