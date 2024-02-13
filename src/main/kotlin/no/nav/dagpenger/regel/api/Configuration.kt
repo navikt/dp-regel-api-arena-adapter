@@ -68,7 +68,7 @@ data class Configuration(
                 tokenEndpointUrl = azureAdConfig.tokenEndpointUrl,
                 authType = azureAdConfig.clientSecret(),
             )
-            runBlocking { azureAdClient.clientCredentials(config()[Key("DP_REGEL_API_SCOPE", stringType)]).accessToken }
+            runBlocking { azureAdClient.clientCredentials(config()[Key("dp.regel.api.scope", stringType)]).accessToken }
         }
     }
 
