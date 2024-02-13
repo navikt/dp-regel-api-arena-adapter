@@ -8,8 +8,10 @@ import com.natpryce.konfig.booleanType
 import com.natpryce.konfig.intType
 import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
+import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
-import no.nav.dagpenger.regel.api.arena.adapter.ApiKeyVerifier
+import no.nav.dagpenger.oauth2.CachedOauth2Client
+import no.nav.dagpenger.oauth2.OAuth2Config
 
 private val LOGGER = KotlinLogging.logger {}
 
@@ -19,13 +21,12 @@ private val localProperties = ConfigurationMap(
         "application.httpPort" to "8093",
         "srvdp.regel.api.arena.adapter.username" to "username",
         "srvdp.regel.api.arena.adapter.password" to "password",
-        "dp.regel.api.url" to "http://localhost",
+        "dp.regel.api.url" to "http://localhost/v1",
+        "dp.regel.api.scope" to "api://dev-fss.teamdagpenger.dp-regel-api/.default",
         "dp.inntekt.api.url" to "http://localhost",
         "jwks.url" to "http://localhost",
         "jwks.issuer" to "http://localhost",
         "optional.jwt" to "true",
-        "auth.regelapi.secret" to "secret",
-        "auth.regelapi.key" to "secret1",
         "unleash.url" to "https://localhost",
     ),
 )
@@ -33,8 +34,9 @@ private val devProperties = ConfigurationMap(
     mapOf(
         "application.profile" to "DEV",
         "application.httpPort" to "8093",
-        "dp.regel.api.url" to "http://dp-regel-api.teamdagpenger.svc.nais.local",
+        "dp.regel.api.url" to "http://dp-regel-api.teamdagpenger.svc.nais.local/v1",
         "dp.inntekt.api.url" to "https://dp-inntekt-api.intern.dev.nav.no",
+        "dp.regel.api.scope" to "api://dev-fss.teamdagpenger.dp-regel-api/.default",
         "jwks.url" to "http://security-token-service.default.svc.nais.local/rest/v1/sts/jwks",
         "jwks.issuer" to "https://security-token-service.nais.preprod.local",
         "optional.jwt" to "false",
@@ -45,7 +47,8 @@ private val prodProperties = ConfigurationMap(
     mapOf(
         "application.profile" to "PROD",
         "application.httpPort" to "8093",
-        "dp.regel.api.url" to "http://dp-regel-api.teamdagpenger.svc.nais.local",
+        "dp.regel.api.url" to "http://dp-regel-api.teamdagpenger.svc.nais.local/v1",
+        "dp.regel.api.scope" to "api://prod-fss.teamdagpenger.dp-regel-api/.default",
         "dp.inntekt.api.url" to "https://dp-inntekt-api.intern.nav.no",
         "jwks.url" to "http://security-token-service.default.svc.nais.local/rest/v1/sts/jwks",
         "jwks.issuer" to "https://security-token-service.nais.adeo.no",
@@ -56,14 +59,17 @@ private val prodProperties = ConfigurationMap(
 
 data class Configuration(
     val application: Application = Application(),
-    val auth: Auth = Auth(),
 ) {
 
-    class Auth(
-        regelApiSecret: String = config()[Key("auth.regelapi.secret", stringType)],
-        regelApiKeyPlain: String = config()[Key("auth.regelapi.key", stringType)],
-    ) {
-        val regelApiKey = ApiKeyVerifier(regelApiSecret).generate(regelApiKeyPlain)
+    val tokenProvider: () -> String by lazy {
+        {
+            val azureAdConfig = OAuth2Config.AzureAd(config())
+            val azureAdClient = CachedOauth2Client(
+                tokenEndpointUrl = azureAdConfig.tokenEndpointUrl,
+                authType = azureAdConfig.clientSecret(),
+            )
+            runBlocking { azureAdClient.clientCredentials(config()[Key("DP_REGEL_API_SCOPE", stringType)]).accessToken }
+        }
     }
 
     data class Application(

@@ -6,10 +6,10 @@ import com.github.kittinunf.fuel.core.Request
 import com.github.kittinunf.fuel.core.ResponseResultOf
 import no.nav.dagpenger.regel.api.arena.adapter.responseObject
 
-internal class FuelHttpClient(val baseUrl: String, private val apiKey: String? = null) {
+internal class FuelHttpClient(val baseUrl: String, private val tokentProvider: (() -> String)? = null) {
     val instance = FuelManager().apply {
-        apiKey?.let {
-            this.baseHeaders = mapOf("X-API-KEY" to it)
+        tokentProvider?.let {
+            this.baseHeaders = mapOf("Authorization" to "Bearer ${it()}")
         }
     }
 

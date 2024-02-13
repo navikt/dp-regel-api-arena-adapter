@@ -35,17 +35,17 @@ class RegelApiNyVurderingHttpClientTest {
 
     @Test
     fun `Should get minsteinntekt vurdering`() {
-        val equalToPattern = EqualToPattern("regelApiKey")
+        val tokenProvider = { "Token" }
         WireMock.stubFor(
             WireMock.post(WireMock.urlEqualTo("//lovverk/vurdering/minsteinntekt"))
-                .withHeader("X-API-KEY", equalToPattern)
+                .withHeader("Authorization", EqualToPattern("Bearer ${tokenProvider.invoke()}"))
                 .willReturn(
                     WireMock.aResponse()
                         .withBody("""{"nyVurdering": true}"""),
                 ),
         )
 
-        val client = RegelApiNyVurderingHttpClient(FuelHttpClient(server.url(""), equalToPattern.value))
+        val client = RegelApiNyVurderingHttpClient(FuelHttpClient(server.url(""), tokenProvider))
         val response = client.kreverNyVurdering(listOf("123"), LocalDate.of(2020, 1, 13))
         assertTrue(response)
     }

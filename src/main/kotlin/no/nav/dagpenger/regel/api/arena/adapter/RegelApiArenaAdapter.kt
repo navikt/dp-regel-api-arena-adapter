@@ -66,9 +66,10 @@ fun main() {
         .rateLimited(10, 1, TimeUnit.MINUTES)
         .build()
 
-    val inntektApiBeregningsdatoHttpClient = InntektApiInntjeningsperiodeHttpClient(FuelHttpClient(config.application.dpInntektApiUrl))
+    val inntektApiBeregningsdatoHttpClient =
+        InntektApiInntjeningsperiodeHttpClient(FuelHttpClient(config.application.dpInntektApiUrl))
 
-    val regelApiHttpClient = FuelHttpClient(config.application.dpRegelApiUrl, config.auth.regelApiKey)
+    val regelApiHttpClient = FuelHttpClient(config.application.dpRegelApiUrl, config.tokenProvider)
 
     val behovHttpClient = RegelApiBehovHttpClient(regelApiHttpClient)
     val statusHttpClient = RegelApiStatusHttpClient(regelApiHttpClient)
