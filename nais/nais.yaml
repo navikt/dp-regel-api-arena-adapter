@@ -37,6 +37,8 @@ spec:
     outbound:
       rules:
         - application: dp-regel-api
+          namespace: teamdagpenger
+          cluster: {{ dpRegelApiCluster}}
   # required for on-premises only
   webproxy: true
 
