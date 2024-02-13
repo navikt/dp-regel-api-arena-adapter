@@ -60,16 +60,14 @@ private val prodProperties = ConfigurationMap(
 data class Configuration(
     val application: Application = Application(),
 ) {
+    private val azureAdConfig = OAuth2Config.AzureAd(config())
+    private val azureAdClient = CachedOauth2Client(
+        tokenEndpointUrl = azureAdConfig.tokenEndpointUrl,
+        authType = azureAdConfig.clientSecret(),
+    )
 
     val tokenProvider: () -> String by lazy {
         {
-            val azureAdConfig = OAuth2Config.AzureAd(config()).also {
-                LOGGER.info { "Using Azure AD config: ${it.tokenEndpointUrl} and ${it.wellKnowUrl()}" }
-            }
-            val azureAdClient = CachedOauth2Client(
-                tokenEndpointUrl = azureAdConfig.tokenEndpointUrl,
-                authType = azureAdConfig.clientSecret(),
-            )
             runBlocking { azureAdClient.clientCredentials(config()[Key("dp.regel.api.scope", stringType)]).accessToken }
         }
     }
@@ -86,7 +84,7 @@ data class Configuration(
         val optionalJwt: Boolean = config()[Key("optional.jwt", booleanType)],
         val unleashUrl: String = config()[Key("unleash.url", stringType)],
 
-    ) {
+        ) {
         init {
             LOGGER.info { "Using jwksurl $jwksUrl and issuer $jwksIssuer" }
         }
