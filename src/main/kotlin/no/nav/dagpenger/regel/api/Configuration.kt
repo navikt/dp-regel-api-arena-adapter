@@ -63,7 +63,9 @@ data class Configuration(
 
     val tokenProvider: () -> String by lazy {
         {
-            val azureAdConfig = OAuth2Config.AzureAd(config())
+            val azureAdConfig = OAuth2Config.AzureAd(config()).also {
+                LOGGER.info { "Using Azure AD config: ${it.tokenEndpointUrl} and ${it.wellKnowUrl()}" }
+            }
             val azureAdClient = CachedOauth2Client(
                 tokenEndpointUrl = azureAdConfig.tokenEndpointUrl,
                 authType = azureAdConfig.clientSecret(),
