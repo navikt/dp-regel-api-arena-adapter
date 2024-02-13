@@ -7,14 +7,16 @@ import com.github.kittinunf.fuel.core.ResponseResultOf
 import no.nav.dagpenger.regel.api.arena.adapter.responseObject
 
 internal class FuelHttpClient(val baseUrl: String, private val tokentProvider: (() -> String)? = null) {
-    val instance = FuelManager().apply {
-        tokentProvider?.let {
-            this.baseHeaders = mapOf("Authorization" to "Bearer ${it()}")
-        }
-    }
 
-    inline fun request(method: Method, path: String, configure: (Request) -> Unit) =
-        instance.request(method, this.baseUrl + path).apply(configure)
+    val instance = FuelManager()
+
+    inline fun request(method: Method, path: String, configure: (Request) -> Unit): Request {
+        val request = instance.request(method, this.baseUrl + path)
+        tokentProvider?.let {
+            request.header("Authorization", "Bearer ${it()}")
+        }
+        return request.apply(configure)
+    }
 
     inline fun <reified T : Any> get(path: String, configure: (Request) -> Unit = {}): ResponseResultOf<T> =
         run(Method.GET, path, configure)
