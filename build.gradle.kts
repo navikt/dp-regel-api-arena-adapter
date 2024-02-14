@@ -82,6 +82,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-api:${libs.versions.junit.get()}")
 
     testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.kotest.assertions.json)
     testImplementation("io.kotest:kotest-runner-junit5-jvm:${libs.versions.kotest.get()}")
 
     testImplementation(libs.testcontainer.postgresql)

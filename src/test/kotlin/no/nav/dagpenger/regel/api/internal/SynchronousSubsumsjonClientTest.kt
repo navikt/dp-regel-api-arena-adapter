@@ -139,11 +139,11 @@ class SynchronousSubsumsjonClientTest {
         return Subsumsjon(
             behovId = "565656",
             faktum =
-                Faktum(
-                    aktorId = "1234",
-                    regelkontekst = RegelKontekst("12345", "vedtak"),
-                    beregningsdato = LocalDate.of(2019, 4, 14),
-                ),
+            Faktum(
+                aktorId = "1234",
+                regelkontekst = RegelKontekst("12345", "vedtak"),
+                beregningsdato = LocalDate.of(2019, 4, 14),
+            ),
             minsteinntektResultat = null,
             periodeResultat = null,
             grunnlagResultat = null,

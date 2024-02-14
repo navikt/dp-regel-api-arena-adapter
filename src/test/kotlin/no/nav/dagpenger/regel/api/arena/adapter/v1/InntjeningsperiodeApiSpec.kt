@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1
 
+import io.kotest.assertions.json.shouldEqualJson
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -62,7 +63,7 @@ class InntjeningsperiodeApiSpec {
                 )
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
-                assertEquals(expectedJson, response.content)
+                response.content?.shouldEqualJson(expectedJson)
             }
         }
     }
