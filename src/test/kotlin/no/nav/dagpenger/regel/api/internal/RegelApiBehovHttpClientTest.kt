@@ -36,10 +36,11 @@ class RegelApiBehovHttpClientTest {
 
     @Test
     fun ` Should get url to behov status `() {
-        val equalToPattern = EqualToPattern("regelApiKey")
+        val tokenProvider = { "Token" }
+        val equalToPattern = EqualToPattern("Bearer ${tokenProvider.invoke()}")
         WireMock.stubFor(
             WireMock.post(WireMock.urlEqualTo("//behov"))
-                .withHeader("X-API-KEY", equalToPattern)
+                .withHeader("Authorization", equalToPattern)
                 .withRequestBody(
                     EqualToJsonPattern(
                         """
@@ -60,7 +61,10 @@ class RegelApiBehovHttpClientTest {
                 ),
         )
 
-        val client = RegelApiBehovHttpClient(FuelHttpClient(server.url(""), equalToPattern.value))
+        val client =
+            RegelApiBehovHttpClient(
+                FuelHttpClient(server.url(""), tokenProvider),
+            )
 
         val behovRequest =
             BehovRequest(

@@ -28,11 +28,15 @@ spec:
     - {{ ingress }}
   secureLogs:
     enabled: true
-  vault:
-    enabled: true
   azure:
     application:
       enabled: true
+  accessPolicy:
+    outbound:
+      rules:
+        - application: dp-regel-api
+          namespace: teamdagpenger
+          cluster: {{ dpRegelApiCluster}}
   # required for on-premises only
   webproxy: true
 

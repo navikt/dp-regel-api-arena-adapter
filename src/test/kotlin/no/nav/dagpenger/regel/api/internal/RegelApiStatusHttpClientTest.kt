@@ -42,7 +42,7 @@ internal class RegelApiStatusHttpClientTest {
             RegelApiStatusHttpClient(
                 FuelHttpClient(
                     baseUrl = server.url("/"),
-                    apiKey = "regelApiKey",
+                    tokentProvider = { "regelApiKey" },
                 ),
                 timeout = Duration.ZERO,
             )
@@ -55,11 +55,12 @@ internal class RegelApiStatusHttpClientTest {
 
     @Test
     fun ` Should retry query until response redirects to the result `() {
-        val pattern = EqualToPattern("regelApiKey")
+        val tokenProvider = { "Token" }
+        val pattern = EqualToPattern("Bearer ${tokenProvider.invoke()}")
 
         WireMock.stubFor(
             WireMock.get(WireMock.urlEqualTo("//behov/status/123"))
-                .withHeader("X-API-KEY", pattern)
+                .withHeader("Authorization", pattern)
                 .inScenario("Retry Scenario")
                 .whenScenarioStateIs(Scenario.STARTED)
                 .willReturn(
@@ -71,7 +72,7 @@ internal class RegelApiStatusHttpClientTest {
 
         WireMock.stubFor(
             WireMock.get(WireMock.urlEqualTo("//behov/status/123"))
-                .withHeader("X-API-KEY", pattern)
+                .withHeader("Authorization", pattern)
                 .inScenario("Retry Scenario")
                 .whenScenarioStateIs("First pending")
                 .willReturn(
@@ -83,7 +84,7 @@ internal class RegelApiStatusHttpClientTest {
 
         WireMock.stubFor(
             WireMock.get(WireMock.urlEqualTo("//behov/status/123"))
-                .withHeader("X-API-KEY", pattern)
+                .withHeader("Authorization", pattern)
                 .inScenario("Retry Scenario")
                 .whenScenarioStateIs("Second pending")
                 .willReturn(
@@ -93,7 +94,8 @@ internal class RegelApiStatusHttpClientTest {
                 ),
         )
 
-        val client = RegelApiStatusHttpClient(FuelHttpClient(baseUrl = server.url(""), apiKey = pattern.value))
+        val client =
+            RegelApiStatusHttpClient(FuelHttpClient(baseUrl = server.url(""), tokentProvider = tokenProvider))
 
         val response = runBlocking { client.pollStatus("/behov/status/123") }
         assertEquals("54321", response)

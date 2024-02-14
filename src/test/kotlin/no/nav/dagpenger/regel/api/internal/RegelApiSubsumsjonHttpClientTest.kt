@@ -34,21 +34,21 @@ class RegelApiSubsumsjonHttpClientTest {
 
     @Test
     fun `Should get subsumsjon`() {
+        val tokenProvider = { "Token" }
         val responseBodyJson =
             RegelApiSubsumsjonHttpClientTest::class.java
                 .getResource("/test-data/example-subsumsjon-payload.json").readText()
 
-        val equalToPattern = EqualToPattern("regelApiKey")
         WireMock.stubFor(
             WireMock.get(WireMock.urlEqualTo("//subsumsjon/112233"))
-                .withHeader("X-API-KEY", equalToPattern)
+                .withHeader("Authorization", EqualToPattern("Bearer ${tokenProvider.invoke()}"))
                 .willReturn(
                     WireMock.aResponse()
                         .withBody(responseBodyJson),
                 ),
         )
 
-        val client = RegelApiSubsumsjonHttpClient(FuelHttpClient(server.url(""), equalToPattern.value))
+        val client = RegelApiSubsumsjonHttpClient(FuelHttpClient(server.url(""), tokenProvider))
 
         val subsumsjon = client.getSubsumsjon("/subsumsjon/112233")
 

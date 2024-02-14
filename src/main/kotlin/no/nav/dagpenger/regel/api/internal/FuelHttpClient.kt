@@ -6,19 +6,20 @@ import com.github.kittinunf.fuel.core.Request
 import com.github.kittinunf.fuel.core.ResponseResultOf
 import no.nav.dagpenger.regel.api.arena.adapter.responseObject
 
-internal class FuelHttpClient(val baseUrl: String, private val apiKey: String? = null) {
-    private val instance =
-        FuelManager().apply {
-            apiKey?.let {
-                this.baseHeaders = mapOf("X-API-KEY" to it)
-            }
-        }
+internal class FuelHttpClient(val baseUrl: String, private val tokentProvider: (() -> String)? = null) {
+    val instance = FuelManager()
 
     inline fun request(
         method: Method,
         path: String,
         configure: (Request) -> Unit,
-    ) = instance.request(method, this.baseUrl + path).apply(configure)
+    ): Request {
+        val request = instance.request(method, this.baseUrl + path)
+        tokentProvider?.let {
+            request.header("Authorization", "Bearer ${it()}")
+        }
+        return request.apply(configure)
+    }
 
     inline fun <reified T : Any> get(
         path: String,
