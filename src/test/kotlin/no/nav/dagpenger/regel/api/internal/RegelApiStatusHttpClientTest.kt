@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test
 import java.time.Duration
 
 internal class RegelApiStatusHttpClientTest {
-
     companion object {
         val server: WireMockServer = WireMockServer(WireMockConfiguration.options().dynamicPort())
 
@@ -39,13 +38,14 @@ internal class RegelApiStatusHttpClientTest {
 
     @Test
     fun `Should honor timeout `() {
-        val client = RegelApiStatusHttpClient(
-            FuelHttpClient(
-                baseUrl = server.url("/"),
-                tokentProvider = { "regelApiKey" },
-            ),
-            timeout = Duration.ZERO,
-        )
+        val client =
+            RegelApiStatusHttpClient(
+                FuelHttpClient(
+                    baseUrl = server.url("/"),
+                    tokentProvider = { "regelApiKey" },
+                ),
+                timeout = Duration.ZERO,
+            )
         assertThrows(
             RegelApiTimeoutException::class.java,
         ) {
@@ -103,8 +103,8 @@ internal class RegelApiStatusHttpClientTest {
 
     val responseBody =
         """
-                {
-                        "status" : "PENDING"
-                }
+        {
+                "status" : "PENDING"
+        }
         """.trimIndent()
 }

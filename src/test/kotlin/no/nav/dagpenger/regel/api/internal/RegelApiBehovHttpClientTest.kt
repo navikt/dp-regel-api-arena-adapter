@@ -61,9 +61,10 @@ class RegelApiBehovHttpClientTest {
                 ),
         )
 
-        val client = RegelApiBehovHttpClient(
-            FuelHttpClient(server.url(""), tokenProvider),
-        )
+        val client =
+            RegelApiBehovHttpClient(
+                FuelHttpClient(server.url(""), tokenProvider),
+            )
 
         val behovRequest =
             BehovRequest(
