@@ -28,8 +28,6 @@ spec:
     - {{ ingress }}
   secureLogs:
     enabled: true
-  vault:
-    enabled: true
   azure:
     application:
       enabled: true

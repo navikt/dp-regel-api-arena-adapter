@@ -37,6 +37,3 @@ spec:
       value: "https://security-token-service-t4.nais.preprod.local/rest/v1/sts/jwks"
   secureLogs:
     enabled: true
-  vault:
-    enabled: true
-
