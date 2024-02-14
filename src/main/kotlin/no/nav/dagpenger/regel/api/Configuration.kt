@@ -1,7 +1,5 @@
 package no.nav.dagpenger.regel.api
 
-import com.fasterxml.jackson.annotation.JsonInclude
-import com.fasterxml.jackson.databind.DeserializationFeature
 import com.natpryce.konfig.ConfigurationMap
 import com.natpryce.konfig.ConfigurationProperties
 import com.natpryce.konfig.EnvironmentVariables
@@ -10,15 +8,6 @@ import com.natpryce.konfig.booleanType
 import com.natpryce.konfig.intType
 import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.ProxyBuilder
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.engine.http
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logger
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.serialization.jackson.jackson
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
 import no.nav.dagpenger.oauth2.CachedOauth2Client
@@ -68,30 +57,6 @@ private val prodProperties = ConfigurationMap(
     ),
 )
 
-private val httpClient = HttpClient(CIO) {
-    expectSuccess = true
-    install(ContentNegotiation) {
-        jackson {
-            configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-            setSerializationInclusion(JsonInclude.Include.NON_NULL)
-        }
-    }
-    install(Logging) {
-        level = LogLevel.ALL
-        logger = object : Logger {
-            override fun log(message: String) = LOGGER.info { message }
-        }
-    }
-    engine {
-        val httpProxy: String? = System.getenv("HTTP_PROXY")
-        LOGGER.info { "HTTP_PROXY: $httpProxy" }
-        httpProxy?.let {
-            LOGGER.info { "Setter proxy til $it" }
-            proxy = ProxyBuilder.http(it)
-        }
-    }
-}
-
 data class Configuration(
     val application: Application = Application(),
 ) {
@@ -100,14 +65,11 @@ data class Configuration(
         CachedOauth2Client(
             tokenEndpointUrl = azureAdConfig.tokenEndpointUrl,
             authType = azureAdConfig.clientSecret(),
-            httpClient = httpClient,
         )
     }
 
     val tokenProvider: () -> String by lazy {
         {
-            LOGGER.info("Skal hente token fra ${azureAdConfig.wellKnowUrl()} ")
-            LOGGER.info("Henter token fra ${azureAdConfig.tokenEndpointUrl}")
             runBlocking { azureAdClient.clientCredentials(config()[Key("dp.regel.api.scope", stringType)]).accessToken }
         }
     }
