@@ -68,7 +68,7 @@ private val prodProperties = ConfigurationMap(
     ),
 )
 
-private val httpClient = HttpClient(CIO.create()) {
+private val httpClient = HttpClient(CIO) {
     expectSuccess = true
     install(ContentNegotiation) {
         jackson {
