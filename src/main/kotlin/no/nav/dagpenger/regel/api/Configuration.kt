@@ -18,7 +18,6 @@ import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
-import io.ktor.client.request.get
 import io.ktor.serialization.jackson.jackson
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
@@ -84,7 +83,10 @@ private val httpClient = HttpClient(CIO.create()) {
         }
     }
     engine {
-        System.getenv("HTTP_PROXY")?.let {
+        val httpProxy: String? = System.getenv("HTTP_PROXY")
+        LOGGER.info { "HTTP_PROXY: $httpProxy" }
+        httpProxy?.let {
+            LOGGER.info { "Setter proxy til $it" }
             proxy = ProxyBuilder.http(it)
         }
     }
@@ -122,7 +124,7 @@ data class Configuration(
         val optionalJwt: Boolean = config()[Key("optional.jwt", booleanType)],
         val unleashUrl: String = config()[Key("unleash.url", stringType)],
 
-        ) {
+    ) {
         init {
             LOGGER.info { "Using jwksurl $jwksUrl and issuer $jwksIssuer" }
         }
