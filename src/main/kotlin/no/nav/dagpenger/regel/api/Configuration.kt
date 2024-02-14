@@ -67,7 +67,7 @@ data class Configuration(
     }
 
     data class Application(
-        val httpPort: Int = 8083,
+        val httpPort: Int = 8093,
         val dpRegelApiBaseUrl: String = config()[Key("dp.regel.api.url", stringType)],
         val dpRegelApiV1Url: String = "$dpRegelApiBaseUrl/v1",
         val dpInntektApiUrl: String = config()[Key("dp.inntekt.api.url", stringType)],
