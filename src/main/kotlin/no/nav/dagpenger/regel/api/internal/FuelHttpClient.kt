@@ -7,7 +7,6 @@ import com.github.kittinunf.fuel.core.ResponseResultOf
 import no.nav.dagpenger.regel.api.arena.adapter.responseObject
 
 internal class FuelHttpClient(val baseUrl: String, private val tokentProvider: (() -> String)? = null) {
-
     val instance = FuelManager()
 
     inline fun request(method: Method, path: String, configure: (Request) -> Unit): Request {
