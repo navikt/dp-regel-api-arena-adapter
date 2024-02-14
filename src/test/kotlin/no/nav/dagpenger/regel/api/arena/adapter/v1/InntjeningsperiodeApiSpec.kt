@@ -98,5 +98,13 @@ class InntjeningsperiodeApiSpec {
     }
 
     private val expectedJson =
-        """{"sammeInntjeningsPeriode":true,"parametere":{"aktorId":"1234","vedtakId":5678,"beregningsdato":"2019-02-27","inntektsId":"12345"}}"""
+        """{
+  "sammeInntjeningsPeriode": true,
+  "parametere": {
+    "aktorId": "1234",
+    "vedtakId": 5678,
+    "beregningsdato": "2019-02-27",
+    "inntektsId": "12345"
+  }
+}"""
 }

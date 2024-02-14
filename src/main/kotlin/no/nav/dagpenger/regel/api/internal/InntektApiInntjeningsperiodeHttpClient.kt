@@ -20,8 +20,10 @@ internal class InntektApiInntjeningsperiodeHttpClient(private val client: FuelHt
 
         return when (result) {
             is Result.Failure -> throw InntektApiInntjeningsperiodeHttpClientException(
-                "Failed to return samme-inntjeningsperiode. Response message ${response.responseMessage}. Error message: ${result.error.message}",
+                "Failed to return samme-inntjeningsperiode. " +
+                    "Response message ${response.responseMessage}. Error message: ${result.error.message}",
             )
+
             is Result.Success -> result.get().let { InntjeningsperiodeResultat(it.sammeInntjeningsPeriode, parametere) }
         }
     }

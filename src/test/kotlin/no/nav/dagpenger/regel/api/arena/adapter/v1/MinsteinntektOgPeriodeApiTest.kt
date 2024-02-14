@@ -495,7 +495,80 @@ class MinsteinntektOgPeriodeApiTest {
     }
 
     private val expectedJson =
-        """{"minsteinntektSubsumsjonsId":"12345","periodeSubsumsjonsId":"1234","opprettet":"2000-08-11T15:30:11","utfort":"2000-08-11T15:30:11","parametere":{"aktorId":"1234","vedtakId":123,"beregningsdato":"2019-02-10","inntektsId":"13445","harAvtjentVerneplikt":false,"oppfyllerKravTilFangstOgFisk":false,"oppfyllerKravTilLaerling":false,"bruktInntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"}},"resultat":{"oppfyllerKravTilMinsteArbeidsinntekt":true,"periodeAntallUker":104, "minsteinntektRegel": "ORDINAER"},"inntekt":[{"inntekt":4999423,"periode":1,"inntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"},"inneholderNaeringsinntekter":false,"andel":111}],"inntektManueltRedigert":true,"inntektAvvik":true}"""
+        """{
+  "minsteinntektSubsumsjonsId": "12345",
+  "periodeSubsumsjonsId": "1234",
+  "opprettet": "2000-08-11T15:30:11",
+  "utfort": "2000-08-11T15:30:11",
+  "parametere": {
+    "aktorId": "1234",
+    "vedtakId": 123,
+    "beregningsdato": "2019-02-10",
+    "inntektsId": "13445",
+    "harAvtjentVerneplikt": false,
+    "oppfyllerKravTilFangstOgFisk": false,
+    "oppfyllerKravTilLaerling": false,
+    "bruktInntektsPeriode": {
+      "foersteMaaned": "2018-01",
+      "sisteMaaned": "2019-01"
+    }
+  },
+  "resultat": {
+    "oppfyllerKravTilMinsteArbeidsinntekt": true,
+    "periodeAntallUker": 104,
+    "minsteinntektRegel": "ORDINAER"
+  },
+  "inntekt": [
+    {
+      "inntekt": 4999423,
+      "periode": 1,
+      "inntektsPeriode": {
+        "foersteMaaned": "2018-01",
+        "sisteMaaned": "2019-01"
+      },
+      "inneholderNaeringsinntekter": false,
+      "andel": 111
+    }
+  ],
+  "inntektManueltRedigert": true,
+  "inntektAvvik": true
+}"""
     private val expectedJsonUtenMinsteinntektRegel =
-        """{"minsteinntektSubsumsjonsId":"12345","periodeSubsumsjonsId":"1234","opprettet":"2000-08-11T15:30:11","utfort":"2000-08-11T15:30:11","parametere":{"aktorId":"1234","vedtakId":123,"beregningsdato":"2019-02-10","inntektsId":"13445","harAvtjentVerneplikt":false,"oppfyllerKravTilFangstOgFisk":false,"oppfyllerKravTilLaerling":false,"bruktInntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"}},"resultat":{"oppfyllerKravTilMinsteArbeidsinntekt":true,"periodeAntallUker":104},"inntekt":[{"inntekt":4999423,"periode":1,"inntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"},"inneholderNaeringsinntekter":false,"andel":111}],"inntektManueltRedigert":true,"inntektAvvik":true}"""
+        """{
+  "minsteinntektSubsumsjonsId": "12345",
+  "periodeSubsumsjonsId": "1234",
+  "opprettet": "2000-08-11T15:30:11",
+  "utfort": "2000-08-11T15:30:11",
+  "parametere": {
+    "aktorId": "1234",
+    "vedtakId": 123,
+    "beregningsdato": "2019-02-10",
+    "inntektsId": "13445",
+    "harAvtjentVerneplikt": false,
+    "oppfyllerKravTilFangstOgFisk": false,
+    "oppfyllerKravTilLaerling": false,
+    "bruktInntektsPeriode": {
+      "foersteMaaned": "2018-01",
+      "sisteMaaned": "2019-01"
+    }
+  },
+  "resultat": {
+    "oppfyllerKravTilMinsteArbeidsinntekt": true,
+    "periodeAntallUker": 104
+  },
+  "inntekt": [
+    {
+      "inntekt": 4999423,
+      "periode": 1,
+      "inntektsPeriode": {
+        "foersteMaaned": "2018-01",
+        "sisteMaaned": "2019-01"
+      },
+      "inneholderNaeringsinntekter": false,
+      "andel": 111
+    }
+  ],
+  "inntektManueltRedigert": true,
+  "inntektAvvik": true
+}"""
 }
