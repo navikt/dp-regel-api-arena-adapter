@@ -42,7 +42,7 @@ jobs:
 
       - name: docker-build-push
         uses: nais/docker-build-push@v0
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/azuread'
         id: docker-build-push
         with:
           team: teamdagpenger
@@ -54,7 +54,7 @@ jobs:
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
 
       - name: Archive NAIS yaml
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/azuread'
         uses: actions/upload-artifact@v4
         with:
           name: nais-yaml
@@ -66,7 +66,7 @@ jobs:
   deploy-dev:
     name: Deploy to dev
     needs: [build]
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/azuread'
     runs-on: ubuntu-latest
     environment: dev-fss
     steps:
