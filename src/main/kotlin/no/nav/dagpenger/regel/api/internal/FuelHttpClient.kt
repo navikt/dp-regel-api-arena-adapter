@@ -7,7 +7,7 @@ import com.github.kittinunf.fuel.core.ResponseResultOf
 import no.nav.dagpenger.regel.api.arena.adapter.responseObject
 
 internal class FuelHttpClient(val baseUrl: String, private val apiKey: String? = null) {
-    val instance = FuelManager().apply {
+    private val instance = FuelManager().apply {
         apiKey?.let {
             this.baseHeaders = mapOf("X-API-KEY" to it)
         }
