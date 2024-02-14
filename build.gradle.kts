@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.ktor.serialization.jackson)
     implementation(libs.ktor.server.status.pages)
     implementation(libs.ktor.server.metrics.micrometer)
+    implementation(libs.bundles.ktor.client)
 
     implementation(libs.jackson.core)
     implementation(libs.jackson.kotlin)
