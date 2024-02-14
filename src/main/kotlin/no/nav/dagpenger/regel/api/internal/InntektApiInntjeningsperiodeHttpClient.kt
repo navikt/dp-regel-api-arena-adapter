@@ -6,17 +6,17 @@ import no.nav.dagpenger.regel.api.internal.models.InntjeningsperiodeParametre
 import no.nav.dagpenger.regel.api.internal.models.InntjeningsperiodeResultat
 
 internal class InntektApiInntjeningsperiodeHttpClient(private val client: FuelHttpClient) {
-
     fun getInntjeningsperiode(parametere: InntjeningsperiodeParametre): InntjeningsperiodeResultat {
         val url = "/v1/samme-inntjeningsperiode"
 
-        val (_, response, result) = client.post<InntjeningsPeriodeRespond>(url) { request ->
-            request.header(mapOf("Content-Type" to "application/json"))
-            request.body(
-                moshiInstance.adapter(InntjeningsPeriodeRequest::class.java)
-                    .toJson(InntjeningsPeriodeRequest(parametere.beregningsdato, parametere.inntektsId)),
-            )
-        }
+        val (_, response, result) =
+            client.post<InntjeningsPeriodeRespond>(url) { request ->
+                request.header(mapOf("Content-Type" to "application/json"))
+                request.body(
+                    moshiInstance.adapter(InntjeningsPeriodeRequest::class.java)
+                        .toJson(InntjeningsPeriodeRequest(parametere.beregningsdato, parametere.inntektsId)),
+                )
+            }
 
         return when (result) {
             is Result.Failure -> throw InntektApiInntjeningsperiodeHttpClientException(

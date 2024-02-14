@@ -21,9 +21,7 @@ import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 
 private val sikkerlogg = KotlinLogging.logger("tjenestekall.minsteinntektOgPeriodeApi")
 
-internal fun Route.minsteinntektOgPeriodeApi(
-    synchronousSubsumsjonClient: SynchronousSubsumsjonClient,
-) {
+internal fun Route.minsteinntektOgPeriodeApi(synchronousSubsumsjonClient: SynchronousSubsumsjonClient) {
     route("/minsteinntekt") {
         post {
             withContext(Dispatchers.IO) {
@@ -69,12 +67,13 @@ fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequ
         harAvtjentVerneplikt = parametere.harAvtjentVerneplikt,
         oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,
         lærling = parametere.oppfyllerKravTilLaerling,
-        bruktInntektsPeriode = parametere.bruktInntektsPeriode?.let {
-            InntektsPeriode(
-                førsteMåned = it.foersteMaaned,
-                sisteMåned = it.sisteMaaned,
-            )
-        },
+        bruktInntektsPeriode =
+            parametere.bruktInntektsPeriode?.let {
+                InntektsPeriode(
+                    førsteMåned = it.foersteMaaned,
+                    sisteMåned = it.sisteMaaned,
+                )
+            },
         regelverksdato = parametere.regelverksdato,
     ).also {
         withLoggingContext("requestId" to it.requestId) {

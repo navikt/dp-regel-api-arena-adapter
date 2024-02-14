@@ -19,7 +19,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 class SynchronousSubsumsjonClientTest {
-
     @Test
     fun `Get subsumsjon synchronously`() {
         val behovHttpClient: RegelApiBehovHttpClient = mockk()
@@ -38,18 +37,20 @@ class SynchronousSubsumsjonClientTest {
             subsumsjonHttpClient.getSubsumsjon("subsumsjon/0987")
         } returns subsumsjon()
 
-        val synchronousSubsumsjonClient = SynchronousSubsumsjonClient(
-            behovHttpClient,
-            statusHttpClient,
-            subsumsjonHttpClient,
-        )
+        val synchronousSubsumsjonClient =
+            SynchronousSubsumsjonClient(
+                behovHttpClient,
+                statusHttpClient,
+                subsumsjonHttpClient,
+            )
 
-        val behovRequest = BehovRequest(
-            aktorId = "1234",
-            vedtakId = 123,
-            regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
-            beregningsdato = LocalDate.of(2019, 4, 14),
-        )
+        val behovRequest =
+            BehovRequest(
+                aktorId = "1234",
+                vedtakId = 123,
+                regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
+                beregningsdato = LocalDate.of(2019, 4, 14),
+            )
 
         val testFunction = { subsumsjon: Subsumsjon, _: LocalDateTime, _: LocalDateTime -> subsumsjon.behovId }
 
@@ -76,18 +77,20 @@ class SynchronousSubsumsjonClientTest {
             subsumsjonHttpClient.getSubsumsjon("subsumsjon/0987")
         } returns subsumsjon()
 
-        val synchronousSubsumsjonClient = SynchronousSubsumsjonClient(
-            behovHttpClient,
-            statusHttpClient,
-            subsumsjonHttpClient,
-        )
+        val synchronousSubsumsjonClient =
+            SynchronousSubsumsjonClient(
+                behovHttpClient,
+                statusHttpClient,
+                subsumsjonHttpClient,
+            )
 
-        val behovRequest = BehovRequest(
-            aktorId = "1234",
-            vedtakId = 123,
-            regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
-            beregningsdato = LocalDate.of(2019, 4, 14),
-        )
+        val behovRequest =
+            BehovRequest(
+                aktorId = "1234",
+                vedtakId = 123,
+                regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
+                beregningsdato = LocalDate.of(2019, 4, 14),
+            )
 
         val testFunction = { subsumsjon: Subsumsjon, _: LocalDateTime, _: LocalDateTime -> subsumsjon.behovId }
 
@@ -106,15 +109,18 @@ class SynchronousSubsumsjonClientTest {
     @Test
     fun `Exception is thrown if subsumsjon has problem`() {
         val problem = Problem(title = "problem")
-        val apply = mockk<RegelApiSubsumsjonHttpClient>().apply {
-            every { this@apply.getSubsumsjon(any()) } returns subsumsjon().copy(problem = problem)
-        }
-        val behovHttpClient = mockk<RegelApiBehovHttpClient>(relaxed = true).apply {
-            every { this@apply.run(any()) } returns "string"
-        }
-        val statusHttpClient = mockk<RegelApiStatusHttpClient>(relaxed = true).apply {
-            coEvery { this@apply.pollStatus(any()) } returns "string"
-        }
+        val apply =
+            mockk<RegelApiSubsumsjonHttpClient>().apply {
+                every { this@apply.getSubsumsjon(any()) } returns subsumsjon().copy(problem = problem)
+            }
+        val behovHttpClient =
+            mockk<RegelApiBehovHttpClient>(relaxed = true).apply {
+                every { this@apply.run(any()) } returns "string"
+            }
+        val statusHttpClient =
+            mockk<RegelApiStatusHttpClient>(relaxed = true).apply {
+                coEvery { this@apply.pollStatus(any()) } returns "string"
+            }
 
         shouldThrow<SubsumsjonProblem> {
             runBlocking {
@@ -132,11 +138,12 @@ class SynchronousSubsumsjonClientTest {
     private fun subsumsjon(): Subsumsjon {
         return Subsumsjon(
             behovId = "565656",
-            faktum = Faktum(
-                aktorId = "1234",
-                regelkontekst = RegelKontekst("12345", "vedtak"),
-                beregningsdato = LocalDate.of(2019, 4, 14),
-            ),
+            faktum =
+                Faktum(
+                    aktorId = "1234",
+                    regelkontekst = RegelKontekst("12345", "vedtak"),
+                    beregningsdato = LocalDate.of(2019, 4, 14),
+                ),
             minsteinntektResultat = null,
             periodeResultat = null,
             grunnlagResultat = null,

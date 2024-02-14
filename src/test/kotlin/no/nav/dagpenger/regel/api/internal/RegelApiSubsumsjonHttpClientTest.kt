@@ -11,7 +11,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 class RegelApiSubsumsjonHttpClientTest {
-
     companion object {
         val server: WireMockServer = WireMockServer(WireMockConfiguration.options().dynamicPort())
 
@@ -35,8 +34,9 @@ class RegelApiSubsumsjonHttpClientTest {
 
     @Test
     fun `Should get subsumsjon`() {
-        val responseBodyJson = RegelApiSubsumsjonHttpClientTest::class.java
-            .getResource("/test-data/example-subsumsjon-payload.json").readText()
+        val responseBodyJson =
+            RegelApiSubsumsjonHttpClientTest::class.java
+                .getResource("/test-data/example-subsumsjon-payload.json").readText()
 
         val equalToPattern = EqualToPattern("regelApiKey")
         WireMock.stubFor(

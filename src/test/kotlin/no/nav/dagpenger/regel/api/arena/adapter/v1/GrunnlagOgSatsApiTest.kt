@@ -48,31 +48,33 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Mapper parametere til BehovRequest`() {
-        val parametere = GrunnlagOgSatsParametere(
-            aktorId = "12345",
-            vedtakId = 123,
-            beregningsdato = LocalDate.of(2019, 5, 13),
-            harAvtjentVerneplikt = true,
-            oppfyllerKravTilFangstOgFisk = false,
-            manueltGrunnlag = 3000,
-            forrigeGrunnlag = 7000,
-            antallBarn = 3,
-            oppfyllerKravTilLaerling = false,
-        )
+        val parametere =
+            GrunnlagOgSatsParametere(
+                aktorId = "12345",
+                vedtakId = 123,
+                beregningsdato = LocalDate.of(2019, 5, 13),
+                harAvtjentVerneplikt = true,
+                oppfyllerKravTilFangstOgFisk = false,
+                manueltGrunnlag = 3000,
+                forrigeGrunnlag = 7000,
+                antallBarn = 3,
+                oppfyllerKravTilLaerling = false,
+            )
         val parametreMedRegelverksdato = parametere.copy(regelverksdato = LocalDate.of(2020, 6, 14))
-        val standardBehovRequest = BehovRequest(
-            aktorId = "12345",
-            vedtakId = 123,
-            regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
-            beregningsdato = LocalDate.of(2019, 5, 13),
-            harAvtjentVerneplikt = true,
-            oppfyllerKravTilFangstOgFisk = false,
-            manueltGrunnlag = 3000,
-            forrigeGrunnlag = 7000,
-            antallBarn = 3,
-            lærling = false,
-            regelverksdato = LocalDate.of(2019, 5, 13),
-        )
+        val standardBehovRequest =
+            BehovRequest(
+                aktorId = "12345",
+                vedtakId = 123,
+                regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
+                beregningsdato = LocalDate.of(2019, 5, 13),
+                harAvtjentVerneplikt = true,
+                oppfyllerKravTilFangstOgFisk = false,
+                manueltGrunnlag = 3000,
+                forrigeGrunnlag = 7000,
+                antallBarn = 3,
+                lærling = false,
+                regelverksdato = LocalDate.of(2019, 5, 13),
+            )
         val behovRequestMedRegelverksdato = standardBehovRequest.copy(regelverksdato = LocalDate.of(2020, 6, 14))
 
         assertEquals(standardBehovRequest, behovFromParametere(parametere))
@@ -81,24 +83,26 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Deprecated grunnlag mappes til manueltgrunnlag`() {
-        val parametere = GrunnlagOgSatsParametere(
-            aktorId = "12345",
-            vedtakId = 123,
-            beregningsdato = LocalDate.of(2019, 5, 13),
-            grunnlag = 4000,
-        )
-        val standardBehovRequest = BehovRequest(
-            aktorId = "12345",
-            vedtakId = 123,
-            regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
-            beregningsdato = LocalDate.of(2019, 5, 13),
-            regelverksdato = LocalDate.of(2019, 5, 13),
-            manueltGrunnlag = 4000,
-            harAvtjentVerneplikt = false,
-            oppfyllerKravTilFangstOgFisk = false,
-            lærling = false,
-            antallBarn = 0,
-        )
+        val parametere =
+            GrunnlagOgSatsParametere(
+                aktorId = "12345",
+                vedtakId = 123,
+                beregningsdato = LocalDate.of(2019, 5, 13),
+                grunnlag = 4000,
+            )
+        val standardBehovRequest =
+            BehovRequest(
+                aktorId = "12345",
+                vedtakId = 123,
+                regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
+                beregningsdato = LocalDate.of(2019, 5, 13),
+                regelverksdato = LocalDate.of(2019, 5, 13),
+                manueltGrunnlag = 4000,
+                harAvtjentVerneplikt = false,
+                oppfyllerKravTilFangstOgFisk = false,
+                lærling = false,
+                antallBarn = 0,
+            )
         assertEquals(standardBehovRequest, behovFromParametere(parametere))
     }
 
@@ -394,14 +398,15 @@ class GrunnlagOgSatsApiTest {
     @Test
     fun `Skal svare med HTTP problem rfc7807 for SubsumsjonProblem`() {
         val problem = Problem(title = "subsumsjon problem")
-        val synchronousSubsumsjonClient = mockk<SynchronousSubsumsjonClient>().apply {
-            coEvery {
-                this@apply.getSubsumsjonSynchronously(
-                    any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>(),
-                )
-            } throws SubsumsjonProblem(problem)
-        }
+        val synchronousSubsumsjonClient =
+            mockk<SynchronousSubsumsjonClient>().apply {
+                coEvery {
+                    this@apply.getSubsumsjonSynchronously(
+                        any(),
+                        any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>(),
+                    )
+                } throws SubsumsjonProblem(problem)
+            }
 
         withTestApplication({
             mockedRegelApiAdapter(
@@ -487,7 +492,7 @@ class GrunnlagOgSatsApiTest {
                 addHeader(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
-                        { "badjson" : "error}
+                    { "badjson" : "error}
                     """.trimIndent(),
                 )
             }.apply {
@@ -512,7 +517,7 @@ class GrunnlagOgSatsApiTest {
                 addHeader(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
-                        {  "aktorId": "1234" }
+                    {  "aktorId": "1234" }
                     """.trimIndent(),
                 )
             }.apply {
@@ -753,38 +758,43 @@ class GrunnlagOgSatsApiTest {
             satsSubsumsjonsId = "4567",
             opprettet = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
             utfort = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            parametere = GrunnlagOgSatsRegelFaktum(
-                aktorId = "1234",
-                vedtakId = 123,
-                beregningsdato = LocalDate.of(2019, 2, 10),
-                inntektsId = "1234",
-                harAvtjentVerneplikt = false,
-                oppfyllerKravTilFangstOgFisk = false,
-                antallBarn = 0,
-                grunnlag = 12345,
-                manueltGrunnlag = 12345,
-                forrigeGrunnlag = null,
-            ),
-            resultat = GrunnlagOgSatsResultat(
-                grunnlag = Grunnlag(
-                    avkortet = 12345,
-                    uavkortet = 12345,
-                    beregningsregel = GrunnlagBeregningsregel.ORDINAER_ETTAAR,
+            parametere =
+                GrunnlagOgSatsRegelFaktum(
+                    aktorId = "1234",
+                    vedtakId = 123,
+                    beregningsdato = LocalDate.of(2019, 2, 10),
+                    inntektsId = "1234",
+                    harAvtjentVerneplikt = false,
+                    oppfyllerKravTilFangstOgFisk = false,
+                    antallBarn = 0,
+                    grunnlag = 12345,
+                    manueltGrunnlag = 12345,
+                    forrigeGrunnlag = null,
                 ),
-                sats = Sats(124, 234),
-                benyttet90ProsentRegel = false,
-            ),
-            inntekt = setOf(
-                no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
-                    inntekt = 4999423,
-                    inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                        foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1),
+            resultat =
+                GrunnlagOgSatsResultat(
+                    grunnlag =
+                        Grunnlag(
+                            avkortet = 12345,
+                            uavkortet = 12345,
+                            beregningsregel = GrunnlagBeregningsregel.ORDINAER_ETTAAR,
+                        ),
+                    sats = Sats(124, 234),
+                    benyttet90ProsentRegel = false,
+                ),
+            inntekt =
+                setOf(
+                    no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
+                        inntekt = 4999423,
+                        inntektsPeriode =
+                            no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                                foersteMaaned = YearMonth.of(2018, 1),
+                                sisteMaaned = YearMonth.of(2019, 1),
+                            ),
+                        inneholderNaeringsinntekter = false,
+                        periode = 1,
                     ),
-                    inneholderNaeringsinntekter = false,
-                    periode = 1,
                 ),
-            ),
             inntektManueltRedigert = true,
             inntektAvvik = true,
         )
@@ -796,39 +806,43 @@ class GrunnlagOgSatsApiTest {
             satsSubsumsjonsId = "4567",
             opprettet = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
             utfort = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            parametere = GrunnlagOgSatsRegelFaktum(
-                aktorId = "1234",
-                vedtakId = 123,
-                beregningsdato = LocalDate.of(2019, 2, 10),
-                inntektsId = "1234",
-                harAvtjentVerneplikt = false,
-                oppfyllerKravTilFangstOgFisk = false,
-                antallBarn = 0,
-                grunnlag = 12345,
-                manueltGrunnlag = 12345,
-                forrigeGrunnlag = null,
-            ),
-            resultat = GrunnlagOgSatsResultat(
-                grunnlag = Grunnlag(
-                    avkortet = 12345,
-                    uavkortet = 12345,
-                    beregningsregel = GrunnlagBeregningsregel.ORDINAER_ETTAAR,
+            parametere =
+                GrunnlagOgSatsRegelFaktum(
+                    aktorId = "1234",
+                    vedtakId = 123,
+                    beregningsdato = LocalDate.of(2019, 2, 10),
+                    inntektsId = "1234",
+                    harAvtjentVerneplikt = false,
+                    oppfyllerKravTilFangstOgFisk = false,
+                    antallBarn = 0,
+                    grunnlag = 12345,
+                    manueltGrunnlag = 12345,
+                    forrigeGrunnlag = null,
                 ),
-                sats = Sats(124, 234, beregningsregel = SatsBeregningsregel.ORDINAER),
-                benyttet90ProsentRegel = false,
-            ),
+            resultat =
+                GrunnlagOgSatsResultat(
+                    grunnlag =
+                        Grunnlag(
+                            avkortet = 12345,
+                            uavkortet = 12345,
+                            beregningsregel = GrunnlagBeregningsregel.ORDINAER_ETTAAR,
+                        ),
+                    sats = Sats(124, 234, beregningsregel = SatsBeregningsregel.ORDINAER),
+                    benyttet90ProsentRegel = false,
+                ),
             inntekt =
-            setOf(
-                no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
-                    inntekt = 4999423,
-                    inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                        foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1),
+                setOf(
+                    no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
+                        inntekt = 4999423,
+                        inntektsPeriode =
+                            no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                                foersteMaaned = YearMonth.of(2018, 1),
+                                sisteMaaned = YearMonth.of(2019, 1),
+                            ),
+                        inneholderNaeringsinntekter = false,
+                        periode = 1,
                     ),
-                    inneholderNaeringsinntekter = false,
-                    periode = 1,
                 ),
-            ),
             inntektManueltRedigert = true,
             inntektAvvik = true,
         )

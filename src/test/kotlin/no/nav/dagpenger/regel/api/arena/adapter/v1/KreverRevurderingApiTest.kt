@@ -20,7 +20,6 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
 class KreverRevurderingApiTest {
-
     private val jwkStub = JwtStub()
     private val token = jwkStub.createTokenFor("systembrukeren")
 
@@ -30,10 +29,13 @@ class KreverRevurderingApiTest {
 
     private val beregningsdato = LocalDate.of(2020, 1, 13)
 
-    private val reberegningMockClient = mockk<RegelApiNyVurderingHttpClient>().also {
-        every { it.kreverNyVurdering(subsumsjonIder = subsumsjonIder, beregningsdato) } returns true
-        every { it.kreverNyVurdering(subsumsjonIder = listOf(ukjentSubsumsjonId), beregningsdato) } throws RegelApiMinsteinntektNyVurderingException("Test exception")
-    }
+    private val reberegningMockClient =
+        mockk<RegelApiNyVurderingHttpClient>().also {
+            every { it.kreverNyVurdering(subsumsjonIder = subsumsjonIder, beregningsdato) } returns true
+            every {
+                it.kreverNyVurdering(subsumsjonIder = listOf(ukjentSubsumsjonId), beregningsdato)
+            } throws RegelApiMinsteinntektNyVurderingException("Test exception")
+        }
 
     @Test
     fun `Vurdering av minsteinntekt API specification test - Should match json field names and formats`() {

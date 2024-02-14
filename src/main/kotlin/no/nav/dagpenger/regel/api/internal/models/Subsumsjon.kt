@@ -30,6 +30,7 @@ data class GrunnlagResultat(
     }
 
     fun erNegativt() = this.uavkortet < zero
+
     fun erNull() = this.uavkortet == zero
 }
 

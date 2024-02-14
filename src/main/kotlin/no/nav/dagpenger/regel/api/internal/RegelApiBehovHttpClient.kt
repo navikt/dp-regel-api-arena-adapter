@@ -12,10 +12,11 @@ internal class RegelApiBehovHttpClient(private val httpClient: FuelHttpClient) {
     fun run(behovRequest: BehovRequest): String {
         val json = jsonAdapter.toJson(behovRequest)
 
-        val (_, response, result) = httpClient.request(Method.POST, "/behov") {
-            it.header("Content-Type" to "application/json")
-            it.body(json)
-        }.response()
+        val (_, response, result) =
+            httpClient.request(Method.POST, "/behov") {
+                it.header("Content-Type" to "application/json")
+                it.body(json)
+            }.response()
 
         return result.fold(
             { response.headers["Location"].first() },

@@ -13,14 +13,15 @@ import java.time.LocalDateTime
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 
-val moshiInstance: Moshi = Moshi.Builder()
-    .add(YearMonthJsonAdapter())
-    .add(LocalDateTimeJsonAdapter())
-    .add(LocalDateJsonAdapter())
-    .add(KotlinJsonAdapterFactory())
-    .add(URIJsonAdapter())
-    .add(BigDecimalJsonAdapter())
-    .build()!!
+val moshiInstance: Moshi =
+    Moshi.Builder()
+        .add(YearMonthJsonAdapter())
+        .add(LocalDateTimeJsonAdapter())
+        .add(LocalDateJsonAdapter())
+        .add(KotlinJsonAdapterFactory())
+        .add(URIJsonAdapter())
+        .add(BigDecimalJsonAdapter())
+        .build()!!
 
 class YearMonthJsonAdapter {
     @ToJson
@@ -59,7 +60,6 @@ class LocalDateTimeJsonAdapter {
 }
 
 class BigDecimalJsonAdapter {
-
     @ToJson
     fun toJson(bigDecimal: BigDecimal): String {
         return bigDecimal.toString()
@@ -71,10 +71,12 @@ class BigDecimalJsonAdapter {
     }
 }
 
-internal fun <T : Any> moshiDeserializerOf(clazz: Class<T>) = object : ResponseDeserializable<T> {
-    override fun deserialize(content: String): T? = moshiInstance
-        .adapter(clazz)
-        .fromJson(content)
-}
+internal fun <T : Any> moshiDeserializerOf(clazz: Class<T>) =
+    object : ResponseDeserializable<T> {
+        override fun deserialize(content: String): T? =
+            moshiInstance
+                .adapter(clazz)
+                .fromJson(content)
+    }
 
 internal inline fun <reified T : Any> Request.responseObject() = response(moshiDeserializerOf(T::class.java))

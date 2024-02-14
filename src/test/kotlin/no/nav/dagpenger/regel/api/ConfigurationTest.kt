@@ -11,12 +11,13 @@ internal class ConfigurationTest {
         }
     }
 
-    private val dummyConfigs = listOf(
-        "srvdp.regel.api.arena.adapter.username",
-        "srvdp.regel.api.arena.adapter.password",
-        "auth.regelapi.secret",
-        "auth.regelapi.key",
-    )
+    private val dummyConfigs =
+        listOf(
+            "srvdp.regel.api.arena.adapter.username",
+            "srvdp.regel.api.arena.adapter.password",
+            "auth.regelapi.secret",
+            "auth.regelapi.key",
+        )
 
     @Test
     fun `Configuration is loaded based on application profile`() {
@@ -38,7 +39,10 @@ internal class ConfigurationTest {
         }
     }
 
-    private fun withProps(props: Map<String, String>, test: () -> Unit) {
+    private fun withProps(
+        props: Map<String, String>,
+        test: () -> Unit,
+    ) {
         for ((k, v) in props) {
             System.getProperties()[k] = v
         }

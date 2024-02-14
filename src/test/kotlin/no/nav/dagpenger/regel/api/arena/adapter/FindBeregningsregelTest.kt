@@ -11,7 +11,6 @@ import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertEquals
 
 class FindBeregningsregelTest {
-
     @Test
     fun `Skal returnere beregningsregel ORDINAER_OVER_6G_SISTE_2019 når den er satt til ArbeidsinntektSiste12 og harAvkortet`() {
         val regel = findBeregningsregel("ArbeidsinntektSiste12", true)
@@ -149,16 +148,12 @@ class FindBeregningsregelLærlingTest : FreeSpec({
         listOf(
             row("LærlingArbeidsinntekt1x12", false, GrunnlagBeregningsregel.LAERLING_12_MAANED),
             row("LærlingArbeidsinntekt1x12", true, GrunnlagBeregningsregel.LAERLING_12_MAANED_AVKORTET),
-
             row("LærlingFangstOgFisk1x12", true, GrunnlagBeregningsregel.LAERLING_12_MAANED_AVKORTET),
             row("LærlingFangstOgFisk1x12", false, GrunnlagBeregningsregel.LAERLING_12_MAANED),
-
             row("LærlingArbeidsinntekt3x4", false, GrunnlagBeregningsregel.LAERLING_4_MAANED),
             row("LærlingArbeidsinntekt3x4", true, GrunnlagBeregningsregel.LAERLING_4_MAANED_AVKORTET),
-
             row("LærlingFangstOgFisk3x4", true, GrunnlagBeregningsregel.LAERLING_4_MAANED_AVKORTET),
             row("LærlingFangstOgFisk3x4", false, GrunnlagBeregningsregel.LAERLING_4_MAANED),
-
         ).map { (regel: String, avkortet: Boolean, grunnlagsRegel: GrunnlagBeregningsregel) ->
             "$regel-$grunnlagsRegel" {
                 findBeregningsregel(regel, avkortet) shouldBe grunnlagsRegel

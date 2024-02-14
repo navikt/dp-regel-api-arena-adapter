@@ -22,23 +22,25 @@ internal fun Route.inntjeningsperiodeApi(inntektApiberegningsdatoHttpClient: Inn
             withContext(Dispatchers.IO) {
                 val parametere = call.receive<InntjeningsperiodeParametre>()
 
-                val parametereInternal = no.nav.dagpenger.regel.api.internal.models.InntjeningsperiodeParametre(
-                    parametere.aktorId,
-                    parametere.vedtakId,
-                    parametere.beregningsdato,
-                    parametere.inntektsId,
-                )
+                val parametereInternal =
+                    no.nav.dagpenger.regel.api.internal.models.InntjeningsperiodeParametre(
+                        parametere.aktorId,
+                        parametere.vedtakId,
+                        parametere.beregningsdato,
+                        parametere.inntektsId,
+                    )
                 val resultatInternal = inntektApiberegningsdatoHttpClient.getInntjeningsperiode(parametereInternal)
 
-                val resultat = InntjeningsperiodeResultat(
-                    resultatInternal.sammeInntjeningsPeriode,
-                    InntjeningsperiodeParametre(
-                        resultatInternal.parametere.aktorId,
-                        resultatInternal.parametere.vedtakId,
-                        resultatInternal.parametere.beregningsdato,
-                        resultatInternal.parametere.inntektsId,
-                    ),
-                )
+                val resultat =
+                    InntjeningsperiodeResultat(
+                        resultatInternal.sammeInntjeningsPeriode,
+                        InntjeningsperiodeParametre(
+                            resultatInternal.parametere.aktorId,
+                            resultatInternal.parametere.vedtakId,
+                            resultatInternal.parametere.beregningsdato,
+                            resultatInternal.parametere.inntektsId,
+                        ),
+                    )
 
                 call.respond(HttpStatusCode.OK, resultat)
             }

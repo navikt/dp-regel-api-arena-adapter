@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class InntjeningsperiodeApiSpec {
-
     private val jwkStub = JwtStub()
     private val token = jwkStub.createTokenFor("systembrukeren")
 
@@ -31,15 +30,16 @@ class InntjeningsperiodeApiSpec {
 
         coEvery {
             inntektApiBeregningsdatoHttpClient.getInntjeningsperiode(any())
-        } returns InntjeningsperiodeResultat(
-            true,
-            InntjeningsperiodeParametre(
-                "1234",
-                5678,
-                "2019-02-27",
-                "12345",
-            ),
-        )
+        } returns
+            InntjeningsperiodeResultat(
+                true,
+                InntjeningsperiodeParametre(
+                    "1234",
+                    5678,
+                    "2019-02-27",
+                    "12345",
+                ),
+            )
 
         withTestApplication({
             mockedRegelApiAdapter(

@@ -10,7 +10,6 @@ import java.security.interfaces.RSAPublicKey
 import java.util.Base64
 
 class JwtStub(private val issuer: String = "test issuer") {
-
     private val privateKey: RSAPrivateKey
     private val publicKey: RSAPublicKey
 

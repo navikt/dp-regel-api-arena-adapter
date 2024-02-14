@@ -9,7 +9,6 @@ import io.ktor.server.testing.withTestApplication
 import org.junit.jupiter.api.Test
 
 class NaisChecksTest {
-
     @Test
     fun `The application has alive endpoint `() {
         withTestApplication({ mockedRegelApiAdapter() }) {
@@ -30,7 +29,6 @@ class NaisChecksTest {
 }
 
 class MetricsTest {
-
     @Test
     fun `The application produces metrics`() {
         withTestApplication({ mockedRegelApiAdapter() }) {
