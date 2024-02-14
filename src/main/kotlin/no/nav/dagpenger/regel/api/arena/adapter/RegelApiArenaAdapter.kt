@@ -70,13 +70,19 @@ fun main() {
     val inntektApiBeregningsdatoHttpClient =
         InntektApiInntjeningsperiodeHttpClient(FuelHttpClient(config.application.dpInntektApiUrl))
 
-    val regelApiHttpClient = FuelHttpClient(config.application.dpRegelApiUrl + "/v1", config.tokenProvider)
-    val regelApiHttpClient2 = FuelHttpClient(config.application.dpRegelApiUrl, config.tokenProvider)
-
-    val behovHttpClient = RegelApiBehovHttpClient(regelApiHttpClient)
-    val statusHttpClient = RegelApiStatusHttpClient(regelApiHttpClient2)
-    val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(regelApiHttpClient2)
-    val regelApiNyVurderingHttpClient = RegelApiNyVurderingHttpClient(regelApiHttpClient)
+    val behovHttpClient =
+        RegelApiBehovHttpClient(FuelHttpClient(config.application.dpRegelApiV1Url, config.tokenProvider))
+    val statusHttpClient =
+        RegelApiStatusHttpClient(FuelHttpClient(config.application.dpRegelApiBaseUrl, config.tokenProvider))
+    val subsumsjonHttpClient =
+        RegelApiSubsumsjonHttpClient(FuelHttpClient(config.application.dpRegelApiBaseUrl, config.tokenProvider))
+    val regelApiNyVurderingHttpClient =
+        RegelApiNyVurderingHttpClient(
+            FuelHttpClient(
+                config.application.dpRegelApiV1Url,
+                config.tokenProvider,
+            ),
+        )
 
     val synchronousSubsumsjonClient =
         SynchronousSubsumsjonClient(behovHttpClient, statusHttpClient, subsumsjonHttpClient)
