@@ -69,10 +69,11 @@ fun main() {
     val inntektApiBeregningsdatoHttpClient =
         InntektApiInntjeningsperiodeHttpClient(FuelHttpClient(config.application.dpInntektApiUrl))
 
-    val regelApiHttpClient = FuelHttpClient(config.application.dpRegelApiUrl, config.tokenProvider)
+    val regelApiHttpClient = FuelHttpClient(config.application.dpRegelApiUrl + "/v1", config.tokenProvider)
+    val regelApiHttpClient2 = FuelHttpClient(config.application.dpRegelApiUrl, config.tokenProvider)
 
     val behovHttpClient = RegelApiBehovHttpClient(regelApiHttpClient)
-    val statusHttpClient = RegelApiStatusHttpClient(regelApiHttpClient)
+    val statusHttpClient = RegelApiStatusHttpClient(regelApiHttpClient2)
     val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(regelApiHttpClient)
     val regelApiNyVurderingHttpClient = RegelApiNyVurderingHttpClient(regelApiHttpClient)
 
