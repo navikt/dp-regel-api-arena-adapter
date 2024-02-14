@@ -66,7 +66,7 @@ jobs:
   deploy-dev:
     name: Deploy to dev
     needs: [build]
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/azuread'
     runs-on: ubuntu-latest
     environment: dev-fss
     steps:
@@ -88,7 +88,7 @@ jobs:
   deploy-t5-instans:
     name: Deploy to t5
     needs: [build]
-    if: github.ref == 'refs/heads/azuread'
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     environment: dev-fss
     steps:
