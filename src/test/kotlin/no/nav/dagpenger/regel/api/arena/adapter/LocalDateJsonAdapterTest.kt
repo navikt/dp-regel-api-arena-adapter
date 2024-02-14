@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
 internal class LocalDateJsonAdapterTest {
-
     private val localDateJsonAdapter = LocalDateJsonAdapter()
 
     @Test

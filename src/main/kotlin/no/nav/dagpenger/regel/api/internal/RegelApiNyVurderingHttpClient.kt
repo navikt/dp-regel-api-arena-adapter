@@ -6,7 +6,10 @@ import java.time.LocalDate
 internal class RegelApiNyVurderingHttpClient(private val httpClient: FuelHttpClient) {
     private val jsonAdapter = moshiInstance.adapter(KreverNyVurderingParametre::class.java)
 
-    fun kreverNyVurdering(subsumsjonIder: List<String>, beregningsdato: LocalDate): Boolean {
+    fun kreverNyVurdering(
+        subsumsjonIder: List<String>,
+        beregningsdato: LocalDate,
+    ): Boolean {
         val json = jsonAdapter.toJson(KreverNyVurderingParametre(beregningsdato, subsumsjonIder))
 
         val (_, response, result) =
@@ -26,6 +29,7 @@ internal class RegelApiNyVurderingHttpClient(private val httpClient: FuelHttpCli
     }
 
     private data class KreverNyVurderingRespons(val nyVurdering: Boolean)
+
     private data class KreverNyVurderingParametre(val beregningsdato: LocalDate, val subsumsjonIder: List<String>)
 }
 

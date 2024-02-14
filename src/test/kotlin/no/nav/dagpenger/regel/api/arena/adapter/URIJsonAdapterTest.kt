@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import java.net.URI
 
 internal class URIJsonAdapterTest {
-
     private val uriJsonAdapter = URIJsonAdapter()
 
     @Test

@@ -22,9 +22,7 @@ import no.nav.dagpenger.regel.api.internal.extractGrunnlagOgSats
 
 private val sikkerlogg = KotlinLogging.logger("tjenestekall.grunnlagOgSatsApi")
 
-internal fun Route.grunnlagOgSatsApi(
-    synchronousSubsumsjonClient: SynchronousSubsumsjonClient,
-) {
+internal fun Route.grunnlagOgSatsApi(synchronousSubsumsjonClient: SynchronousSubsumsjonClient) {
     route("/dagpengegrunnlag") {
         post {
             withContext(Dispatchers.IO) {
@@ -64,8 +62,16 @@ internal fun Route.grunnlagOgSatsApi(
 }
 
 fun GrunnlagOgSatsParametere.validate() {
-    if (this.oppfyllerKravTilLaerling && this.harAvtjentVerneplikt) throw UgyldigParameterkombinasjonException("harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig")
-    if (this.manueltGrunnlag != null && this.forrigeGrunnlag != null) throw UgyldigParameterkombinasjonException("manueltGrunnlag og forrigeGrunnlag kan ikke settes samtidig")
+    if (this.oppfyllerKravTilLaerling && this.harAvtjentVerneplikt) {
+        throw UgyldigParameterkombinasjonException(
+            "harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig",
+        )
+    }
+    if (this.manueltGrunnlag != null && this.forrigeGrunnlag != null) {
+        throw UgyldigParameterkombinasjonException(
+            "manueltGrunnlag og forrigeGrunnlag kan ikke settes samtidig",
+        )
+    }
 }
 
 fun behovFromParametere(parametere: GrunnlagOgSatsParametere): BehovRequest {

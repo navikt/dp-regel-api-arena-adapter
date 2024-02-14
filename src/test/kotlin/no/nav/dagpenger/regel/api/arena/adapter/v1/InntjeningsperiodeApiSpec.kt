@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1
 
+import io.kotest.assertions.json.shouldEqualJson
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
@@ -19,7 +20,6 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 class InntjeningsperiodeApiSpec {
-
     private val jwkStub = JwtStub()
     private val token = jwkStub.createTokenFor("systembrukeren")
 
@@ -31,15 +31,16 @@ class InntjeningsperiodeApiSpec {
 
         coEvery {
             inntektApiBeregningsdatoHttpClient.getInntjeningsperiode(any())
-        } returns InntjeningsperiodeResultat(
-            true,
-            InntjeningsperiodeParametre(
-                "1234",
-                5678,
-                "2019-02-27",
-                "12345",
-            ),
-        )
+        } returns
+            InntjeningsperiodeResultat(
+                true,
+                InntjeningsperiodeParametre(
+                    "1234",
+                    5678,
+                    "2019-02-27",
+                    "12345",
+                ),
+            )
 
         withTestApplication({
             mockedRegelApiAdapter(
@@ -62,7 +63,7 @@ class InntjeningsperiodeApiSpec {
                 )
             }.apply {
                 assertEquals(HttpStatusCode.OK, response.status())
-                assertEquals(expectedJson, response.content)
+                response.content?.shouldEqualJson(expectedJson)
             }
         }
     }
@@ -98,5 +99,13 @@ class InntjeningsperiodeApiSpec {
     }
 
     private val expectedJson =
-        """{"sammeInntjeningsPeriode":true,"parametere":{"aktorId":"1234","vedtakId":5678,"beregningsdato":"2019-02-27","inntektsId":"12345"}}"""
+        """{
+  "sammeInntjeningsPeriode": true,
+  "parametere": {
+    "aktorId": "1234",
+    "vedtakId": 5678,
+    "beregningsdato": "2019-02-27",
+    "inntektsId": "12345"
+  }
+}"""
 }

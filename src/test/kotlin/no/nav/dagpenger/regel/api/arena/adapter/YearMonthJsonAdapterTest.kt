@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test
 import java.time.YearMonth
 
 internal class YearMonthJsonAdapterTest {
-
     private val yearMonthJsonAdapter = YearMonthJsonAdapter()
 
     @Test

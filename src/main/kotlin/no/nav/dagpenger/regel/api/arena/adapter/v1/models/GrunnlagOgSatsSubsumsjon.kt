@@ -13,7 +13,6 @@ data class GrunnlagOgSatsSubsumsjon(
     val inntekt: Set<Inntekt>? = null,
     val inntektManueltRedigert: Boolean? = null,
     val inntektAvvik: Boolean? = null,
-
 )
 
 data class GrunnlagOgSatsRegelFaktum(

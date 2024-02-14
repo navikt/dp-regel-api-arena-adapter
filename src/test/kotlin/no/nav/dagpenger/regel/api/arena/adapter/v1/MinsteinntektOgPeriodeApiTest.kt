@@ -41,29 +41,32 @@ class MinsteinntektOgPeriodeApiTest {
 
     @Test
     fun `Skal mappe parametre til BehovRequest`() {
-        val parametere = MinsteinntektOgPeriodeParametere(
-            aktorId = "12345",
-            vedtakId = 123,
-            beregningsdato = LocalDate.of(2019, 5, 13),
-            harAvtjentVerneplikt = true,
-            oppfyllerKravTilFangstOgFisk = false,
-            bruktInntektsPeriode = InntektsPeriode(YearMonth.of(2019, 4), YearMonth.of(2019, 7)),
-            oppfyllerKravTilLaerling = false,
-        )
+        val parametere =
+            MinsteinntektOgPeriodeParametere(
+                aktorId = "12345",
+                vedtakId = 123,
+                beregningsdato = LocalDate.of(2019, 5, 13),
+                harAvtjentVerneplikt = true,
+                oppfyllerKravTilFangstOgFisk = false,
+                bruktInntektsPeriode = InntektsPeriode(YearMonth.of(2019, 4), YearMonth.of(2019, 7)),
+                oppfyllerKravTilLaerling = false,
+            )
         val parametereMedRegelverksdato = parametere.copy(regelverksdato = LocalDate.of(2020, 6, 14))
-        val standardBehovRequest = BehovRequest(
-            aktorId = "12345",
-            vedtakId = 123,
-            regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
-            beregningsdato = LocalDate.of(2019, 5, 13),
-            harAvtjentVerneplikt = true,
-            oppfyllerKravTilFangstOgFisk = false,
-            bruktInntektsPeriode = no.nav.dagpenger.regel.api.internal.models.InntektsPeriode(
-                YearMonth.of(2019, 4),
-                YearMonth.of(2019, 7),
-            ),
-            lærling = false,
-        )
+        val standardBehovRequest =
+            BehovRequest(
+                aktorId = "12345",
+                vedtakId = 123,
+                regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
+                beregningsdato = LocalDate.of(2019, 5, 13),
+                harAvtjentVerneplikt = true,
+                oppfyllerKravTilFangstOgFisk = false,
+                bruktInntektsPeriode =
+                    no.nav.dagpenger.regel.api.internal.models.InntektsPeriode(
+                        YearMonth.of(2019, 4),
+                        YearMonth.of(2019, 7),
+                    ),
+                lærling = false,
+            )
         val behovRequestMedRegelverksdato = standardBehovRequest.copy(regelverksdato = LocalDate.of(2020, 6, 14))
 
         assertEquals(standardBehovRequest, behovFromParametere(parametere))
@@ -207,14 +210,15 @@ class MinsteinntektOgPeriodeApiTest {
     @Test
     fun `Skal svare med HTTP problem rfc7807 for Subsumsjon med problem`() {
         val problem = Problem(title = "problem")
-        val synchronousSubsumsjonClient = mockk<SynchronousSubsumsjonClient>().apply {
-            coEvery {
-                this@apply.getSubsumsjonSynchronously(
-                    any(),
-                    any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>(),
-                )
-            } throws SubsumsjonProblem(problem)
-        }
+        val synchronousSubsumsjonClient =
+            mockk<SynchronousSubsumsjonClient>().apply {
+                coEvery {
+                    this@apply.getSubsumsjonSynchronously(
+                        any(),
+                        any<(Subsumsjon, LocalDateTime, LocalDateTime) -> MinsteinntektOgPeriodeSubsumsjon>(),
+                    )
+                } throws SubsumsjonProblem(problem)
+            }
 
         withTestApplication({
             mockedRegelApiAdapter(
@@ -335,7 +339,7 @@ class MinsteinntektOgPeriodeApiTest {
                 addHeader(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
-                        { "badjson" : "error}
+                    { "badjson" : "error}
                     """.trimIndent(),
                 )
             }.apply {
@@ -360,7 +364,7 @@ class MinsteinntektOgPeriodeApiTest {
                 addHeader(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
-                        {  "aktorId": "1234" }
+                    {  "aktorId": "1234" }
                     """.trimIndent(),
                 )
             }.apply {
@@ -451,42 +455,120 @@ class MinsteinntektOgPeriodeApiTest {
             periodeSubsumsjonsId = "1234",
             opprettet = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
             utfort = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
-            parametere = MinsteinntektOgPeriodeRegelfaktum(
-                aktorId = "1234",
-                vedtakId = 123,
-                beregningsdato = LocalDate.of(2019, 2, 10),
-                inntektsId = "13445",
-                harAvtjentVerneplikt = false,
-                oppfyllerKravTilFangstOgFisk = false,
-                bruktInntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                    foersteMaaned = YearMonth.of(2018, 1),
-                    sisteMaaned = YearMonth.of(2019, 1),
+            parametere =
+                MinsteinntektOgPeriodeRegelfaktum(
+                    aktorId = "1234",
+                    vedtakId = 123,
+                    beregningsdato = LocalDate.of(2019, 2, 10),
+                    inntektsId = "13445",
+                    harAvtjentVerneplikt = false,
+                    oppfyllerKravTilFangstOgFisk = false,
+                    bruktInntektsPeriode =
+                        no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                            foersteMaaned = YearMonth.of(2018, 1),
+                            sisteMaaned = YearMonth.of(2019, 1),
+                        ),
                 ),
-            ),
-            resultat = MinsteinntektOgPeriodeResultat(
-                oppfyllerKravTilMinsteArbeidsinntekt = true,
-                periodeAntallUker = 104,
-                minsteinntektRegel = MinsteinntektRegel.ORDINAER,
-            ),
-            inntekt = setOf(
-                no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
-                    inntekt = 4999423,
-                    inntektsPeriode = no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                        foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1),
+            resultat =
+                MinsteinntektOgPeriodeResultat(
+                    oppfyllerKravTilMinsteArbeidsinntekt = true,
+                    periodeAntallUker = 104,
+                    minsteinntektRegel = MinsteinntektRegel.ORDINAER,
+                ),
+            inntekt =
+                setOf(
+                    no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
+                        inntekt = 4999423,
+                        inntektsPeriode =
+                            no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                                foersteMaaned = YearMonth.of(2018, 1),
+                                sisteMaaned = YearMonth.of(2019, 1),
+                            ),
+                        andel = 111,
+                        inneholderNaeringsinntekter = false,
+                        periode = 1,
                     ),
-                    andel = 111,
-                    inneholderNaeringsinntekter = false,
-                    periode = 1,
                 ),
-            ),
             inntektManueltRedigert = true,
             inntektAvvik = true,
         )
     }
 
     private val expectedJson =
-        """{"minsteinntektSubsumsjonsId":"12345","periodeSubsumsjonsId":"1234","opprettet":"2000-08-11T15:30:11","utfort":"2000-08-11T15:30:11","parametere":{"aktorId":"1234","vedtakId":123,"beregningsdato":"2019-02-10","inntektsId":"13445","harAvtjentVerneplikt":false,"oppfyllerKravTilFangstOgFisk":false,"oppfyllerKravTilLaerling":false,"bruktInntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"}},"resultat":{"oppfyllerKravTilMinsteArbeidsinntekt":true,"periodeAntallUker":104, "minsteinntektRegel": "ORDINAER"},"inntekt":[{"inntekt":4999423,"periode":1,"inntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"},"inneholderNaeringsinntekter":false,"andel":111}],"inntektManueltRedigert":true,"inntektAvvik":true}"""
+        """{
+  "minsteinntektSubsumsjonsId": "12345",
+  "periodeSubsumsjonsId": "1234",
+  "opprettet": "2000-08-11T15:30:11",
+  "utfort": "2000-08-11T15:30:11",
+  "parametere": {
+    "aktorId": "1234",
+    "vedtakId": 123,
+    "beregningsdato": "2019-02-10",
+    "inntektsId": "13445",
+    "harAvtjentVerneplikt": false,
+    "oppfyllerKravTilFangstOgFisk": false,
+    "oppfyllerKravTilLaerling": false,
+    "bruktInntektsPeriode": {
+      "foersteMaaned": "2018-01",
+      "sisteMaaned": "2019-01"
+    }
+  },
+  "resultat": {
+    "oppfyllerKravTilMinsteArbeidsinntekt": true,
+    "periodeAntallUker": 104,
+    "minsteinntektRegel": "ORDINAER"
+  },
+  "inntekt": [
+    {
+      "inntekt": 4999423,
+      "periode": 1,
+      "inntektsPeriode": {
+        "foersteMaaned": "2018-01",
+        "sisteMaaned": "2019-01"
+      },
+      "inneholderNaeringsinntekter": false,
+      "andel": 111
+    }
+  ],
+  "inntektManueltRedigert": true,
+  "inntektAvvik": true
+}"""
     private val expectedJsonUtenMinsteinntektRegel =
-        """{"minsteinntektSubsumsjonsId":"12345","periodeSubsumsjonsId":"1234","opprettet":"2000-08-11T15:30:11","utfort":"2000-08-11T15:30:11","parametere":{"aktorId":"1234","vedtakId":123,"beregningsdato":"2019-02-10","inntektsId":"13445","harAvtjentVerneplikt":false,"oppfyllerKravTilFangstOgFisk":false,"oppfyllerKravTilLaerling":false,"bruktInntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"}},"resultat":{"oppfyllerKravTilMinsteArbeidsinntekt":true,"periodeAntallUker":104},"inntekt":[{"inntekt":4999423,"periode":1,"inntektsPeriode":{"foersteMaaned":"2018-01","sisteMaaned":"2019-01"},"inneholderNaeringsinntekter":false,"andel":111}],"inntektManueltRedigert":true,"inntektAvvik":true}"""
+        """{
+  "minsteinntektSubsumsjonsId": "12345",
+  "periodeSubsumsjonsId": "1234",
+  "opprettet": "2000-08-11T15:30:11",
+  "utfort": "2000-08-11T15:30:11",
+  "parametere": {
+    "aktorId": "1234",
+    "vedtakId": 123,
+    "beregningsdato": "2019-02-10",
+    "inntektsId": "13445",
+    "harAvtjentVerneplikt": false,
+    "oppfyllerKravTilFangstOgFisk": false,
+    "oppfyllerKravTilLaerling": false,
+    "bruktInntektsPeriode": {
+      "foersteMaaned": "2018-01",
+      "sisteMaaned": "2019-01"
+    }
+  },
+  "resultat": {
+    "oppfyllerKravTilMinsteArbeidsinntekt": true,
+    "periodeAntallUker": 104
+  },
+  "inntekt": [
+    {
+      "inntekt": 4999423,
+      "periode": 1,
+      "inntektsPeriode": {
+        "foersteMaaned": "2018-01",
+        "sisteMaaned": "2019-01"
+      },
+      "inneholderNaeringsinntekter": false,
+      "andel": 111
+    }
+  ],
+  "inntektManueltRedigert": true,
+  "inntektAvvik": true
+}"""
 }

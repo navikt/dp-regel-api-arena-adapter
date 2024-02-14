@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
 class RegelApiBehovHttpClientTest {
-
     companion object {
         val server: WireMockServer = WireMockServer(WireMockConfiguration.options().dynamicPort())
 
@@ -45,11 +44,11 @@ class RegelApiBehovHttpClientTest {
                 .withRequestBody(
                     EqualToJsonPattern(
                         """
-                    {
-                        "aktorId": "001",
-                        "vedtakId": 123456,
-                        "beregningsdato": "2019-04-14"
-                    }
+                        {
+                            "aktorId": "001",
+                            "vedtakId": 123456,
+                            "beregningsdato": "2019-04-14"
+                        }
                         """.trimIndent(),
                         true,
                         true,
@@ -66,12 +65,13 @@ class RegelApiBehovHttpClientTest {
             FuelHttpClient(server.url(""), tokenProvider),
         )
 
-        val behovRequest = BehovRequest(
-            "001",
-            123456,
-            regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
-            LocalDate.of(2019, 4, 14),
-        )
+        val behovRequest =
+            BehovRequest(
+                "001",
+                123456,
+                regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
+                LocalDate.of(2019, 4, 14),
+            )
 
         val response = client.run(behovRequest)
         Assertions.assertEquals("/behov/status/123", response)
@@ -79,8 +79,8 @@ class RegelApiBehovHttpClientTest {
 
     private val responseBody =
         """
-                {
-                        "status" : "PENDING"
-                }
+        {
+                "status" : "PENDING"
+        }
         """.trimIndent()
 }

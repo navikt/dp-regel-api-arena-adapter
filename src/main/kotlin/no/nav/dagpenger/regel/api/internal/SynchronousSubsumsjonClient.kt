@@ -9,7 +9,6 @@ internal class SynchronousSubsumsjonClient(
     private val statusHttpClient: RegelApiStatusHttpClient,
     private val subsumsjonHttpClient: RegelApiSubsumsjonHttpClient,
 ) {
-
     suspend fun <T> getSubsumsjonSynchronously(
         behovRequest: BehovRequest,
         extractResult: (subsumsjon: Subsumsjon, opprettet: LocalDateTime, utfort: LocalDateTime) -> T,

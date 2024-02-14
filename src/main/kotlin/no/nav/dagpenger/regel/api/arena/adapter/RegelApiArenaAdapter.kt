@@ -61,10 +61,11 @@ private val LOGGER = KotlinLogging.logger {}
 fun main() {
     val config = Configuration()
 
-    val jwkProvider = JwkProviderBuilder(URL(config.application.jwksUrl))
-        .cached(10, 24, TimeUnit.HOURS)
-        .rateLimited(10, 1, TimeUnit.MINUTES)
-        .build()
+    val jwkProvider =
+        JwkProviderBuilder(URL(config.application.jwksUrl))
+            .cached(10, 24, TimeUnit.HOURS)
+            .rateLimited(10, 1, TimeUnit.MINUTES)
+            .build()
 
     val inntektApiBeregningsdatoHttpClient =
         InntektApiInntjeningsperiodeHttpClient(FuelHttpClient(config.application.dpInntektApiUrl))
@@ -80,16 +81,17 @@ fun main() {
     val synchronousSubsumsjonClient =
         SynchronousSubsumsjonClient(behovHttpClient, statusHttpClient, subsumsjonHttpClient)
 
-    val app = embeddedServer(Netty, port = config.application.httpPort) {
-        regelApiAdapter(
-            config.application.jwksIssuer,
-            jwkProvider,
-            inntektApiBeregningsdatoHttpClient,
-            synchronousSubsumsjonClient,
-            regelApiNyVurderingHttpClient,
-            config.application.optionalJwt,
-        )
-    }
+    val app =
+        embeddedServer(Netty, port = config.application.httpPort) {
+            regelApiAdapter(
+                config.application.jwksIssuer,
+                jwkProvider,
+                inntektApiBeregningsdatoHttpClient,
+                synchronousSubsumsjonClient,
+                regelApiNyVurderingHttpClient,
+                config.application.optionalJwt,
+            )
+        }
 
     app.start(wait = true)
 }
@@ -134,71 +136,78 @@ internal fun Application.regelApiAdapter(
     install(StatusPages) {
         exception<Throwable> { call, cause ->
             LOGGER.error("Unhåndtert feil ved beregning av regel", cause)
-            val problem = Problem(
-                title = "Uhåndtert feil",
-                detail = cause.message,
-            )
+            val problem =
+                Problem(
+                    title = "Uhåndtert feil",
+                    detail = cause.message,
+                )
             call.respond(HttpStatusCode.InternalServerError, problem)
         }
         exception<JsonDataException> { call, cause ->
             LOGGER.warn(cause.message, cause)
             val status = HttpStatusCode.BadRequest
-            val problem = Problem(
-                type = URI.create("urn:dp:error:parameter"),
-                title = "Parameteret er ikke gyldig, mangler obligatorisk felt: '${cause.message}'",
-                status = status.value,
-            )
+            val problem =
+                Problem(
+                    type = URI.create("urn:dp:error:parameter"),
+                    title = "Parameteret er ikke gyldig, mangler obligatorisk felt: '${cause.message}'",
+                    status = status.value,
+                )
             call.respond(status, problem)
         }
         exception<JsonEncodingException> { call, cause ->
             LOGGER.warn(cause.message, cause)
             val status = HttpStatusCode.BadRequest
-            val problem = Problem(
-                type = URI.create("urn:dp:error:parameter"),
-                title = "Parameteret er ikke gyldig json",
-                status = status.value,
-            )
+            val problem =
+                Problem(
+                    type = URI.create("urn:dp:error:parameter"),
+                    title = "Parameteret er ikke gyldig json",
+                    status = status.value,
+                )
             call.respond(status, problem)
         }
         exception<BadRequestException> { call, cause ->
             LOGGER.warn(cause.message, cause)
             val status = HttpStatusCode.BadRequest
-            val problem = Problem(
-                type = URI.create("urn:dp:error:parameter"),
-                title = "Parameteret er ikke gyldig json",
-                status = status.value,
-            )
+            val problem =
+                Problem(
+                    type = URI.create("urn:dp:error:parameter"),
+                    title = "Parameteret er ikke gyldig json",
+                    status = status.value,
+                )
             call.respond(status, problem)
         }
         exception<InvalidInnteksperiodeException> { call, cause ->
             LOGGER.warn(cause.message)
             val status = HttpStatusCode.BadRequest
-            val problem = Problem(
-                type = URI.create("urn:dp:error:parameter"),
-                title = cause.message,
-                status = status.value,
-            )
+            val problem =
+                Problem(
+                    type = URI.create("urn:dp:error:parameter"),
+                    title = cause.message,
+                    status = status.value,
+                )
             call.respond(status, problem)
         }
         exception<IllegalInntektIdException> { call, cause ->
             LOGGER.warn(cause.message)
             val status = HttpStatusCode.BadRequest
-            val problem = Problem(
-                type = URI.create("urn:dp:error:parameter"),
-                title = "InnteksId er ikke gyldig",
-                status = status.value,
-            )
+            val problem =
+                Problem(
+                    type = URI.create("urn:dp:error:parameter"),
+                    title = "InnteksId er ikke gyldig",
+                    status = status.value,
+                )
             call.respond(status, problem)
         }
         exception<RegelApiTimeoutException> { call, cause ->
             LOGGER.error("Tidsavbrudd ved beregning av regel", cause)
             val status = HttpStatusCode.GatewayTimeout
-            val problem = Problem(
-                type = URI.create("urn:dp:error:regelberegning:tidsavbrudd"),
-                title = "Tidsavbrudd ved beregning av regel",
-                detail = cause.message,
-                status = status.value,
-            )
+            val problem =
+                Problem(
+                    type = URI.create("urn:dp:error:regelberegning:tidsavbrudd"),
+                    title = "Tidsavbrudd ved beregning av regel",
+                    detail = cause.message,
+                    status = status.value,
+                )
             call.respond(status, problem)
         }
         exception<SubsumsjonProblem> { call, cause ->
@@ -209,56 +218,61 @@ internal fun Application.regelApiAdapter(
         exception<RegelApiMinsteinntektNyVurderingException> { call, cause ->
             LOGGER.error("Kan ikke fastslå om minsteinntekt må revurderes", cause)
             val status = HttpStatusCode.InternalServerError
-            val problem = Problem(
-                type = URI.create("urn:dp:error:revurdering:minsteinntekt"),
-                title = "Feil ved sjekk om minsteinntekt må revurderes",
-                detail = cause.message,
-                status = status.value,
-            )
+            val problem =
+                Problem(
+                    type = URI.create("urn:dp:error:revurdering:minsteinntekt"),
+                    title = "Feil ved sjekk om minsteinntekt må revurderes",
+                    detail = cause.message,
+                    status = status.value,
+                )
             call.respond(status, problem)
         }
         exception<NegativtGrunnlagException> { call, cause ->
             LOGGER.error("Negativt grunnlag", cause)
             val status = HttpStatusCode.InternalServerError
-            val problem = Problem(
-                type = URI.create("urn:dp:error:regelberegning:grunnlag:negativ"),
-                title = "Grunnlag er negativt",
-                detail = cause.message,
-                status = status.value,
-            )
+            val problem =
+                Problem(
+                    type = URI.create("urn:dp:error:regelberegning:grunnlag:negativ"),
+                    title = "Grunnlag er negativt",
+                    detail = cause.message,
+                    status = status.value,
+                )
             call.respond(status, problem)
         }
 
         exception<NullGrunnlagException> { call, cause ->
             LOGGER.warn(cause) { "0 grunnlag" }
             val status = HttpStatusCode.InternalServerError
-            val problem = Problem(
-                type = URI.create("urn:dp:error:regelberegning:grunnlag:0"),
-                title = "Grunnlag er 0",
-                detail = cause.message,
-                status = status.value,
-            )
+            val problem =
+                Problem(
+                    type = URI.create("urn:dp:error:regelberegning:grunnlag:0"),
+                    title = "Grunnlag er 0",
+                    detail = cause.message,
+                    status = status.value,
+                )
             call.respond(status, problem)
         }
         exception<UgyldigParameterkombinasjonException> { call, cause ->
             LOGGER.warn(cause.message)
             val status = HttpStatusCode.BadRequest
-            val problem = Problem(
-                type = URI.create("urn:dp:error:parameter"),
-                title = "Ugyldig kombinasjon av parametere: ${cause.message}",
-                status = status.value,
-            )
+            val problem =
+                Problem(
+                    type = URI.create("urn:dp:error:parameter"),
+                    title = "Ugyldig kombinasjon av parametere: ${cause.message}",
+                    status = status.value,
+                )
             call.respond(status, problem)
         }
 
         status(HttpStatusCode.Unauthorized) { call, _ ->
             val status = HttpStatusCode.Unauthorized
             LOGGER.warn("Unauthorized call")
-            val problem = Problem(
-                type = URI.create("urn:dp:error:uautorisert"),
-                title = "Uautorisert",
-                status = status.value,
-            )
+            val problem =
+                Problem(
+                    type = URI.create("urn:dp:error:uautorisert"),
+                    title = "Uautorisert",
+                    status = status.value,
+                )
             call.respond(status, problem)
         }
     }

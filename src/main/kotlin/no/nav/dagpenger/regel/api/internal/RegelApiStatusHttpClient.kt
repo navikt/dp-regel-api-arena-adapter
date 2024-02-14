@@ -19,9 +19,10 @@ internal class RegelApiStatusHttpClient(
     private fun pollInternal(statusUrl: String): BehovStatusPollResult {
         val timer = clientLatencyStats.labels("poll").startTimer()
         try {
-            val (_, response, result) = client.request(Method.GET, statusUrl) {
-                it.allowRedirects(false)
-            }.response()
+            val (_, response, result) =
+                client.request(Method.GET, statusUrl) {
+                    it.allowRedirects(false)
+                }.response()
 
             return result.fold(
                 success = {
