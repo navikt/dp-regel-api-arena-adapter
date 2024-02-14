@@ -104,6 +104,8 @@ data class Configuration(
 
     val tokenProvider: () -> String by lazy {
         {
+            LOGGER.info("Skal hente token fra ${azureAdConfig.wellKnowUrl()} ")
+            LOGGER.info("Henter token fra ${azureAdConfig.tokenEndpointUrl}")
             runBlocking { azureAdClient.clientCredentials(config()[Key("dp.regel.api.scope", stringType)]).accessToken }
         }
     }
@@ -120,7 +122,7 @@ data class Configuration(
         val optionalJwt: Boolean = config()[Key("optional.jwt", booleanType)],
         val unleashUrl: String = config()[Key("unleash.url", stringType)],
 
-    ) {
+        ) {
         init {
             LOGGER.info { "Using jwksurl $jwksUrl and issuer $jwksIssuer" }
         }
