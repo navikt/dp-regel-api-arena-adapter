@@ -74,7 +74,7 @@ fun main() {
 
     val behovHttpClient = RegelApiBehovHttpClient(regelApiHttpClient)
     val statusHttpClient = RegelApiStatusHttpClient(regelApiHttpClient2)
-    val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(regelApiHttpClient)
+    val subsumsjonHttpClient = RegelApiSubsumsjonHttpClient(regelApiHttpClient2)
     val regelApiNyVurderingHttpClient = RegelApiNyVurderingHttpClient(regelApiHttpClient)
 
     val synchronousSubsumsjonClient =
