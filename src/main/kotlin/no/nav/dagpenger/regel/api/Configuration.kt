@@ -40,8 +40,8 @@ private val devProperties =
 private val prodProperties =
     ConfigurationMap(
         mapOf(
-            "dp.regel.api.url" to "http://dp-regel-api.teamdagpenger.svc.nais.local",
-            "dp.regel.api.scope" to "api://prod-fss.teamdagpenger.dp-regel-api/.default",
+            "dp.regel.api.url" to "https://dp-regel-api.intern.nav.no",
+            "dp.regel.api.scope" to "api://prod-gcp.teamdagpenger.dp-regel-api/.default",
             "dp.inntekt.api.url" to "https://dp-inntekt-api.intern.nav.no",
             "jwks.url" to "http://security-token-service.default.svc.nais.local/rest/v1/sts/jwks",
             "jwks.issuer" to "https://security-token-service.nais.adeo.no",
