@@ -29,7 +29,7 @@ private val localProperties =
 private val devProperties =
     ConfigurationMap(
         mapOf(
-            "dp.regel.api.url" to "https://dp-inntekt-api.intern.dev.nav.no",
+            "dp.regel.api.url" to "https://dp-regel-api.intern.dev.nav.no",
             "dp.inntekt.api.url" to "https://dp-inntekt-api.intern.dev.nav.no",
             "dp.regel.api.scope" to "api://dev-gcp.teamdagpenger.dp-regel-api/.default",
             "jwks.url" to "http://security-token-service.default.svc.nais.local/rest/v1/sts/jwks",
