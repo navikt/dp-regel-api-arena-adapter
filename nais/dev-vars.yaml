@@ -10,4 +10,3 @@ resources:
   requests:
     cpu: 40m
     memory: 512Mi
-dpRegelApiCluster: dev-fss
