@@ -33,43 +33,43 @@ fun extractMinsteinntektOgPeriode(
         opprettet = opprettet,
         utfort = utfort,
         parametere =
-            MinsteinntektOgPeriodeRegelfaktum(
-                aktorId = faktum.aktorId,
-                vedtakId = faktum.regelkontekst.id.toInt(),
-                beregningsdato = faktum.beregningsdato,
-                inntektsId = faktum.inntektsId ?: throw MissingSubsumsjonDataException("Missing faktum inntektId"),
-                regelverksdato = faktum.regelverksdato,
-                harAvtjentVerneplikt = faktum.harAvtjentVerneplikt,
-                oppfyllerKravTilFangstOgFisk = faktum.oppfyllerKravTilFangstOgFisk,
-                oppfyllerKravTilLaerling = faktum.lærling,
-                bruktInntektsPeriode =
-                    faktum.bruktInntektsPeriode?.let {
-                        InntektsPeriode(
-                            foersteMaaned = faktum.bruktInntektsPeriode.førsteMåned,
-                            sisteMaaned = faktum.bruktInntektsPeriode.sisteMåned,
-                        )
-                    },
-            ),
-        resultat =
-            MinsteinntektOgPeriodeResultat(
-                oppfyllerKravTilMinsteArbeidsinntekt = minsteinntektResultat.oppfyllerMinsteinntekt,
-                periodeAntallUker = periodeResultat?.periodeAntallUker,
-                minsteinntektRegel = MinsteinntektRegel.valueOf(minsteinntektResultat.beregningsregel.name),
-            ),
-        inntekt =
-            minsteinntektResultat.minsteinntektInntektsPerioder.map {
-                Inntekt(
-                    inntekt = it.inntekt.round().toInt(),
-                    periode = it.periode,
-                    inntektsPeriode =
-                        InntektsPeriode(
-                            foersteMaaned = it.inntektsPeriode.førsteMåned,
-                            sisteMaaned = it.inntektsPeriode.sisteMåned,
-                        ),
-                    andel = it.andel?.round()?.toInt(),
-                    inneholderNaeringsinntekter = it.inneholderFangstOgFisk,
+        MinsteinntektOgPeriodeRegelfaktum(
+            aktorId = faktum.aktorId,
+            vedtakId = faktum.regelkontekst.id.toInt(),
+            beregningsdato = faktum.beregningsdato,
+            inntektsId = faktum.inntektsId ?: throw MissingSubsumsjonDataException("Missing faktum inntektId"),
+            regelverksdato = faktum.regelverksdato,
+            harAvtjentVerneplikt = faktum.harAvtjentVerneplikt,
+            oppfyllerKravTilFangstOgFisk = faktum.oppfyllerKravTilFangstOgFisk,
+            oppfyllerKravTilLaerling = faktum.lærling,
+            bruktInntektsPeriode =
+            faktum.bruktInntektsPeriode?.let {
+                InntektsPeriode(
+                    foersteMaaned = faktum.bruktInntektsPeriode.førsteMåned,
+                    sisteMaaned = faktum.bruktInntektsPeriode.sisteMåned,
                 )
-            }.toSet(),
+            },
+        ),
+        resultat =
+        MinsteinntektOgPeriodeResultat(
+            oppfyllerKravTilMinsteArbeidsinntekt = minsteinntektResultat.oppfyllerMinsteinntekt,
+            periodeAntallUker = periodeResultat?.periodeAntallUker,
+            minsteinntektRegel = MinsteinntektRegel.valueOf(minsteinntektResultat.beregningsregel.name),
+        ),
+        inntekt =
+        minsteinntektResultat.minsteinntektInntektsPerioder.map {
+            Inntekt(
+                inntekt = it.inntekt.round().toInt(),
+                periode = it.periode,
+                inntektsPeriode =
+                InntektsPeriode(
+                    foersteMaaned = it.inntektsPeriode.førsteMåned,
+                    sisteMaaned = it.inntektsPeriode.sisteMåned,
+                ),
+                andel = it.andel?.round()?.toInt(),
+                inneholderNaeringsinntekter = it.inneholderFangstOgFisk,
+            )
+        }.toSet(),
         inntektManueltRedigert = faktum.inntektManueltRedigert,
         inntektAvvik = faktum.inntektAvvik,
     )

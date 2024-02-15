@@ -68,12 +68,12 @@ fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequ
         oppfyllerKravTilFangstOgFisk = parametere.oppfyllerKravTilFangstOgFisk,
         lærling = parametere.oppfyllerKravTilLaerling,
         bruktInntektsPeriode =
-            parametere.bruktInntektsPeriode?.let {
-                InntektsPeriode(
-                    førsteMåned = it.foersteMaaned,
-                    sisteMåned = it.sisteMaaned,
-                )
-            },
+        parametere.bruktInntektsPeriode?.let {
+            InntektsPeriode(
+                førsteMåned = it.foersteMaaned,
+                sisteMåned = it.sisteMaaned,
+            )
+        },
         regelverksdato = parametere.regelverksdato,
     ).also {
         withLoggingContext("requestId" to it.requestId) {
