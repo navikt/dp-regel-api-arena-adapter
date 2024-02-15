@@ -41,49 +41,49 @@ fun extractGrunnlagOgSats(
         opprettet = opprettet,
         utfort = utfort,
         parametere =
-            GrunnlagOgSatsRegelFaktum(
-                aktorId = faktum.aktorId,
-                vedtakId = faktum.regelkontekst.id.toInt(),
-                beregningsdato = faktum.beregningsdato,
-                regelverksdato = faktum.regelverksdato,
-                inntektsId = faktum.inntektsId,
-                harAvtjentVerneplikt = faktum.harAvtjentVerneplikt,
-                oppfyllerKravTilFangstOgFisk = faktum.oppfyllerKravTilFangstOgFisk,
-                oppfyllerKravTilLaerling = faktum.lærling,
-                antallBarn = faktum.antallBarn ?: throw MissingSubsumsjonDataException("Missing faktum antallBarn"),
-                grunnlag = faktum.manueltGrunnlag,
-                manueltGrunnlag = faktum.manueltGrunnlag,
-                forrigeGrunnlag = faktum.forrigeGrunnlag,
-            ),
+        GrunnlagOgSatsRegelFaktum(
+            aktorId = faktum.aktorId,
+            vedtakId = faktum.regelkontekst.id.toInt(),
+            beregningsdato = faktum.beregningsdato,
+            regelverksdato = faktum.regelverksdato,
+            inntektsId = faktum.inntektsId,
+            harAvtjentVerneplikt = faktum.harAvtjentVerneplikt,
+            oppfyllerKravTilFangstOgFisk = faktum.oppfyllerKravTilFangstOgFisk,
+            oppfyllerKravTilLaerling = faktum.lærling,
+            antallBarn = faktum.antallBarn ?: throw MissingSubsumsjonDataException("Missing faktum antallBarn"),
+            grunnlag = faktum.manueltGrunnlag,
+            manueltGrunnlag = faktum.manueltGrunnlag,
+            forrigeGrunnlag = faktum.forrigeGrunnlag,
+        ),
         resultat =
-            GrunnlagOgSatsResultat(
-                grunnlag =
-                    Grunnlag(
-                        avkortet = grunnlagResultat.avkortet.toInt(),
-                        uavkortet = grunnlagResultat.uavkortet.toInt(),
-                        beregningsregel = findBeregningsregel(grunnlagResultat.beregningsregel, grunnlagResultat.harAvkortet),
-                    ),
-                sats =
-                    Sats(
-                        dagsats = satsResultat.dagsats,
-                        ukesats = satsResultat.ukesats,
-                        beregningsregel = satsResultat.beregningsregel,
-                    ),
-                benyttet90ProsentRegel = satsResultat.benyttet90ProsentRegel,
+        GrunnlagOgSatsResultat(
+            grunnlag =
+            Grunnlag(
+                avkortet = grunnlagResultat.avkortet.toInt(),
+                uavkortet = grunnlagResultat.uavkortet.toInt(),
+                beregningsregel = findBeregningsregel(grunnlagResultat.beregningsregel, grunnlagResultat.harAvkortet),
             ),
+            sats =
+            Sats(
+                dagsats = satsResultat.dagsats,
+                ukesats = satsResultat.ukesats,
+                beregningsregel = satsResultat.beregningsregel,
+            ),
+            benyttet90ProsentRegel = satsResultat.benyttet90ProsentRegel,
+        ),
         inntekt =
-            grunnlagResultat.grunnlagInntektsPerioder?.map {
-                Inntekt(
-                    inntekt = it.inntekt.round().toInt(),
-                    periode = it.periode,
-                    inntektsPeriode =
-                        InntektsPeriode(
-                            foersteMaaned = it.inntektsPeriode.førsteMåned,
-                            sisteMaaned = it.inntektsPeriode.sisteMåned,
-                        ),
-                    inneholderNaeringsinntekter = it.inneholderFangstOgFisk,
-                )
-            }?.toSet(),
+        grunnlagResultat.grunnlagInntektsPerioder?.map {
+            Inntekt(
+                inntekt = it.inntekt.round().toInt(),
+                periode = it.periode,
+                inntektsPeriode =
+                InntektsPeriode(
+                    foersteMaaned = it.inntektsPeriode.førsteMåned,
+                    sisteMaaned = it.inntektsPeriode.sisteMåned,
+                ),
+                inneholderNaeringsinntekter = it.inneholderFangstOgFisk,
+            )
+        }?.toSet(),
         inntektManueltRedigert = faktum.inntektManueltRedigert,
         inntektAvvik = faktum.inntektAvvik,
     )
