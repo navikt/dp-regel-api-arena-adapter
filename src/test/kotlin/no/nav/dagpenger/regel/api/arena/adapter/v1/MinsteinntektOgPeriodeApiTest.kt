@@ -61,10 +61,10 @@ class MinsteinntektOgPeriodeApiTest {
                 harAvtjentVerneplikt = true,
                 oppfyllerKravTilFangstOgFisk = false,
                 bruktInntektsPeriode =
-                no.nav.dagpenger.regel.api.internal.models.InntektsPeriode(
-                    YearMonth.of(2019, 4),
-                    YearMonth.of(2019, 7),
-                ),
+                    no.nav.dagpenger.regel.api.internal.models.InntektsPeriode(
+                        YearMonth.of(2019, 4),
+                        YearMonth.of(2019, 7),
+                    ),
                 lærling = false,
             )
         val behovRequestMedRegelverksdato = standardBehovRequest.copy(regelverksdato = LocalDate.of(2020, 6, 14))
@@ -456,39 +456,39 @@ class MinsteinntektOgPeriodeApiTest {
             opprettet = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
             utfort = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
             parametere =
-            MinsteinntektOgPeriodeRegelfaktum(
-                aktorId = "1234",
-                vedtakId = 123,
-                beregningsdato = LocalDate.of(2019, 2, 10),
-                inntektsId = "13445",
-                harAvtjentVerneplikt = false,
-                oppfyllerKravTilFangstOgFisk = false,
-                bruktInntektsPeriode =
-                no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                    foersteMaaned = YearMonth.of(2018, 1),
-                    sisteMaaned = YearMonth.of(2019, 1),
+                MinsteinntektOgPeriodeRegelfaktum(
+                    aktorId = "1234",
+                    vedtakId = 123,
+                    beregningsdato = LocalDate.of(2019, 2, 10),
+                    inntektsId = "13445",
+                    harAvtjentVerneplikt = false,
+                    oppfyllerKravTilFangstOgFisk = false,
+                    bruktInntektsPeriode =
+                        no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                            foersteMaaned = YearMonth.of(2018, 1),
+                            sisteMaaned = YearMonth.of(2019, 1),
+                        ),
                 ),
-            ),
             resultat =
-            MinsteinntektOgPeriodeResultat(
-                oppfyllerKravTilMinsteArbeidsinntekt = true,
-                periodeAntallUker = 104,
-                minsteinntektRegel = MinsteinntektRegel.ORDINAER,
-            ),
-            inntekt =
-            setOf(
-                no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
-                    inntekt = 4999423,
-                    inntektsPeriode =
-                    no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                        foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1),
-                    ),
-                    andel = 111,
-                    inneholderNaeringsinntekter = false,
-                    periode = 1,
+                MinsteinntektOgPeriodeResultat(
+                    oppfyllerKravTilMinsteArbeidsinntekt = true,
+                    periodeAntallUker = 104,
+                    minsteinntektRegel = MinsteinntektRegel.ORDINAER,
                 ),
-            ),
+            inntekt =
+                setOf(
+                    no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
+                        inntekt = 4999423,
+                        inntektsPeriode =
+                            no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                                foersteMaaned = YearMonth.of(2018, 1),
+                                sisteMaaned = YearMonth.of(2019, 1),
+                            ),
+                        andel = 111,
+                        inneholderNaeringsinntekter = false,
+                        periode = 1,
+                    ),
+                ),
             inntektManueltRedigert = true,
             inntektAvvik = true,
         )
