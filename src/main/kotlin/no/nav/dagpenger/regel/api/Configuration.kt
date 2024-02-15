@@ -18,7 +18,7 @@ private val localProperties =
     ConfigurationMap(
         mapOf(
             "dp.regel.api.url" to "http://localhost/v1",
-            "dp.regel.api.scope" to "api://dev-fss.teamdagpenger.dp-regel-api/.default",
+            "dp.regel.api.scope" to "api://dev-gcp.teamdagpenger.dp-regel-api/.default",
             "dp.inntekt.api.url" to "http://localhost",
             "jwks.url" to "http://localhost",
             "jwks.issuer" to "http://localhost",
@@ -29,9 +29,9 @@ private val localProperties =
 private val devProperties =
     ConfigurationMap(
         mapOf(
-            "dp.regel.api.url" to "http://dp-regel-api.teamdagpenger.svc.nais.local",
+            "dp.regel.api.url" to "https://dp-inntekt-api.intern.dev.nav.no",
             "dp.inntekt.api.url" to "https://dp-inntekt-api.intern.dev.nav.no",
-            "dp.regel.api.scope" to "api://dev-fss.teamdagpenger.dp-regel-api/.default",
+            "dp.regel.api.scope" to "api://dev-gcp.teamdagpenger.dp-regel-api/.default",
             "jwks.url" to "http://security-token-service.default.svc.nais.local/rest/v1/sts/jwks",
             "jwks.issuer" to "https://security-token-service.nais.preprod.local",
             "optional.jwt" to "false",
