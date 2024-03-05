@@ -27,7 +27,7 @@ val fuelVersion = "2.2.1"
 val log4j2Versjon = "2.23.0"
 val prometheusVersion = "0.16.0"
 val kafkaVersion = "7.6.0-ce"
-val ktorVersion = "2.3.8"
+val ktorVersion = "2.3.9"
 dependencies {
     implementation(kotlin("stdlib"))
 
