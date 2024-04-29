@@ -46,7 +46,7 @@ dependencies {
     implementation(libs.jackson.kotlin)
     implementation(libs.jackson.datatype.jsr310)
 
-    implementation("commons-codec:commons-codec:1.16.1")
+    implementation("commons-codec:commons-codec:1.17.0")
     implementation(libs.micrometer.registry.prometheus)
 
     implementation("com.squareup.moshi:moshi:$moshiVersion")
