@@ -47,7 +47,7 @@ dependencies {
     implementation(libs.jackson.datatype.jsr310)
 
     implementation("commons-codec:commons-codec:1.17.1")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.13.3")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.13.4")
 
     implementation("com.squareup.moshi:moshi:$moshiVersion")
     implementation("com.squareup.moshi:moshi-adapters:$moshiVersion")
