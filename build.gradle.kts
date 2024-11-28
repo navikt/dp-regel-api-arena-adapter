@@ -76,7 +76,7 @@ dependencies {
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
 
     // unleash
-    implementation("io.getunleash:unleash-client-java:9.2.5")
+    implementation("io.getunleash:unleash-client-java:9.2.6")
 
     testImplementation(kotlin("test"))
     testImplementation(libs.ktor.server.test.host)
