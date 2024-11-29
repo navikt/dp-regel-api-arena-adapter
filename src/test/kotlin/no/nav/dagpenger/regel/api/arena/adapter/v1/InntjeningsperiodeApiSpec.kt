@@ -51,20 +51,21 @@ class InntjeningsperiodeApiSpec {
                     inntektApiBeregningsdatoHttpClient = inntektApiBeregningsdatoHttpClient,
                 )
             }
-            val response = client.post(inntjeningsperiodePath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "inntektsId": "12345"
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(inntjeningsperiodePath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "inntektsId": "12345"
+                        }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.OK
             response.bodyAsText().shouldEqualJson(expectedJson)
         }
@@ -78,18 +79,19 @@ class InntjeningsperiodeApiSpec {
                     jwkProvider = jwkStub.stubbedJwkProvider(),
                 )
             }
-            val response = client.post(inntjeningsperiodePath) {
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "inntektsId": "12345"
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(inntjeningsperiodePath) {
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "inntektsId": "12345"
+                        }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.Unauthorized
             val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
             assertEquals("Uautorisert", problem?.title)

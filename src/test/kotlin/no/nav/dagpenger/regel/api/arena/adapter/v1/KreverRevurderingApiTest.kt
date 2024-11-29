@@ -48,18 +48,19 @@ class KreverRevurderingApiTest {
                     nyVurderingHttpClient = reberegningMockClient,
                 )
             }
-            val response = client.post(kreverReberegningPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "subsumsjonIder": [${subsumsjonIder.joinToString(prefix = "\"", separator = "\", \"", postfix = "\"")}],
-                      "beregningsdato": "$beregningsdato"
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(kreverReberegningPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "subsumsjonIder": [${subsumsjonIder.joinToString(prefix = "\"", separator = "\", \"", postfix = "\"")}],
+                          "beregningsdato": "$beregningsdato"
+                        }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.OK
             assertEquals("""{"reberegning": true}""", response.bodyAsText())
         }
@@ -74,18 +75,19 @@ class KreverRevurderingApiTest {
                     nyVurderingHttpClient = reberegningMockClient,
                 )
             }
-            val response = client.post(kreverReberegningPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "subsumsjonIder": ["$ukjentSubsumsjonId"],
-                      "beregningsdato": "$beregningsdato"
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(kreverReberegningPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "subsumsjonIder": ["$ukjentSubsumsjonId"],
+                          "beregningsdato": "$beregningsdato"
+                        }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.InternalServerError
             val problem = moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText())
             assertEquals("Feil ved sjekk om minsteinntekt må revurderes", problem?.title)

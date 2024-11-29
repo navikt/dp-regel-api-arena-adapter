@@ -4,15 +4,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
-    id("com.diffplug.spotless")
+    id("org.jlleitschuh.gradle.ktlint")
 }
 
 repositories {
     mavenCentral()
+    maven("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
     maven("https://jitpack.io")
-    maven {
-        url = uri("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
-    }
 }
 
 dependencies {
@@ -35,21 +33,6 @@ tasks.test {
     }
 }
 
-configure<com.diffplug.gradle.spotless.SpotlessExtension> {
-    kotlin {
-        ktlint().editorConfigOverride(
-            mapOf(
-                "ktlint_standard_max-line-length" to "disabled",
-                "ktlint_standard_package-name" to "disabled",
-            ),
-        )
-    }
-
-    kotlinGradle {
-        ktlint()
-    }
-}
-
 tasks.withType<KotlinCompile>().configureEach {
-    dependsOn("spotlessApply")
+    dependsOn("ktlintFormat")
 }

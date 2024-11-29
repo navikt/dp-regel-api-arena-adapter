@@ -126,21 +126,22 @@ class GrunnlagOgSatsApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post(dagpengegrunnlagPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(dagpengegrunnlagPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false
+                        }
+                        """.trimIndent(),
+                    )
+                }
             assertEquals(HttpStatusCode.OK, response.status)
             JSONAssert.assertEquals(
                 expectedGrunnlagJson,
@@ -174,21 +175,22 @@ class GrunnlagOgSatsApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post(dagpengegrunnlagPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(dagpengegrunnlagPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false
+                        }
+                        """.trimIndent(),
+                    )
+                }
             assertEquals(HttpStatusCode.OK, response.status)
             JSONAssert.assertEquals(
                 expectedGrunnlagJsonWithBeregningsregel,
@@ -220,22 +222,23 @@ class GrunnlagOgSatsApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post("$dagpengegrunnlagPath-reberegning") {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "inntektsId" : "${ULID().nextULID()}",
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post("$dagpengegrunnlagPath-reberegning") {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "inntektsId" : "${ULID().nextULID()}",
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false
+                        }
+                        """.trimIndent(),
+                    )
+                }
             assertEquals(HttpStatusCode.OK, response.status)
         }
     }
@@ -258,22 +261,23 @@ class GrunnlagOgSatsApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post("$dagpengegrunnlagPath-reberegning") {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "inntektsId" : "${ULID().nextULID()}",
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post("$dagpengegrunnlagPath-reberegning") {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "inntektsId" : "${ULID().nextULID()}",
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false
+                        }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.InternalServerError
             moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText()).apply {
                 this?.type shouldBe URI("urn:dp:error:regelberegning:grunnlag:negativ")
@@ -299,22 +303,23 @@ class GrunnlagOgSatsApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post("$dagpengegrunnlagPath-reberegning") {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "inntektsId" : "${ULID().nextULID()}",
-                      "beregningsdato": "2019-02-27",
-                      "lærling": true,
-                      "oppfyllerKravTilFangstOgFisk": false
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post("$dagpengegrunnlagPath-reberegning") {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "inntektsId" : "${ULID().nextULID()}",
+                          "beregningsdato": "2019-02-27",
+                          "lærling": true,
+                          "oppfyllerKravTilFangstOgFisk": false
+                        }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.InternalServerError
             moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText()).apply {
                 this?.type shouldBe URI("urn:dp:error:regelberegning:grunnlag:0")
@@ -331,22 +336,23 @@ class GrunnlagOgSatsApiTest {
                     synchronousSubsumsjonClient = mockk(),
                 )
             }
-            val response = client.post("$dagpengegrunnlagPath-reberegning") {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "inntektsId" : "bla bla",
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post("$dagpengegrunnlagPath-reberegning") {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "inntektsId" : "bla bla",
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false
+                        }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.BadRequest
             moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText()).apply {
                 this?.type shouldBe URI("urn:dp:error:parameter")
@@ -372,22 +378,23 @@ class GrunnlagOgSatsApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post(dagpengegrunnlagPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "inntektsId" : "${ULID().nextULID()}",
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(dagpengegrunnlagPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "inntektsId" : "${ULID().nextULID()}",
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false
+                        }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.InternalServerError
             moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
                 this.shouldNotBeNull()
@@ -418,22 +425,23 @@ class GrunnlagOgSatsApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post(dagpengegrunnlagPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "inntektsId" : "${ULID().nextULID()}",
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(dagpengegrunnlagPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "inntektsId" : "${ULID().nextULID()}",
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false
+                        }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.BadGateway
             moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
                 this shouldBe problem
@@ -459,22 +467,23 @@ class GrunnlagOgSatsApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post(dagpengegrunnlagPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "inntektsId" : "${ULID().nextULID()}",
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(dagpengegrunnlagPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "inntektsId" : "${ULID().nextULID()}",
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false
+                        }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.GatewayTimeout
             moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
                 this.shouldNotBeNull()
@@ -491,15 +500,16 @@ class GrunnlagOgSatsApiTest {
                     jwkProvider = jwkStub.stubbedJwkProvider(),
                 )
             }
-            val response = client.post(dagpengegrunnlagPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    { "badjson" : "error}
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(dagpengegrunnlagPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        { "badjson" : "error}
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.BadRequest
             moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
                 this.shouldNotBeNull()
@@ -518,15 +528,16 @@ class GrunnlagOgSatsApiTest {
                     jwkProvider = jwkStub.stubbedJwkProvider(),
                 )
             }
-            val response = client.post(dagpengegrunnlagPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {  "aktorId": "1234" }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(dagpengegrunnlagPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {  "aktorId": "1234" }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.BadRequest
             moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
                 this.shouldNotBeNull()
@@ -545,22 +556,23 @@ class GrunnlagOgSatsApiTest {
                     jwkProvider = jwkStub.stubbedJwkProvider(),
                 )
             }
-            val response = client.post(dagpengegrunnlagPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": true,
-                      "oppfyllerKravTilFangstOgFisk": false,
-                      "oppfyllerKravTilLaerling": true
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(dagpengegrunnlagPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": true,
+                          "oppfyllerKravTilFangstOgFisk": false,
+                          "oppfyllerKravTilLaerling": true
+                        }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.BadRequest
             moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
                 this.shouldNotBeNull()
@@ -582,21 +594,22 @@ class GrunnlagOgSatsApiTest {
                     jwkProvider = jwkStub.stubbedJwkProvider(),
                 )
             }
-            val response = client.post(dagpengegrunnlagPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": true,
-                      "oppfyllerKravTilFangstOgFisk": false,
-                      "oppfyllerKravTilLaerling": true
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(dagpengegrunnlagPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": true,
+                          "oppfyllerKravTilFangstOgFisk": false,
+                          "oppfyllerKravTilLaerling": true
+                        }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.Unauthorized
             moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
                 this.shouldNotBeNull()
@@ -625,23 +638,24 @@ class GrunnlagOgSatsApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post(dagpengegrunnlagPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                         {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false,
-                      "regelverksdato": "2020-03-28"
-                    }
+            val response =
+                client.post(dagpengegrunnlagPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                             {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false,
+                          "regelverksdato": "2020-03-28"
+                        }
 
-                    """.trimIndent(),
-                )
-            }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.OK
         }
     }
@@ -663,24 +677,25 @@ class GrunnlagOgSatsApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post(dagpengegrunnlagPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                         {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false,
-                      "regelverksdato": "2020-03-28",
-                      "manueltGrunnlag": 1000000
-                    }
+            val response =
+                client.post(dagpengegrunnlagPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                             {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false,
+                          "regelverksdato": "2020-03-28",
+                          "manueltGrunnlag": 1000000
+                        }
 
-                    """.trimIndent(),
-                )
-            }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.OK
         }
     }
@@ -703,24 +718,25 @@ class GrunnlagOgSatsApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post(dagpengegrunnlagPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                         {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false,
-                      "regelverksdato": "2020-03-28",
-                      "forrigeGrunnlag": 600000
-                    }
+            val response =
+                client.post(dagpengegrunnlagPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                             {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false,
+                          "regelverksdato": "2020-03-28",
+                          "forrigeGrunnlag": 600000
+                        }
 
-                    """.trimIndent(),
-                )
-            }
+                        """.trimIndent(),
+                    )
+                }
             response.status shouldBe HttpStatusCode.OK
         }
     }
@@ -732,42 +748,42 @@ class GrunnlagOgSatsApiTest {
             opprettet = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
             utfort = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
             parametere =
-            GrunnlagOgSatsRegelFaktum(
-                aktorId = "1234",
-                vedtakId = 123,
-                beregningsdato = LocalDate.of(2019, 2, 10),
-                inntektsId = "1234",
-                harAvtjentVerneplikt = false,
-                oppfyllerKravTilFangstOgFisk = false,
-                antallBarn = 0,
-                grunnlag = 12345,
-                manueltGrunnlag = 12345,
-                forrigeGrunnlag = null,
-            ),
+                GrunnlagOgSatsRegelFaktum(
+                    aktorId = "1234",
+                    vedtakId = 123,
+                    beregningsdato = LocalDate.of(2019, 2, 10),
+                    inntektsId = "1234",
+                    harAvtjentVerneplikt = false,
+                    oppfyllerKravTilFangstOgFisk = false,
+                    antallBarn = 0,
+                    grunnlag = 12345,
+                    manueltGrunnlag = 12345,
+                    forrigeGrunnlag = null,
+                ),
             resultat =
-            GrunnlagOgSatsResultat(
-                grunnlag =
-                Grunnlag(
-                    avkortet = 12345,
-                    uavkortet = 12345,
-                    beregningsregel = GrunnlagBeregningsregel.ORDINAER_ETTAAR,
+                GrunnlagOgSatsResultat(
+                    grunnlag =
+                        Grunnlag(
+                            avkortet = 12345,
+                            uavkortet = 12345,
+                            beregningsregel = GrunnlagBeregningsregel.ORDINAER_ETTAAR,
+                        ),
+                    sats = Sats(124, 234),
+                    benyttet90ProsentRegel = false,
                 ),
-                sats = Sats(124, 234),
-                benyttet90ProsentRegel = false,
-            ),
             inntekt =
-            setOf(
-                no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
-                    inntekt = 4999423,
-                    inntektsPeriode =
-                    no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                        foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1),
+                setOf(
+                    no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
+                        inntekt = 4999423,
+                        inntektsPeriode =
+                            no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                                foersteMaaned = YearMonth.of(2018, 1),
+                                sisteMaaned = YearMonth.of(2019, 1),
+                            ),
+                        inneholderNaeringsinntekter = false,
+                        periode = 1,
                     ),
-                    inneholderNaeringsinntekter = false,
-                    periode = 1,
                 ),
-            ),
             inntektManueltRedigert = true,
             inntektAvvik = true,
         )
@@ -780,42 +796,42 @@ class GrunnlagOgSatsApiTest {
             opprettet = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
             utfort = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
             parametere =
-            GrunnlagOgSatsRegelFaktum(
-                aktorId = "1234",
-                vedtakId = 123,
-                beregningsdato = LocalDate.of(2019, 2, 10),
-                inntektsId = "1234",
-                harAvtjentVerneplikt = false,
-                oppfyllerKravTilFangstOgFisk = false,
-                antallBarn = 0,
-                grunnlag = 12345,
-                manueltGrunnlag = 12345,
-                forrigeGrunnlag = null,
-            ),
+                GrunnlagOgSatsRegelFaktum(
+                    aktorId = "1234",
+                    vedtakId = 123,
+                    beregningsdato = LocalDate.of(2019, 2, 10),
+                    inntektsId = "1234",
+                    harAvtjentVerneplikt = false,
+                    oppfyllerKravTilFangstOgFisk = false,
+                    antallBarn = 0,
+                    grunnlag = 12345,
+                    manueltGrunnlag = 12345,
+                    forrigeGrunnlag = null,
+                ),
             resultat =
-            GrunnlagOgSatsResultat(
-                grunnlag =
-                Grunnlag(
-                    avkortet = 12345,
-                    uavkortet = 12345,
-                    beregningsregel = GrunnlagBeregningsregel.ORDINAER_ETTAAR,
+                GrunnlagOgSatsResultat(
+                    grunnlag =
+                        Grunnlag(
+                            avkortet = 12345,
+                            uavkortet = 12345,
+                            beregningsregel = GrunnlagBeregningsregel.ORDINAER_ETTAAR,
+                        ),
+                    sats = Sats(124, 234, beregningsregel = SatsBeregningsregel.ORDINAER),
+                    benyttet90ProsentRegel = false,
                 ),
-                sats = Sats(124, 234, beregningsregel = SatsBeregningsregel.ORDINAER),
-                benyttet90ProsentRegel = false,
-            ),
             inntekt =
-            setOf(
-                no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
-                    inntekt = 4999423,
-                    inntektsPeriode =
-                    no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                        foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1),
+                setOf(
+                    no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
+                        inntekt = 4999423,
+                        inntektsPeriode =
+                            no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                                foersteMaaned = YearMonth.of(2018, 1),
+                                sisteMaaned = YearMonth.of(2019, 1),
+                            ),
+                        inneholderNaeringsinntekter = false,
+                        periode = 1,
                     ),
-                    inneholderNaeringsinntekter = false,
-                    periode = 1,
                 ),
-            ),
             inntektManueltRedigert = true,
             inntektAvvik = true,
         )

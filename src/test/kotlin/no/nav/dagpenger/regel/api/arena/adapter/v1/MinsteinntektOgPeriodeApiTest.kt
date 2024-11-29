@@ -62,10 +62,10 @@ class MinsteinntektOgPeriodeApiTest {
                 harAvtjentVerneplikt = true,
                 oppfyllerKravTilFangstOgFisk = false,
                 bruktInntektsPeriode =
-                no.nav.dagpenger.regel.api.internal.models.InntektsPeriode(
-                    YearMonth.of(2019, 4),
-                    YearMonth.of(2019, 7),
-                ),
+                    no.nav.dagpenger.regel.api.internal.models.InntektsPeriode(
+                        YearMonth.of(2019, 4),
+                        YearMonth.of(2019, 7),
+                    ),
                 lærling = false,
             )
         val behovRequestMedRegelverksdato = standardBehovRequest.copy(regelverksdato = LocalDate.of(2020, 6, 14))
@@ -92,20 +92,21 @@ class MinsteinntektOgPeriodeApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post(minsteinntektPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "inntektsId": "12345"
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(minsteinntektPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "inntektsId": "12345"
+                        }
+                        """.trimIndent(),
+                    )
+                }
             assertEquals(HttpStatusCode.OK, response.status)
             JSONAssert.assertEquals(
                 expectedJson,
@@ -137,21 +138,22 @@ class MinsteinntektOgPeriodeApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post(minsteinntektPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(minsteinntektPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false
+                        }
+                        """.trimIndent(),
+                    )
+                }
             assertEquals(HttpStatusCode.OK, response.status)
             JSONAssert.assertEquals(
                 expectedJsonUtenMinsteinntektRegel,
@@ -183,21 +185,22 @@ class MinsteinntektOgPeriodeApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post(minsteinntektPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(minsteinntektPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false
+                        }
+                        """.trimIndent(),
+                    )
+                }
             assertEquals(HttpStatusCode.InternalServerError, response.status)
             val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
             assertEquals("Uhåndtert feil", problem?.title)
@@ -226,22 +229,23 @@ class MinsteinntektOgPeriodeApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post(minsteinntektPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
-                    }
+            val response =
+                client.post(minsteinntektPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false
+                        }
 
-                    """.trimIndent(),
-                )
-            }
+                        """.trimIndent(),
+                    )
+                }
             assertEquals(HttpStatusCode.BadGateway, response.status)
             moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText()).apply {
                 this@apply shouldBe problem
@@ -267,22 +271,23 @@ class MinsteinntektOgPeriodeApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post(minsteinntektPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
-                    }
+            val response =
+                client.post(minsteinntektPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false
+                        }
 
-                    """.trimIndent(),
-                )
-            }
+                        """.trimIndent(),
+                    )
+                }
             assertEquals(HttpStatusCode.GatewayTimeout, response.status)
             val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
             assertEquals("urn:dp:error:regelberegning:tidsavbrudd", problem?.type.toString())
@@ -299,22 +304,23 @@ class MinsteinntektOgPeriodeApiTest {
                     jwkProvider = jwkStub.stubbedJwkProvider(),
                 )
             }
-            val response = client.post(minsteinntektPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                        "aktorId": "1234",
-                        "vedtakId": 5678,
-                        "beregningsdato": "2019-02-27",
-                        "harAvtjentVerneplikt": true,
-                        "oppfyllerKravTilFangstOgFisk": false,
-                        "oppfyllerKravTilLaerling": true
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(minsteinntektPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                            "aktorId": "1234",
+                            "vedtakId": 5678,
+                            "beregningsdato": "2019-02-27",
+                            "harAvtjentVerneplikt": true,
+                            "oppfyllerKravTilFangstOgFisk": false,
+                            "oppfyllerKravTilLaerling": true
+                        }
+                        """.trimIndent(),
+                    )
+                }
             assertEquals(HttpStatusCode.BadRequest, response.status)
             val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
             assertEquals(
@@ -334,15 +340,16 @@ class MinsteinntektOgPeriodeApiTest {
                     jwkProvider = jwkStub.stubbedJwkProvider(),
                 )
             }
-            val response = client.post(minsteinntektPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    { "badjson" : "error}
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(minsteinntektPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        { "badjson" : "error}
+                        """.trimIndent(),
+                    )
+                }
             assertEquals(HttpStatusCode.BadRequest, response.status)
             val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
             assertEquals("Parameteret er ikke gyldig json", problem?.title)
@@ -359,15 +366,16 @@ class MinsteinntektOgPeriodeApiTest {
                     jwkProvider = jwkStub.stubbedJwkProvider(),
                 )
             }
-            val response = client.post(minsteinntektPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {  "aktorId": "1234" }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(minsteinntektPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {  "aktorId": "1234" }
+                        """.trimIndent(),
+                    )
+                }
             assertEquals(HttpStatusCode.BadRequest, response.status)
             val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
             assertEquals(
@@ -387,21 +395,22 @@ class MinsteinntektOgPeriodeApiTest {
                     jwkProvider = jwkStub.stubbedJwkProvider(),
                 )
             }
-            val response = client.post(minsteinntektPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                setBody(
-                    """
-                         {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
-                    }
+            val response =
+                client.post(minsteinntektPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    setBody(
+                        """
+                             {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false
+                        }
 
-                    """.trimIndent(),
-                )
-            }
+                        """.trimIndent(),
+                    )
+                }
             assertEquals(HttpStatusCode.Unauthorized, response.status)
             val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
             assertEquals("Uautorisert", problem?.title)
@@ -427,22 +436,23 @@ class MinsteinntektOgPeriodeApiTest {
                     synchronousSubsumsjonClient = synchronousSubsumsjonClient,
                 )
             }
-            val response = client.post(minsteinntektPath) {
-                header(HttpHeaders.ContentType, "application/json")
-                header(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false,
-                      "regelverksdato": "2020-03-28"
-                    }
-                    """.trimIndent(),
-                )
-            }
+            val response =
+                client.post(minsteinntektPath) {
+                    header(HttpHeaders.ContentType, "application/json")
+                    header(HttpHeaders.Authorization, "Bearer $token")
+                    setBody(
+                        """
+                        {
+                          "aktorId": "1234",
+                          "vedtakId": 5678,
+                          "beregningsdato": "2019-02-27",
+                          "harAvtjentVerneplikt": false,
+                          "oppfyllerKravTilFangstOgFisk": false,
+                          "regelverksdato": "2020-03-28"
+                        }
+                        """.trimIndent(),
+                    )
+                }
             assertEquals(HttpStatusCode.OK, response.status)
         }
     }
@@ -454,39 +464,39 @@ class MinsteinntektOgPeriodeApiTest {
             opprettet = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
             utfort = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
             parametere =
-            MinsteinntektOgPeriodeRegelfaktum(
-                aktorId = "1234",
-                vedtakId = 123,
-                beregningsdato = LocalDate.of(2019, 2, 10),
-                inntektsId = "13445",
-                harAvtjentVerneplikt = false,
-                oppfyllerKravTilFangstOgFisk = false,
-                bruktInntektsPeriode =
-                no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                    foersteMaaned = YearMonth.of(2018, 1),
-                    sisteMaaned = YearMonth.of(2019, 1),
+                MinsteinntektOgPeriodeRegelfaktum(
+                    aktorId = "1234",
+                    vedtakId = 123,
+                    beregningsdato = LocalDate.of(2019, 2, 10),
+                    inntektsId = "13445",
+                    harAvtjentVerneplikt = false,
+                    oppfyllerKravTilFangstOgFisk = false,
+                    bruktInntektsPeriode =
+                        no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                            foersteMaaned = YearMonth.of(2018, 1),
+                            sisteMaaned = YearMonth.of(2019, 1),
+                        ),
                 ),
-            ),
             resultat =
-            MinsteinntektOgPeriodeResultat(
-                oppfyllerKravTilMinsteArbeidsinntekt = true,
-                periodeAntallUker = 104,
-                minsteinntektRegel = MinsteinntektRegel.ORDINAER,
-            ),
-            inntekt =
-            setOf(
-                no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
-                    inntekt = 4999423,
-                    inntektsPeriode =
-                    no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
-                        foersteMaaned = YearMonth.of(2018, 1),
-                        sisteMaaned = YearMonth.of(2019, 1),
-                    ),
-                    andel = 111,
-                    inneholderNaeringsinntekter = false,
-                    periode = 1,
+                MinsteinntektOgPeriodeResultat(
+                    oppfyllerKravTilMinsteArbeidsinntekt = true,
+                    periodeAntallUker = 104,
+                    minsteinntektRegel = MinsteinntektRegel.ORDINAER,
                 ),
-            ),
+            inntekt =
+                setOf(
+                    no.nav.dagpenger.regel.api.arena.adapter.v1.models.Inntekt(
+                        inntekt = 4999423,
+                        inntektsPeriode =
+                            no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode(
+                                foersteMaaned = YearMonth.of(2018, 1),
+                                sisteMaaned = YearMonth.of(2019, 1),
+                            ),
+                        andel = 111,
+                        inneholderNaeringsinntekter = false,
+                        periode = 1,
+                    ),
+                ),
             inntektManueltRedigert = true,
             inntektAvvik = true,
         )
