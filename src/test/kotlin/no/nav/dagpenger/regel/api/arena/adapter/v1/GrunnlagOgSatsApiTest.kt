@@ -1,13 +1,15 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1
 
 import de.huxhorn.sulky.ulid.ULID
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
-import io.ktor.server.testing.withTestApplication
+import io.ktor.server.testing.testApplication
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.runBlocking
@@ -117,15 +119,16 @@ class GrunnlagOgSatsApiTest {
             )
         } returns grunnlagOgSatsSubsumsjon()
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post(dagpengegrunnlagPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -133,23 +136,21 @@ class GrunnlagOgSatsApiTest {
                       "vedtakId": 5678,
                       "beregningsdato": "2019-02-27",
                       "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false,
-                      "oppfyllerKravTilLaerling": true
+                      "oppfyllerKravTilFangstOgFisk": false
                     }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.OK, response.status())
-                JSONAssert.assertEquals(
-                    expectedGrunnlagJson,
-                    response.content,
-                    CustomComparator(
-                        JSONCompareMode.STRICT,
-                        Customization("opprettet") { _, _ -> true },
-                        Customization("utfort") { _, _ -> true },
-                    ),
-                )
             }
+            assertEquals(HttpStatusCode.OK, response.status)
+            JSONAssert.assertEquals(
+                expectedGrunnlagJson,
+                response.bodyAsText(),
+                CustomComparator(
+                    JSONCompareMode.STRICT,
+                    Customization("opprettet") { _, _ -> true },
+                    Customization("utfort") { _, _ -> true },
+                ),
+            )
         }
     }
 
@@ -166,15 +167,16 @@ class GrunnlagOgSatsApiTest {
             }
         } returns grunnlagOgSatsSubsumsjonWithSatsBeregningsregel()
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post(dagpengegrunnlagPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -186,18 +188,17 @@ class GrunnlagOgSatsApiTest {
                     }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.OK, response.status())
-                JSONAssert.assertEquals(
-                    expectedGrunnlagJsonWithBeregningsregel,
-                    response.content,
-                    CustomComparator(
-                        JSONCompareMode.STRICT,
-                        Customization("opprettet") { _, _ -> true },
-                        Customization("utfort") { _, _ -> true },
-                    ),
-                )
             }
+            assertEquals(HttpStatusCode.OK, response.status)
+            JSONAssert.assertEquals(
+                expectedGrunnlagJsonWithBeregningsregel,
+                response.bodyAsText(),
+                CustomComparator(
+                    JSONCompareMode.STRICT,
+                    Customization("opprettet") { _, _ -> true },
+                    Customization("utfort") { _, _ -> true },
+                ),
+            )
         }
     }
 
@@ -212,15 +213,16 @@ class GrunnlagOgSatsApiTest {
             )
         } returns grunnlagOgSatsSubsumsjon()
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, "$dagpengegrunnlagPath-reberegning") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post("$dagpengegrunnlagPath-reberegning") {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -233,9 +235,8 @@ class GrunnlagOgSatsApiTest {
                     }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.OK, response.status())
             }
+            assertEquals(HttpStatusCode.OK, response.status)
         }
     }
 
@@ -250,15 +251,16 @@ class GrunnlagOgSatsApiTest {
             )
         } throws NegativtGrunnlagException("Negativt grunnlag")
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, "$dagpengegrunnlagPath-reberegning") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post("$dagpengegrunnlagPath-reberegning") {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -271,11 +273,10 @@ class GrunnlagOgSatsApiTest {
                     }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.InternalServerError, response.status())
-                moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!).apply {
-                    this?.type shouldBe URI("urn:dp:error:regelberegning:grunnlag:negativ")
-                }
+            }
+            response.status shouldBe HttpStatusCode.InternalServerError
+            moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText()).apply {
+                this?.type shouldBe URI("urn:dp:error:regelberegning:grunnlag:negativ")
             }
         }
     }
@@ -291,15 +292,16 @@ class GrunnlagOgSatsApiTest {
             )
         } throws NullGrunnlagException("Negativt grunnlag")
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, "$dagpengegrunnlagPath-reberegning") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post("$dagpengegrunnlagPath-reberegning") {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -312,26 +314,26 @@ class GrunnlagOgSatsApiTest {
                     }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.InternalServerError, response.status())
-                moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!).apply {
-                    this?.type shouldBe URI("urn:dp:error:regelberegning:grunnlag:0")
-                }
+            }
+            response.status shouldBe HttpStatusCode.InternalServerError
+            moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText()).apply {
+                this?.type shouldBe URI("urn:dp:error:regelberegning:grunnlag:0")
             }
         }
     }
 
     @Test
     fun `Grunnlag og Sats re-beregning API skal svare med 400 for ugyldig inntektsId`() {
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = mockk(),
-            )
-        }) {
-            handleRequest(HttpMethod.Post, "$dagpengegrunnlagPath-reberegning") {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = mockk(),
+                )
+            }
+            val response = client.post("$dagpengegrunnlagPath-reberegning") {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -344,11 +346,10 @@ class GrunnlagOgSatsApiTest {
                     }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.BadRequest, response.status())
-                moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!).apply {
-                    this?.type shouldBe URI("urn:dp:error:parameter")
-                }
+            }
+            response.status shouldBe HttpStatusCode.BadRequest
+            moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText()).apply {
+                this?.type shouldBe URI("urn:dp:error:parameter")
             }
         }
     }
@@ -364,33 +365,35 @@ class GrunnlagOgSatsApiTest {
             )
         } throws RuntimeException()
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post(dagpengegrunnlagPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
                       "aktorId": "1234",
                       "vedtakId": 5678,
+                      "inntektsId" : "${ULID().nextULID()}",
                       "beregningsdato": "2019-02-27",
                       "harAvtjentVerneplikt": false,
                       "oppfyllerKravTilFangstOgFisk": false
                     }
-
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.InternalServerError, response.status())
-                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals("Uhåndtert feil", problem?.title)
-                assertEquals("about:blank", problem?.type.toString())
-                assertEquals(500, problem?.status)
+            }
+            response.status shouldBe HttpStatusCode.InternalServerError
+            moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
+                this.shouldNotBeNull()
+                this.type shouldBe URI("about:blank")
+                this.status shouldBe 500
+                this.title shouldBe "Uhåndtert feil"
             }
         }
     }
@@ -408,32 +411,32 @@ class GrunnlagOgSatsApiTest {
                 } throws SubsumsjonProblem(problem)
             }
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post(dagpengegrunnlagPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
                       "aktorId": "1234",
                       "vedtakId": 5678,
+                      "inntektsId" : "${ULID().nextULID()}",
                       "beregningsdato": "2019-02-27",
                       "harAvtjentVerneplikt": false,
                       "oppfyllerKravTilFangstOgFisk": false
                     }
-
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.BadGateway, response.status())
-                moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!).apply {
-                    this shouldBe problem
-                }
+            }
+            response.status shouldBe HttpStatusCode.BadGateway
+            moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
+                this shouldBe problem
             }
         }
     }
@@ -449,100 +452,102 @@ class GrunnlagOgSatsApiTest {
             )
         } throws RegelApiTimeoutException("timeout")
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-                addHeader(HttpHeaders.ContentType, "application/json")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post(dagpengegrunnlagPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
                       "aktorId": "1234",
                       "vedtakId": 5678,
+                      "inntektsId" : "${ULID().nextULID()}",
                       "beregningsdato": "2019-02-27",
                       "harAvtjentVerneplikt": false,
                       "oppfyllerKravTilFangstOgFisk": false
                     }
-
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.GatewayTimeout, response.status())
-                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals("urn:dp:error:regelberegning:tidsavbrudd", problem?.type.toString())
-                assertEquals("Tidsavbrudd ved beregning av regel", problem?.title)
-                assertEquals(504, problem?.status)
+            }
+            response.status shouldBe HttpStatusCode.GatewayTimeout
+            moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
+                this.shouldNotBeNull()
+                this.type shouldBe URI("urn:dp:error:regelberegning:tidsavbrudd")
             }
         }
     }
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for dagpengegrunnlag med ugyldig json request`() {
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-            )
-        }) {
-            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                )
+            }
+            val response = client.post(dagpengegrunnlagPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     { "badjson" : "error}
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.BadRequest, response.status())
-                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals("Parameteret er ikke gyldig json", problem?.title)
-                assertEquals("urn:dp:error:parameter", problem?.type.toString())
-                assertEquals(400, problem?.status)
+            }
+            response.status shouldBe HttpStatusCode.BadRequest
+            moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
+                this.shouldNotBeNull()
+                this.type shouldBe URI("urn:dp:error:parameter")
+                this.status shouldBe 400
+                this.title shouldBe "Parameteret er ikke gyldig json"
             }
         }
     }
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for json med manglende obligatoriske felt`() {
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-            )
-        }) {
-            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                )
+            }
+            val response = client.post(dagpengegrunnlagPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {  "aktorId": "1234" }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.BadRequest, response.status())
-                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals(
-                    "Parameteret er ikke gyldig json",
-                    problem?.title,
-                )
-                assertEquals("urn:dp:error:parameter", problem?.type.toString())
-                assertEquals(400, problem?.status)
+            }
+            response.status shouldBe HttpStatusCode.BadRequest
+            moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
+                this.shouldNotBeNull()
+                this.type shouldBe URI("urn:dp:error:parameter")
+                this.status shouldBe 400
+                this.title shouldBe "Parameteret er ikke gyldig json"
             }
         }
     }
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 hvis både verneplikt og lærling er true`() {
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-            )
-        }) {
-            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                )
+            }
+            val response = client.post(dagpengegrunnlagPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -555,46 +560,49 @@ class GrunnlagOgSatsApiTest {
                     }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.BadRequest, response.status())
-                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
+            }
+            response.status shouldBe HttpStatusCode.BadRequest
+            moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
+                this.shouldNotBeNull()
                 assertEquals(
                     "Ugyldig kombinasjon av parametere: harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig",
-                    problem?.title,
+                    title,
                 )
-                assertEquals("urn:dp:error:parameter", problem?.type.toString())
-                assertEquals(400, problem?.status)
+                assertEquals("urn:dp:error:parameter", type.toString())
+                assertEquals(400, status)
             }
         }
     }
 
     @Test
     fun `Skal svare med 401 hvis request mangler bearer token`() {
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-            )
-        }) {
-            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                )
+            }
+            val response = client.post(dagpengegrunnlagPath) {
+                header(HttpHeaders.ContentType, "application/json")
                 setBody(
                     """
-                         {
+                    {
                       "aktorId": "1234",
                       "vedtakId": 5678,
                       "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
+                      "harAvtjentVerneplikt": true,
+                      "oppfyllerKravTilFangstOgFisk": false,
+                      "oppfyllerKravTilLaerling": true
                     }
-
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.Unauthorized, response.status())
-                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals("Uautorisert", problem?.title)
-                assertEquals("urn:dp:error:uautorisert", problem?.type.toString())
-                assertEquals(401, problem?.status)
+            }
+            response.status shouldBe HttpStatusCode.Unauthorized
+            moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
+                this.shouldNotBeNull()
+                assertEquals("Uautorisert", title)
+                assertEquals("urn:dp:error:uautorisert", type.toString())
+                assertEquals(401, status)
             }
         }
     }
@@ -610,15 +618,16 @@ class GrunnlagOgSatsApiTest {
             )
         } returns grunnlagOgSatsSubsumsjon()
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post(dagpengegrunnlagPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                          {
@@ -632,9 +641,8 @@ class GrunnlagOgSatsApiTest {
 
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.OK, response.status())
             }
+            response.status shouldBe HttpStatusCode.OK
         }
     }
 
@@ -648,16 +656,16 @@ class GrunnlagOgSatsApiTest {
                 any<(Subsumsjon, LocalDateTime, LocalDateTime) -> GrunnlagOgSatsSubsumsjon>(),
             )
         } returns grunnlagOgSatsSubsumsjon()
-
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post(dagpengegrunnlagPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                          {
@@ -672,9 +680,8 @@ class GrunnlagOgSatsApiTest {
 
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.OK, response.status())
             }
+            response.status shouldBe HttpStatusCode.OK
         }
     }
 
@@ -689,15 +696,16 @@ class GrunnlagOgSatsApiTest {
             )
         } returns grunnlagOgSatsSubsumsjon()
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post(dagpengegrunnlagPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                          {
@@ -712,43 +720,8 @@ class GrunnlagOgSatsApiTest {
 
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.OK, response.status())
             }
-        }
-    }
-
-    @Test
-    fun `Skal svare med HTTP problem rfc7807 hvis både manueltGrunnlag og tidligereGrunnlag er satt`() {
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-            )
-        }) {
-            handleRequest(HttpMethod.Post, dagpengegrunnlagPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-                setBody(
-                    """
-                    {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "manueltGrunnlag": 600000,
-                      "forrigeGrunnlag": 800000
-                    }
-                    """.trimIndent(),
-                )
-            }.apply {
-                assertEquals(HttpStatusCode.BadRequest, response.status())
-                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals(
-                    "Ugyldig kombinasjon av parametere: manueltGrunnlag og forrigeGrunnlag kan ikke settes samtidig",
-                    problem?.title,
-                )
-                assertEquals("urn:dp:error:parameter", problem?.type.toString())
-                assertEquals(400, problem?.status)
-            }
+            response.status shouldBe HttpStatusCode.OK
         }
     }
 

@@ -1,12 +1,14 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1
 
 import de.huxhorn.sulky.ulid.ULID
+import io.kotest.matchers.shouldBe
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
-import io.ktor.server.testing.withTestApplication
+import io.ktor.server.testing.testApplication
 import io.mockk.every
 import io.mockk.mockk
 import no.nav.dagpenger.regel.api.JwtStub
@@ -39,15 +41,16 @@ class KreverRevurderingApiTest {
 
     @Test
     fun `Vurdering av minsteinntekt API specification test - Should match json field names and formats`() {
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                nyVurderingHttpClient = reberegningMockClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, kreverReberegningPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    nyVurderingHttpClient = reberegningMockClient,
+                )
+            }
+            val response = client.post(kreverReberegningPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -56,24 +59,24 @@ class KreverRevurderingApiTest {
                     }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.OK, response.status())
-                assertEquals("""{"reberegning": true}""", response.content)
             }
+            response.status shouldBe HttpStatusCode.OK
+            assertEquals("""{"reberegning": true}""", response.bodyAsText())
         }
     }
 
     @Test
     fun `Feil ved sjekk av krav om revurdeing av minsteinntekt `() {
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                nyVurderingHttpClient = reberegningMockClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, kreverReberegningPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    nyVurderingHttpClient = reberegningMockClient,
+                )
+            }
+            val response = client.post(kreverReberegningPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -82,13 +85,12 @@ class KreverRevurderingApiTest {
                     }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.InternalServerError, response.status())
-                val problem = moshiInstance.adapter(Problem::class.java).fromJson(response.content!!)
-                assertEquals("Feil ved sjekk om minsteinntekt må revurderes", problem?.title)
-                assertEquals("urn:dp:error:revurdering:minsteinntekt", problem?.type.toString())
-                assertEquals(500, problem?.status)
             }
+            response.status shouldBe HttpStatusCode.InternalServerError
+            val problem = moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText())
+            assertEquals("Feil ved sjekk om minsteinntekt må revurderes", problem?.title)
+            assertEquals("urn:dp:error:revurdering:minsteinntekt", problem?.type.toString())
+            assertEquals(500, problem?.status)
         }
     }
 }

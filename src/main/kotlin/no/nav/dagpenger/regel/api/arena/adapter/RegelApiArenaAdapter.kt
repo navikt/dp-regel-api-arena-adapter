@@ -17,7 +17,7 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.metrics.micrometer.MicrometerMetrics
 import io.ktor.server.netty.Netty
 import io.ktor.server.plugins.BadRequestException
-import io.ktor.server.plugins.callloging.CallLogging
+import io.ktor.server.plugins.calllogging.CallLogging
 import io.ktor.server.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.server.plugins.defaultheaders.DefaultHeaders
 import io.ktor.server.plugins.statuspages.StatusPages
@@ -53,7 +53,6 @@ import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 import no.nav.dagpenger.regel.api.serder.jacksonObjectMapper
 import org.slf4j.event.Level
 import java.net.URI
-import java.net.URL
 import java.util.concurrent.TimeUnit
 
 private val LOGGER = KotlinLogging.logger {}
@@ -62,7 +61,7 @@ fun main() {
     val config = Configuration()
 
     val jwkProvider =
-        JwkProviderBuilder(URL(config.application.jwksUrl))
+        JwkProviderBuilder(URI(config.application.jwksUrl).toURL())
             .cached(10, 24, TimeUnit.HOURS)
             .rateLimited(10, 1, TimeUnit.MINUTES)
             .build()

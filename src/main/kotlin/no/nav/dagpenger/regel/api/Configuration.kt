@@ -23,7 +23,6 @@ private val localProperties =
             "jwks.url" to "http://localhost",
             "jwks.issuer" to "http://localhost",
             "optional.jwt" to "true",
-            "unleash.url" to "https://localhost",
         ),
     )
 private val devProperties =
