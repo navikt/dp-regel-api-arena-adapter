@@ -1,6 +1,7 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1
 
 import de.huxhorn.sulky.ulid.ULID
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.ktor.client.request.header
 import io.ktor.client.request.post
@@ -9,16 +10,17 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.testApplication
-import io.mockk.every
+import io.mockk.coEvery
 import io.mockk.mockk
 import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import no.nav.dagpenger.regel.api.arena.adapter.mockedRegelApiAdapter
-import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
+import no.nav.dagpenger.regel.api.internal.RegelApi
 import no.nav.dagpenger.regel.api.internal.RegelApiMinsteinntektNyVurderingException
-import no.nav.dagpenger.regel.api.internal.RegelApiNyVurderingHttpClient
+import no.nav.dagpenger.regel.api.serder.jacksonObjectMapper
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.net.URI
 import java.time.LocalDate
 
 class KreverRevurderingApiTest {
@@ -32,9 +34,9 @@ class KreverRevurderingApiTest {
     private val beregningsdato = LocalDate.of(2020, 1, 13)
 
     private val reberegningMockClient =
-        mockk<RegelApiNyVurderingHttpClient>().also {
-            every { it.kreverNyVurdering(subsumsjonIder = subsumsjonIder, beregningsdato) } returns true
-            every {
+        mockk<RegelApi>().also {
+            coEvery { it.kreverNyVurdering(subsumsjonIder = subsumsjonIder, beregningsdato) } returns true
+            coEvery {
                 it.kreverNyVurdering(subsumsjonIder = listOf(ukjentSubsumsjonId), beregningsdato)
             } throws RegelApiMinsteinntektNyVurderingException("Test exception")
         }
@@ -45,7 +47,7 @@ class KreverRevurderingApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    nyVurderingHttpClient = reberegningMockClient,
+                    regelApi = reberegningMockClient,
                 )
             }
             val response =
@@ -72,7 +74,7 @@ class KreverRevurderingApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    nyVurderingHttpClient = reberegningMockClient,
+                    regelApi = reberegningMockClient,
                 )
             }
             val response =
@@ -89,10 +91,12 @@ class KreverRevurderingApiTest {
                     )
                 }
             response.status shouldBe HttpStatusCode.InternalServerError
-            val problem = moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText())
-            assertEquals("Feil ved sjekk om minsteinntekt må revurderes", problem?.title)
-            assertEquals("urn:dp:error:revurdering:minsteinntekt", problem?.type.toString())
-            assertEquals(500, problem?.status)
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
+                this.shouldNotBeNull()
+                title shouldBe "Feil ved sjekk om minsteinntekt må revurderes"
+                type shouldBe URI("urn:dp:error:revurdering:minsteinntekt")
+                status shouldBe 500
+            }
         }
     }
 }

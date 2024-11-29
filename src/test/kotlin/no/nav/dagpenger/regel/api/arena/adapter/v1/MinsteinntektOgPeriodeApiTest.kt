@@ -1,5 +1,6 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1
 
+import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.ktor.client.request.header
 import io.ktor.client.request.post
@@ -13,7 +14,6 @@ import io.mockk.mockk
 import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import no.nav.dagpenger.regel.api.arena.adapter.mockedRegelApiAdapter
-import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntektsPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeRegelfaktum
@@ -21,15 +21,17 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriode
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektRegel
 import no.nav.dagpenger.regel.api.internal.BehovRequest
+import no.nav.dagpenger.regel.api.internal.RegelApi
 import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
 import no.nav.dagpenger.regel.api.internal.RegelKontekst
-import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
+import no.nav.dagpenger.regel.api.serder.jacksonObjectMapper
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.Customization
 import org.skyscreamer.jsonassert.JSONAssert
 import org.skyscreamer.jsonassert.JSONCompareMode
 import org.skyscreamer.jsonassert.comparator.CustomComparator
+import java.net.URI
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.YearMonth
@@ -76,7 +78,7 @@ class MinsteinntektOgPeriodeApiTest {
 
     @Test
     fun `Minsteinntekt og Periode API spesifkasjonstest - Skal håndtere json riktig`() {
-        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+        val synchronousSubsumsjonClient: RegelApi = mockk()
 
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
@@ -89,7 +91,7 @@ class MinsteinntektOgPeriodeApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -122,7 +124,7 @@ class MinsteinntektOgPeriodeApiTest {
 
     @Test
     fun `Minsteinntekt og Periode API spesifkasjonstest - Skal ikke inkludere minsteinntektregels resultat hvis det er null`() {
-        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+        val synchronousSubsumsjonClient: RegelApi = mockk()
 
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
@@ -135,7 +137,7 @@ class MinsteinntektOgPeriodeApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -169,7 +171,7 @@ class MinsteinntektOgPeriodeApiTest {
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for minsteinntekt ved uhåndterte feil`() {
-        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+        val synchronousSubsumsjonClient: RegelApi = mockk()
 
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
@@ -182,7 +184,7 @@ class MinsteinntektOgPeriodeApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -202,10 +204,12 @@ class MinsteinntektOgPeriodeApiTest {
                     )
                 }
             assertEquals(HttpStatusCode.InternalServerError, response.status)
-            val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
-            assertEquals("Uhåndtert feil", problem?.title)
-            assertEquals("about:blank", problem?.type.toString())
-            assertEquals(500, problem?.status)
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
+                this.shouldNotBeNull()
+                title shouldBe "Uhåndtert feil"
+                type shouldBe URI("about:blank")
+                status shouldBe 500
+            }
         }
     }
 
@@ -213,7 +217,7 @@ class MinsteinntektOgPeriodeApiTest {
     fun `Skal svare med HTTP problem rfc7807 for Subsumsjon med problem`() {
         val problem = Problem(title = "problem")
         val synchronousSubsumsjonClient =
-            mockk<SynchronousSubsumsjonClient>().apply {
+            mockk<RegelApi>().apply {
                 coEvery {
                     this@apply.getSubsumsjonSynchronously(
                         any(),
@@ -226,7 +230,7 @@ class MinsteinntektOgPeriodeApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -247,15 +251,16 @@ class MinsteinntektOgPeriodeApiTest {
                     )
                 }
             assertEquals(HttpStatusCode.BadGateway, response.status)
-            moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText()).apply {
-                this@apply shouldBe problem
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
+                this.shouldNotBeNull()
+                this shouldBe problem
             }
         }
     }
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for minsteinntekt ved timout errors`() {
-        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+        val synchronousSubsumsjonClient: RegelApi = mockk()
 
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
@@ -268,7 +273,7 @@ class MinsteinntektOgPeriodeApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -289,10 +294,12 @@ class MinsteinntektOgPeriodeApiTest {
                     )
                 }
             assertEquals(HttpStatusCode.GatewayTimeout, response.status)
-            val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
-            assertEquals("urn:dp:error:regelberegning:tidsavbrudd", problem?.type.toString())
-            assertEquals("Tidsavbrudd ved beregning av regel", problem?.title)
-            assertEquals(504, problem?.status)
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
+                this.shouldNotBeNull()
+                title shouldBe "Tidsavbrudd ved beregning av regel"
+                type shouldBe URI("urn:dp:error:regelberegning:tidsavbrudd")
+                status shouldBe 504
+            }
         }
     }
 
@@ -322,13 +329,13 @@ class MinsteinntektOgPeriodeApiTest {
                     )
                 }
             assertEquals(HttpStatusCode.BadRequest, response.status)
-            val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
-            assertEquals(
-                "Ugyldig kombinasjon av parametere: harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig",
-                problem?.title,
-            )
-            assertEquals("urn:dp:error:parameter", problem?.type.toString())
-            assertEquals(400, problem?.status)
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
+                this.shouldNotBeNull()
+                title shouldBe
+                    "Ugyldig kombinasjon av parametere: harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig"
+                type shouldBe URI("urn:dp:error:parameter")
+                status shouldBe 400
+            }
         }
     }
 
@@ -351,10 +358,13 @@ class MinsteinntektOgPeriodeApiTest {
                     )
                 }
             assertEquals(HttpStatusCode.BadRequest, response.status)
-            val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
-            assertEquals("Parameteret er ikke gyldig json", problem?.title)
-            assertEquals("urn:dp:error:parameter", problem?.type.toString())
-            assertEquals(400, problem?.status)
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
+                this.shouldNotBeNull()
+                title shouldBe
+                    "Parameteret er ikke gyldig json"
+                type shouldBe URI("urn:dp:error:parameter")
+                status shouldBe 400
+            }
         }
     }
 
@@ -377,13 +387,13 @@ class MinsteinntektOgPeriodeApiTest {
                     )
                 }
             assertEquals(HttpStatusCode.BadRequest, response.status)
-            val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
-            assertEquals(
-                "Parameteret er ikke gyldig json",
-                problem?.title,
-            )
-            assertEquals("urn:dp:error:parameter", problem?.type.toString())
-            assertEquals(400, problem?.status)
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
+                this.shouldNotBeNull()
+                title shouldBe
+                    "Parameteret er ikke gyldig json"
+                type shouldBe URI("urn:dp:error:parameter")
+                status shouldBe 400
+            }
         }
     }
 
@@ -412,15 +422,18 @@ class MinsteinntektOgPeriodeApiTest {
                     )
                 }
             assertEquals(HttpStatusCode.Unauthorized, response.status)
-            val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
-            assertEquals("Uautorisert", problem?.title)
-            assertEquals("urn:dp:error:uautorisert", problem?.type.toString())
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
+                this.shouldNotBeNull()
+                title shouldBe
+                    "Uautorisert"
+                type shouldBe URI("urn:dp:error:uautorisert")
+            }
         }
     }
 
     @Test
     fun `Skal håndtere request med både regelverk- og beregningsdato`() {
-        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+        val synchronousSubsumsjonClient: RegelApi = mockk()
 
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
@@ -433,7 +446,7 @@ class MinsteinntektOgPeriodeApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -457,8 +470,8 @@ class MinsteinntektOgPeriodeApiTest {
         }
     }
 
-    private fun minsteinntektOgPeriodeSubsumsjon(): MinsteinntektOgPeriodeSubsumsjon {
-        return MinsteinntektOgPeriodeSubsumsjon(
+    private fun minsteinntektOgPeriodeSubsumsjon(): MinsteinntektOgPeriodeSubsumsjon =
+        MinsteinntektOgPeriodeSubsumsjon(
             minsteinntektSubsumsjonsId = "12345",
             periodeSubsumsjonsId = "1234",
             opprettet = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
@@ -500,7 +513,6 @@ class MinsteinntektOgPeriodeApiTest {
             inntektManueltRedigert = true,
             inntektAvvik = true,
         )
-    }
 
     private val expectedJson =
         """{

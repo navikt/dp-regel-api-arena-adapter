@@ -39,11 +39,9 @@ internal class RegelApiStatusHttpClientTest {
     @Test
     fun `Should honor timeout `() {
         val client =
-            RegelApiStatusHttpClient(
-                FuelHttpClient(
-                    baseUrl = server.url("/"),
-                    tokentProvider = { "regelApiKey" },
-                ),
+            RegelApiBehovHttpClient(
+                baseUrl = server.url("/"),
+                tokenProvider = { "regelApiKey" },
                 timeout = Duration.ZERO,
             )
         assertThrows(
@@ -59,43 +57,50 @@ internal class RegelApiStatusHttpClientTest {
         val pattern = EqualToPattern("Bearer ${tokenProvider.invoke()}")
 
         WireMock.stubFor(
-            WireMock.get(WireMock.urlEqualTo("//behov/status/123"))
+            WireMock
+                .get(WireMock.urlEqualTo("/behov/status/123"))
                 .withHeader("Authorization", pattern)
                 .inScenario("Retry Scenario")
                 .whenScenarioStateIs(Scenario.STARTED)
                 .willReturn(
-                    WireMock.aResponse()
+                    WireMock
+                        .aResponse()
+                        .withHeader("Content-Type", "application/json")
                         .withBody(responseBody),
-                )
-                .willSetStateTo("First pending"),
+                ).willSetStateTo("First pending"),
         )
 
         WireMock.stubFor(
-            WireMock.get(WireMock.urlEqualTo("//behov/status/123"))
+            WireMock
+                .get(WireMock.urlEqualTo("/behov/status/123"))
                 .withHeader("Authorization", pattern)
                 .inScenario("Retry Scenario")
                 .whenScenarioStateIs("First pending")
                 .willReturn(
-                    WireMock.aResponse()
+                    WireMock
+                        .aResponse()
+                        .withHeader("Content-Type", "application/json")
                         .withBody(responseBody),
-                )
-                .willSetStateTo("Second pending"),
+                ).willSetStateTo("Second pending"),
         )
 
         WireMock.stubFor(
-            WireMock.get(WireMock.urlEqualTo("//behov/status/123"))
+            WireMock
+                .get(WireMock.urlEqualTo("/behov/status/123"))
                 .withHeader("Authorization", pattern)
                 .inScenario("Retry Scenario")
                 .whenScenarioStateIs("Second pending")
                 .willReturn(
-                    WireMock.aResponse()
+                    WireMock
+                        .aResponse()
                         .withStatus(303)
+                        .withHeader("Content-Type", "application/json")
                         .withHeader("Location", "54321"),
                 ),
         )
 
         val client =
-            RegelApiStatusHttpClient(FuelHttpClient(baseUrl = server.url(""), tokentProvider = tokenProvider))
+            RegelApiBehovHttpClient(baseUrl = server.url(""), tokenProvider = tokenProvider)
 
         val response = runBlocking { client.pollStatus("/behov/status/123") }
         assertEquals("54321", response)

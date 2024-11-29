@@ -16,7 +16,6 @@ import kotlinx.coroutines.runBlocking
 import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import no.nav.dagpenger.regel.api.arena.adapter.mockedRegelApiAdapter
-import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag.expectedGrunnlagJson
 import no.nav.dagpenger.regel.api.arena.adapter.v1.grunnlag.expectedGrunnlagJsonWithBeregningsregel
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Grunnlag
@@ -28,10 +27,11 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsSubsumsj
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.Sats
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.SatsBeregningsregel
 import no.nav.dagpenger.regel.api.internal.BehovRequest
+import no.nav.dagpenger.regel.api.internal.RegelApi
 import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
 import no.nav.dagpenger.regel.api.internal.RegelKontekst
-import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
+import no.nav.dagpenger.regel.api.serder.jacksonObjectMapper
 import org.junit.jupiter.api.Test
 import org.skyscreamer.jsonassert.Customization
 import org.skyscreamer.jsonassert.JSONAssert
@@ -110,7 +110,7 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Grunnlag and Sats API spesifikasjonstest - håndterer json korrekt`() {
-        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+        val synchronousSubsumsjonClient: RegelApi = mockk()
 
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
@@ -123,7 +123,7 @@ class GrunnlagOgSatsApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -157,7 +157,7 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Grunnlag og Sats API spesifikasjonstest - håndterer json body korrekt for v2 med beregningsregel i sats`() {
-        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+        val synchronousSubsumsjonClient: RegelApi = mockk()
 
         coEvery {
             runBlocking {
@@ -172,7 +172,7 @@ class GrunnlagOgSatsApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -206,7 +206,7 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Grunnlag og Sats re-beregning API spesifikasjonstest - håndterer json korrekt`() {
-        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+        val synchronousSubsumsjonClient: RegelApi = mockk()
 
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
@@ -219,7 +219,7 @@ class GrunnlagOgSatsApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -245,7 +245,7 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Grunnlag og Sats beregning skal svare med http-problem når resultatet er negativt`() {
-        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+        val synchronousSubsumsjonClient: RegelApi = mockk()
 
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
@@ -258,7 +258,7 @@ class GrunnlagOgSatsApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -279,15 +279,14 @@ class GrunnlagOgSatsApiTest {
                     )
                 }
             response.status shouldBe HttpStatusCode.InternalServerError
-            moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText()).apply {
-                this?.type shouldBe URI("urn:dp:error:regelberegning:grunnlag:negativ")
-            }
+            val problem = jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)
+            problem.type shouldBe URI("urn:dp:error:regelberegning:grunnlag:negativ")
         }
     }
 
     @Test
     fun `Grunnlag og Sats beregning skal svare med http-problem når resultatet er 0`() {
-        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+        val synchronousSubsumsjonClient: RegelApi = mockk()
 
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
@@ -300,7 +299,7 @@ class GrunnlagOgSatsApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -321,8 +320,9 @@ class GrunnlagOgSatsApiTest {
                     )
                 }
             response.status shouldBe HttpStatusCode.InternalServerError
-            moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText()).apply {
-                this?.type shouldBe URI("urn:dp:error:regelberegning:grunnlag:0")
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
+                this.shouldNotBeNull()
+                type shouldBe URI("urn:dp:error:regelberegning:grunnlag:0")
             }
         }
     }
@@ -333,7 +333,7 @@ class GrunnlagOgSatsApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = mockk(),
+                    regelApi = mockk(),
                 )
             }
             val response =
@@ -354,15 +354,14 @@ class GrunnlagOgSatsApiTest {
                     )
                 }
             response.status shouldBe HttpStatusCode.BadRequest
-            moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText()).apply {
-                this?.type shouldBe URI("urn:dp:error:parameter")
-            }
+            val problem = jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)
+            problem.type shouldBe URI("urn:dp:error:parameter")
         }
     }
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for uhåndtert feil`() {
-        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+        val synchronousSubsumsjonClient: RegelApi = mockk()
 
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
@@ -375,7 +374,7 @@ class GrunnlagOgSatsApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -396,7 +395,7 @@ class GrunnlagOgSatsApiTest {
                     )
                 }
             response.status shouldBe HttpStatusCode.InternalServerError
-            moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
                 this.shouldNotBeNull()
                 this.type shouldBe URI("about:blank")
                 this.status shouldBe 500
@@ -409,7 +408,7 @@ class GrunnlagOgSatsApiTest {
     fun `Skal svare med HTTP problem rfc7807 for SubsumsjonProblem`() {
         val problem = Problem(title = "subsumsjon problem")
         val synchronousSubsumsjonClient =
-            mockk<SynchronousSubsumsjonClient>().apply {
+            mockk<RegelApi>().apply {
                 coEvery {
                     this@apply.getSubsumsjonSynchronously(
                         any(),
@@ -422,7 +421,7 @@ class GrunnlagOgSatsApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -443,7 +442,8 @@ class GrunnlagOgSatsApiTest {
                     )
                 }
             response.status shouldBe HttpStatusCode.BadGateway
-            moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
+                this.shouldNotBeNull()
                 this shouldBe problem
             }
         }
@@ -451,7 +451,7 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for timeout errors`() {
-        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+        val synchronousSubsumsjonClient: RegelApi = mockk()
 
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
@@ -464,7 +464,7 @@ class GrunnlagOgSatsApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -485,7 +485,7 @@ class GrunnlagOgSatsApiTest {
                     )
                 }
             response.status shouldBe HttpStatusCode.GatewayTimeout
-            moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
                 this.shouldNotBeNull()
                 this.type shouldBe URI("urn:dp:error:regelberegning:tidsavbrudd")
             }
@@ -511,7 +511,7 @@ class GrunnlagOgSatsApiTest {
                     )
                 }
             response.status shouldBe HttpStatusCode.BadRequest
-            moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
                 this.shouldNotBeNull()
                 this.type shouldBe URI("urn:dp:error:parameter")
                 this.status shouldBe 400
@@ -539,7 +539,7 @@ class GrunnlagOgSatsApiTest {
                     )
                 }
             response.status shouldBe HttpStatusCode.BadRequest
-            moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
                 this.shouldNotBeNull()
                 this.type shouldBe URI("urn:dp:error:parameter")
                 this.status shouldBe 400
@@ -574,14 +574,14 @@ class GrunnlagOgSatsApiTest {
                     )
                 }
             response.status shouldBe HttpStatusCode.BadRequest
-            moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
+
+            @Suppress("ktlint:standard:max-line-length")
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
                 this.shouldNotBeNull()
-                assertEquals(
-                    "Ugyldig kombinasjon av parametere: harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig",
-                    title,
-                )
-                assertEquals("urn:dp:error:parameter", type.toString())
-                assertEquals(400, status)
+                title shouldBe
+                    "Ugyldig kombinasjon av parametere: harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig"
+                type shouldBe URI("urn:dp:error:parameter")
+                status shouldBe 400
             }
         }
     }
@@ -611,18 +611,19 @@ class GrunnlagOgSatsApiTest {
                     )
                 }
             response.status shouldBe HttpStatusCode.Unauthorized
-            moshiInstance.adapter(Problem::class.java).fromJson(response.bodyAsText()).apply {
+
+            with(jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)) {
                 this.shouldNotBeNull()
-                assertEquals("Uautorisert", title)
-                assertEquals("urn:dp:error:uautorisert", type.toString())
-                assertEquals(401, status)
+                title shouldBe "Uautorisert"
+                type shouldBe URI("urn:dp:error:uautorisert")
+                status shouldBe 401
             }
         }
     }
 
     @Test
     fun `Skal håndtere request med både regelverk- og beregningsdato`() {
-        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+        val synchronousSubsumsjonClient: RegelApi = mockk()
 
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
@@ -635,7 +636,7 @@ class GrunnlagOgSatsApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -662,7 +663,7 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Skal håndtere request med manuelt grunnlag`() {
-        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+        val synchronousSubsumsjonClient: RegelApi = mockk()
 
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
@@ -674,7 +675,7 @@ class GrunnlagOgSatsApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -702,7 +703,7 @@ class GrunnlagOgSatsApiTest {
 
     @Test
     fun `Skal håndtere request med forrige grunnlag`() {
-        val synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk()
+        val synchronousSubsumsjonClient: RegelApi = mockk()
 
         coEvery {
             synchronousSubsumsjonClient.getSubsumsjonSynchronously(
@@ -715,7 +716,7 @@ class GrunnlagOgSatsApiTest {
             application {
                 mockedRegelApiAdapter(
                     jwkProvider = jwkStub.stubbedJwkProvider(),
-                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                    regelApi = synchronousSubsumsjonClient,
                 )
             }
             val response =
@@ -741,8 +742,8 @@ class GrunnlagOgSatsApiTest {
         }
     }
 
-    private fun grunnlagOgSatsSubsumsjon(): GrunnlagOgSatsSubsumsjon {
-        return GrunnlagOgSatsSubsumsjon(
+    private fun grunnlagOgSatsSubsumsjon(): GrunnlagOgSatsSubsumsjon =
+        GrunnlagOgSatsSubsumsjon(
             grunnlagSubsumsjonsId = "1234",
             satsSubsumsjonsId = "4567",
             opprettet = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
@@ -787,10 +788,9 @@ class GrunnlagOgSatsApiTest {
             inntektManueltRedigert = true,
             inntektAvvik = true,
         )
-    }
 
-    private fun grunnlagOgSatsSubsumsjonWithSatsBeregningsregel(): GrunnlagOgSatsSubsumsjon {
-        return GrunnlagOgSatsSubsumsjon(
+    private fun grunnlagOgSatsSubsumsjonWithSatsBeregningsregel(): GrunnlagOgSatsSubsumsjon =
+        GrunnlagOgSatsSubsumsjon(
             grunnlagSubsumsjonsId = "1234",
             satsSubsumsjonsId = "4567",
             opprettet = LocalDateTime.of(2019, 4, 25, 1, 1, 1),
@@ -835,5 +835,4 @@ class GrunnlagOgSatsApiTest {
             inntektManueltRedigert = true,
             inntektAvvik = true,
         )
-    }
 }

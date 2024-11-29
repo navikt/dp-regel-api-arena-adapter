@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import com.github.tomakehurst.wiremock.matching.EqualToPattern
+import io.kotest.common.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -34,19 +35,24 @@ class RegelApiNyVurderingHttpClientTest {
     }
 
     @Test
-    fun `Should get minsteinntekt vurdering`() {
-        val tokenProvider = { "Token" }
-        WireMock.stubFor(
-            WireMock.post(WireMock.urlEqualTo("//lovverk/vurdering/minsteinntekt"))
-                .withHeader("Authorization", EqualToPattern("Bearer ${tokenProvider.invoke()}"))
-                .willReturn(
-                    WireMock.aResponse()
-                        .withBody("""{"nyVurdering": true}"""),
-                ),
-        )
+    fun `Should get minsteinntekt vurdering`() =
+        runBlocking {
+            val tokenProvider = { "Token" }
+            WireMock.stubFor(
+                WireMock
+                    .post(WireMock.urlEqualTo("/lovverk/vurdering/minsteinntekt"))
+                    .withHeader("Authorization", EqualToPattern("Bearer ${tokenProvider.invoke()}"))
+                    .withHeader("Accept", EqualToPattern("application/json"))
+                    .willReturn(
+                        WireMock
+                            .aResponse()
+                            .withHeader("Content-Type", "application/json")
+                            .withBody("""{"nyVurdering": true}"""),
+                    ),
+            )
 
-        val client = RegelApiNyVurderingHttpClient(FuelHttpClient(server.url(""), tokenProvider))
-        val response = client.kreverNyVurdering(listOf("123"), LocalDate.of(2020, 1, 13))
-        assertTrue(response)
-    }
+            val client = RegelApiBehovHttpClient(server.url(""), tokenProvider)
+            val response = client.kreverNyVurdering(listOf("123"), LocalDate.of(2020, 1, 13))
+            assertTrue(response)
+        }
 }

@@ -14,10 +14,10 @@ import io.mockk.mockk
 import no.nav.dagpenger.regel.api.JwtStub
 import no.nav.dagpenger.regel.api.arena.adapter.Problem
 import no.nav.dagpenger.regel.api.arena.adapter.mockedRegelApiAdapter
-import no.nav.dagpenger.regel.api.arena.adapter.moshiInstance
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
 import no.nav.dagpenger.regel.api.internal.models.InntjeningsperiodeParametre
 import no.nav.dagpenger.regel.api.internal.models.InntjeningsperiodeResultat
+import no.nav.dagpenger.regel.api.serder.jacksonObjectMapper
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
@@ -93,7 +93,7 @@ class InntjeningsperiodeApiSpec {
                     )
                 }
             response.status shouldBe HttpStatusCode.Unauthorized
-            val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
+            val problem = jacksonObjectMapper.readValue(response.bodyAsText(), Problem::class.java)
             assertEquals("Uautorisert", problem?.title)
             assertEquals("urn:dp:error:uautorisert", problem?.type.toString())
             assertEquals(401, problem?.status)
