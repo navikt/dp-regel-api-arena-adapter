@@ -121,7 +121,6 @@ internal fun Application.regelApiAdapter(
             verifier(jwkProvider, jwtIssuer)
             realm = "dp-regel-api-arena-adapter"
             validate { credentials ->
-                LOGGER.info("'${credentials.payload.subject}' authenticated")
                 JWTPrincipal(credentials.payload)
             }
         }
