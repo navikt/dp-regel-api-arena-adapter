@@ -1,12 +1,13 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1
 
 import io.kotest.matchers.shouldBe
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
-import io.ktor.server.testing.withTestApplication
+import io.ktor.server.testing.testApplication
 import io.mockk.coEvery
 import io.mockk.mockk
 import no.nav.dagpenger.regel.api.JwtStub
@@ -84,38 +85,37 @@ class MinsteinntektOgPeriodeApiTest {
             )
         } returns minsteinntektOgPeriodeSubsumsjon()
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, minsteinntektPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post(minsteinntektPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
                       "aktorId": "1234",
                       "vedtakId": 5678,
                       "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": false,
-                      "oppfyllerKravTilFangstOgFisk": false
+                      "inntektsId": "12345"
                     }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.OK, response.status())
-                JSONAssert.assertEquals(
-                    expectedJson,
-                    response.content,
-                    CustomComparator(
-                        JSONCompareMode.STRICT,
-                        Customization("opprettet") { _, _ -> true },
-                        Customization("utfort") { _, _ -> true },
-                    ),
-                )
             }
+            assertEquals(HttpStatusCode.OK, response.status)
+            JSONAssert.assertEquals(
+                expectedJson,
+                response.bodyAsText(),
+                CustomComparator(
+                    JSONCompareMode.STRICT,
+                    Customization("opprettet") { _, _ -> true },
+                    Customization("utfort") { _, _ -> true },
+                ),
+            )
         }
     }
 
@@ -130,15 +130,16 @@ class MinsteinntektOgPeriodeApiTest {
             )
         } returns minsteinntektOgPeriodeSubsumsjon().copy(resultat = MinsteinntektOgPeriodeResultat(true, 104, null))
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, minsteinntektPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post(minsteinntektPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -150,18 +151,17 @@ class MinsteinntektOgPeriodeApiTest {
                     }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.OK, response.status())
-                JSONAssert.assertEquals(
-                    expectedJsonUtenMinsteinntektRegel,
-                    response.content,
-                    CustomComparator(
-                        JSONCompareMode.STRICT,
-                        Customization("opprettet") { _, _ -> true },
-                        Customization("utfort") { _, _ -> true },
-                    ),
-                )
             }
+            assertEquals(HttpStatusCode.OK, response.status)
+            JSONAssert.assertEquals(
+                expectedJsonUtenMinsteinntektRegel,
+                response.bodyAsText(),
+                CustomComparator(
+                    JSONCompareMode.STRICT,
+                    Customization("opprettet") { _, _ -> true },
+                    Customization("utfort") { _, _ -> true },
+                ),
+            )
         }
     }
 
@@ -176,15 +176,16 @@ class MinsteinntektOgPeriodeApiTest {
             )
         } throws RuntimeException()
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, minsteinntektPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post(minsteinntektPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -194,16 +195,14 @@ class MinsteinntektOgPeriodeApiTest {
                       "harAvtjentVerneplikt": false,
                       "oppfyllerKravTilFangstOgFisk": false
                     }
-
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.InternalServerError, response.status())
-                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals("Uhåndtert feil", problem?.title)
-                assertEquals("about:blank", problem?.type.toString())
-                assertEquals(500, problem?.status)
             }
+            assertEquals(HttpStatusCode.InternalServerError, response.status)
+            val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
+            assertEquals("Uhåndtert feil", problem?.title)
+            assertEquals("about:blank", problem?.type.toString())
+            assertEquals(500, problem?.status)
         }
     }
 
@@ -220,15 +219,16 @@ class MinsteinntektOgPeriodeApiTest {
                 } throws SubsumsjonProblem(problem)
             }
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, minsteinntektPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post(minsteinntektPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -241,11 +241,10 @@ class MinsteinntektOgPeriodeApiTest {
 
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.BadGateway, response.status())
-                moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!).apply {
-                    this@apply shouldBe problem
-                }
+            }
+            assertEquals(HttpStatusCode.BadGateway, response.status)
+            moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText()).apply {
+                this@apply shouldBe problem
             }
         }
     }
@@ -261,15 +260,16 @@ class MinsteinntektOgPeriodeApiTest {
             )
         } throws RegelApiTimeoutException("timeout")
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, minsteinntektPath) {
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
-                addHeader(HttpHeaders.ContentType, "application/json")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post(minsteinntektPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -282,113 +282,113 @@ class MinsteinntektOgPeriodeApiTest {
 
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.GatewayTimeout, response.status())
-                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals("urn:dp:error:regelberegning:tidsavbrudd", problem?.type.toString())
-                assertEquals("Tidsavbrudd ved beregning av regel", problem?.title)
-                assertEquals(504, problem?.status)
             }
+            assertEquals(HttpStatusCode.GatewayTimeout, response.status)
+            val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
+            assertEquals("urn:dp:error:regelberegning:tidsavbrudd", problem?.type.toString())
+            assertEquals("Tidsavbrudd ved beregning av regel", problem?.title)
+            assertEquals(504, problem?.status)
         }
     }
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 hvis både verneplikt og lærling er true`() {
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-            )
-        }) {
-            handleRequest(HttpMethod.Post, minsteinntektPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                )
+            }
+            val response = client.post(minsteinntektPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
-                      "aktorId": "1234",
-                      "vedtakId": 5678,
-                      "beregningsdato": "2019-02-27",
-                      "harAvtjentVerneplikt": true,
-                      "oppfyllerKravTilFangstOgFisk": false,
-                      "oppfyllerKravTilLaerling": true
+                        "aktorId": "1234",
+                        "vedtakId": 5678,
+                        "beregningsdato": "2019-02-27",
+                        "harAvtjentVerneplikt": true,
+                        "oppfyllerKravTilFangstOgFisk": false,
+                        "oppfyllerKravTilLaerling": true
                     }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.BadRequest, response.status())
-                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals(
-                    "Ugyldig kombinasjon av parametere: harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig",
-                    problem?.title,
-                )
-                assertEquals("urn:dp:error:parameter", problem?.type.toString())
-                assertEquals(400, problem?.status)
             }
+            assertEquals(HttpStatusCode.BadRequest, response.status)
+            val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
+            assertEquals(
+                "Ugyldig kombinasjon av parametere: harAvtjentVerneplikt og oppfyllerKravTilLaerling kan ikke vaere true samtidig",
+                problem?.title,
+            )
+            assertEquals("urn:dp:error:parameter", problem?.type.toString())
+            assertEquals(400, problem?.status)
         }
     }
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for dagpengegrunnlag med ugyldig json request`() {
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-            )
-        }) {
-            handleRequest(HttpMethod.Post, minsteinntektPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                )
+            }
+            val response = client.post(minsteinntektPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     { "badjson" : "error}
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.BadRequest, response.status())
-                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals("Parameteret er ikke gyldig json", problem?.title)
-                assertEquals("urn:dp:error:parameter", problem?.type.toString())
-                assertEquals(400, problem?.status)
             }
+            assertEquals(HttpStatusCode.BadRequest, response.status)
+            val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
+            assertEquals("Parameteret er ikke gyldig json", problem?.title)
+            assertEquals("urn:dp:error:parameter", problem?.type.toString())
+            assertEquals(400, problem?.status)
         }
     }
 
     @Test
     fun `Skal svare med HTTP problem rfc7807 for json med manglende obligatoriske felt`() {
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-            )
-        }) {
-            handleRequest(HttpMethod.Post, minsteinntektPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                )
+            }
+            val response = client.post(minsteinntektPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {  "aktorId": "1234" }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.BadRequest, response.status())
-                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals(
-                    "Parameteret er ikke gyldig json",
-                    problem?.title,
-                )
-                assertEquals("urn:dp:error:parameter", problem?.type.toString())
-                assertEquals(400, problem?.status)
             }
+            assertEquals(HttpStatusCode.BadRequest, response.status)
+            val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
+            assertEquals(
+                "Parameteret er ikke gyldig json",
+                problem?.title,
+            )
+            assertEquals("urn:dp:error:parameter", problem?.type.toString())
+            assertEquals(400, problem?.status)
         }
     }
 
     @Test
     fun `Skal svare med 401 hvis request mangler bearer token`() {
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-            )
-        }) {
-            handleRequest(HttpMethod.Post, minsteinntektPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                )
+            }
+            val response = client.post(minsteinntektPath) {
+                header(HttpHeaders.ContentType, "application/json")
                 setBody(
                     """
                          {
@@ -401,13 +401,11 @@ class MinsteinntektOgPeriodeApiTest {
 
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.Unauthorized, response.status())
-                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals("Uautorisert", problem?.title)
-                assertEquals("urn:dp:error:uautorisert", problem?.type.toString())
-                assertEquals(401, problem?.status)
             }
+            assertEquals(HttpStatusCode.Unauthorized, response.status)
+            val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
+            assertEquals("Uautorisert", problem?.title)
+            assertEquals("urn:dp:error:uautorisert", problem?.type.toString())
         }
     }
 
@@ -422,15 +420,16 @@ class MinsteinntektOgPeriodeApiTest {
             )
         } returns minsteinntektOgPeriodeSubsumsjon()
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                synchronousSubsumsjonClient = synchronousSubsumsjonClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, minsteinntektPath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
+                )
+            }
+            val response = client.post(minsteinntektPath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -443,9 +442,8 @@ class MinsteinntektOgPeriodeApiTest {
                     }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.OK, response.status())
             }
+            assertEquals(HttpStatusCode.OK, response.status)
         }
     }
 

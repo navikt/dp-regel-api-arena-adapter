@@ -27,7 +27,7 @@ val fuelVersion = "2.2.1"
 val log4j2Versjon = "2.24.2"
 val prometheusVersion = "0.16.0"
 val kafkaVersion = "7.7.2-ce"
-val ktorVersion = "2.3.12"
+val ktorVersion = "3.0.1"
 dependencies {
     implementation(kotlin("stdlib"))
 
@@ -71,12 +71,9 @@ dependencies {
     implementation("io.prometheus:simpleclient_common:$prometheusVersion")
     implementation("io.prometheus:simpleclient_hotspot:$prometheusVersion")
     implementation("io.prometheus:simpleclient_log4j2:$prometheusVersion")
-    implementation(libs.dp.biblioteker.oauth2.klient)
+    implementation("no.nav.dagpenger:oauth2-klient:2024.10.31-15.02.1d4f08a38d24")
 
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
-
-    // unleash
-    implementation("io.getunleash:unleash-client-java:9.2.6")
 
     testImplementation(kotlin("test"))
     testImplementation(libs.ktor.server.test.host)

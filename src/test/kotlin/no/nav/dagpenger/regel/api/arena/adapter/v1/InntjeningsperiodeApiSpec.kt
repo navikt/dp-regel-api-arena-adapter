@@ -1,12 +1,14 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1
 
 import io.kotest.assertions.json.shouldEqualJson
+import io.kotest.matchers.shouldBe
+import io.ktor.client.request.header
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.testing.handleRequest
-import io.ktor.server.testing.setBody
-import io.ktor.server.testing.withTestApplication
+import io.ktor.server.testing.testApplication
 import io.mockk.coEvery
 import io.mockk.mockk
 import no.nav.dagpenger.regel.api.JwtStub
@@ -42,15 +44,16 @@ class InntjeningsperiodeApiSpec {
                 ),
             )
 
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-                inntektApiBeregningsdatoHttpClient = inntektApiBeregningsdatoHttpClient,
-            )
-        }) {
-            handleRequest(HttpMethod.Post, inntjeningsperiodePath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
-                addHeader(HttpHeaders.Authorization, "Bearer $token")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                    inntektApiBeregningsdatoHttpClient = inntektApiBeregningsdatoHttpClient,
+                )
+            }
+            val response = client.post(inntjeningsperiodePath) {
+                header(HttpHeaders.ContentType, "application/json")
+                header(HttpHeaders.Authorization, "Bearer $token")
                 setBody(
                     """
                     {
@@ -61,40 +64,37 @@ class InntjeningsperiodeApiSpec {
                     }
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.OK, response.status())
-                response.content?.shouldEqualJson(expectedJson)
             }
+            response.status shouldBe HttpStatusCode.OK
+            response.bodyAsText().shouldEqualJson(expectedJson)
         }
     }
 
     @Test
     fun ` Should give 401 - Not authorized if token is missing `() {
-        withTestApplication({
-            mockedRegelApiAdapter(
-                jwkProvider = jwkStub.stubbedJwkProvider(),
-            )
-        }) {
-            handleRequest(HttpMethod.Post, inntjeningsperiodePath) {
-                addHeader(HttpHeaders.ContentType, "application/json")
+        testApplication {
+            application {
+                mockedRegelApiAdapter(
+                    jwkProvider = jwkStub.stubbedJwkProvider(),
+                )
+            }
+            val response = client.post(inntjeningsperiodePath) {
                 setBody(
                     """
-                      {
+                    {
                       "aktorId": "1234",
                       "vedtakId": 5678,
                       "beregningsdato": "2019-02-27",
                       "inntektsId": "12345"
                     }
-
                     """.trimIndent(),
                 )
-            }.apply {
-                assertEquals(HttpStatusCode.Unauthorized, response.status())
-                val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.content!!)
-                assertEquals("Uautorisert", problem?.title)
-                assertEquals("urn:dp:error:uautorisert", problem?.type.toString())
-                assertEquals(401, problem?.status)
             }
+            response.status shouldBe HttpStatusCode.Unauthorized
+            val problem = moshiInstance.adapter<Problem>(Problem::class.java).fromJson(response.bodyAsText())
+            assertEquals("Uautorisert", problem?.title)
+            assertEquals("urn:dp:error:uautorisert", problem?.type.toString())
+            assertEquals(401, problem?.status)
         }
     }
 
