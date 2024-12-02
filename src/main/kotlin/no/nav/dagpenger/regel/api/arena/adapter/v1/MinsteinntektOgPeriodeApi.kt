@@ -14,14 +14,14 @@ import mu.withLoggingContext
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.MinsteinntektOgPeriodeSubsumsjon
 import no.nav.dagpenger.regel.api.internal.BehovRequest
+import no.nav.dagpenger.regel.api.internal.RegelApi
 import no.nav.dagpenger.regel.api.internal.RegelKontekst
-import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 import no.nav.dagpenger.regel.api.internal.extractMinsteinntektOgPeriode
 import no.nav.dagpenger.regel.api.internal.models.InntektsPeriode
 
 private val sikkerlogg = KotlinLogging.logger("tjenestekall.minsteinntektOgPeriodeApi")
 
-internal fun Route.minsteinntektOgPeriodeApi(synchronousSubsumsjonClient: SynchronousSubsumsjonClient) {
+internal fun Route.minsteinntektOgPeriodeApi(regelApi: RegelApi) {
     route("/minsteinntekt") {
         post {
             withContext(Dispatchers.IO) {
@@ -32,7 +32,7 @@ internal fun Route.minsteinntektOgPeriodeApi(synchronousSubsumsjonClient: Synchr
                 val behovRequest = behovFromParametere(parametere)
 
                 val minsteinntektOgPeriodeSubsumsjon: MinsteinntektOgPeriodeSubsumsjon =
-                    synchronousSubsumsjonClient.getSubsumsjonSynchronously(
+                    regelApi.getSubsumsjonSynchronously(
                         behovRequest,
                         ::extractMinsteinntektOgPeriode,
                     )
@@ -58,8 +58,8 @@ fun MinsteinntektOgPeriodeParametere.validate() {
     }
 }
 
-fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequest {
-    return BehovRequest(
+fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequest =
+    BehovRequest(
         aktorId = parametere.aktorId,
         vedtakId = parametere.vedtakId,
         regelkontekst = RegelKontekst(id = parametere.vedtakId.toString()),
@@ -80,4 +80,3 @@ fun behovFromParametere(parametere: MinsteinntektOgPeriodeParametere): BehovRequ
             sikkerlogg.info { "Lager behov for $parametere" }
         }
     }
-}

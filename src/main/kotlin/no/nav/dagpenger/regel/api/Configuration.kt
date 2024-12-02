@@ -62,7 +62,8 @@ data class Configuration(
     val tokenProvider: () -> String by lazy {
         {
             runBlocking {
-                azureAdClient.clientCredentials(config()[Key("dp.regel.api.scope", stringType)])
+                azureAdClient
+                    .clientCredentials(config()[Key("dp.regel.api.scope", stringType)])
                     .accessToken ?: throw RuntimeException("Failed to get token")
             }
         }

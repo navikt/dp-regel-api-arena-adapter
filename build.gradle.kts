@@ -22,8 +22,6 @@ val jar by tasks.getting(Jar::class) {
     }
 }
 
-val moshiVersion = "1.15.1"
-val fuelVersion = "2.2.1"
 val log4j2Versjon = "2.24.2"
 val prometheusVersion = "0.16.0"
 val kafkaVersion = "7.7.2-ce"
@@ -42,19 +40,11 @@ dependencies {
     implementation(libs.ktor.server.status.pages)
     implementation(libs.ktor.server.metrics.micrometer)
 
-    implementation(libs.jackson.core)
-    implementation(libs.jackson.kotlin)
-    implementation(libs.jackson.datatype.jsr310)
+    implementation(libs.bundles.jackson)
+    implementation(libs.bundles.ktor.client)
 
     implementation("commons-codec:commons-codec:1.17.1")
     implementation("io.micrometer:micrometer-registry-prometheus:1.14.1")
-
-    implementation("com.squareup.moshi:moshi:$moshiVersion")
-    implementation("com.squareup.moshi:moshi-adapters:$moshiVersion")
-    implementation("com.squareup.moshi:moshi-kotlin:$moshiVersion")
-
-    implementation("com.github.kittinunf.fuel:fuel:$fuelVersion")
-    implementation("com.github.kittinunf.fuel:fuel-moshi:$fuelVersion")
 
     implementation(libs.konfig)
 
