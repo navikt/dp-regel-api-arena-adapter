@@ -72,19 +72,18 @@ fun extractGrunnlagOgSats(
                 benyttet90ProsentRegel = satsResultat.benyttet90ProsentRegel,
             ),
         inntekt =
-            grunnlagResultat.grunnlagInntektsPerioder
-                ?.map {
-                    Inntekt(
-                        inntekt = it.inntekt.round().toInt(),
-                        periode = it.periode,
-                        inntektsPeriode =
-                            InntektsPeriode(
-                                foersteMaaned = it.inntektsPeriode.førsteMåned,
-                                sisteMaaned = it.inntektsPeriode.sisteMåned,
-                            ),
-                        inneholderNaeringsinntekter = it.inneholderFangstOgFisk,
-                    )
-                }?.toSet(),
+            grunnlagResultat.grunnlagInntektsPerioder?.map {
+                Inntekt(
+                    inntekt = it.inntekt.round().toInt(),
+                    periode = it.periode,
+                    inntektsPeriode =
+                        InntektsPeriode(
+                            foersteMaaned = it.inntektsPeriode.førsteMåned,
+                            sisteMaaned = it.inntektsPeriode.sisteMåned,
+                        ),
+                    inneholderNaeringsinntekter = it.inneholderFangstOgFisk,
+                )
+            }?.toSet(),
         inntektManueltRedigert = faktum.inntektManueltRedigert,
         inntektAvvik = faktum.inntektAvvik,
     )
@@ -93,8 +92,8 @@ fun extractGrunnlagOgSats(
 fun findBeregningsregel(
     beregningsregel: String,
     harAvkortet: Boolean,
-): GrunnlagBeregningsregel =
-    when {
+): GrunnlagBeregningsregel {
+    return when {
         beregningsregel == "Manuell" && harAvkortet -> GrunnlagBeregningsregel.MANUELL_OVER_6G
         beregningsregel == "Manuell" -> GrunnlagBeregningsregel.MANUELL_UNDER_6G
         beregningsregel == "ForrigeGrunnlag" -> GrunnlagBeregningsregel.FORRIGE_GRUNNLAG // Brukes ikke av Arena
@@ -125,3 +124,4 @@ fun findBeregningsregel(
         beregningsregel == "LærlingArbeidsinntekt3x4" -> GrunnlagBeregningsregel.LAERLING_4_MAANED
         else -> throw FeilBeregningsregelException("Ukjent beregningsregel: '$beregningsregel'")
     }
+}

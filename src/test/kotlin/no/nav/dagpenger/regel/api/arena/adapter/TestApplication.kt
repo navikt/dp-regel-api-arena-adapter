@@ -5,17 +5,20 @@ import io.ktor.server.application.Application
 import io.mockk.mockk
 import io.prometheus.metrics.model.registry.PrometheusRegistry
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
-import no.nav.dagpenger.regel.api.internal.RegelApi
+import no.nav.dagpenger.regel.api.internal.RegelApiNyVurderingHttpClient
+import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 
 internal fun Application.mockedRegelApiAdapter(
     jwtIssuer: String = "test issuer",
     jwkProvider: JwkProvider = mockk(),
     inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient = mockk(),
-    regelApi: RegelApi = mockk(),
+    nyVurderingHttpClient: RegelApiNyVurderingHttpClient = mockk(),
+    synchronousSubsumsjonClient: SynchronousSubsumsjonClient = mockk(),
 ) = regelApiAdapter(
     jwtIssuer = jwtIssuer,
     jwkProvider = jwkProvider,
     inntektApiBeregningsdatoHttpClient = inntektApiBeregningsdatoHttpClient,
-    regelApi = regelApi,
+    kreverRebergningClient = nyVurderingHttpClient,
+    synchronousSubsumsjonClient = synchronousSubsumsjonClient,
     collectorRegistry = PrometheusRegistry(),
 )

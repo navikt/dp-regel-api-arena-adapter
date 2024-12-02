@@ -2,7 +2,8 @@ package no.nav.dagpenger.regel.api.arena.adapter
 
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
-import com.fasterxml.jackson.databind.JsonMappingException
+import com.squareup.moshi.JsonDataException
+import com.squareup.moshi.JsonEncodingException
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.jackson.JacksonConverter
@@ -40,11 +41,15 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.inntjeningsperiodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.minsteinntektOgPeriodeApi
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.IllegalInntektIdException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.nyVurderingApi
+import no.nav.dagpenger.regel.api.internal.FuelHttpClient
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
-import no.nav.dagpenger.regel.api.internal.RegelApi
 import no.nav.dagpenger.regel.api.internal.RegelApiBehovHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiMinsteinntektNyVurderingException
+import no.nav.dagpenger.regel.api.internal.RegelApiNyVurderingHttpClient
+import no.nav.dagpenger.regel.api.internal.RegelApiStatusHttpClient
+import no.nav.dagpenger.regel.api.internal.RegelApiSubsumsjonHttpClient
 import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
+import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 import no.nav.dagpenger.regel.api.serder.jacksonObjectMapper
 import org.slf4j.event.Level
 import java.net.URI
@@ -62,16 +67,19 @@ fun main() {
             .build()
 
     val inntektApiBeregningsdatoHttpClient =
-        InntektApiInntjeningsperiodeHttpClient(
-            baseUrl = config.application.dpInntektApiUrl,
-            tokenProvider = config.tokenProvider,
-        )
+        InntektApiInntjeningsperiodeHttpClient(FuelHttpClient(config.application.dpInntektApiUrl))
 
+    val fuelHttpClient = FuelHttpClient(config.application.dpRegelApiBaseUrl, config.tokenProvider)
     val behovHttpClient =
-        RegelApiBehovHttpClient(
-            baseUrl = config.application.dpRegelApiBaseUrl,
-            tokenProvider = config.tokenProvider,
-        )
+        RegelApiBehovHttpClient(fuelHttpClient)
+    val statusHttpClient =
+        RegelApiStatusHttpClient(fuelHttpClient)
+    val subsumsjonHttpClient =
+        RegelApiSubsumsjonHttpClient(fuelHttpClient)
+    val regelApiNyVurderingHttpClient = RegelApiNyVurderingHttpClient(fuelHttpClient)
+
+    val synchronousSubsumsjonClient =
+        SynchronousSubsumsjonClient(behovHttpClient, statusHttpClient, subsumsjonHttpClient)
 
     val app =
         embeddedServer(Netty, port = config.application.httpPort) {
@@ -79,7 +87,8 @@ fun main() {
                 config.application.jwksIssuer,
                 jwkProvider,
                 inntektApiBeregningsdatoHttpClient,
-                behovHttpClient,
+                synchronousSubsumsjonClient,
+                regelApiNyVurderingHttpClient,
                 config.application.optionalJwt,
             )
         }
@@ -91,7 +100,8 @@ internal fun Application.regelApiAdapter(
     jwtIssuer: String,
     jwkProvider: JwkProvider,
     inntektApiBeregningsdatoHttpClient: InntektApiInntjeningsperiodeHttpClient,
-    regelApi: RegelApi,
+    synchronousSubsumsjonClient: SynchronousSubsumsjonClient,
+    kreverRebergningClient: RegelApiNyVurderingHttpClient,
     optionalJwt: Boolean = false,
     collectorRegistry: PrometheusRegistry = PrometheusRegistry.defaultRegistry,
 ) {
@@ -132,13 +142,24 @@ internal fun Application.regelApiAdapter(
                 )
             call.respond(HttpStatusCode.InternalServerError, problem)
         }
-        exception<JsonMappingException> { call, cause ->
+        exception<JsonDataException> { call, cause ->
             LOGGER.warn(cause.message, cause)
             val status = HttpStatusCode.BadRequest
             val problem =
                 Problem(
                     type = URI.create("urn:dp:error:parameter"),
-                    title = "Parameteret er ikke gyldig json. '${cause.message}'",
+                    title = "Parameteret er ikke gyldig, mangler obligatorisk felt: '${cause.message}'",
+                    status = status.value,
+                )
+            call.respond(status, problem)
+        }
+        exception<JsonEncodingException> { call, cause ->
+            LOGGER.warn(cause.message, cause)
+            val status = HttpStatusCode.BadRequest
+            val problem =
+                Problem(
+                    type = URI.create("urn:dp:error:parameter"),
+                    title = "Parameteret er ikke gyldig json",
                     status = status.value,
                 )
             call.respond(status, problem)
@@ -258,10 +279,10 @@ internal fun Application.regelApiAdapter(
     routing {
         authenticate(optional = optionalJwt) {
             route("/v1") {
-                grunnlagOgSatsApi(regelApi)
-                minsteinntektOgPeriodeApi(regelApi)
+                grunnlagOgSatsApi(synchronousSubsumsjonClient)
+                minsteinntektOgPeriodeApi(synchronousSubsumsjonClient)
                 inntjeningsperiodeApi(inntektApiBeregningsdatoHttpClient)
-                nyVurderingApi(regelApi)
+                nyVurderingApi(kreverRebergningClient)
             }
         }
 

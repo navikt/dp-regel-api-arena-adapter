@@ -16,13 +16,13 @@ import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsParamete
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagOgSatsReberegningParametere
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.IllegalInntektIdException
 import no.nav.dagpenger.regel.api.internal.BehovRequest
-import no.nav.dagpenger.regel.api.internal.RegelApi
 import no.nav.dagpenger.regel.api.internal.RegelKontekst
+import no.nav.dagpenger.regel.api.internal.SynchronousSubsumsjonClient
 import no.nav.dagpenger.regel.api.internal.extractGrunnlagOgSats
 
 private val sikkerlogg = KotlinLogging.logger("tjenestekall.grunnlagOgSatsApi")
 
-internal fun Route.grunnlagOgSatsApi(regelApi: RegelApi) {
+internal fun Route.grunnlagOgSatsApi(synchronousSubsumsjonClient: SynchronousSubsumsjonClient) {
     route("/dagpengegrunnlag") {
         post {
             withContext(Dispatchers.IO) {
@@ -33,7 +33,7 @@ internal fun Route.grunnlagOgSatsApi(regelApi: RegelApi) {
                 val behovRequest = behovFromParametere(parametere)
 
                 val grunnlagOgSatsSubsumsjon =
-                    regelApi.getSubsumsjonSynchronously(behovRequest, ::extractGrunnlagOgSats)
+                    synchronousSubsumsjonClient.getSubsumsjonSynchronously(behovRequest, ::extractGrunnlagOgSats)
 
                 call.respond(HttpStatusCode.OK, grunnlagOgSatsSubsumsjon)
             }
@@ -53,7 +53,7 @@ internal fun Route.grunnlagOgSatsApi(regelApi: RegelApi) {
                 val behovRequest = behovFromParametere(parametere)
 
                 val grunnlagOgSatsSubsumsjon =
-                    regelApi.getSubsumsjonSynchronously(behovRequest, ::extractGrunnlagOgSats)
+                    synchronousSubsumsjonClient.getSubsumsjonSynchronously(behovRequest, ::extractGrunnlagOgSats)
 
                 call.respond(HttpStatusCode.OK, grunnlagOgSatsSubsumsjon)
             }
@@ -74,8 +74,8 @@ fun GrunnlagOgSatsParametere.validate() {
     }
 }
 
-fun behovFromParametere(parametere: GrunnlagOgSatsParametere): BehovRequest =
-    BehovRequest(
+fun behovFromParametere(parametere: GrunnlagOgSatsParametere): BehovRequest {
+    return BehovRequest(
         aktorId = parametere.aktorId,
         vedtakId = parametere.vedtakId,
         regelkontekst = RegelKontekst(id = parametere.vedtakId.toString()),
@@ -92,9 +92,10 @@ fun behovFromParametere(parametere: GrunnlagOgSatsParametere): BehovRequest =
             sikkerlogg.info { "Lager behov for $parametere" }
         }
     }
+}
 
-fun behovFromParametere(parametere: GrunnlagOgSatsReberegningParametere): BehovRequest =
-    BehovRequest(
+fun behovFromParametere(parametere: GrunnlagOgSatsReberegningParametere): BehovRequest {
+    return BehovRequest(
         aktorId = parametere.aktorId,
         vedtakId = parametere.vedtakId,
         regelkontekst = RegelKontekst(id = parametere.vedtakId.toString()),
@@ -111,3 +112,4 @@ fun behovFromParametere(parametere: GrunnlagOgSatsReberegningParametere): BehovR
             sikkerlogg.info { "Lager behov for $parametere" }
         }
     }
+}

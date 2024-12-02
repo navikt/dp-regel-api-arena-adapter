@@ -57,20 +57,19 @@ fun extractMinsteinntektOgPeriode(
                 minsteinntektRegel = MinsteinntektRegel.valueOf(minsteinntektResultat.beregningsregel.name),
             ),
         inntekt =
-            minsteinntektResultat.minsteinntektInntektsPerioder
-                .map {
-                    Inntekt(
-                        inntekt = it.inntekt.round().toInt(),
-                        periode = it.periode,
-                        inntektsPeriode =
-                            InntektsPeriode(
-                                foersteMaaned = it.inntektsPeriode.førsteMåned,
-                                sisteMaaned = it.inntektsPeriode.sisteMåned,
-                            ),
-                        andel = it.andel?.round()?.toInt(),
-                        inneholderNaeringsinntekter = it.inneholderFangstOgFisk,
-                    )
-                }.toSet(),
+            minsteinntektResultat.minsteinntektInntektsPerioder.map {
+                Inntekt(
+                    inntekt = it.inntekt.round().toInt(),
+                    periode = it.periode,
+                    inntektsPeriode =
+                        InntektsPeriode(
+                            foersteMaaned = it.inntektsPeriode.førsteMåned,
+                            sisteMaaned = it.inntektsPeriode.sisteMåned,
+                        ),
+                    andel = it.andel?.round()?.toInt(),
+                    inneholderNaeringsinntekter = it.inneholderFangstOgFisk,
+                )
+            }.toSet(),
         inntektManueltRedigert = faktum.inntektManueltRedigert,
         inntektAvvik = faktum.inntektAvvik,
     )

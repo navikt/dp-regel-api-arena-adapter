@@ -5,7 +5,6 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration
 import com.github.tomakehurst.wiremock.matching.EqualToJsonPattern
 import com.github.tomakehurst.wiremock.matching.EqualToPattern
-import io.kotest.common.runBlocking
 import org.junit.jupiter.api.AfterAll
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeAll
@@ -36,51 +35,48 @@ class RegelApiBehovHttpClientTest {
     }
 
     @Test
-    fun ` Should get url to behov status `() =
-        runBlocking {
-            val tokenProvider = { "Token" }
-            val equalToPattern = EqualToPattern("Bearer ${tokenProvider.invoke()}")
-            WireMock.stubFor(
-                WireMock
-                    .post(WireMock.urlEqualTo("/behov"))
-                    .withHeader("Authorization", equalToPattern)
-                    .withRequestBody(
-                        EqualToJsonPattern(
-                            """
-                            {
-                                "aktorId": "001",
-                                "vedtakId": 123456,
-                                "beregningsdato": "2019-04-14"
-                            }
-                            """.trimIndent(),
-                            true,
-                            true,
-                        ),
-                    ).willReturn(
-                        WireMock
-                            .aResponse()
-                            .withBody(responseBody)
-                            .withHeader("Location", "/behov/status/123"),
+    fun ` Should get url to behov status `() {
+        val tokenProvider = { "Token" }
+        val equalToPattern = EqualToPattern("Bearer ${tokenProvider.invoke()}")
+        WireMock.stubFor(
+            WireMock.post(WireMock.urlEqualTo("//behov"))
+                .withHeader("Authorization", equalToPattern)
+                .withRequestBody(
+                    EqualToJsonPattern(
+                        """
+                        {
+                            "aktorId": "001",
+                            "vedtakId": 123456,
+                            "beregningsdato": "2019-04-14"
+                        }
+                        """.trimIndent(),
+                        true,
+                        true,
                     ),
+                )
+                .willReturn(
+                    WireMock.aResponse()
+                        .withBody(responseBody)
+                        .withHeader("Location", "/behov/status/123"),
+                ),
+        )
+
+        val client =
+            RegelApiBehovHttpClient(
+                FuelHttpClient(server.url(""), tokenProvider),
             )
 
-            val client =
-                RegelApiBehovHttpClient(
-                    server.url(""),
-                    tokenProvider,
-                )
+        val behovRequest =
+            BehovRequest(
+                "001",
+                123456,
+                regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
+                LocalDate.of(2019, 4, 14),
+            )
 
-            val behovRequest =
-                BehovRequest(
-                    "001",
-                    123456,
-                    regelkontekst = RegelKontekst(id = "123", type = "vedtak"),
-                    LocalDate.of(2019, 4, 14),
-                )
-
-            val response = client.run(behovRequest)
-            Assertions.assertEquals("/behov/status/123", response)
-        }
+        val response = client.run(behovRequest)
+        Assertions.assertEquals("/behov/status/123", response)
+    }
 
     private val responseBody =
         """
