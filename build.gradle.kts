@@ -44,7 +44,7 @@ dependencies {
     implementation(libs.bundles.ktor.client)
 
     implementation("commons-codec:commons-codec:1.17.1")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.14.1")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.14.2")
 
     implementation(libs.konfig)
 
