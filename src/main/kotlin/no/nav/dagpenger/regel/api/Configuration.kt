@@ -64,7 +64,7 @@ data class Configuration(
             runBlocking {
                 azureAdClient
                     .clientCredentials(config()[Key("dp.regel.api.scope", stringType)])
-                    .accessToken ?: throw RuntimeException("Failed to get token")
+                    .access_token ?: throw RuntimeException("Failed to get token")
             }
         }
     }
