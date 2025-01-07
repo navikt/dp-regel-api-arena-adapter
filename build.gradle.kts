@@ -43,7 +43,7 @@ dependencies {
     implementation(libs.bundles.jackson)
     implementation(libs.bundles.ktor.client)
 
-    implementation("commons-codec:commons-codec:1.17.1")
+    implementation("commons-codec:commons-codec:1.17.2")
     implementation("io.micrometer:micrometer-registry-prometheus:1.14.2")
 
     implementation(libs.konfig)
