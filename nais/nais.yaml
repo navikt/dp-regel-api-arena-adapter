@@ -6,7 +6,7 @@ metadata:
   labels:
     team: teamdagpenger
 spec:
-  image: {{ image }}
+  image: "{{ image }}"
   port: 8093
   liveness:
     path: /isAlive
@@ -16,14 +16,14 @@ spec:
     enabled: true
     path: /metrics
   replicas:
-    min: {{ replicas.min }}
-    max: {{ replicas.max }}
+    min: "{{ replicas.min }}"
+    max: "{{ replicas.max }}"
   resources:
     limits:
-      memory: {{ resources.limits.memory }}
+      memory: "{{ resources.limits.memory }}"
     requests:
-      cpu: {{ resources.requests.cpu }}
-      memory: {{ resources.requests.memory }}
+      cpu: "{{ resources.requests.cpu }}"
+      memory: "{{ resources.requests.memory }}"
   ingresses:
     - {{ ingress }}
   secureLogs:
