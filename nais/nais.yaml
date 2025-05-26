@@ -16,8 +16,8 @@ spec:
     enabled: true
     path: /metrics
   replicas:
-    min: "{{ replicas.min }}"
-    max: "{{ replicas.max }}"
+    min: {{ replicas.min }}
+    max: {{ replicas.max }}
   resources:
     limits:
       memory: "{{ resources.limits.memory }}"
