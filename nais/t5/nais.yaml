@@ -36,4 +36,11 @@ spec:
     - name: JWKS_URL
       value: "https://security-token-service-t4.nais.preprod.local/rest/v1/sts/jwks"
   secureLogs:
-    enabled: true
+    enabled: true  observability:
+    logging:
+      destinations:
+        - id: loki
+        - id: elastic
+    autoInstrumentation:
+      enabled: true
+      runtime: java

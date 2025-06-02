@@ -34,3 +34,11 @@ spec:
   # required for on-premises only
   webproxy: true
 
+  observability:
+    logging:
+      destinations:
+        - id: loki
+        - id: elastic
+    autoInstrumentation:
+      enabled: true
+      runtime: java
