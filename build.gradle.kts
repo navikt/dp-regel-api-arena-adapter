@@ -22,7 +22,7 @@ val jar by tasks.getting(Jar::class) {
     }
 }
 
-val log4j2Versjon = "2.25.0"
+val log4j2Versjon = "2.25.1"
 val prometheusVersion = "0.16.0"
 val kafkaVersion = "7.9.1-ce"
 val ktorVersion = "3.2.2"
