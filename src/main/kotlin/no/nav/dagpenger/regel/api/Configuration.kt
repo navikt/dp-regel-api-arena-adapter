@@ -7,8 +7,8 @@ import com.natpryce.konfig.Key
 import com.natpryce.konfig.booleanType
 import com.natpryce.konfig.overriding
 import com.natpryce.konfig.stringType
+import io.github.oshai.kotlinlogging.KotlinLogging
 import kotlinx.coroutines.runBlocking
-import mu.KotlinLogging
 import no.nav.dagpenger.oauth2.CachedOauth2Client
 import no.nav.dagpenger.oauth2.OAuth2Config
 

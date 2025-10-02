@@ -3,6 +3,7 @@ package no.nav.dagpenger.regel.api.arena.adapter
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
 import com.fasterxml.jackson.databind.JsonMappingException
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.jackson.JacksonConverter
@@ -28,7 +29,6 @@ import io.micrometer.core.instrument.Clock
 import io.micrometer.prometheusmetrics.PrometheusConfig
 import io.micrometer.prometheusmetrics.PrometheusMeterRegistry
 import io.prometheus.metrics.model.registry.PrometheusRegistry
-import mu.KotlinLogging
 import no.nav.dagpenger.regel.api.Configuration
 import no.nav.dagpenger.regel.api.arena.adapter.v1.InvalidInnteksperiodeException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.NegativtGrunnlagException
@@ -124,7 +124,7 @@ internal fun Application.regelApiAdapter(
     }
     install(StatusPages) {
         exception<Throwable> { call, cause ->
-            LOGGER.error("Unhåndtert feil ved beregning av regel", cause)
+            LOGGER.error(cause) { "Unhåndtert feil ved beregning av regel" }
             val problem =
                 Problem(
                     title = "Uhåndtert feil",
@@ -133,7 +133,7 @@ internal fun Application.regelApiAdapter(
             call.respond(HttpStatusCode.InternalServerError, problem)
         }
         exception<JsonMappingException> { call, cause ->
-            LOGGER.warn(cause.message, cause)
+            LOGGER.warn(cause) { cause.message }
             val status = HttpStatusCode.BadRequest
             val problem =
                 Problem(
@@ -144,7 +144,7 @@ internal fun Application.regelApiAdapter(
             call.respond(status, problem)
         }
         exception<BadRequestException> { call, cause ->
-            LOGGER.warn(cause.message, cause)
+            LOGGER.warn(cause) { cause.message }
             val status = HttpStatusCode.BadRequest
             val problem =
                 Problem(
@@ -155,7 +155,7 @@ internal fun Application.regelApiAdapter(
             call.respond(status, problem)
         }
         exception<InvalidInnteksperiodeException> { call, cause ->
-            LOGGER.warn(cause.message)
+            LOGGER.warn { cause.message }
             val status = HttpStatusCode.BadRequest
             val problem =
                 Problem(
@@ -166,7 +166,7 @@ internal fun Application.regelApiAdapter(
             call.respond(status, problem)
         }
         exception<IllegalInntektIdException> { call, cause ->
-            LOGGER.warn(cause.message)
+            LOGGER.warn(cause) { cause.message }
             val status = HttpStatusCode.BadRequest
             val problem =
                 Problem(
@@ -177,7 +177,7 @@ internal fun Application.regelApiAdapter(
             call.respond(status, problem)
         }
         exception<RegelApiTimeoutException> { call, cause ->
-            LOGGER.error("Tidsavbrudd ved beregning av regel", cause)
+            LOGGER.error(cause) { "Tidsavbrudd ved beregning av regel" }
             val status = HttpStatusCode.GatewayTimeout
             val problem =
                 Problem(
@@ -190,11 +190,11 @@ internal fun Application.regelApiAdapter(
         }
         exception<SubsumsjonProblem> { call, cause ->
             call.respond(HttpStatusCode.BadGateway, cause.problem).also {
-                LOGGER.error("Problem ved beregning av subsumsjon", cause)
+                LOGGER.error(cause) { "Problem ved beregning av subsumsjon" }
             }
         }
         exception<RegelApiMinsteinntektNyVurderingException> { call, cause ->
-            LOGGER.error("Kan ikke fastslå om minsteinntekt må revurderes", cause)
+            LOGGER.error(cause) { "Kan ikke fastslå om minsteinntekt må revurderes" }
             val status = HttpStatusCode.InternalServerError
             val problem =
                 Problem(
@@ -206,7 +206,7 @@ internal fun Application.regelApiAdapter(
             call.respond(status, problem)
         }
         exception<NegativtGrunnlagException> { call, cause ->
-            LOGGER.error("Negativt grunnlag", cause)
+            LOGGER.error(cause) { "Negativt grunnlag" }
             val status = HttpStatusCode.InternalServerError
             val problem =
                 Problem(
@@ -231,7 +231,7 @@ internal fun Application.regelApiAdapter(
             call.respond(status, problem)
         }
         exception<UgyldigParameterkombinasjonException> { call, cause ->
-            LOGGER.warn(cause.message)
+            LOGGER.warn(cause) { cause.message }
             val status = HttpStatusCode.BadRequest
             val problem =
                 Problem(
@@ -244,7 +244,7 @@ internal fun Application.regelApiAdapter(
 
         status(HttpStatusCode.Unauthorized) { call, _ ->
             val status = HttpStatusCode.Unauthorized
-            LOGGER.warn("Unauthorized call")
+            LOGGER.warn { "Unauthorized call" }
             val problem =
                 Problem(
                     type = URI.create("urn:dp:error:uautorisert"),
