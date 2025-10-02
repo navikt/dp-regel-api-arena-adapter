@@ -11,5 +11,5 @@ internal val jacksonObjectMapper =
         it.registerModule(JavaTimeModule())
         it.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
         it.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-        it.setSerializationInclusion(JsonInclude.Include.NON_NULL)
+        it.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL)
     }

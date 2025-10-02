@@ -1,5 +1,7 @@
 package no.nav.dagpenger.regel.api.internal
 
+import io.github.oshai.kotlinlogging.KotlinLogging
+import io.github.oshai.kotlinlogging.withLoggingContext
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.engine.HttpClientEngine
@@ -20,8 +22,6 @@ import io.ktor.serialization.jackson.JacksonConverter
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.time.delay
 import kotlinx.coroutines.withTimeout
-import mu.KotlinLogging
-import mu.withLoggingContext
 import no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterException
 import no.nav.dagpenger.regel.api.internal.models.Subsumsjon
 import no.nav.dagpenger.regel.api.serder.jacksonObjectMapper
@@ -156,14 +156,14 @@ internal class RegelApiBehovHttpClient(
             return when (response.status.value) {
                 303 -> BehovStatusPollResult(pending = false, location = response.headers["Location"])
                 else -> {
-                    LOGGER.debug("Polling: $response")
+                    LOGGER.debug { "Polling: $response" }
                     BehovStatusPollResult(pending = true, location = null)
                 }
             }
         } catch (e: RedirectResponseException) {
             return BehovStatusPollResult(pending = false, location = e.response.headers["Location"])
         } catch (e: Exception) {
-            LOGGER.error("Failed polling $statusUrl")
+            LOGGER.error { "Failed polling $statusUrl" }
             throw RegelApiStatusHttpClientException(
                 "Failed to poll behov status",
                 e,

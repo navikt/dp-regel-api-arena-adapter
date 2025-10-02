@@ -1,7 +1,6 @@
 package no.nav.dagpenger.regel.api.arena.adapter
 
 import io.kotest.core.spec.style.FreeSpec
-import io.kotest.data.row
 import io.kotest.matchers.shouldBe
 import no.nav.dagpenger.regel.api.arena.adapter.v1.FeilBeregningsregelException
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.GrunnlagBeregningsregel
@@ -143,21 +142,22 @@ class FindBeregningsregelTest {
     }
 }
 
-class FindBeregningsregelLærlingTest : FreeSpec({
-    "skal finne beregningsregel for grunnlag ved lærling forskrift" - {
-        listOf(
-            row("LærlingArbeidsinntekt1x12", false, GrunnlagBeregningsregel.LAERLING_12_MAANED),
-            row("LærlingArbeidsinntekt1x12", true, GrunnlagBeregningsregel.LAERLING_12_MAANED_AVKORTET),
-            row("LærlingFangstOgFisk1x12", true, GrunnlagBeregningsregel.LAERLING_12_MAANED_AVKORTET),
-            row("LærlingFangstOgFisk1x12", false, GrunnlagBeregningsregel.LAERLING_12_MAANED),
-            row("LærlingArbeidsinntekt3x4", false, GrunnlagBeregningsregel.LAERLING_4_MAANED),
-            row("LærlingArbeidsinntekt3x4", true, GrunnlagBeregningsregel.LAERLING_4_MAANED_AVKORTET),
-            row("LærlingFangstOgFisk3x4", true, GrunnlagBeregningsregel.LAERLING_4_MAANED_AVKORTET),
-            row("LærlingFangstOgFisk3x4", false, GrunnlagBeregningsregel.LAERLING_4_MAANED),
-        ).map { (regel: String, avkortet: Boolean, grunnlagsRegel: GrunnlagBeregningsregel) ->
-            "$regel-$grunnlagsRegel" {
-                findBeregningsregel(regel, avkortet) shouldBe grunnlagsRegel
+class FindBeregningsregelLærlingTest :
+    FreeSpec({
+        "skal finne beregningsregel for grunnlag ved lærling forskrift" - {
+            listOf(
+                Triple("LærlingArbeidsinntekt1x12", false, GrunnlagBeregningsregel.LAERLING_12_MAANED),
+                Triple("LærlingArbeidsinntekt1x12", true, GrunnlagBeregningsregel.LAERLING_12_MAANED_AVKORTET),
+                Triple("LærlingFangstOgFisk1x12", true, GrunnlagBeregningsregel.LAERLING_12_MAANED_AVKORTET),
+                Triple("LærlingFangstOgFisk1x12", false, GrunnlagBeregningsregel.LAERLING_12_MAANED),
+                Triple("LærlingArbeidsinntekt3x4", false, GrunnlagBeregningsregel.LAERLING_4_MAANED),
+                Triple("LærlingArbeidsinntekt3x4", true, GrunnlagBeregningsregel.LAERLING_4_MAANED_AVKORTET),
+                Triple("LærlingFangstOgFisk3x4", true, GrunnlagBeregningsregel.LAERLING_4_MAANED_AVKORTET),
+                Triple("LærlingFangstOgFisk3x4", false, GrunnlagBeregningsregel.LAERLING_4_MAANED),
+            ).map { (regel: String, avkortet: Boolean, grunnlagsRegel: GrunnlagBeregningsregel) ->
+                "$regel-$grunnlagsRegel" {
+                    findBeregningsregel(regel, avkortet) shouldBe grunnlagsRegel
+                }
             }
         }
-    }
-})
+    })

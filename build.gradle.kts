@@ -25,7 +25,7 @@ val jar by tasks.getting(Jar::class) {
 val log4j2Versjon = "2.25.1"
 val prometheusVersion = "0.16.0"
 val kafkaVersion = "7.9.1-ce"
-val ktorVersion = "3.2.3"
+val ktorVersion = "3.3.0"
 dependencies {
     implementation(kotlin("stdlib"))
 
@@ -61,7 +61,7 @@ dependencies {
     implementation("io.prometheus:simpleclient_common:$prometheusVersion")
     implementation("io.prometheus:simpleclient_hotspot:$prometheusVersion")
     implementation("io.prometheus:simpleclient_log4j2:$prometheusVersion")
-    implementation("no.nav.dagpenger:oauth2-klient:2024.12.19-12.57.9d42f60a1165")
+    implementation("no.nav.dagpenger:oauth2-klient:2025.08.20-08.53.9250ac7fbd99")
 
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
 
@@ -72,6 +72,7 @@ dependencies {
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.kotest.assertions.json)
     testImplementation("io.kotest:kotest-runner-junit5-jvm:${libs.versions.kotest.get()}")
+    testImplementation("io.kotest:kotest-property:${libs.versions.kotest.get()}")
 
     testImplementation(libs.testcontainer.postgresql)
     testImplementation("org.testcontainers:kafka:${libs.versions.testcontainer.get()}")
