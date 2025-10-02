@@ -1,7 +1,7 @@
 package no.nav.dagpenger.regel.api.arena.adapter.v1
 
+import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.application.call
 import io.ktor.server.request.receive
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
@@ -9,7 +9,6 @@ import io.ktor.server.routing.post
 import io.ktor.server.routing.route
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import mu.KotlinLogging
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntjeningsperiodeParametre
 import no.nav.dagpenger.regel.api.arena.adapter.v1.models.InntjeningsperiodeResultat
 import no.nav.dagpenger.regel.api.internal.InntektApiInntjeningsperiodeHttpClient
