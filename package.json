@@ -6,9 +6,9 @@
   },
   "private": true,
   "scripts": {
-    "start": "openapi preview-docs",
-    "build": "openapi bundle -o web/openapi.yaml",
-    "bundle": "openapi build-docs -o web/index.html",
+    "start": "openapi preview",
+    "build": "openapi bundle openapi/openapi.yaml -o web/openapi.yaml",
+    "bundle": "openapi build-docs openapi/openapi.yaml -o web/index.html",
     "test": "openapi lint"
   }
 }
