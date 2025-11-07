@@ -24,7 +24,7 @@ val jar by tasks.getting(Jar::class) {
 
 val log4j2Versjon = "2.25.2"
 val prometheusVersion = "0.16.0"
-val kafkaVersion = "7.9.1-ce"
+val kafkaVersion = "8.1.0-ce"
 val ktorVersion = "3.3.2"
 dependencies {
     implementation(kotlin("stdlib"))
