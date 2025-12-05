@@ -75,7 +75,7 @@ dependencies {
     testImplementation("io.kotest:kotest-property:${libs.versions.kotest.get()}")
 
     testImplementation(libs.testcontainer.postgresql)
-    testImplementation("org.testcontainers:kafka:${libs.versions.testcontainer.get()}")
+    testImplementation("org.testcontainers:testcontainers-kafka:${libs.versions.testcontainer.get()}")
 
     testImplementation("org.apache.kafka:kafka-clients:$kafkaVersion")
     testImplementation("org.apache.kafka:kafka-streams-test-utils:$kafkaVersion")
