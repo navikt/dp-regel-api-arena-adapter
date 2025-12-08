@@ -17,4 +17,6 @@ data class GrunnlagOgSatsReberegningParametere(
     val regelverksdato: LocalDate = beregningsdato,
 )
 
-class IllegalInntektIdException(override val cause: Throwable?) : RuntimeException(cause)
+class IllegalInntektIdException(
+    override val cause: Throwable?,
+) : RuntimeException(cause)
