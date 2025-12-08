@@ -21,7 +21,6 @@ val jar by tasks.getting(Jar::class) {
     }
 }
 
-val log4j2Versjon = "2.25.2"
 val prometheusVersion = "0.16.0"
 val kafkaVersion = "8.1.1-ce"
 val ktorVersion = "3.3.3"
@@ -47,14 +46,9 @@ dependencies {
 
     implementation(libs.konfig)
 
-    implementation("org.apache.logging.log4j:log4j-api:$log4j2Versjon")
-    implementation("org.apache.logging.log4j:log4j-slf4j2-impl:$log4j2Versjon")
-    implementation("org.apache.logging.log4j:log4j-layout-template-json:$log4j2Versjon")
-    implementation("org.apache.logging.log4j:log4j-core:$log4j2Versjon")
-    implementation("org.apache.logging.log4j:log4j-layout-template-json:$log4j2Versjon")
-
+    implementation("ch.qos.logback:logback-classic:1.5.18")
+    implementation("net.logstash.logback:logstash-logback-encoder:8.1")
     implementation("org.slf4j:slf4j-api:2.0.17")
-
     implementation(libs.kotlin.logging)
 
     implementation("io.prometheus:simpleclient_common:$prometheusVersion")
@@ -88,5 +82,4 @@ dependencies {
 
 tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
     mergeServiceFiles()
-    transform(com.github.jengelman.gradle.plugins.shadow.transformers.Log4j2PluginsCacheFileTransformer::class.java)
 }
