@@ -34,9 +34,10 @@ spec:
   # required for on-premises only
   webproxy: true
   accessPolicy:
-    rules:
-      - application: logging
-        namespace: nais-system
+    outbound:
+      rules:
+        - application: logging
+          namespace: nais-system
   observability:
     logging:
       destinations:
