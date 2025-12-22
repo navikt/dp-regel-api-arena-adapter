@@ -73,7 +73,7 @@ jobs:
       id-token: "write"
     steps:
       - name: Fetch NAIS yaml
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: nais-yaml
           path: nais
@@ -96,7 +96,7 @@ jobs:
       id-token: "write"
     steps:
       - name: Fetch NAIS yaml
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
         with:
           name: nais-yaml
           path: nais
