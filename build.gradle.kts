@@ -47,7 +47,7 @@ dependencies {
     implementation(libs.konfig)
 
     implementation("ch.qos.logback:logback-classic:1.5.23")
-    implementation("net.logstash.logback:logstash-logback-encoder:8.1")
+    implementation("net.logstash.logback:logstash-logback-encoder:9.0")
     implementation("org.slf4j:slf4j-api:2.0.17")
     implementation(libs.kotlin.logging)
 
