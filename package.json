@@ -2,7 +2,7 @@
   "name": "dagpenger-regel-api-arena-adapter",
   "version": "1.0.0",
   "dependencies": {
-    "@redocly/cli": "^2.14.7"
+    "@redocly/cli": "^2.15.0"
   },
   "private": true,
   "scripts": {
