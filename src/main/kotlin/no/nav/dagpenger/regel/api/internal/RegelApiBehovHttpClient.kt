@@ -18,7 +18,7 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
-import io.ktor.serialization.jackson.JacksonConverter
+import io.ktor.serialization.jackson3.JacksonConverter
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.time.delay
 import kotlinx.coroutines.withTimeout

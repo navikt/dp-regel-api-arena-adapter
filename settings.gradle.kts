@@ -2,11 +2,12 @@ rootProject.name = "dp-regel-api-arena-adapter"
 
 dependencyResolutionManagement {
     repositories {
+        mavenCentral()
         maven("https://github-package-registry-mirror.gc.nav.no/cached/maven-release")
     }
     versionCatalogs {
         create("libs") {
-            from("no.nav.dagpenger:dp-version-catalog:20251205.234.05353f")
+            from("no.nav.dagpenger:dp-version-catalog:20260728.277")
         }
     }
 }
