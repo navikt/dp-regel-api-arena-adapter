@@ -2,11 +2,10 @@ package no.nav.dagpenger.regel.api.arena.adapter
 
 import com.auth0.jwk.JwkProvider
 import com.auth0.jwk.JwkProviderBuilder
-import com.fasterxml.jackson.databind.JsonMappingException
 import io.github.oshai.kotlinlogging.KotlinLogging
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.serialization.jackson.JacksonConverter
+import io.ktor.serialization.jackson3.JacksonConverter
 import io.ktor.server.application.Application
 import io.ktor.server.application.install
 import io.ktor.server.auth.Authentication
@@ -47,6 +46,7 @@ import no.nav.dagpenger.regel.api.internal.RegelApiMinsteinntektNyVurderingExcep
 import no.nav.dagpenger.regel.api.internal.RegelApiTimeoutException
 import no.nav.dagpenger.regel.api.serder.jacksonObjectMapper
 import org.slf4j.event.Level
+import tools.jackson.databind.DatabindException
 import java.net.URI
 import java.util.concurrent.TimeUnit
 
@@ -132,7 +132,7 @@ internal fun Application.regelApiAdapter(
                 )
             call.respond(HttpStatusCode.InternalServerError, problem)
         }
-        exception<JsonMappingException> { call, cause ->
+        exception<DatabindException> { call, cause ->
             LOGGER.warn(cause) { cause.message }
             val status = HttpStatusCode.BadRequest
             val problem =
