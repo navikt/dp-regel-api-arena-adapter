@@ -1,7 +1,6 @@
 plugins {
     id("common")
     application
-    alias(libs.plugins.shadow.jar)
 }
 
 repositories {
@@ -13,12 +12,6 @@ repositories {
 application {
     applicationName = "dp-regel-api-arena-adapter"
     mainClass.set("no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterKt")
-}
-
-val jar by tasks.getting(Jar::class) {
-    manifest {
-        attributes["Multi-Release"] = "true" // https://github.com/johnrengelman/shadow/issues/449
-    }
 }
 
 val prometheusVersion = "0.16.0"
@@ -78,8 +71,4 @@ dependencies {
     testImplementation(libs.mockk)
 
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:${libs.versions.junit.get()}")
-}
-
-tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
-    mergeServiceFiles()
 }
