@@ -44,8 +44,8 @@ jobs:
         with:
           team: teamdagpenger
           tag: ${{ github.sha }}
-          dockerfile: mediator/Dockerfile # optional, default Dockerfile
-          docker_context: mediator # optional, default .
+          dockerfile: Dockerfile # optional, default Dockerfile
+          docker_context: . # optional, default .
           salsa: false
     outputs:
       image: ${{ steps.docker-build-push.outputs.image }}
