@@ -1,7 +1,7 @@
-FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/jre:openjdk-21@sha256:ed2d694c609c54964dad1c10e92c32b153830e2c1fa56d9e8cb78113fcfc89f7
+FROM europe-north1-docker.pkg.dev/cgr-nav/pull-through/nav.no/jre:openjdk-25@sha256:d80cd18fb4f468842f219250f8df37fd9fca3791baf832acd27d8ab19c5148f0
 
 ENV LANG='nb_NO.UTF-8' LANGUAGE='nb_NO:nb' LC_ALL='nb_NO.UTF-8' TZ="Europe/Oslo"
 
-COPY build/libs/*-all.jar /app.jar
+COPY build/install/dp-regel-api-arena-adapter/lib /app/lib
 
-ENTRYPOINT ["java", "-jar", "/app.jar"]
+ENTRYPOINT ["java", "-cp", "/app/lib/*", "no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterKt"]

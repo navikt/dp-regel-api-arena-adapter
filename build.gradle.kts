@@ -1,7 +1,6 @@
 plugins {
     id("common")
     application
-    alias(libs.plugins.shadow.jar)
 }
 
 repositories {
@@ -15,15 +14,9 @@ application {
     mainClass.set("no.nav.dagpenger.regel.api.arena.adapter.RegelApiArenaAdapterKt")
 }
 
-val jar by tasks.getting(Jar::class) {
-    manifest {
-        attributes["Multi-Release"] = "true" // https://github.com/johnrengelman/shadow/issues/449
-    }
-}
-
 val prometheusVersion = "0.16.0"
 val kafkaVersion = "8.1.1-ce"
-val ktorVersion = "3.3.3"
+val ktorVersion = "3.5.2"
 dependencies {
     implementation(kotlin("stdlib"))
 
@@ -42,11 +35,11 @@ dependencies {
     implementation(libs.bundles.ktor.client)
 
     implementation("commons-codec:commons-codec:1.21.0")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.16.5")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.17.1")
 
     implementation(libs.konfig)
 
-    implementation("ch.qos.logback:logback-classic:1.5.32")
+    implementation("ch.qos.logback:logback-classic:1.6.3")
     implementation("net.logstash.logback:logstash-logback-encoder:9.0")
     implementation("org.slf4j:slf4j-api:2.0.18")
     implementation(libs.kotlin.logging)
@@ -54,7 +47,7 @@ dependencies {
     implementation("io.prometheus:simpleclient_common:$prometheusVersion")
     implementation("io.prometheus:simpleclient_hotspot:$prometheusVersion")
     implementation("io.prometheus:simpleclient_log4j2:$prometheusVersion")
-    implementation("no.nav.dagpenger:oauth2-klient:2025.12.19-08.15.2e150cd55270")
+    implementation("no.nav.dagpenger:oauth2-klient:2026.08.31-20.20.1e39ba859781")
 
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
 
@@ -78,8 +71,4 @@ dependencies {
     testImplementation(libs.mockk)
 
     testRuntimeOnly("org.junit.vintage:junit-vintage-engine:${libs.versions.junit.get()}")
-}
-
-tasks.withType<com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar> {
-    mergeServiceFiles()
 }
