@@ -12,6 +12,7 @@ on:
       - 'README.md'
     branches-ignore:
       - 'dependabot/**'
+      - 'renovate/**'
 
 jobs:
   build:
@@ -28,7 +29,6 @@ jobs:
         with:
           distribution: temurin
           java-version: 25
-
       - uses: gradle/actions/wrapper-validation@v6.3.0
       - uses: gradle/actions/setup-gradle@v6.3.0
         env:
@@ -51,6 +51,23 @@ jobs:
     outputs:
       image: ${{ steps.docker-build-push.outputs.image }}
       digest: ${{ steps.docker-build-push.outputs.digest }}
+
+  salsa:
+    name: Generate SBOM, attest and sign image
+    needs: [ build ]
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: "write"
+    steps:
+      - name: NAIS login
+        uses: nais/login@v0
+        id: login
+        with:
+          team: teamdagpenger
+      - id: attest-sign
+        uses: nais/attest-sign@v2.0.18
+        with:
+          image_ref: ${{ needs.build.outputs.image }}
 
   deploy-dev:
     name: Deploy to dev
