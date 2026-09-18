@@ -15,8 +15,8 @@ application {
 }
 
 val prometheusVersion = "0.16.0"
-val kafkaVersion = "8.3.1-ce"
-val ktorVersion = "3.5.2"
+val kafkaVersion = "8.3.2-ce"
+val ktorVersion = "3.6.0"
 dependencies {
     implementation(kotlin("stdlib"))
 
@@ -47,7 +47,7 @@ dependencies {
     implementation("io.prometheus:simpleclient_common:$prometheusVersion")
     implementation("io.prometheus:simpleclient_hotspot:$prometheusVersion")
     implementation("io.prometheus:simpleclient_log4j2:$prometheusVersion")
-    implementation("no.nav.dagpenger:oauth2-klient:2026.09.11-06.18.3bec782ce866")
+    implementation("no.nav.dagpenger:oauth2-klient:2026.09.17-06.22.ccf7ed62c283")
 
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
 
