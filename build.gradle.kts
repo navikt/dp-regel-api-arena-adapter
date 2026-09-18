@@ -16,7 +16,7 @@ application {
 
 val prometheusVersion = "0.16.0"
 val kafkaVersion = "8.3.2-ce"
-val ktorVersion = "3.5.2"
+val ktorVersion = "3.6.0"
 dependencies {
     implementation(kotlin("stdlib"))
 
