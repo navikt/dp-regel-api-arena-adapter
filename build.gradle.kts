@@ -47,7 +47,7 @@ dependencies {
     implementation("io.prometheus:simpleclient_common:$prometheusVersion")
     implementation("io.prometheus:simpleclient_hotspot:$prometheusVersion")
     implementation("io.prometheus:simpleclient_log4j2:$prometheusVersion")
-    implementation("no.nav.dagpenger:oauth2-klient:2026.11.11-13.39.1535e94d2015")
+    implementation("no.nav.dagpenger:oauth2-klient:2026.11.12-12.16.6c115ef19241")
 
     implementation("de.huxhorn.sulky:de.huxhorn.sulky.ulid:8.3.0")
 
